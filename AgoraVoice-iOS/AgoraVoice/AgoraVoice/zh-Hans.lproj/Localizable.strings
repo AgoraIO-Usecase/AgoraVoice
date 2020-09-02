@@ -1,0 +1,55 @@
+/* 
+  File.strings
+  AgoraVoice
+
+  Created by CavanSu on 2020/9/1.
+  Copyright © 2020 CavanSu. All rights reserved.
+*/
+
+Cancel="取消";
+Done="完成";
+Confirm="确定";
+Reject="拒绝";
+End="结束";
+Accept="接受";
+Music="音乐";
+
+Lost_Connection="网络异常";
+Lost_Connection_Description="当前网络连接错误，请稍后再试";
+
+Lost_Connection_Retry="网络不给力，请稍后再试";
+Use_Cellular_Data="当前网络无WIFI，继续使用可能产生流量费用";
+
+// LiveType
+Chat_Room="语聊房";
+Start_Chating="开始聊天";
+
+// LiveList
+Create_A_Room="请创建一个房间";
+No_Data_Please_Try_Again_Later="暂无数据，请稍后再试";
+
+// Create Room
+Create_Start="开始直播";
+Create_NameLabel="直播间的名字: ";
+Limit_Toast="本应用为测试产品，请勿商用。单次直播最长10分钟，每个频道最多10人";
+
+// Mine
+Mine_Head="设置头像";
+Mine_Name="设置昵称";
+Input_Name="输入名字";
+About="关于";
+Privacy_Item="隐私条例";
+Disclaimer="免责声明";
+Register_Agora_Account="注册声网账号";
+Version_Release_Date="发版时间";
+RTC_SDK_Version="SDK 版本";
+AV_Version="Agora Voice 版本";
+Upload_Log="上传日志";
+
+Test_Product_Disclaimer="测试产品免责声明";
+
+Disclaimer_Detail="Agora Live（“本产品”）是由Agora提供的一款测试产品，Agora享有本产品的著作权和所有权。特此免费授予获得本产品和相关文档文件（以下简称“软件”）副本的任何人无限制地试用软件的权利，包括但不限于试用，复制，修改，合并，发布，分发，但本产品不得用于任何商业用途，不得再许可和/或出售该软件的副本。
+
+本产品按“现状”提供，没有任何形式的明示担保，包括但不限于对适配性、特定目的的适用性和非侵权性的担保。无论是由于与本产品或本产品的试用或其他方式有关的任何合同、侵权或其他形式的行为，Agora均不对任何索赔、损害或其他责任负责。
+
+您可以自由选择是否试用本产品提供的服务，如果您下载、安装、试用本产品中所提供的服务，即表明您信任该产品所有人，Agora对任何原因在试用本产品中提供的服务时可能对您自身或他人造成的任何形式的损失和伤害不承担任何责任。";
