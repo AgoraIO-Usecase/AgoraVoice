@@ -11,3 +11,4 @@
 #import "UIImage+CSClipToCycle.h"
 #import "AGOSSClient.h"
 #import "SubThreadTimer.h"
+#import "MediaDevice.h"

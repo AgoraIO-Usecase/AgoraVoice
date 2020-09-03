@@ -113,12 +113,12 @@ class LiveListViewController: MaskViewController {
         switch segueId {
         case "CreateLiveNavigation":
             guard let type = sender as? LiveType,
-                let navi = segue.destination as? UINavigationController,
+                let navi = segue.destination as? CSNavigationController,
                 let vc = navi.viewControllers.first as? CreateLiveViewController else {
                     assert(false)
                     return
             }
-            
+            navi.statusBarStyle = .lightContent
             vc.liveType = type
         default:
             break

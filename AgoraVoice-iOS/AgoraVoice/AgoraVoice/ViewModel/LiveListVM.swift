@@ -108,7 +108,7 @@ extension LiveListVM {
 //        let task = RequestTask(event: event,
 //                               type: .http(.get, url: url),
 //                               timeout: .low,
-//                               header: ["token": ALKeys.ALUserToken],
+//                               header: ["token": Keys.UserToken],
 //                               parameters: parameters)
 //
 //        let successCallback: DicEXCompletion = { [weak self] (json: ([String: Any])) in
@@ -150,7 +150,7 @@ extension LiveListVM {
     }
     
     func refetch(success: Completion = nil, fail: Completion = nil) {
-//        let client = ALCenter.shared().centerProvideRequestHelper()
+//        let client = Center.shared().centerProvideRequestHelper()
 //        let requestListType = presentingType
 //        let currentCount = presentingList.value.count < 10 ? 10 : presentingList.value.count
 //        let parameters: StringAnyDic = ["count": currentCount,
@@ -161,7 +161,7 @@ extension LiveListVM {
 //        let task = RequestTask(event: event,
 //                               type: .http(.get, url: url),
 //                               timeout: .low,
-//                               header: ["token": ALKeys.ALUserToken],
+//                               header: ["token": Keys.UserToken],
 //                               parameters: parameters)
 //
 //        let successCallback: DicEXCompletion = { [weak self] (json: ([String: Any])) in

@@ -13,6 +13,7 @@ Reject="Reject";
 End="End";
 Accept="Accept";
 Music="Music";
+Background="Background";
 
 Lost_Connection="Network error";
 Lost_Connection_Description="We cannot connect to network now. Please retry later";

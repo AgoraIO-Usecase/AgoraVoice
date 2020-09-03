@@ -9,6 +9,7 @@
 import UIKit
 import AgoraRtcKit
 import RxSwift
+import RxCocoa
 import RxRelay
 
 struct RandomName {
@@ -39,12 +40,14 @@ class CreateLiveViewController: MaskViewController {
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var nameBgView: UIView!
     
+    @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var backgroundButton: UIButton!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var randomButton: UIButton!
     
     var liveType: LiveType = .chatRoom
+    var selectedImageIndex = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,10 +78,17 @@ class CreateLiveViewController: MaskViewController {
 
 private extension CreateLiveViewController {
     func updateViews() {
+        backgroundImageView.image = Center.shared().centerProvideImagesHelper().roomBackgrounds.first
+        
         nameTextField.delegate = self
         nameLabel.text = NSLocalizedString("Create_NameLabel")
         startButton.setTitle(NSLocalizedString("Create_Start"),
                              for: .normal)
+        
+        nameTextField.rx.controlEvent([.editingDidEndOnExit])
+            .subscribe(onNext: { [unowned self] in
+                self.view.endEditing(true)
+        }).disposed(by: bag)
         
         backButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.close()
@@ -89,7 +99,7 @@ private extension CreateLiveViewController {
         }).disposed(by: bag)
         
         backgroundButton.rx.tap.subscribe(onNext: { [unowned self] in
-            
+            self.presentBackground()
         }).disposed(by: bag)
         
         startButton.rx.tap.subscribe(onNext: { [unowned self] in
@@ -123,32 +133,30 @@ private extension CreateLiveViewController {
         self.showToastView(view, duration: 5.0)
     }
     
-//    func presentMediaSettings() {
-//        let mediaSettingsNavi = UIStoryboard.initViewController(of: "MediaSettingsNavigation",
-//                                                       class: UINavigationController.self,
-//                                                       on: "Popover")
-//
-//        let mediaSettingsVC = mediaSettingsNavi.children.first! as! MediaSettingsViewController
-//        self.mediaSettingsNavi = mediaSettingsNavi
-//
-//        mediaSettingsVC.settings = BehaviorRelay(value: videoConfiguration)
-//        mediaSettingsVC.settings?.subscribe(onNext: { [unowned self] (newMedia) in
-//            self.videoConfiguration = newMedia
-//        }).disposed(by: bag)
-//
-//        mediaSettingsVC.view.cornerRadius(5)
-//
-//        let presenetedHeight: CGFloat = 239 + UIScreen.main.heightOfSafeAreaBottom
-//        let y = UIScreen.main.bounds.height - presenetedHeight
-//        let presentedFrame = CGRect(x: 0,
-//                                    y: y,
-//                                    width: UIScreen.main.bounds.width,
-//                                    height: UIScreen.main.bounds.height)
-//        self.presentChild(mediaSettingsNavi,
-//                          animated: true,
-//                          presentedFrame: presentedFrame)
-//    }
-    
+    func presentBackground() {
+        showMaskView()
+        
+        let vc = UIStoryboard.initViewController(of: "ImageSelectViewController",
+                                                 class: ImageSelectViewController.self,
+                                                 on: "Popover")
+        
+        let presenetedHeight: CGFloat = 455 + UIScreen.main.heightOfSafeAreaBottom
+        let y = UIScreen.main.bounds.height - presenetedHeight
+        let presentedFrame = CGRect(x: 0,
+                                    y: y,
+                                    width: UIScreen.main.bounds.width,
+                                    height: presenetedHeight)
+        
+        self.presentChild(vc,
+                          animated: true,
+                          presentedFrame: presentedFrame)
+        
+        vc.selectIndex.accept(selectedImageIndex)
+        vc.selectImage.bind(to: backgroundImageView.rx.image).disposed(by: vc.bag)
+        vc.selectIndex.subscribe(onNext: { [unowned self] (index) in
+            self.selectedImageIndex = index
+        }).disposed(by: vc.bag)
+    }
 }
 
 private extension CreateLiveViewController {

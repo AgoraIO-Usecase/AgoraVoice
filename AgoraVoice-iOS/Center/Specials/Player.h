@@ -35,6 +35,7 @@ typedef NS_ENUM(int, PlayerStatus) {
 - (instancetype)initWithRtcEngine:(AgoraRtcEngineKit *)engine;
 - (BOOL)startWithURL:(NSString *)url;
 - (BOOL)pause;
+- (BOOL)resume;
 - (BOOL)seekWithSecond:(NSInteger)second;
 - (BOOL)stop;
 @end

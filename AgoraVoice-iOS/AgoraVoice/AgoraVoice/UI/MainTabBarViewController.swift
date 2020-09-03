@@ -29,7 +29,7 @@ class MainTabBarViewController: MaskTabBarController {
 //        tabBar.isUserInteractionEnabled = false
 //
 //        showHUD()
-//        ALCenter.shared().isWorkNormally.subscribe(onNext: { [unowned self] (normal) in
+//        Center.shared().isWorkNormally.subscribe(onNext: { [unowned self] (normal) in
 //            if normal {
 //                self.tabBar.isUserInteractionEnabled = true
 //                self.hiddenHUD()

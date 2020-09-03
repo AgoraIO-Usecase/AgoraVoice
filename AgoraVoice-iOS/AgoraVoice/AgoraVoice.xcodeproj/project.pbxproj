@@ -8,6 +8,34 @@
 
 /* Begin PBXBuildFile section */
 		25FE87BC8A59A85C79FC19B9 /* Pods_AgoraVoice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFA6A288AD8BCBB08EA5C83D /* Pods_AgoraVoice.framework */; };
+		A750EC302500A18E006E50E3 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A750EC2F2500A18E006E50E3 /* Popover.storyboard */; };
+		A750EC3C2500A33F006E50E3 /* GIFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC322500A33F006E50E3 /* GIFViewController.swift */; };
+		A750EC3D2500A33F006E50E3 /* CVUserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC332500A33F006E50E3 /* CVUserListViewController.swift */; };
+		A750EC3E2500A33F006E50E3 /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC342500A33F006E50E3 /* MusicViewController.swift */; };
+		A750EC3F2500A33F006E50E3 /* RealDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC352500A33F006E50E3 /* RealDataViewController.swift */; };
+		A750EC402500A33F006E50E3 /* ChatInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC362500A33F006E50E3 /* ChatInputView.swift */; };
+		A750EC412500A33F006E50E3 /* ExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC372500A33F006E50E3 /* ExtensionViewController.swift */; };
+		A750EC422500A33F006E50E3 /* GIFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC382500A33F006E50E3 /* GIFView.swift */; };
+		A750EC432500A33F006E50E3 /* GiftAudienceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC392500A33F006E50E3 /* GiftAudienceViewController.swift */; };
+		A750EC442500A33F006E50E3 /* BottomToolsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC3A2500A33F006E50E3 /* BottomToolsViewController.swift */; };
+		A750EC452500A33F006E50E3 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC3B2500A33F006E50E3 /* ChatViewController.swift */; };
+		A750EC4B2500B1E6006E50E3 /* GiftVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC462500B1E6006E50E3 /* GiftVM.swift */; };
+		A750EC4C2500B1E6006E50E3 /* LiveUserListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC472500B1E6006E50E3 /* LiveUserListVM.swift */; };
+		A750EC4D2500B1E6006E50E3 /* MultiHostsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC482500B1E6006E50E3 /* MultiHostsVM.swift */; };
+		A750EC4E2500B1E6006E50E3 /* ChatVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC492500B1E6006E50E3 /* ChatVM.swift */; };
+		A750EC4F2500B1E6006E50E3 /* MineVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC4A2500B1E6006E50E3 /* MineVM.swift */; };
+		A750EC522500B353006E50E3 /* SubThreadTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = A750EC502500B353006E50E3 /* SubThreadTimer.m */; };
+		A750EC542500B362006E50E3 /* RTMObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC532500B362006E50E3 /* RTMObserver.swift */; };
+		A750EC572500B3BC006E50E3 /* TimestampQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC552500B3BB006E50E3 /* TimestampQueue.swift */; };
+		A750EC582500B3BC006E50E3 /* TimestampModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC562500B3BC006E50E3 /* TimestampModel.swift */; };
+		A750EC5A2500B455006E50E3 /* TabSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC592500B455006E50E3 /* TabSelectView.swift */; };
+		A750EC5C2500B661006E50E3 /* ImageSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC5B2500B661006E50E3 /* ImageSelectViewController.swift */; };
+		A750EC5E2500D0D8006E50E3 /* LiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC5D2500D0D8006E50E3 /* LiveViewController.swift */; };
+		A750EC622500D1C5006E50E3 /* MusicVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC5F2500D1C5006E50E3 /* MusicVM.swift */; };
+		A750EC632500D1C5006E50E3 /* LiveSeatVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC602500D1C5006E50E3 /* LiveSeatVM.swift */; };
+		A750EC642500D1C5006E50E3 /* MediaDeviceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC612500D1C5006E50E3 /* MediaDeviceVM.swift */; };
+		A750EC662500D5B5006E50E3 /* GiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC652500D5B5006E50E3 /* GiftViewController.swift */; };
+		A750EC692500D730006E50E3 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC682500D730006E50E3 /* ChatRoomViewController.swift */; };
 		A75C6F5524FCC387003E5AD9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A75C6F5424FCC387003E5AD9 /* Assets.xcassets */; };
 		A75C6FBD24FCD709003E5AD9 /* UIView+ExProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FB424FCD709003E5AD9 /* UIView+ExProperty.m */; };
 		A75C6FBE24FCD709003E5AD9 /* CSNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FB524FCD709003E5AD9 /* CSNavigationController.swift */; };
@@ -44,13 +72,12 @@
 		A75C700D24FCE6D2003E5AD9 /* FilletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C700B24FCE6D2003E5AD9 /* FilletView.swift */; };
 		A75C701624FCE8B8003E5AD9 /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = A75C701424FCE8B8003E5AD9 /* UIColor+Hex.m */; };
 		A75C701724FCE8B8003E5AD9 /* UIImage+CSClipToCycle.m in Sources */ = {isa = PBXBuildFile; fileRef = A75C701524FCE8B8003E5AD9 /* UIImage+CSClipToCycle.m */; };
-		A75C701A24FCE8F0003E5AD9 /* SubThreadTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = A75C701924FCE8F0003E5AD9 /* SubThreadTimer.m */; };
 		A75C702424FCEBBC003E5AD9 /* AgoraVoice.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A75C701F24FCEBBC003E5AD9 /* AgoraVoice.xcdatamodeld */; };
 		A75C702524FCEBBC003E5AD9 /* UserData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C702124FCEBBC003E5AD9 /* UserData+CoreDataClass.swift */; };
 		A75C702624FCEBBC003E5AD9 /* UserData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C702224FCEBBC003E5AD9 /* UserData+CoreDataProperties.swift */; };
 		A75C702724FCEBBC003E5AD9 /* UserDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C702324FCEBBC003E5AD9 /* UserDataHelper.swift */; };
 		A75C702D24FCEF1E003E5AD9 /* DeviceAssistant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C702C24FCEF1E003E5AD9 /* DeviceAssistant.swift */; };
-		A75C70E224FDF121003E5AD9 /* Scene.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A75C70E124FDF121003E5AD9 /* Scene.storyboard */; };
+		A75C70E224FDF121003E5AD9 /* Live.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A75C70E124FDF121003E5AD9 /* Live.storyboard */; };
 		A75C70E524FDF16A003E5AD9 /* MediaDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = A75C70E424FDF16A003E5AD9 /* MediaDevice.m */; };
 		A75C70E824FDF2DE003E5AD9 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = A75C70E724FDF2DE003E5AD9 /* Player.m */; };
 		A75C70EB24FE2557003E5AD9 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C70EA24FE2557003E5AD9 /* MainTabBarViewController.swift */; };
@@ -67,6 +94,35 @@
 
 /* Begin PBXFileReference section */
 		9FC5D8282F94142407E449F3 /* Pods-AgoraVoice.lab2020-pre.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraVoice.lab2020-pre.xcconfig"; path = "Target Support Files/Pods-AgoraVoice/Pods-AgoraVoice.lab2020-pre.xcconfig"; sourceTree = "<group>"; };
+		A750EC2F2500A18E006E50E3 /* Popover.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Popover.storyboard; sourceTree = "<group>"; };
+		A750EC322500A33F006E50E3 /* GIFViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GIFViewController.swift; sourceTree = "<group>"; };
+		A750EC332500A33F006E50E3 /* CVUserListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CVUserListViewController.swift; sourceTree = "<group>"; };
+		A750EC342500A33F006E50E3 /* MusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicViewController.swift; sourceTree = "<group>"; };
+		A750EC352500A33F006E50E3 /* RealDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealDataViewController.swift; sourceTree = "<group>"; };
+		A750EC362500A33F006E50E3 /* ChatInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatInputView.swift; sourceTree = "<group>"; };
+		A750EC372500A33F006E50E3 /* ExtensionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionViewController.swift; sourceTree = "<group>"; };
+		A750EC382500A33F006E50E3 /* GIFView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GIFView.swift; sourceTree = "<group>"; };
+		A750EC392500A33F006E50E3 /* GiftAudienceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiftAudienceViewController.swift; sourceTree = "<group>"; };
+		A750EC3A2500A33F006E50E3 /* BottomToolsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomToolsViewController.swift; sourceTree = "<group>"; };
+		A750EC3B2500A33F006E50E3 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		A750EC462500B1E6006E50E3 /* GiftVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiftVM.swift; sourceTree = "<group>"; };
+		A750EC472500B1E6006E50E3 /* LiveUserListVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveUserListVM.swift; sourceTree = "<group>"; };
+		A750EC482500B1E6006E50E3 /* MultiHostsVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiHostsVM.swift; sourceTree = "<group>"; };
+		A750EC492500B1E6006E50E3 /* ChatVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatVM.swift; sourceTree = "<group>"; };
+		A750EC4A2500B1E6006E50E3 /* MineVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MineVM.swift; sourceTree = "<group>"; };
+		A750EC502500B353006E50E3 /* SubThreadTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubThreadTimer.m; sourceTree = "<group>"; };
+		A750EC512500B353006E50E3 /* SubThreadTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubThreadTimer.h; sourceTree = "<group>"; };
+		A750EC532500B362006E50E3 /* RTMObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMObserver.swift; sourceTree = "<group>"; };
+		A750EC552500B3BB006E50E3 /* TimestampQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimestampQueue.swift; sourceTree = "<group>"; };
+		A750EC562500B3BC006E50E3 /* TimestampModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimestampModel.swift; sourceTree = "<group>"; };
+		A750EC592500B455006E50E3 /* TabSelectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabSelectView.swift; sourceTree = "<group>"; };
+		A750EC5B2500B661006E50E3 /* ImageSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSelectViewController.swift; sourceTree = "<group>"; };
+		A750EC5D2500D0D8006E50E3 /* LiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveViewController.swift; sourceTree = "<group>"; };
+		A750EC5F2500D1C5006E50E3 /* MusicVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicVM.swift; sourceTree = "<group>"; };
+		A750EC602500D1C5006E50E3 /* LiveSeatVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSeatVM.swift; sourceTree = "<group>"; };
+		A750EC612500D1C5006E50E3 /* MediaDeviceVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaDeviceVM.swift; sourceTree = "<group>"; };
+		A750EC652500D5B5006E50E3 /* GiftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiftViewController.swift; sourceTree = "<group>"; };
+		A750EC682500D730006E50E3 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		A75C6F4824FCC386003E5AD9 /* AgoraVoice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AgoraVoice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A75C6F5424FCC387003E5AD9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A75C6FB424FCD709003E5AD9 /* UIView+ExProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ExProperty.m"; sourceTree = "<group>"; };
@@ -112,14 +168,12 @@
 		A75C701324FCE8B8003E5AD9 /* UIColor+Hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hex.h"; sourceTree = "<group>"; };
 		A75C701424FCE8B8003E5AD9 /* UIColor+Hex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hex.m"; sourceTree = "<group>"; };
 		A75C701524FCE8B8003E5AD9 /* UIImage+CSClipToCycle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+CSClipToCycle.m"; sourceTree = "<group>"; };
-		A75C701824FCE8F0003E5AD9 /* SubThreadTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubThreadTimer.h; sourceTree = "<group>"; };
-		A75C701924FCE8F0003E5AD9 /* SubThreadTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubThreadTimer.m; sourceTree = "<group>"; };
 		A75C702024FCEBBC003E5AD9 /* AgoraLive.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AgoraLive.xcdatamodel; sourceTree = "<group>"; };
 		A75C702124FCEBBC003E5AD9 /* UserData+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A75C702224FCEBBC003E5AD9 /* UserData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A75C702324FCEBBC003E5AD9 /* UserDataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDataHelper.swift; sourceTree = "<group>"; };
 		A75C702C24FCEF1E003E5AD9 /* DeviceAssistant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceAssistant.swift; sourceTree = "<group>"; };
-		A75C70E124FDF121003E5AD9 /* Scene.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Scene.storyboard; sourceTree = "<group>"; };
+		A75C70E124FDF121003E5AD9 /* Live.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Live.storyboard; sourceTree = "<group>"; };
 		A75C70E324FDF16A003E5AD9 /* MediaDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaDevice.h; sourceTree = "<group>"; };
 		A75C70E424FDF16A003E5AD9 /* MediaDevice.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaDevice.m; sourceTree = "<group>"; };
 		A75C70E624FDF2DE003E5AD9 /* Player.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
@@ -174,6 +228,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A750EC672500D71E006E50E3 /* ChatRoom */ = {
+			isa = PBXGroup;
+			children = (
+				A750EC682500D730006E50E3 /* ChatRoomViewController.swift */,
+			);
+			name = ChatRoom;
+			sourceTree = "<group>";
+		};
 		A75C6F3F24FCC386003E5AD9 = {
 			isa = PBXGroup;
 			children = (
@@ -208,9 +270,10 @@
 		A75C6FB224FCD709003E5AD9 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				A7FFA32124FF6BC200C66569 /* SharedView */,
+				A750EC672500D71E006E50E3 /* ChatRoom */,
 				A75C70F124FE29A3003E5AD9 /* Mine */,
 				A75C70E924FE2545003E5AD9 /* ViewControllers */,
+				A7FFA32124FF6BC200C66569 /* SharedViews */,
 				A75C6FC324FCD729003E5AD9 /* storyboard */,
 			);
 			path = UI;
@@ -219,12 +282,12 @@
 		A75C6FB324FCD709003E5AD9 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				A750EC562500B3BC006E50E3 /* TimestampModel.swift */,
+				A750EC552500B3BB006E50E3 /* TimestampQueue.swift */,
 				A75C6FB524FCD709003E5AD9 /* CSNavigationController.swift */,
 				A75C6FB724FCD709003E5AD9 /* AppleExtension.swift */,
 				A75C700B24FCE6D2003E5AD9 /* FilletView.swift */,
 				A75C6FCD24FCD986003E5AD9 /* ToastView.swift */,
-				A75C701824FCE8F0003E5AD9 /* SubThreadTimer.h */,
-				A75C701924FCE8F0003E5AD9 /* SubThreadTimer.m */,
 				A75C6FB824FCD709003E5AD9 /* UIView+ExProperty.h */,
 				A75C6FB424FCD709003E5AD9 /* UIView+ExProperty.m */,
 				A75C701324FCE8B8003E5AD9 /* UIColor+Hex.h */,
@@ -249,6 +312,14 @@
 		A75C6FBC24FCD709003E5AD9 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				A750EC602500D1C5006E50E3 /* LiveSeatVM.swift */,
+				A750EC612500D1C5006E50E3 /* MediaDeviceVM.swift */,
+				A750EC5F2500D1C5006E50E3 /* MusicVM.swift */,
+				A750EC492500B1E6006E50E3 /* ChatVM.swift */,
+				A750EC462500B1E6006E50E3 /* GiftVM.swift */,
+				A750EC472500B1E6006E50E3 /* LiveUserListVM.swift */,
+				A750EC4A2500B1E6006E50E3 /* MineVM.swift */,
+				A750EC482500B1E6006E50E3 /* MultiHostsVM.swift */,
 				A7FFA32624FF959D00C66569 /* LiveListVM.swift */,
 			);
 			path = ViewModel;
@@ -259,7 +330,8 @@
 			children = (
 				A75C6FC624FCD75D003E5AD9 /* LaunchScreen.storyboard */,
 				A75C6FC424FCD75D003E5AD9 /* Main.storyboard */,
-				A75C70E124FDF121003E5AD9 /* Scene.storyboard */,
+				A75C70E124FDF121003E5AD9 /* Live.storyboard */,
+				A750EC2F2500A18E006E50E3 /* Popover.storyboard */,
 			);
 			name = storyboard;
 			sourceTree = "<group>";
@@ -303,6 +375,8 @@
 				A75C6FE424FCE41E003E5AD9 /* NetworkMonitor.swift */,
 				A75C6FD624FCE41E003E5AD9 /* AGOSSClient.h */,
 				A75C6FE324FCE41E003E5AD9 /* AGOSSClient.m */,
+				A750EC512500B353006E50E3 /* SubThreadTimer.h */,
+				A750EC502500B353006E50E3 /* SubThreadTimer.m */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -331,6 +405,7 @@
 		A75C6FEA24FCE41E003E5AD9 /* Specials */ = {
 			isa = PBXGroup;
 			children = (
+				A750EC532500B362006E50E3 /* RTMObserver.swift */,
 				A75C6FEB24FCE41E003E5AD9 /* JsonParse.swift */,
 				A75C6FEC24FCE41E003E5AD9 /* URLGroup.swift */,
 				A75C6FED24FCE41E003E5AD9 /* AppAssistant.swift */,
@@ -364,6 +439,7 @@
 				A75C70EF24FE2765003E5AD9 /* LiveTypeViewController.swift */,
 				A7FFA31F24FF667700C66569 /* LiveListViewController.swift */,
 				A7FFA32424FF85CE00C66569 /* CreateLiveViewController.swift */,
+				A750EC5D2500D0D8006E50E3 /* LiveViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -378,12 +454,25 @@
 			name = Mine;
 			sourceTree = "<group>";
 		};
-		A7FFA32124FF6BC200C66569 /* SharedView */ = {
+		A7FFA32124FF6BC200C66569 /* SharedViews */ = {
 			isa = PBXGroup;
 			children = (
+				A750EC652500D5B5006E50E3 /* GiftViewController.swift */,
+				A750EC592500B455006E50E3 /* TabSelectView.swift */,
+				A750EC3A2500A33F006E50E3 /* BottomToolsViewController.swift */,
+				A750EC362500A33F006E50E3 /* ChatInputView.swift */,
+				A750EC3B2500A33F006E50E3 /* ChatViewController.swift */,
+				A750EC332500A33F006E50E3 /* CVUserListViewController.swift */,
+				A750EC372500A33F006E50E3 /* ExtensionViewController.swift */,
+				A750EC392500A33F006E50E3 /* GiftAudienceViewController.swift */,
+				A750EC382500A33F006E50E3 /* GIFView.swift */,
+				A750EC322500A33F006E50E3 /* GIFViewController.swift */,
+				A750EC342500A33F006E50E3 /* MusicViewController.swift */,
+				A750EC352500A33F006E50E3 /* RealDataViewController.swift */,
 				A7FFA32224FF6BCC00C66569 /* IconTextView.swift */,
+				A750EC5B2500B661006E50E3 /* ImageSelectViewController.swift */,
 			);
-			name = SharedView;
+			name = SharedViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -448,9 +537,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A75C6FC824FCD75D003E5AD9 /* Main.storyboard in Resources */,
-				A75C70E224FDF121003E5AD9 /* Scene.storyboard in Resources */,
+				A75C70E224FDF121003E5AD9 /* Live.storyboard in Resources */,
 				A75C6FC924FCD75D003E5AD9 /* LaunchScreen.storyboard in Resources */,
 				A75C6F5524FCC387003E5AD9 /* Assets.xcassets in Resources */,
+				A750EC302500A18E006E50E3 /* Popover.storyboard in Resources */,
 				A75C70FC24FE2B70003E5AD9 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -504,44 +594,66 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A750EC582500B3BC006E50E3 /* TimestampModel.swift in Sources */,
+				A750EC572500B3BC006E50E3 /* TimestampQueue.swift in Sources */,
 				A75C70E524FDF16A003E5AD9 /* MediaDevice.m in Sources */,
+				A750EC542500B362006E50E3 /* RTMObserver.swift in Sources */,
 				A75C700124FCE41F003E5AD9 /* Center.swift in Sources */,
 				A75C70F524FE29AF003E5AD9 /* AboutViewController.swift in Sources */,
 				A75C6FF224FCE41E003E5AD9 /* AGEError.swift in Sources */,
 				A75C70EB24FE2557003E5AD9 /* MainTabBarViewController.swift in Sources */,
 				A75C6FF424FCE41E003E5AD9 /* Convert.swift in Sources */,
+				A750EC402500A33F006E50E3 /* ChatInputView.swift in Sources */,
 				A7FFA32324FF6BCC00C66569 /* IconTextView.swift in Sources */,
 				A75C702524FCEBBC003E5AD9 /* UserData+CoreDataClass.swift in Sources */,
+				A750EC5C2500B661006E50E3 /* ImageSelectViewController.swift in Sources */,
+				A750EC662500D5B5006E50E3 /* GiftViewController.swift in Sources */,
+				A750EC4B2500B1E6006E50E3 /* GiftVM.swift in Sources */,
+				A750EC4E2500B1E6006E50E3 /* ChatVM.swift in Sources */,
+				A750EC3D2500A33F006E50E3 /* CVUserListViewController.swift in Sources */,
 				A75C6FBD24FCD709003E5AD9 /* UIView+ExProperty.m in Sources */,
 				A75C6FF324FCE41E003E5AD9 /* LogTube.swift in Sources */,
+				A750EC3E2500A33F006E50E3 /* MusicViewController.swift in Sources */,
 				A75C700624FCE41F003E5AD9 /* User.swift in Sources */,
+				A750EC5E2500D0D8006E50E3 /* LiveViewController.swift in Sources */,
+				A750EC4C2500B1E6006E50E3 /* LiveUserListVM.swift in Sources */,
+				A750EC692500D730006E50E3 /* ChatRoomViewController.swift in Sources */,
 				A75C700D24FCE6D2003E5AD9 /* FilletView.swift in Sources */,
+				A750EC642500D1C5006E50E3 /* MediaDeviceVM.swift in Sources */,
 				A75C702724FCEBBC003E5AD9 /* UserDataHelper.swift in Sources */,
 				A75C700924FCE41F003E5AD9 /* LogFiles.swift in Sources */,
 				A75C702424FCEBBC003E5AD9 /* AgoraVoice.xcdatamodeld in Sources */,
 				A75C700024FCE41F003E5AD9 /* Keys.swift in Sources */,
+				A750EC5A2500B455006E50E3 /* TabSelectView.swift in Sources */,
+				A750EC422500A33F006E50E3 /* GIFView.swift in Sources */,
 				A75C6FFD24FCE41F003E5AD9 /* AGOSSClient.m in Sources */,
+				A750EC412500A33F006E50E3 /* ExtensionViewController.swift in Sources */,
 				A75C70E824FDF2DE003E5AD9 /* Player.m in Sources */,
 				A75C6FBE24FCD709003E5AD9 /* CSNavigationController.swift in Sources */,
 				A75C701724FCE8B8003E5AD9 /* UIImage+CSClipToCycle.m in Sources */,
 				A75C6FD024FCE205003E5AD9 /* RxObject.swift in Sources */,
-				A75C701A24FCE8F0003E5AD9 /* SubThreadTimer.m in Sources */,
 				A75C6FFB24FCE41F003E5AD9 /* AGELog.swift in Sources */,
 				A75C6FF524FCE41F003E5AD9 /* LCLLogFile.m in Sources */,
+				A750EC3F2500A33F006E50E3 /* RealDataViewController.swift in Sources */,
 				A75C6FC024FCD709003E5AD9 /* AppleExtension.swift in Sources */,
+				A750EC4D2500B1E6006E50E3 /* MultiHostsVM.swift in Sources */,
 				A75C6FF824FCE41F003E5AD9 /* DictionaryGetable.swift in Sources */,
 				A75C6FC124FCD709003E5AD9 /* AppDelegate.swift in Sources */,
 				A75C6FF724FCE41F003E5AD9 /* ZipTool.swift in Sources */,
 				A75C701624FCE8B8003E5AD9 /* UIColor+Hex.m in Sources */,
 				A75C702624FCEBBC003E5AD9 /* UserData+CoreDataProperties.swift in Sources */,
+				A750EC522500B353006E50E3 /* SubThreadTimer.m in Sources */,
 				A75C70F624FE29AF003E5AD9 /* MineViewController.swift in Sources */,
+				A750EC4F2500B1E6006E50E3 /* MineVM.swift in Sources */,
 				A75C700324FCE41F003E5AD9 /* JsonParse.swift in Sources */,
 				A75C700224FCE41F003E5AD9 /* Utils.swift in Sources */,
 				A75C6FFA24FCE41F003E5AD9 /* AGELock.swift in Sources */,
 				A75C700724FCE41F003E5AD9 /* FilesGroup.swift in Sources */,
+				A750EC442500A33F006E50E3 /* BottomToolsViewController.swift in Sources */,
 				A75C702D24FCEF1E003E5AD9 /* DeviceAssistant.swift in Sources */,
 				A75C6FF924FCE41F003E5AD9 /* DataExtension.swift in Sources */,
 				A75C6FF624FCE41F003E5AD9 /* TypeAlias.swift in Sources */,
+				A750EC632500D1C5006E50E3 /* LiveSeatVM.swift in Sources */,
 				A75C6FFE24FCE41F003E5AD9 /* NetworkMonitor.swift in Sources */,
 				A75C6FCE24FCD986003E5AD9 /* ToastView.swift in Sources */,
 				A75C700524FCE41F003E5AD9 /* AppAssistant.swift in Sources */,
@@ -552,8 +664,12 @@
 				A75C70F724FE29AF003E5AD9 /* UserNameViewController.swift in Sources */,
 				A75C700424FCE41F003E5AD9 /* URLGroup.swift in Sources */,
 				A7FFA32524FF85CE00C66569 /* CreateLiveViewController.swift in Sources */,
+				A750EC432500A33F006E50E3 /* GiftAudienceViewController.swift in Sources */,
 				A75C70F024FE2765003E5AD9 /* LiveTypeViewController.swift in Sources */,
+				A750EC622500D1C5006E50E3 /* MusicVM.swift in Sources */,
 				A75C700824FCE41F003E5AD9 /* ImageFiles.swift in Sources */,
+				A750EC452500A33F006E50E3 /* ChatViewController.swift in Sources */,
+				A750EC3C2500A33F006E50E3 /* GIFViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,6 +13,7 @@ Reject="拒绝";
 End="结束";
 Accept="接受";
 Music="音乐";
+Background="背景";
 
 Lost_Connection="网络异常";
 Lost_Connection_Description="当前网络连接错误，请稍后再试";

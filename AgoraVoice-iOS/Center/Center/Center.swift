@@ -158,9 +158,9 @@ extension Center: CenterHelper {
         return files.images
     }
     
-//    func centerProvideMediaHelper() -> MediaKit {
-//        return mediaKit
-//    }
+    func centerProvideMediaDevice() -> MediaDevice {
+        return MediaDevice()
+    }
     
     func centerProvideFilesGroup() -> FilesGroup {
         return self.files

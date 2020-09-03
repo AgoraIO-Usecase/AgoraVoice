@@ -67,7 +67,7 @@ class AboutViewController: MaskTableViewController {
         alLabel.text = NSLocalizedString("AV_Version")
         
         alValueLabel.text = "Ver \(AppAssistant.version)"
-//        sdkValueLabel.text = "Ver \(ALCenter.shared().centerProvideMediaHelper().rtcVersion)"
+//        sdkValueLabel.text = "Ver \(Center.shared().centerProvideMediaHelper().rtcVersion)"
         
         releaseDateValueLabel.text = "2020.6.18"
         
@@ -130,7 +130,7 @@ class AboutViewController: MaskTableViewController {
             UIApplication.shared.openURL(url)
         case 6:
             self.showHUD()
-//            let log = ALCenter.shared().centerProvideFilesGroup().logs
+//            let log = Center.shared().centerProvideFilesGroup().logs
 //            log.upload(success: { [weak self] (logId) in
 //                self?.hiddenHUD()
 //
