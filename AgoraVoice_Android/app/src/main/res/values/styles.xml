@@ -1,0 +1,11 @@
+<resources>
+    <style name="agora_voice_base_dialog" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:backgroundDimAmount">0</item>
+    </style>
+
+    <style name="nav_title_text">
+        <item name="android:textSize">@dimen/text_size_1</item>
+    </style>
+</resources>

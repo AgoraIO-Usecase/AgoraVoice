@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="common_margin_horizontal">16dp</dimen>
+    <dimen name="common_margin_vertical">16dp</dimen>
+
+    <dimen name="text_size_1">12dp</dimen>
+    <dimen name="text_size_1_1">14dp</dimen>
+    <dimen name="text_size_2">16dp</dimen>
+    <dimen name="text_size_3">24dp</dimen>
+
+    <dimen name="corner_1">4dp</dimen>
+    <dimen name="corner_2">6dp</dimen>
+    <dimen name="corner_3">8dp</dimen>
+    <dimen name="corner_4">12dp</dimen>
+    <dimen name="corner_5">20dp</dimen>
+    <dimen name="corner_6">24dp</dimen>
+
+    <dimen name="border_1">1dp</dimen>
+    <dimen name="border_2">2dp</dimen>
+
+    <dimen name="margin_1">6dp</dimen>
+    <dimen name="margin_2">8dp</dimen>
+    <dimen name="margin_3">12dp</dimen>
+    <dimen name="margin_4">16dp</dimen>
+    <dimen name="margin_5">20dp</dimen>
+    <dimen name="margin_6">24dp</dimen>
+
+    <!-- Main Activity -->
+    <dimen name="main_app_title_height">56dp</dimen>
+    <dimen name="main_navigation_layout_height">56dp</dimen>
+    <dimen name="main_content_margin">52dp</dimen>
+
+    <dimen name="main_navigation_btn_size">40dp</dimen>
+    <dimen name="main_navigation_btn_margin">78dp</dimen>
+
+    <dimen name="main_entry_button_width">138dp</dimen>
+    <dimen name="main_entry_button_height">48dp</dimen>
+
+    <dimen name="main_entry_text_margin_horizontal">18dp</dimen>
+    <dimen name="main_entry_text_margin_vertical">20dp</dimen>
+
+    <!-- Profile -->
+    <dimen name="main_profile_background_height">210dp</dimen>
+    <dimen name="main_profile_portrait_layout_size">96dp</dimen>
+    <dimen name="main_profile_portrait_size">94dp</dimen>
+    <dimen name="main_profile_user_nickname_margin">12dp</dimen>
+    <dimen name="main_profile_setting_item_height">48dp</dimen>
+    <dimen name="main_profile_setting_item_divider_height">2dp</dimen>
+
+    <!-- Prepare Activity -->
+    <dimen name="prepare_top_layout_height">64dp</dimen>
+    <dimen name="prepare_top_button_size">32dp</dimen>
+    <dimen name="prepare_edit_layout_height">48dp</dimen>
+    <dimen name="prepare_edit_padding">8dp</dimen>
+    <dimen name="prepare_go_live_btn_height">48dp</dimen>
+    <dimen name="prepare_go_live_btn_padding">32dp</dimen>
+    <dimen name="prepare_bottom_margin">48dp</dimen>
+    <dimen name="prepare_policy_sign_size">32dp</dimen>
+    <dimen name="prepare_policy_padding">6dp</dimen>
+    <dimen name="prepare_policy_caution_size">16dp</dimen>
+
+    <!-- Action Sheet -->
+    <dimen name="action_sheet_title_height">48dp</dimen>
+    <dimen name="action_sheet_back_icon_size">36dp</dimen>
+
+    <dimen name="action_sheet_background_mask_height">30dp</dimen>
+    <dimen name="action_sheet_background_check_size">20dp</dimen>
+    <dimen name="action_sheet_background_border_width">3dp</dimen>
+
+    <dimen name="action_sheet_voice_beauty_recycler_height">266dp</dimen>
+    <dimen name="action_sheet_voice_beauty_type_width">72dp</dimen>
+    <dimen name="action_sheet_voice_beauty_type_margin">12dp</dimen>
+
+    <dimen name="action_sheet_voice_beauty_item_width">91dp</dimen>
+    <dimen name="action_sheet_voice_beauty_item_margin_bottom">8dp</dimen>
+    <dimen name="action_sheet_voice_beauty_item_icon_height">81dp</dimen>
+    <dimen name="action_sheet_voice_beauty_item_name_height">30dp</dimen>
+
+    <dimen name="action_sheet_voice_beauty_text_item_height">38dp</dimen>
+    <dimen name="action_sheet_voice_beauty_text_item_spacing">8dp</dimen>
+
+    <dimen name="action_sheet_sound_effect_type_text_width">86dp</dimen>
+
+    <dimen name="action_sheet_tool_item_icon_size">54dp</dimen>
+
+    <dimen name="action_sheet_gift_item_width">64dp</dimen>
+    <dimen name="action_sheet_gift_item_height">136dp</dimen>
+    <dimen name="action_sheet_gift_name_height">20dp</dimen>
+    <dimen name="action_sheet_gift_value_height">20dp</dimen>
+
+    <!-- Components -->
+    <dimen name="notification_point_size">6dp</dimen>
+
+    <dimen name="room_top_layout_margin_top">10dp</dimen>
+    <dimen name="room_button_size">32dp</dimen>
+    <dimen name="room_user_action_view_height">32dp</dimen>
+    <dimen name="room_user_action_view_text_height">20dp</dimen>
+    <dimen name="room_user_action_view_padding">6dp</dimen>
+
+    <dimen name="room_bottom_bar_height">42dp</dimen>
+    <dimen name="room_bottom_bar_margin">14dp</dimen>
+    <dimen name="room_bottom_bar_edit_padding">12dp</dimen>
+
+    <dimen name="room_message_list_base_height">40dp</dimen>
+    <dimen name="room_message_text_padding_horizontal">16dp</dimen>
+    <dimen name="room_message_text_padding_vertical">12dp</dimen>
+
+    <dimen name="stats_close_btn_size">24dp</dimen>
+
+    <dimen name="chat_room_host_panel_owner_image_size">96dp</dimen>
+    <dimen name="chat_room_host_panel_seat_size">72dp</dimen>
+</resources>

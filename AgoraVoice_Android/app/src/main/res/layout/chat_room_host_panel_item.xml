@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <io.agora.agoravoice.ui.views.SquareRelativeLayout
+        android:layout_width="@dimen/chat_room_host_panel_seat_size"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chat_room_host_panel_item_bg"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/common_margin_vertical"
+        android:layout_marginBottom="@dimen/common_margin_vertical">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/icon_invite"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/chat_room_host_panel_host_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"/>
+    </io.agora.agoravoice.ui.views.SquareRelativeLayout>
+
+</RelativeLayout>

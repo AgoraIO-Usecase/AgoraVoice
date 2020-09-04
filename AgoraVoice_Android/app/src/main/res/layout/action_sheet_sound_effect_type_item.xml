@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/action_sheet_voice_beauty_layout_1"
+    android:layout_width="@dimen/action_sheet_sound_effect_type_text_width"
+    android:layout_height="match_parent">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/action_sheet_sound_effect_type_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAlignment="gravity"
+        android:gravity="center"/>
+    <View
+        android:id="@+id/action_sheet_sound_effect_type_item_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/border_2"
+        android:background="@color/theme_blue_1"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

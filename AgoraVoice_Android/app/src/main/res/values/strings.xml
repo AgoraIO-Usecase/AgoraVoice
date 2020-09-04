@@ -1,0 +1,207 @@
+<resources>
+    <string name="app_name" translatable="false">Agora Voice</string>
+
+    <!-- Main Activity -->
+    <string name="main_navigation_home">Home</string>
+    <string name="main_navigation_profile">My Profile</string>
+
+    <string name="main_start_chat">Begin Chat</string>
+
+    <!-- Profile -->
+    <string name="profile_setting_title_avatar">Avatar Setting</string>
+    <string name="profile_setting_title_nickname">Nickname Setting</string>
+    <string name="profile_setting_title_about">About</string>
+
+    <!-- Policies -->
+    <string name="room_restriction_policy">This is a testing product. Please refrain from using it commercially. The max duration per session is 10 minutes, and the max number of participants per channel is 10. </string>
+
+    <!-- Prepare Activity -->
+    <string name="live_prepare_hint">Room Name</string>
+    <string name="go_live">Go Live</string>
+    <string name="room_name_too_long_toast_format">Room name cannot be longer than %d characters</string>
+    <string name="no_room_name_toast">Please enter your room name</string>
+
+    <string-array name="random_channel_names">
+        <item>Cheer</item>
+        <item>Vibe</item>
+        <item>Devine</item>
+        <item>Duo</item>
+        <item>Ablaze</item>
+        <item>Amaze</item>
+        <item>Harmony</item>
+        <item>Verse</item>
+        <item>Vigilant</item>
+        <item>Contender</item>
+        <item>Vista</item>
+        <item>Wander</item>
+        <item>Collections</item>
+        <item>Moon</item>
+        <item>Boho</item>
+        <item>Everest</item>
+    </string-array>
+
+    <string-array name="random_surnames">
+        <item>Atkinson</item>
+        <item>Edwards</item>
+        <item>Gibson</item>
+        <item>Holmes</item>
+        <item>Kelvin</item>
+        <item>Lloyd</item>
+        <item>Payne</item>
+        <item>White</item>
+    </string-array>
+
+    <string-array name="random_names">
+        <item>Alexander</item>
+        <item>Halley</item>
+        <item>Rickey</item>
+        <item>Xavior</item>
+        <item>Yolanda</item>
+        <item>Corynn</item>
+        <item>Daniel</item>
+        <item>Kelly</item>
+        <item>Lauren</item>
+    </string-array>
+
+    <!-- Components -->
+    <string name="room_bottom_bar_input_hint">Say something &#8230;</string>
+
+    <string name="live_system_notification_member_joined">has joined</string>
+    <string name="live_system_notification_member_left">has left</string>
+
+    <string name="live_message_gift_send">has sent out</string>
+
+    <string name="rtc_stats_format">Downstream Bitrate: %.2f kbps%nDownstream Loss Rate: %.2f%% %nUpstream Bitrate: %.2f kbps%nUpstream Loss Rate: %.2f%%</string>
+
+    <!-- Action Sheets -->
+    <string name="action_sheet_background_title">Background</string>
+
+    <string name="action_sheet_voice_beauty_title">Voice Beauty</string>
+    <string name="action_sheet_voice_beauty_type_title_1">Chat</string>
+    <string name="action_sheet_voice_beauty_type_title_2">Sing</string>
+    <string name="action_sheet_voice_beauty_type_title_3">Timbre</string>
+
+    <string-array name="voice_beauty_chat_names">
+        <item>Magnetic (Male)</item>
+        <item>Fresh (Female)</item>
+        <item>Vitality (Female)</item>
+    </string-array>
+
+    <string-array name="voice_beauty_sing_names">
+        <item>Hall (Male)</item>
+        <item>Large Room (Male)</item>
+        <item>Small Room (Male)</item>
+        <item>Hall (Female)</item>
+        <item>Large Room (Female)</item>
+        <item>Small Room (Female)</item>
+    </string-array>
+
+    <string-array name="voice_beauty_timbre">
+        <item>Vigorous</item>
+        <item>Deep</item>
+        <item>Mellow</item>
+        <item>Falsetto</item>
+        <item>Full</item>
+        <item>Clear</item>
+        <item>Resounding</item>
+        <item>Ringing</item>
+    </string-array>
+
+    <string name="action_sheet_sound_effect_title">Sound Effect</string>
+    <string-array name="action_sheet_sound_effect_types">
+        <item>Spacing</item>
+        <item>Voice Change</item>
+        <item>Flavour</item>
+        <item>Electronic</item>
+        <item>Magic Notes</item>
+    </string-array>
+
+    <string-array name="action_sheet_sound_effect_space_names">
+        <item>KTV</item>
+        <item>Concert</item>
+        <item>Studio</item>
+        <item>Phonograph</item>
+        <item>Stereo</item>
+        <item>Spacial</item>
+        <item>Ethereal</item>
+        <item>3D Voice</item>
+    </string-array>
+
+    <string-array name="action_sheet_sound_effect_change_names">
+        <item>Uncle</item>
+        <item>Old Man</item>
+        <item>Boy</item>
+        <item>Sister</item>
+        <item>Girl</item>
+        <item>Bajie</item>
+        <item>Hawk</item>
+    </string-array>
+
+    <string-array name="action_sheet_sound_effect_flavour_names">
+        <item>R&#38;B</item>
+        <item>Pop</item>
+        <item>HiPop</item>
+        <item>Rock\'n\'Roll</item>
+    </string-array>
+
+    <string name="action_sheet_sound_effect_enable_electronic_voice">Enable Electronic Voice</string>
+    <string-array name="action_sheet_sound_effect_electronic_keys">
+        <item>Major</item>
+        <item>Minor</item>
+        <item>Breeze</item>
+    </string-array>
+
+    <string name="action_sheet_sound_effect_electronic_tones_hint">Choose the starting tone</string>
+
+    <string-array name="action_sheet_sound_effect_electronic_tones">
+        <item>A</item>
+        <item>Bb</item>
+        <item>B</item>
+        <item>C</item>
+        <item>Dd</item>
+        <item>D</item>
+        <item>Eb</item>
+        <item>E</item>
+        <item>F</item>
+        <item>Gb</item>
+        <item>G</item>
+        <item>Ab</item>
+    </string-array>
+
+    <string name="action_sheet_tool_title">Tool</string>
+
+    <string-array name="action_sheet_tool_audience">
+        <item>Data</item>
+    </string-array>
+
+    <string-array name="action_sheet_tool_host">
+        <item>Monitor</item>
+        <item>Data</item>
+    </string-array>
+
+    <string-array name="action_sheet_tool_owner">
+        <item>Monitor</item>
+        <item>Music</item>
+        <item>Background</item>
+        <item>Data</item>
+    </string-array>
+
+    <string-array name="action_sheet_gift_names">
+        <item>Bell</item>
+        <item>Ice Cream</item>
+        <item>Wine</item>
+        <item>Cake</item>
+        <item>Ring</item>
+        <item>Watch</item>
+        <item>Diamond</item>
+        <item>Rocket</item>
+    </string-array>
+
+    <string name="action_sheet_gift_title">Gift</string>
+    <string name="action_sheet_gift_send">Send</string>
+    <string name="gift_action_sheet_value_format">(%d Coins)</string>
+
+    <string name="action_sheet_music_title">Music</string>
+    <string name="action_sheet_music_credit_hint">Music:&#160;&#160;</string>
+    <string name="action_sheet_music_credit_link">https://www.bensound.com</string>
+</resources>
