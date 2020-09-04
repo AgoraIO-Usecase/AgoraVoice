@@ -53,6 +53,7 @@
     <dimen name="main_profile_avatar_edit_icon_background_size">86dp</dimen>
     <dimen name="main_profile_avatar_edit_icon_size">84dp</dimen>
     <dimen name="main_profile_avatar_recycler_top_margin">64dp</dimen>
+    <dimen name="main_profile_nickname_edit_height">48dp</dimen>
 
     <!-- Prepare Activity -->
     <dimen name="prepare_top_layout_height">64dp</dimen>
