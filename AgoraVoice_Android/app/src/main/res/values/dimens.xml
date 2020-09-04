@@ -47,6 +47,13 @@
     <dimen name="main_profile_setting_item_height">48dp</dimen>
     <dimen name="main_profile_setting_item_divider_height">2dp</dimen>
 
+    <dimen name="main_profile_edit_top_layout_height">56dp</dimen>
+    <dimen name="profile_edit_top_button_width">56dp</dimen>
+    <dimen name="profile_edit_top_button_height">28dp</dimen>
+    <dimen name="main_profile_avatar_edit_icon_background_size">86dp</dimen>
+    <dimen name="main_profile_avatar_edit_icon_size">84dp</dimen>
+    <dimen name="main_profile_avatar_recycler_top_margin">64dp</dimen>
+
     <!-- Prepare Activity -->
     <dimen name="prepare_top_layout_height">64dp</dimen>
     <dimen name="prepare_top_button_size">32dp</dimen>
@@ -63,7 +70,7 @@
     <dimen name="action_sheet_title_height">48dp</dimen>
     <dimen name="action_sheet_back_icon_size">36dp</dimen>
 
-    <dimen name="action_sheet_background_mask_height">30dp</dimen>
+    <dimen name="image_select_background_mask_height">30dp</dimen>
     <dimen name="action_sheet_background_check_size">20dp</dimen>
     <dimen name="action_sheet_background_border_width">3dp</dimen>
 

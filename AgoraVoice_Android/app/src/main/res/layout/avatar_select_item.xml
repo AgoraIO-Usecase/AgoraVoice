@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <io.agora.agoravoice.ui.views.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/action_sheet_layout">
+    android:layout_height="wrap_content">
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/action_sheet_background_item_image"
+        android:id="@+id/avatar_select_item_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <RelativeLayout
-        android:id="@+id/action_sheet_background_item_selected_mask"
+        android:id="@+id/image_select_item_selected_mask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/image_select_background_mask_border">
@@ -24,6 +23,5 @@
                 android:src="@drawable/icon_check"
                 android:scaleType="fitXY"/>
         </RelativeLayout>
-
     </RelativeLayout>
 </io.agora.agoravoice.ui.views.SquareRelativeLayout>

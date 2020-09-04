@@ -13,6 +13,11 @@
     <string name="profile_setting_title_nickname">设置昵称</string>
     <string name="profile_setting_title_about">关于</string>
 
+    <string name="profile_edit_avatar_title">请选择头像</string>
+
+    <string name="text_cancel">取消</string>
+    <string name="text_done">完成</string>
+
     <!-- Prepare Activity -->
     <string name="live_prepare_hint">直播间名字</string>
     <string name="go_live">开始直播</string>

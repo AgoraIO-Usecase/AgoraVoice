@@ -11,6 +11,10 @@
     <string name="profile_setting_title_avatar">Avatar Setting</string>
     <string name="profile_setting_title_nickname">Nickname Setting</string>
     <string name="profile_setting_title_about">About</string>
+    <string name="profile_edit_avatar_title">Select Avatar</string>
+
+    <string name="text_cancel">Cancel</string>
+    <string name="text_done">Done</string>
 
     <!-- Policies -->
     <string name="room_restriction_policy">This is a testing product. Please refrain from using it commercially. The max duration per session is 10 minutes, and the max number of participants per channel is 10. </string>
