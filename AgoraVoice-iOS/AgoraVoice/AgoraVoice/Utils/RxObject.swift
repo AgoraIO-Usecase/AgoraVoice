@@ -23,3 +23,7 @@ class RxViewController: UIViewController {
 class RxCollectionViewCell: UICollectionViewCell {
     let bag = DisposeBag()
 }
+
+class RxCollectionViewController: UICollectionViewController {
+    let bag = DisposeBag()
+}

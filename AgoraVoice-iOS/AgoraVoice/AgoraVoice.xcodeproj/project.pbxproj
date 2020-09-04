@@ -36,6 +36,8 @@
 		A750EC642500D1C5006E50E3 /* MediaDeviceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC612500D1C5006E50E3 /* MediaDeviceVM.swift */; };
 		A750EC662500D5B5006E50E3 /* GiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC652500D5B5006E50E3 /* GiftViewController.swift */; };
 		A750EC692500D730006E50E3 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC682500D730006E50E3 /* ChatRoomViewController.swift */; };
+		A750EC6B2500DBDC006E50E3 /* LiveSeatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC6A2500DBDC006E50E3 /* LiveSeatViewController.swift */; };
+		A750EC6D2500DCCB006E50E3 /* LiveRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC6C2500DCCB006E50E3 /* LiveRole.swift */; };
 		A75C6F5524FCC387003E5AD9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A75C6F5424FCC387003E5AD9 /* Assets.xcassets */; };
 		A75C6FBD24FCD709003E5AD9 /* UIView+ExProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FB424FCD709003E5AD9 /* UIView+ExProperty.m */; };
 		A75C6FBE24FCD709003E5AD9 /* CSNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FB524FCD709003E5AD9 /* CSNavigationController.swift */; };
@@ -123,6 +125,8 @@
 		A750EC612500D1C5006E50E3 /* MediaDeviceVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaDeviceVM.swift; sourceTree = "<group>"; };
 		A750EC652500D5B5006E50E3 /* GiftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiftViewController.swift; sourceTree = "<group>"; };
 		A750EC682500D730006E50E3 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
+		A750EC6A2500DBDC006E50E3 /* LiveSeatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSeatViewController.swift; sourceTree = "<group>"; };
+		A750EC6C2500DCCB006E50E3 /* LiveRole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveRole.swift; sourceTree = "<group>"; };
 		A75C6F4824FCC386003E5AD9 /* AgoraVoice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AgoraVoice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A75C6F5424FCC387003E5AD9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A75C6FB424FCD709003E5AD9 /* UIView+ExProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ExProperty.m"; sourceTree = "<group>"; };
@@ -232,6 +236,7 @@
 			isa = PBXGroup;
 			children = (
 				A750EC682500D730006E50E3 /* ChatRoomViewController.swift */,
+				A750EC6A2500DBDC006E50E3 /* LiveSeatViewController.swift */,
 			);
 			name = ChatRoom;
 			sourceTree = "<group>";
@@ -377,6 +382,10 @@
 				A75C6FE324FCE41E003E5AD9 /* AGOSSClient.m */,
 				A750EC512500B353006E50E3 /* SubThreadTimer.h */,
 				A750EC502500B353006E50E3 /* SubThreadTimer.m */,
+				A75C70E324FDF16A003E5AD9 /* MediaDevice.h */,
+				A75C70E424FDF16A003E5AD9 /* MediaDevice.m */,
+				A75C70E624FDF2DE003E5AD9 /* Player.h */,
+				A75C70E724FDF2DE003E5AD9 /* Player.m */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -413,10 +422,7 @@
 				A75C6FEF24FCE41E003E5AD9 /* FilesGroup.swift */,
 				A75C6FF024FCE41E003E5AD9 /* ImageFiles.swift */,
 				A75C6FF124FCE41E003E5AD9 /* LogFiles.swift */,
-				A75C70E324FDF16A003E5AD9 /* MediaDevice.h */,
-				A75C70E424FDF16A003E5AD9 /* MediaDevice.m */,
-				A75C70E624FDF2DE003E5AD9 /* Player.h */,
-				A75C70E724FDF2DE003E5AD9 /* Player.m */,
+				A750EC6C2500DCCB006E50E3 /* LiveRole.swift */,
 			);
 			path = Specials;
 			sourceTree = "<group>";
@@ -619,6 +625,7 @@
 				A750EC4C2500B1E6006E50E3 /* LiveUserListVM.swift in Sources */,
 				A750EC692500D730006E50E3 /* ChatRoomViewController.swift in Sources */,
 				A75C700D24FCE6D2003E5AD9 /* FilletView.swift in Sources */,
+				A750EC6B2500DBDC006E50E3 /* LiveSeatViewController.swift in Sources */,
 				A750EC642500D1C5006E50E3 /* MediaDeviceVM.swift in Sources */,
 				A75C702724FCEBBC003E5AD9 /* UserDataHelper.swift in Sources */,
 				A75C700924FCE41F003E5AD9 /* LogFiles.swift in Sources */,
@@ -632,6 +639,7 @@
 				A75C6FBE24FCD709003E5AD9 /* CSNavigationController.swift in Sources */,
 				A75C701724FCE8B8003E5AD9 /* UIImage+CSClipToCycle.m in Sources */,
 				A75C6FD024FCE205003E5AD9 /* RxObject.swift in Sources */,
+				A750EC6D2500DCCB006E50E3 /* LiveRole.swift in Sources */,
 				A75C6FFB24FCE41F003E5AD9 /* AGELog.swift in Sources */,
 				A75C6FF524FCE41F003E5AD9 /* LCLLogFile.m in Sources */,
 				A750EC3F2500A33F006E50E3 /* RealDataViewController.swift in Sources */,

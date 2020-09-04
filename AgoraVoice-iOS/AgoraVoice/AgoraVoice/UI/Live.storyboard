@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Multi Broadcasters View Controller-->
+        <!--Chat Room View Controller-->
         <scene sceneID="Cqk-YI-Pce">
             <objects>
-                <viewController storyboardIdentifier="MultiBroadcastersViewController" modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="8sC-Gv-D9t" customClass="MultiBroadcastersViewController" customModule="AgoraLive" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChatRoomViewController" modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="8sC-Gv-D9t" customClass="ChatRoomViewController" customModule="AgoraVoice" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BFA-jQ-Cl2">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -20,9 +20,9 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QC5-sr-fAc">
-                                <rect key="frame" x="0.0" y="184" width="414" height="276"/>
+                                <rect key="frame" x="0.0" y="278" width="414" height="276"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="QC5-sr-fAc" secondAttribute="height" multiplier="3:2" id="2UR-yt-BYR"/>
+                                    <constraint firstAttribute="height" constant="276" id="wfg-XI-zxb"/>
                                 </constraints>
                                 <connections>
                                     <segue destination="nQg-WQ-IXw" kind="embed" identifier="LiveSeatViewController" id="bp9-wl-ni7"/>
@@ -48,7 +48,7 @@
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jXq-i0-QOp">
-                                <rect key="frame" x="0.0" y="475" width="414" height="319"/>
+                                <rect key="frame" x="0.0" y="569" width="414" height="225"/>
                                 <connections>
                                     <segue destination="for-GP-f71" kind="embed" identifier="ChatViewController" id="zYG-QD-uIA"/>
                                 </connections>
@@ -69,25 +69,50 @@
                                 </constraints>
                                 <state key="normal" image="icon-close dark"/>
                             </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cLp-JY-t6F">
+                                <rect key="frame" x="167" y="112" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="MbX-xd-NwC"/>
+                                    <constraint firstAttribute="width" constant="80" id="wI8-Lz-fRG"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iK6-cS-GtW">
+                                <rect key="frame" x="186" y="207" width="42" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="obY-kD-wK6"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="jh9-LM-Ap7" firstAttribute="centerY" secondItem="QFn-ZE-Yy6" secondAttribute="centerY" id="07u-ET-uZm"/>
+                            <constraint firstItem="cLp-JY-t6F" firstAttribute="centerX" secondItem="BFA-jQ-Cl2" secondAttribute="centerX" id="1iT-Jn-Zf6"/>
                             <constraint firstItem="WYm-Mx-v3T" firstAttribute="top" secondItem="BFA-jQ-Cl2" secondAttribute="top" id="3pW-wb-y1m"/>
+                            <constraint firstItem="iK6-cS-GtW" firstAttribute="centerX" secondItem="BFA-jQ-Cl2" secondAttribute="centerX" id="5ro-EU-y9b"/>
                             <constraint firstItem="RtG-sd-BY7" firstAttribute="trailing" secondItem="QFn-ZE-Yy6" secondAttribute="trailing" constant="81" id="6Qy-pB-ls6"/>
                             <constraint firstItem="mD5-5G-Jjd" firstAttribute="centerY" secondItem="QFn-ZE-Yy6" secondAttribute="centerY" id="AzT-ax-9Af"/>
                             <constraint firstItem="QC5-sr-fAc" firstAttribute="leading" secondItem="RtG-sd-BY7" secondAttribute="leading" id="D7Q-KG-MHt"/>
                             <constraint firstItem="WYm-Mx-v3T" firstAttribute="leading" secondItem="RtG-sd-BY7" secondAttribute="leading" id="KD2-0k-8n6"/>
                             <constraint firstItem="jXq-i0-QOp" firstAttribute="leading" secondItem="RtG-sd-BY7" secondAttribute="leading" id="Mdj-Rr-yOL"/>
+                            <constraint firstItem="QC5-sr-fAc" firstAttribute="top" secondItem="iK6-cS-GtW" secondAttribute="bottom" constant="46" id="Mfg-SK-hvx"/>
                             <constraint firstItem="mD5-5G-Jjd" firstAttribute="leading" secondItem="RtG-sd-BY7" secondAttribute="leading" id="Rq9-QV-7wR"/>
                             <constraint firstItem="f6M-WM-TTo" firstAttribute="top" secondItem="jXq-i0-QOp" secondAttribute="bottom" constant="15" id="bf5-fR-52g"/>
+                            <constraint firstItem="iK6-cS-GtW" firstAttribute="top" secondItem="cLp-JY-t6F" secondAttribute="bottom" constant="15" id="d8E-ph-Aaa"/>
                             <constraint firstItem="RtG-sd-BY7" firstAttribute="trailing" secondItem="f6M-WM-TTo" secondAttribute="trailing" id="eNr-5L-fsX"/>
                             <constraint firstItem="RtG-sd-BY7" firstAttribute="bottom" secondItem="f6M-WM-TTo" secondAttribute="bottom" constant="15" id="gd0-7Z-sxV"/>
                             <constraint firstAttribute="bottom" secondItem="WYm-Mx-v3T" secondAttribute="bottom" id="jyz-gh-H2F"/>
                             <constraint firstItem="RtG-sd-BY7" firstAttribute="trailing" secondItem="jXq-i0-QOp" secondAttribute="trailing" id="l0U-dv-Iy9"/>
                             <constraint firstItem="jXq-i0-QOp" firstAttribute="top" secondItem="QC5-sr-fAc" secondAttribute="bottom" constant="15" id="lfj-KQ-lzJ"/>
                             <constraint firstItem="RtG-sd-BY7" firstAttribute="trailing" secondItem="WYm-Mx-v3T" secondAttribute="trailing" id="liu-jE-eLe"/>
-                            <constraint firstItem="QC5-sr-fAc" firstAttribute="top" secondItem="RtG-sd-BY7" secondAttribute="top" constant="140" id="noa-TM-Gtg"/>
+                            <constraint firstItem="cLp-JY-t6F" firstAttribute="top" secondItem="QFn-ZE-Yy6" secondAttribute="bottom" constant="25" id="mvK-sm-vHg"/>
                             <constraint firstItem="QFn-ZE-Yy6" firstAttribute="top" secondItem="RtG-sd-BY7" secondAttribute="top" constant="15" id="oPr-0x-h83"/>
                             <constraint firstItem="RtG-sd-BY7" firstAttribute="trailing" secondItem="QC5-sr-fAc" secondAttribute="trailing" id="rpz-cD-zAv"/>
                             <constraint firstItem="RtG-sd-BY7" firstAttribute="trailing" secondItem="jh9-LM-Ap7" secondAttribute="trailing" constant="15" id="w4R-aF-bIq"/>
@@ -98,6 +123,7 @@
                     <navigationItem key="navigationItem" id="9Vm-Uq-1hU"/>
                     <connections>
                         <outlet property="personCountView" destination="jh9-LM-Ap7" id="ztI-KH-V0g"/>
+                        <outlet property="seatViewHeight" destination="wfg-XI-zxb" id="NhT-q0-3AK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dTc-HE-WrB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -107,7 +133,7 @@
         <!--Live Seat View Controller-->
         <scene sceneID="URh-iE-X6u">
             <objects>
-                <viewController id="nQg-WQ-IXw" customClass="LiveSeatViewController" customModule="AgoraLive" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="nQg-WQ-IXw" customClass="LiveSeatViewController" customModule="AgoraVoice" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lKq-2G-SU4" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="276"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

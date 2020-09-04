@@ -44,16 +44,13 @@ class MineVM: NSObject {
 private extension MineVM {
     func observe() {
         let abstraction = self.abstraction
-        let images = Center.shared().centerProvideImagesHelper()
-        
         abstraction.info.subscribe(onNext: { [weak self] (newInfo) in
             guard let strongSelf = self else {
                 return
             }
             
             strongSelf.userName.accept(newInfo.name)
-            let head = images.getHead(index: newInfo.imageIndex)
-            strongSelf.head.accept(head)
+            strongSelf.head.accept(newInfo.image)
         }).disposed(by: bag)
     }
 }

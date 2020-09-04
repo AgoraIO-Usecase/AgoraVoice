@@ -14,20 +14,22 @@ struct BasicUserInfo {
     var userId: String
     var name: String
     var headURL: String
-    var imageIndex: Int
+    var image: UIImage
     
     init(dic: StringAnyDic) throws {
         self.userId = try dic.getStringValue(of: "userId")
         self.name = (try? dic.getStringValue(of: "userName")) ?? ""
         self.headURL = (try? dic.getStringValue(of: "avatar")) ?? ""
-        self.imageIndex = Int(Int64(self.userId)! % 12)
+        let index = Int(Int64(self.userId)! % 12)
+        self.image = Center.shared().centerProvideImagesHelper().heads[index]
     }
     
-    init(userId: String, name: String, headURL: String = "", imageIndex: Int = 0) {
+    init(userId: String, name: String, headURL: String = "") {
         self.userId = userId
         self.name = name
         self.headURL = headURL
-        self.imageIndex = 0
+        let index = Int(Int64(self.userId)! % 12)
+        self.image = Center.shared().centerProvideImagesHelper().heads[index]
     }
     
     static func == (left: BasicUserInfo, right: BasicUserInfo) -> Bool {

@@ -12,18 +12,27 @@ import RxRelay
 import AlamoClient
 
 // state: 0空位 1正常 2封麦
-/*
-enum SeatState: Int {
-    case empty = 0, normal, close
+enum SeatState {
+    case empty, normal(LiveRole), close
+    
+    var rawValue: Int {
+        switch self {
+        case .empty:  return 0
+        case .normal: return 1
+        case .close:  return 2
+        }
+    }
+    
+    static func !=(right: SeatState, left: SeatState) -> Bool {
+        return right.rawValue != left.rawValue
+    }
 }
 
 struct LiveSeat {
-    var user: LiveRoleItem?
     var index: Int // 1 ... 6
     var state: SeatState
     
-    init(user: LiveRoleItem? = nil, index: Int, state: SeatState) {
-        self.user = user
+    init(index: Int, state: SeatState) {
         self.index = index
         self.state = state
     }
@@ -31,15 +40,25 @@ struct LiveSeat {
     init(dic: StringAnyDic) throws {
         let seatJson = try dic.getDictionaryValue(of: "seat")
         self.index = try seatJson.getIntValue(of: "no")
-        self.state = try seatJson.getEnum(of: "state", type: SeatState.self)
-         
-        if self.state == .normal {
+        
+        let state = try seatJson.getIntValue(of: "state")
+        
+        switch state {
+        case 0:
+            self.state = .empty
+        case 1:
             let broadcaster = try dic.getDictionaryValue(of: "user")
-            self.user = try LiveRoleItem(dic: broadcaster)
+            let user = try LiveRoleItem(dic: broadcaster)
+            self.state = .normal(user)
+        case 2:
+            self.state = .close
+        default:
+            assert(false)
+            throw AGEError.fail("LiveSeat init fail", extra: "json: \(dic)")
         }
     }
 }
-
+/*
 class LiveSeatVM: RTMObserver {
     private var room: Room
     private(set) var list: BehaviorRelay<[LiveSeat]>

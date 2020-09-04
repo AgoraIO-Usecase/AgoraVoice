@@ -103,7 +103,7 @@ extension LiveViewController {
         giftVM.received.subscribe(onNext: { [unowned self] (userGift) in
             let chat = Chat(name: userGift.userName,
                             text: " " + NSLocalizedString("Give_Owner_A_Gift"),
-                            image: userGift.gift.image)
+                            image: userGift.gift.image, widthLimit: self.chatVM.chatWidthLimit)
             self.chatVM.newMessages([chat])
             
             guard userGift.gift.hasGIF else {

@@ -1129,6 +1129,9 @@
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#0088EB"/>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <segue destination="udD-yQ-9rI" kind="show" identifier="ChatRoomViewController" id="qke-tt-Wjv"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1164,6 +1167,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9EF-X0-OF7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3482.608695652174" y="-319.41964285714283"/>
+        </scene>
+        <!--ChatRoomViewController-->
+        <scene sceneID="aXG-UN-5Lo">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="ChatRoomViewController" storyboardName="Live" referencedIdentifier="ChatRoomViewController" id="udD-yQ-9rI" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="BtE-el-mOm"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rxm-Sd-VKs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4365" y="-445"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="gwi-MC-pqW">
