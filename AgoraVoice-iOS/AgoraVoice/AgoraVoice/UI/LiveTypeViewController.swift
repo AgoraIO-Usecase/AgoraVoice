@@ -96,8 +96,9 @@ private extension LiveTypeViewController {
             - collectionTop - UINavigationBar.height
         
         let width = CGFloat(310) / CGFloat(508) * height
+        let space = (UIScreen.main.bounds.width - width) / 2
         layout.itemSize = CGSize(width: width, height: height)
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: space, bottom: 0, right: space)
         layout.scrollDirection = .horizontal
         collectionView.setCollectionViewLayout(layout, animated: false)
         

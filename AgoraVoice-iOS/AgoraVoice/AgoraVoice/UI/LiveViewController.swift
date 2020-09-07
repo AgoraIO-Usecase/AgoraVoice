@@ -224,11 +224,11 @@ extension LiveViewController {
         }).disposed(by: bag)
         
         bottomToolsVC.belcantoButton.rx.tap.subscribe(onNext: { [unowned self] in
-            
+            self.presentAudioEffect(type: .belCanto)
         }).disposed(by: bag)
         
         bottomToolsVC.soundEffectButton.rx.tap.subscribe(onNext: { [unowned self] in
-            
+            self.presentAudioEffect(type: .soundEffect)
         }).disposed(by: bag)
     }
     
@@ -494,6 +494,8 @@ extension LiveViewController {
                                                  class: ImageSelectViewController.self,
                                                  on: "Popover")
         
+        vc.view.cornerRadius(10)
+        
         let presenetedHeight: CGFloat = 455 + UIScreen.main.heightOfSafeAreaBottom
         let y = UIScreen.main.bounds.height - presenetedHeight
         let presentedFrame = CGRect(x: 0,
@@ -512,12 +514,30 @@ extension LiveViewController {
         }).disposed(by: vc.bag)
     }
     
-    func presentBelcanto() {
+    func presentAudioEffect(type: AudioEffectType) {
+        showMaskView(color: UIColor.clear)
         
-    }
-    
-    func presentSoundEffect() {
+        let navigation = UIStoryboard.initViewController(of: "AudioEffectNavigation",
+                                                         class: UINavigationController.self,
+                                                         on: "Popover")
+        guard let vc = navigation.viewControllers.first as? AudioEffectViewController else {
+            assert(false)
+            return
+        }
         
+        navigation.view.cornerRadius(10)
+        vc.audioEffect = type
+        
+        let presenetedHeight: CGFloat = 378 + UIScreen.main.heightOfSafeAreaBottom
+        let y = UIScreen.main.bounds.height - presenetedHeight
+        let presentedFrame = CGRect(x: 0,
+                                    y: y,
+                                    width: UIScreen.main.bounds.width,
+                                    height: presenetedHeight)
+        
+        presentChild(navigation,
+                     animated: true,
+                     presentedFrame: presentedFrame)
     }
 }
 

@@ -38,6 +38,11 @@
 		A750EC692500D730006E50E3 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC682500D730006E50E3 /* ChatRoomViewController.swift */; };
 		A750EC6B2500DBDC006E50E3 /* LiveSeatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC6A2500DBDC006E50E3 /* LiveSeatViewController.swift */; };
 		A750EC6D2500DCCB006E50E3 /* LiveRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC6C2500DCCB006E50E3 /* LiveRole.swift */; };
+		A750EC6F2505E286006E50E3 /* AudioEffectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC6E2505E286006E50E3 /* AudioEffectViewController.swift */; };
+		A750EC732505E530006E50E3 /* AudioEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = A750EC722505E530006E50E3 /* AudioEffect.m */; };
+		A750EC7525060347006E50E3 /* AudioEffectVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC7425060347006E50E3 /* AudioEffectVM.swift */; };
+		A750EC7725060E3F006E50E3 /* AECollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC7625060E3F006E50E3 /* AECollectionViewController.swift */; };
+		A750EC7A25061647006E50E3 /* AudioEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC7925061647006E50E3 /* AudioEffect.swift */; };
 		A75C6F5524FCC387003E5AD9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A75C6F5424FCC387003E5AD9 /* Assets.xcassets */; };
 		A75C6FBD24FCD709003E5AD9 /* UIView+ExProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FB424FCD709003E5AD9 /* UIView+ExProperty.m */; };
 		A75C6FBE24FCD709003E5AD9 /* CSNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FB524FCD709003E5AD9 /* CSNavigationController.swift */; };
@@ -127,6 +132,12 @@
 		A750EC682500D730006E50E3 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		A750EC6A2500DBDC006E50E3 /* LiveSeatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSeatViewController.swift; sourceTree = "<group>"; };
 		A750EC6C2500DCCB006E50E3 /* LiveRole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveRole.swift; sourceTree = "<group>"; };
+		A750EC6E2505E286006E50E3 /* AudioEffectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEffectViewController.swift; sourceTree = "<group>"; };
+		A750EC712505E530006E50E3 /* AudioEffect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioEffect.h; sourceTree = "<group>"; };
+		A750EC722505E530006E50E3 /* AudioEffect.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioEffect.m; sourceTree = "<group>"; };
+		A750EC7425060347006E50E3 /* AudioEffectVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEffectVM.swift; sourceTree = "<group>"; };
+		A750EC7625060E3F006E50E3 /* AECollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AECollectionViewController.swift; sourceTree = "<group>"; };
+		A750EC7925061647006E50E3 /* AudioEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEffect.swift; sourceTree = "<group>"; };
 		A75C6F4824FCC386003E5AD9 /* AgoraVoice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AgoraVoice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A75C6F5424FCC387003E5AD9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A75C6FB424FCD709003E5AD9 /* UIView+ExProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ExProperty.m"; sourceTree = "<group>"; };
@@ -241,6 +252,27 @@
 			name = ChatRoom;
 			sourceTree = "<group>";
 		};
+		A750EC702505E4DC006E50E3 /* MediaDevice */ = {
+			isa = PBXGroup;
+			children = (
+				A75C70E324FDF16A003E5AD9 /* MediaDevice.h */,
+				A75C70E424FDF16A003E5AD9 /* MediaDevice.m */,
+				A750EC712505E530006E50E3 /* AudioEffect.h */,
+				A750EC722505E530006E50E3 /* AudioEffect.m */,
+				A75C70E624FDF2DE003E5AD9 /* Player.h */,
+				A75C70E724FDF2DE003E5AD9 /* Player.m */,
+			);
+			path = MediaDevice;
+			sourceTree = "<group>";
+		};
+		A750EC782506162C006E50E3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A750EC7925061647006E50E3 /* AudioEffect.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		A75C6F3F24FCC386003E5AD9 = {
 			isa = PBXGroup;
 			children = (
@@ -279,6 +311,7 @@
 				A75C70F124FE29A3003E5AD9 /* Mine */,
 				A75C70E924FE2545003E5AD9 /* ViewControllers */,
 				A7FFA32124FF6BC200C66569 /* SharedViews */,
+				A750EC782506162C006E50E3 /* Model */,
 				A75C6FC324FCD729003E5AD9 /* storyboard */,
 			);
 			path = UI;
@@ -326,6 +359,7 @@
 				A750EC4A2500B1E6006E50E3 /* MineVM.swift */,
 				A750EC482500B1E6006E50E3 /* MultiHostsVM.swift */,
 				A7FFA32624FF959D00C66569 /* LiveListVM.swift */,
+				A750EC7425060347006E50E3 /* AudioEffectVM.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -365,6 +399,7 @@
 		A75C6FD324FCE41E003E5AD9 /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				A750EC702505E4DC006E50E3 /* MediaDevice */,
 				A75C6FD824FCE41E003E5AD9 /* LCLLogFile */,
 				A75C6FD424FCE41E003E5AD9 /* AGEError.swift */,
 				A75C6FE124FCE41E003E5AD9 /* AGELog.swift */,
@@ -382,10 +417,6 @@
 				A75C6FE324FCE41E003E5AD9 /* AGOSSClient.m */,
 				A750EC512500B353006E50E3 /* SubThreadTimer.h */,
 				A750EC502500B353006E50E3 /* SubThreadTimer.m */,
-				A75C70E324FDF16A003E5AD9 /* MediaDevice.h */,
-				A75C70E424FDF16A003E5AD9 /* MediaDevice.m */,
-				A75C70E624FDF2DE003E5AD9 /* Player.h */,
-				A75C70E724FDF2DE003E5AD9 /* Player.m */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -477,6 +508,8 @@
 				A750EC352500A33F006E50E3 /* RealDataViewController.swift */,
 				A7FFA32224FF6BCC00C66569 /* IconTextView.swift */,
 				A750EC5B2500B661006E50E3 /* ImageSelectViewController.swift */,
+				A750EC6E2505E286006E50E3 /* AudioEffectViewController.swift */,
+				A750EC7625060E3F006E50E3 /* AECollectionViewController.swift */,
 			);
 			name = SharedViews;
 			sourceTree = "<group>";
@@ -623,6 +656,8 @@
 				A75C700624FCE41F003E5AD9 /* User.swift in Sources */,
 				A750EC5E2500D0D8006E50E3 /* LiveViewController.swift in Sources */,
 				A750EC4C2500B1E6006E50E3 /* LiveUserListVM.swift in Sources */,
+				A750EC732505E530006E50E3 /* AudioEffect.m in Sources */,
+				A750EC7525060347006E50E3 /* AudioEffectVM.swift in Sources */,
 				A750EC692500D730006E50E3 /* ChatRoomViewController.swift in Sources */,
 				A75C700D24FCE6D2003E5AD9 /* FilletView.swift in Sources */,
 				A750EC6B2500DBDC006E50E3 /* LiveSeatViewController.swift in Sources */,
@@ -653,6 +688,7 @@
 				A750EC522500B353006E50E3 /* SubThreadTimer.m in Sources */,
 				A75C70F624FE29AF003E5AD9 /* MineViewController.swift in Sources */,
 				A750EC4F2500B1E6006E50E3 /* MineVM.swift in Sources */,
+				A750EC6F2505E286006E50E3 /* AudioEffectViewController.swift in Sources */,
 				A75C700324FCE41F003E5AD9 /* JsonParse.swift in Sources */,
 				A75C700224FCE41F003E5AD9 /* Utils.swift in Sources */,
 				A75C6FFA24FCE41F003E5AD9 /* AGELock.swift in Sources */,
@@ -662,6 +698,7 @@
 				A75C6FF924FCE41F003E5AD9 /* DataExtension.swift in Sources */,
 				A75C6FF624FCE41F003E5AD9 /* TypeAlias.swift in Sources */,
 				A750EC632500D1C5006E50E3 /* LiveSeatVM.swift in Sources */,
+				A750EC7A25061647006E50E3 /* AudioEffect.swift in Sources */,
 				A75C6FFE24FCE41F003E5AD9 /* NetworkMonitor.swift in Sources */,
 				A75C6FCE24FCD986003E5AD9 /* ToastView.swift in Sources */,
 				A75C700524FCE41F003E5AD9 /* AppAssistant.swift in Sources */,
@@ -669,6 +706,7 @@
 				A7FFA32724FF959D00C66569 /* LiveListVM.swift in Sources */,
 				A75C6FFC24FCE41F003E5AD9 /* AfterWorker.swift in Sources */,
 				A7FFA32024FF667700C66569 /* LiveListViewController.swift in Sources */,
+				A750EC7725060E3F006E50E3 /* AECollectionViewController.swift in Sources */,
 				A75C70F724FE29AF003E5AD9 /* UserNameViewController.swift in Sources */,
 				A75C700424FCE41F003E5AD9 /* URLGroup.swift in Sources */,
 				A7FFA32524FF85CE00C66569 /* CreateLiveViewController.swift in Sources */,

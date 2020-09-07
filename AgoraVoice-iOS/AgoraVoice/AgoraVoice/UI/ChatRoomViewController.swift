@@ -77,7 +77,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         case "BottomToolsViewController":
             let vc = segue.destination as! BottomToolsViewController
             vc.liveType = .chatRoom
-            vc.perspective = .audience
+            vc.perspective = .owner
             vc.tintColor = tintColor
             bottomToolsVC = vc
         default:

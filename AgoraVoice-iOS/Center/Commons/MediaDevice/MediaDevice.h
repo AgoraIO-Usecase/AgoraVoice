@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <AgoraRtcKit/AgoraRtcEngineKit.h>
 #import "Player.h"
+#import "AudioEffect.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -38,6 +39,7 @@ typedef NS_ENUM(int, AudioOutputRouting) {
 
 @interface MediaDevice : NSObject
 @property (nonatomic, strong, readonly) Player *player;
+@property (nonatomic, strong, readonly) AudioEffect *recordAudioEffect;
 
 - (instancetype)initWithRtcEngine:(AgoraRtcEngineKit *)engine;
 - (void)recordAudioLoop:(BOOL)enable;
