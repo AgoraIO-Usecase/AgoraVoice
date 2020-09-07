@@ -56,53 +56,6 @@ class SeatButton: UIButton {
     }
 }
 
-class CommandCell: UICollectionViewCell {
-    private lazy var underLine: CALayer = {
-        let layer = CALayer()
-        layer.backgroundColor = UIColor(hexString: "#0C121B").cgColor
-        self.contentView.layer.addSublayer(layer)
-        return layer
-    }()
-    
-    var needUnderLine: Bool = true
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.backgroundColor = UIColor(hexString: "#161D27")
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.backgroundColor = UIColor(hexString: "#161D27")
-    }
-    
-    lazy var titleLabel: UILabel = {
-        let label = UILabel(frame: CGRect.zero)
-        label.textColor = UIColor(hexString: "#FFFFFF")
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 14)
-        self.contentView.addSubview(label)
-        return label
-    }()
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.titleLabel.frame = CGRect(x: 0,
-                                       y: 0,
-                                       width: self.bounds.width,
-                                       height: self.bounds.height)
-        
-        if needUnderLine {
-            self.underLine.frame = CGRect(x: 5,
-                                          y: self.bounds.height - 1,
-                                          width: self.bounds.width - 10,
-                                          height: 1)
-        } else {
-            self.underLine.frame = CGRect.zero
-        }
-    }
-}
-
 class LiveSeatView: RxView {
     enum Command {
         // 禁麦， 解禁， 封麦，下麦， 解封， 邀请，
@@ -154,7 +107,7 @@ class LiveSeatView: RxView {
     }
     
     func initViews() {
-        backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
+        backgroundColor = .clear
         
         commandButton.rx.tap.subscribe(onNext: { [unowned self] in
             switch (self.commandButton.type, self.perspective) {
@@ -250,6 +203,7 @@ class LiveSeatViewController: MaskViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        view.backgroundColor = .clear
         
         let space: CGFloat = 26
         let width: CGFloat = (UIScreen.main.bounds.width - (space * 5)) / 4
@@ -296,6 +250,53 @@ private extension LiveSeatViewController {
             let view = seatViews[index]
             view.perspective = self.perspective
             view.commandButton.type = item.state
+        }
+    }
+}
+
+class CommandCell: UICollectionViewCell {
+    private lazy var underLine: CALayer = {
+        let layer = CALayer()
+        layer.backgroundColor = UIColor(hexString: "#0C121B").cgColor
+        self.contentView.layer.addSublayer(layer)
+        return layer
+    }()
+    
+    var needUnderLine: Bool = true
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.backgroundColor = UIColor(hexString: "#161D27")
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.backgroundColor = UIColor(hexString: "#161D27")
+    }
+    
+    lazy var titleLabel: UILabel = {
+        let label = UILabel(frame: CGRect.zero)
+        label.textColor = UIColor(hexString: "#EEEEEE")
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 14)
+        self.contentView.addSubview(label)
+        return label
+    }()
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.titleLabel.frame = CGRect(x: 0,
+                                       y: 0,
+                                       width: self.bounds.width,
+                                       height: self.bounds.height)
+        
+        if needUnderLine {
+            self.underLine.frame = CGRect(x: 5,
+                                          y: self.bounds.height - 1,
+                                          width: self.bounds.width - 10,
+                                          height: 1)
+        } else {
+            self.underLine.frame = CGRect.zero
         }
     }
 }

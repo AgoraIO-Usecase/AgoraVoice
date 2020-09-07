@@ -50,8 +50,6 @@ class BottomToolsViewController: UIViewController {
         view.addSubview(extensionButton)
         
         updateViews()
-        
-        tintColor = .black
     }
     
     override func viewDidLayoutSubviews() {
@@ -131,7 +129,7 @@ private extension BottomToolsViewController {
         case (.chatRoom, .audience):
             giftButton.isHidden = false
             giftButton.setImage(UIImage(named: "icon-gift"), for: .normal)
-            view.addSubview(belcantoButton)
+            view.addSubview(giftButton)
         }
     }
 }

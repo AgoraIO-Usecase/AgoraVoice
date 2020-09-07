@@ -15,39 +15,39 @@ fileprivate enum UserJoinOrLeft: Int {
     case left, join
 }
 
-//fileprivate extension Array where Element == (UserJoinOrLeft, LiveRoleItem) {
-//    init(list: [StringAnyDic]) throws {
-//        var array = [(UserJoinOrLeft, LiveRoleItem)]()
-//        for item in list {
-//            let user = try LiveRoleItem(dic: item)
-//            let join = try item.getEnum(of: "state", type: UserJoinOrLeft.self)
-//            array.append((join, user))
-//        }
-//        self = array
-//    }
-//}
-//
-//fileprivate extension Array where Element == LiveRoleItem {
-//    init(dicList: [StringAnyDic]) throws {
-//        var array = [LiveRoleItem]()
-//        for item in dicList {
-//            let user = try LiveRoleItem(dic: item)
-//            array.append(user)
-//        }
-//        self = array
-//    }
-//}
+fileprivate extension Array where Element == (UserJoinOrLeft, LiveRoleItem) {
+    init(list: [StringAnyDic]) throws {
+        var array = [(UserJoinOrLeft, LiveRoleItem)]()
+        for item in list {
+            let user = try LiveRoleItem(dic: item)
+            let join = try item.getEnum(of: "state", type: UserJoinOrLeft.self)
+            array.append((join, user))
+        }
+        self = array
+    }
+}
+
+fileprivate extension Array where Element == LiveRoleItem {
+    init(dicList: [StringAnyDic]) throws {
+        var array = [LiveRoleItem]()
+        for item in dicList {
+            let user = try LiveRoleItem(dic: item)
+            array.append(user)
+        }
+        self = array
+    }
+}
 
 class LiveUserListVM: RTMObserver {
     private var room: Room
-//
-//    var giftList = BehaviorRelay(value: [LiveRoleItem]())
-//
-//    var list = BehaviorRelay(value: [LiveRole]())
-//    var audienceList = BehaviorRelay(value: [LiveRole]())
-//
-//    var join = PublishRelay<[LiveRoleItem]>()
-//    var left = PublishRelay<[LiveRoleItem]>()
+
+    var giftList = BehaviorRelay(value: [LiveRoleItem]())
+
+    var list = BehaviorRelay(value: [LiveRole]())
+    var audienceList = BehaviorRelay(value: [LiveRole]())
+
+    var join = PublishRelay<[LiveRoleItem]>()
+    var left = PublishRelay<[LiveRoleItem]>()
     var total = BehaviorRelay(value: 0)
     
     init(room: Room) {
@@ -67,8 +67,8 @@ class LiveUserListVM: RTMObserver {
             return
         }
         
-//        let tList = try! Array(dicList: list)
-//        giftList.accept(tList)
+        let tList = try! Array(dicList: list)
+        giftList.accept(tList)
     }
     
     func fetch(count: Int = 10, onlyAudience: Bool = true, success: Completion = nil, fail: Completion = nil) {

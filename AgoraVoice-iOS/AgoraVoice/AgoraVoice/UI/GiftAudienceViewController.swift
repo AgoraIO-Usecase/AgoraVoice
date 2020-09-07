@@ -24,9 +24,8 @@ class GiftAudienceCell: UICollectionViewCell {
     }
 }
 
-class GiftAudienceViewController: UICollectionViewController {
-//    private(set) var list = BehaviorRelay(value: [LiveRoleItem]())
-    private let bag = DisposeBag()
+class GiftAudienceViewController: RxCollectionViewController {
+    private(set) var list = BehaviorRelay(value: [LiveRoleItem]())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,25 +33,16 @@ class GiftAudienceViewController: UICollectionViewController {
         layout.itemSize = CGSize(width: 28.0, height: 28.0)
         layout.minimumInteritemSpacing = 10
         layout.scrollDirection = .horizontal
-        self.collectionView.semanticContentAttribute = UISemanticContentAttribute.forceRightToLeft
-        self.collectionView.setCollectionViewLayout(layout, animated: true)
-        self.collectionView.reloadData()
+        collectionView.semanticContentAttribute = UISemanticContentAttribute.forceRightToLeft
+        collectionView.setCollectionViewLayout(layout, animated: true)
+        collectionView.backgroundColor = .clear
         
-        self.collectionView.backgroundColor = .clear
+        collectionView.delegate = nil
+        collectionView.dataSource = nil
         
-//        list.subscribe(onNext: { [unowned self] (_) in
-//            self.collectionView.reloadData()
-//        }).disposed(by: bag)
+        list.bind(to: collectionView.rx.items(cellIdentifier: "GiftAudienceCell",
+                                                  cellType: GiftAudienceCell.self)) { (index, user, cell) in
+                                                    cell.headImage.image = user.info.image
+        }.disposed(by: bag)
     }
-    
-//    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return list.value.count
-//    }
-//
-//    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GiftAudienceCell", for: indexPath) as! GiftAudienceCell
-////        let audience = list.value[indexPath.item]
-////        cell.headImage.image = Center.shared().centerProvideImagesHelper().getHead(index: audience.info.imageIndex)
-//        return cell
-//    }
 }

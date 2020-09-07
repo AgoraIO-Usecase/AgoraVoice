@@ -28,7 +28,7 @@ class ExtensionButton: UIButton {
         super.init(frame: frame)
         titleLabel?.textAlignment = .center
         titleLabel?.font = UIFont.systemFont(ofSize: 12)
-        self.setTitleColor(UIColor(hexString: "#333333"), for: .normal)
+        setTitleColor(UIColor(hexString: "#9BA2AB"), for: .normal)
     }
     
     required init?(coder: NSCoder) {
@@ -40,79 +40,43 @@ class ExtensionViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     
     lazy var dataButton = ExtensionButton(frame: CGRect.zero)
-    lazy var settingsButton = ExtensionButton(frame: CGRect.zero)
-    lazy var switchCameraButton = ExtensionButton(frame: CGRect.zero)
-    lazy var cameraButton = ExtensionButton(frame: CGRect.zero)
-    lazy var micButton = ExtensionButton(frame: CGRect.zero)
     lazy var audioLoopButton = ExtensionButton(frame: CGRect.zero)
-    lazy var beautyButton = ExtensionButton(frame: CGRect.zero)
     lazy var musicButton = ExtensionButton(frame: CGRect.zero)
-    lazy var broadcastingButton = ExtensionButton(frame: CGRect.zero)
+    lazy var backgroudButton = ExtensionButton(frame: CGRect.zero)
     
     var liveType: LiveType = .chatRoom
-//    var perspective: LiveRoleType = .audience
+    var perspective: LiveRoleType = .audience
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let color = UIColor(hexString: "#D8D8D8")
-        let x: CGFloat = 15.0
-        let width = UIScreen.main.bounds.width - (x * 2)
+        view.backgroundColor = UIColor(hexString: "#161D27")
+        
         titleLabel.text = NSLocalizedString("Tool")
-        titleLabel.containUnderline(color,
-                                    x: x,
-                                    width: width)
+        titleLabel.textColor = UIColor(hexString: "#EEEEEE")
+        titleLabel.font = UIFont.systemFont(ofSize: 14)
         
         dataButton.setImage(UIImage(named: "icon-data"), for: .normal)
         dataButton.setTitle(NSLocalizedString("Real_Data"), for: .normal)
         view.addSubview(dataButton)
         
-//        switch perspective {
-//        case .owner, .broadcaster:
-//            if liveType != .virtual {
-//                settingsButton.setImage(UIImage(named: "icon-setting"), for: .normal)
-//                settingsButton.setTitle(NSLocalizedString("Live_Room_Settings"), for: .normal)
-//                view.addSubview(settingsButton)
-//                
-//                switchCameraButton.setImage(UIImage(named: "icon-rotate"), for: .normal)
-//                switchCameraButton.setTitle(NSLocalizedString("Switch_Camera"), for: .normal)
-//                view.addSubview(switchCameraButton)
-//                
-//                cameraButton.setImage(UIImage(named: "icon-video on"), for: .normal)
-//                cameraButton.setImage(UIImage(named: "icon-video off"), for: .selected)
-//                cameraButton.setTitle(NSLocalizedString("Camera"), for: .normal)
-//                cameraButton.setTitle(NSLocalizedString("Camera"), for: .selected)
-//                view.addSubview(cameraButton)
-//            }
-//            
-//            if liveType == .shopping {
-//                musicButton.setImage(UIImage(named: "icon-music-shopping"), for: .normal)
-//                musicButton.setTitle(NSLocalizedString("Music"), for: .normal)
-//                view.addSubview(musicButton)
-//                
-//                beautyButton.setImage(UIImage(named: "icon-美颜"), for: .normal)
-//                beautyButton.setTitle(NSLocalizedString("Beauty"), for: .normal)
-//                view.addSubview(beautyButton)
-//            }
-//            
-//            micButton.setImage(UIImage(named: "icon-speaker on"), for: .normal)
-//            micButton.setImage(UIImage(named: "icon-speaker off"), for: .selected)
-//            micButton.setTitle(NSLocalizedString("Mic"), for: .normal)
-//            micButton.setTitle(NSLocalizedString("Mic"), for: .selected)
-//            view.addSubview(micButton)
-//            
-//            audioLoopButton.setImage(UIImage(named: "icon-loop"), for: .normal)
-//            audioLoopButton.setImage(UIImage(named: "icon-loop-active"), for: .selected)
-//            audioLoopButton.setTitle(NSLocalizedString("Audio_Loop"), for: .normal)
-//            audioLoopButton.setTitle(NSLocalizedString("Audio_Loop"), for: .selected)
-//            view.addSubview(audioLoopButton)
-//        case .audience:
-//            if liveType == .shopping {
-//                broadcastingButton.setImage(UIImage(named: "icon-连麦"), for: .normal)
-//                broadcastingButton.setTitle(NSLocalizedString("ApplicationOfBroadcasting"), for: .normal)
-//                view.addSubview(broadcastingButton)
-//            }
-//            break
-//        }
+        switch perspective {
+        case .owner, .broadcaster:
+            musicButton.setImage(UIImage(named: "icon-music"), for: .normal)
+            musicButton.setTitle(NSLocalizedString("Music"), for: .normal)
+            view.addSubview(musicButton)
+            
+            backgroudButton.setImage(UIImage(named: "icon-背景"), for: .normal)
+            backgroudButton.setTitle(NSLocalizedString("Background"), for: .normal)
+            view.addSubview(backgroudButton)
+            
+            audioLoopButton.setImage(UIImage(named: "icon-耳返-off"), for: .normal)
+            audioLoopButton.setImage(UIImage(named: "icon-耳返-on"), for: .selected)
+            audioLoopButton.setTitle(NSLocalizedString("Audio_Loop"), for: .normal)
+            audioLoopButton.setTitle(NSLocalizedString("Audio_Loop"), for: .selected)
+            view.addSubview(audioLoopButton)
+        case .audience:
+            break
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -142,49 +106,16 @@ class ExtensionViewController: UIViewController {
             }
         }
         
-//        switch perspective {
-//        case .owner, .broadcaster:
-//            // row 0
-//            var y: CGFloat = self.titleLabel.frame.maxY + 20.0
-//            var buttons: [UIButton]
-//            
-//            switch liveType {
-//            case .shopping:
-//                buttons = [dataButton, settingsButton, beautyButton, musicButton]
-//            case .virtual:
-//                buttons = [dataButton]
-//            default:
-//                buttons = [dataButton, settingsButton]
-//            }
-//            
-//            buttonsLayout(buttons, y: y)
-//            
-//            // row 1
-//            y = dataButton.frame.maxY + 22.0
-//            
-//            switch liveType {
-//            case .virtual:
-//                buttons = [micButton, audioLoopButton]
-//            default:
-//                buttons = [switchCameraButton, cameraButton, micButton, audioLoopButton]
-//            }
-//            
-//            buttonsLayout(buttons, y: y)
-//        case .audience:
-//            switch liveType {
-//            case .shopping:
-//                let y: CGFloat = self.titleLabel.frame.maxY + 20.0
-//                buttonsLayout([broadcastingButton, dataButton], y: y)
-//            default:
-//                let width: CGFloat = 63.0
-//                let height: CGFloat = 17.0 + 8.0 + 42.0
-//                let y: CGFloat = self.titleLabel.frame.maxY + 20.0
-//                let x: CGFloat = (self.view.bounds.width - width) * 0.5
-//                self.dataButton.frame = CGRect(x: x,
-//                                               y: y,
-//                                               width: width,
-//                                               height: height)
-//            }
-//        }
+        switch perspective {
+        case .owner:
+            let y: CGFloat = self.titleLabel.frame.maxY + 20.0
+            buttonsLayout([audioLoopButton, musicButton, backgroudButton, dataButton], y: y)
+        case .broadcaster:
+            let y: CGFloat = self.titleLabel.frame.maxY + 20.0
+            buttonsLayout([audioLoopButton, dataButton], y: y)
+        case .audience:
+            let y: CGFloat = self.titleLabel.frame.maxY + 20.0
+            buttonsLayout([dataButton], y: y)
+        }
     }
 }

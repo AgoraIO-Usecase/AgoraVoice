@@ -1,11 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "icon-microphone-off.pdf",
+      "filename" : "gift-dang.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "gift-dang@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

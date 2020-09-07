@@ -18,15 +18,21 @@ class GiftCell: UICollectionViewCell {
     var isSelectedNow: Bool = false {
         didSet {
             if isSelectedNow {
-                self.contentView.cornerRadius(4)
-                self.contentView.layer.borderWidth = 1
-                self.contentView.layer.borderColor = UIColor(hexString: "#008AF3").cgColor
-                self.contentView.backgroundColor = UIColor(hexString: "#FAFAFA")
+                contentView.cornerRadius(4)
+                contentView.layer.borderWidth = 1
+                contentView.layer.borderColor = UIColor(hexString: "#008AF3").cgColor
+                contentView.backgroundColor = UIColor(hexString: "#10284B")
+                
+                nameLabel.textColor = .white
+                priceLabel.textColor = .white
             } else {
-                self.contentView.cornerRadius(0)
-                self.contentView.layer.borderWidth = 0
-                self.contentView.layer.borderColor = UIColor.white.cgColor
-                self.contentView.backgroundColor = UIColor.white
+                contentView.cornerRadius(0)
+                contentView.layer.borderWidth = 0
+                contentView.layer.borderColor = UIColor.white.cgColor
+                contentView.backgroundColor = UIColor(hexString: "#161D27")
+                
+                nameLabel.textColor = UIColor(hexString: "#9BA2AB")
+                priceLabel.textColor = UIColor(hexString: "#9BA2AB")
             }
         }
     }
@@ -43,17 +49,14 @@ class GiftViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.titleLabel.text = NSLocalizedString("Gift")
+        view.backgroundColor = UIColor(hexString: "#161D27")
         
-        let color = UIColor(hexString: "#D8D8D8")
-        let x: CGFloat = 15.0
-        let width = UIScreen.main.bounds.width - (x * 2)
-        self.titleLabel.containUnderline(color,
-                                         x: x,
-                                         width: width)
+        titleLabel.text = NSLocalizedString("Gift")
+        titleLabel.textColor = UIColor(hexString: "#EEEEEE")
         
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.backgroundColor = UIColor(hexString: "#161D27")
         
         let itemWidth: CGFloat = 60.0
         let itemHeight: CGFloat = 98.0

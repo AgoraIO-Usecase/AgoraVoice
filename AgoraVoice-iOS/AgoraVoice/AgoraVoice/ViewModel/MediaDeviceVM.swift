@@ -11,6 +11,7 @@ import RxSwift
 import RxRelay
 
 class MediaDeviceVM: RxObject {
+    var mic: AGESwitch = .on
    
 //
 //    var mic: AGESwitch {
