@@ -198,4 +198,9 @@
     <string name="action_sheet_music_title">音乐</string>
     <string name="action_sheet_music_credit_hint">音乐:&#160;&#160;</string>
     <string name="action_sheet_music_credit_link" translatable="false">https://www.bensound.com</string>
+
+    <!-- Network status detection -->
+    <string name="network_unavailable">网络不给力，请稍候再试</string>
+    <string name="network_switch_to_wifi">您已处于 WIFI 网络</string>
+    <string name="network_switch_to_mobile">当前处于非 WIFI 网络, 您可能需要支付移动网络数据费用</string>
 </resources>

@@ -1,12 +1,17 @@
 package io.agora.agoravoice.ui.activities;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
@@ -16,6 +21,7 @@ import androidx.core.content.ContextCompat;
 import io.agora.agoravoice.R;
 import io.agora.agoravoice.ui.views.actionsheets.AbstractActionSheet;
 import io.agora.agoravoice.ui.views.actionsheets.ActionSheetManager;
+import io.agora.agoravoice.utils.ToastUtil;
 import io.agora.agoravoice.utils.WindowUtil;
 
 public abstract class AbsLiveActivity extends BaseActivity {
@@ -31,7 +37,44 @@ public abstract class AbsLiveActivity extends BaseActivity {
     private Rect mDecorViewRect;
     private int mInputMethodHeight;
 
+    private boolean mHeadsetWithMicPlugged;
+
     private ActionSheetManager mActionSheetManager;
+
+    private BroadcastReceiver mHeadPhoneReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (AudioManager.ACTION_HEADSET_PLUG.equals(action)) {
+                boolean plugged = intent.getIntExtra("state", -1) == 1;
+                boolean hasMic = intent.getIntExtra("microphone", -1) == 1;
+                mHeadsetWithMicPlugged = plugged && hasMic;
+            }
+        }
+    };
+
+    private NetworkReceiver mNetworkReceiver;
+
+    private static class NetworkReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager cm = (ConnectivityManager) context.
+                    getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (cm == null) return;
+
+            NetworkInfo info = cm.getActiveNetworkInfo();
+            if (info == null || !info.isAvailable() || !info.isConnected()) {
+                ToastUtil.showShortToast(context, R.string.network_unavailable);
+            } else {
+                int type = info.getType();
+                if (ConnectivityManager.TYPE_WIFI == type) {
+                    // Toast.makeText(context, R.string.network_switch_to_wifi, Toast.LENGTH_SHORT).show();
+                } else if (ConnectivityManager.TYPE_MOBILE == type) {
+                    ToastUtil.showShortToast(context, R.string.network_switch_to_mobile);
+                }
+            }
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +83,10 @@ public abstract class AbsLiveActivity extends BaseActivity {
         mActionSheetManager = new ActionSheetManager();
         mInputMethodManager = (InputMethodManager)
             getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        IntentFilter headPhoneFilter = new IntentFilter();
+        headPhoneFilter.addAction(AudioManager.ACTION_HEADSET_PLUG);
+        registerReceiver(mHeadPhoneReceiver, headPhoneFilter);
     }
 
     protected void detectKeyboard() {
@@ -134,7 +181,7 @@ public abstract class AbsLiveActivity extends BaseActivity {
             if (permissionArrayGranted()) {
                 onAllPermissionsGranted();
             } else {
-                Toast.makeText(this, R.string.permission_not_granted, Toast.LENGTH_LONG).show();
+                ToastUtil.showShortToast(this, R.string.permission_not_granted);
                 finish();
             }
         }
@@ -144,9 +191,21 @@ public abstract class AbsLiveActivity extends BaseActivity {
 
     }
 
+    protected void detectNetworkState() {
+        mNetworkReceiver = new NetworkReceiver();
+        IntentFilter filter = new IntentFilter(
+                ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(mNetworkReceiver, filter);
+    }
+
+    protected void stopDetectNetworkState() {
+        unregisterReceiver(mNetworkReceiver);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         stopDetectKeyboard();
+        unregisterReceiver(mHeadPhoneReceiver);
     }
 }

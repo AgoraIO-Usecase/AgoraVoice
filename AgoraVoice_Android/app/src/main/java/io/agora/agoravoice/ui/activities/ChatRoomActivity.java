@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import io.agora.agoravoice.R;
+import io.agora.agoravoice.ui.views.GiftAnimWindow;
 import io.agora.agoravoice.ui.views.MessageEditLayout;
 import io.agora.agoravoice.ui.views.RoomMessageList;
 import io.agora.agoravoice.ui.views.RtcStatsView;
@@ -20,11 +21,12 @@ import io.agora.agoravoice.ui.views.actionsheets.VoiceBeautyActionSheet;
 import io.agora.agoravoice.ui.views.bottombar.AbsBottomBar;
 import io.agora.agoravoice.ui.views.bottombar.ChatRoomBottomBar;
 import io.agora.agoravoice.utils.Const;
+import io.agora.agoravoice.utils.GiftUtil;
 import io.agora.agoravoice.utils.RoomBgUtil;
 import io.agora.agoravoice.utils.ToastUtil;
 
 
-public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickListener{
+public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickListener {
     private RelativeLayout mBackground;
 
     // Room basic info
@@ -89,6 +91,9 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     };
 
     private GiftActionSheet.GiftActionListener mGiftActionListener = index -> {
+        GiftAnimWindow window = new GiftAnimWindow(ChatRoomActivity.this, R.style.gift_anim_window);
+        window.setAnimResource(GiftUtil.getGiftAnimRes(index));
+        window.show();
         closeActionSheet();
     };
 

@@ -13,4 +13,19 @@ public class GiftUtil {
             R.drawable.gift_07_diamond,
             R.drawable.gift_08_rocket
     };
+
+    public static final int[] GIFT_ANIM_RES = {
+            R.drawable.gift_anim_bell,
+            R.drawable.gift_anim_icecream,
+            R.drawable.gift_anim_wine,
+            R.drawable.gift_anim_cake,
+            R.drawable.gift_anim_ring,
+            R.drawable.gift_anim_watch,
+            R.drawable.gift_anim_diamond,
+            R.drawable.gift_anim_rocket
+    };
+
+    public static int getGiftAnimRes(int id) {
+        return GIFT_ANIM_RES[id];
+    }
 }

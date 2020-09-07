@@ -8,4 +8,10 @@
     <style name="nav_title_text">
         <item name="android:textSize">@dimen/text_size_1</item>
     </style>
+
+    <style name="gift_anim_window">
+        <item name="android:windowFullscreen">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 </resources>
