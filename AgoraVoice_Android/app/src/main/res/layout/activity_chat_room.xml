@@ -2,15 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/chat_room_background_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingStart="@dimen/common_margin_horizontal"
-    android:paddingEnd="@dimen/common_margin_horizontal">
+    android:layout_height="match_parent">
     <RelativeLayout
         android:id="@+id/chat_room_top_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/room_user_action_view_height"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="@dimen/room_top_layout_margin_top">
+        android:layout_marginTop="@dimen/room_top_layout_margin_top"
+        android:layout_marginStart="@dimen/common_margin_horizontal"
+        android:layout_marginEnd="@dimen/common_margin_horizontal">
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/chat_room_exit_btn"
             android:layout_width="@dimen/room_button_size"
@@ -29,25 +29,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/chat_room_top_bar"
-        android:layout_marginTop="@dimen/margin_6"/>
+        android:layout_marginTop="@dimen/margin_6"
+        android:layout_marginStart="@dimen/common_margin_horizontal"
+        android:layout_marginEnd="@dimen/common_margin_horizontal"/>
 
     <io.agora.agoravoice.ui.views.bottombar.ChatRoomBottomBar
         android:id="@+id/chat_room_bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/room_bottom_bar_height"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/common_margin_vertical"/>
+        android:layout_marginBottom="@dimen/common_margin_vertical"
+        android:layout_marginStart="@dimen/common_margin_horizontal"
+        android:layout_marginEnd="@dimen/common_margin_horizontal"/>
 
     <io.agora.agoravoice.ui.views.RoomMessageList
         android:id="@+id/chat_room_message_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/chat_room_bottom_bar"
-        android:layout_marginBottom="@dimen/common_margin_vertical"/>
+        android:layout_marginBottom="@dimen/common_margin_vertical"
+        android:layout_marginStart="@dimen/common_margin_horizontal"
+        android:layout_marginEnd="@dimen/common_margin_horizontal"/>
 
     <io.agora.agoravoice.ui.views.RtcStatsView
         android:id="@+id/rtc_stats_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_margin_horizontal"
+        android:layout_marginEnd="@dimen/common_margin_horizontal"
+        android:visibility="gone"/>
+
+    <io.agora.agoravoice.ui.views.MessageEditLayout
+        android:id="@+id/message_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:visibility="gone"/>
 </RelativeLayout>

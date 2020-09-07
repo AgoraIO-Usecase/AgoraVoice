@@ -2,10 +2,12 @@ package io.agora.agoravoice.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import io.agora.agoravoice.R;
+import io.agora.agoravoice.ui.views.MessageEditLayout;
 import io.agora.agoravoice.ui.views.RoomMessageList;
 import io.agora.agoravoice.ui.views.RtcStatsView;
 import io.agora.agoravoice.ui.views.actionsheets.ActionSheetManager;
@@ -19,6 +21,7 @@ import io.agora.agoravoice.ui.views.bottombar.AbsBottomBar;
 import io.agora.agoravoice.ui.views.bottombar.ChatRoomBottomBar;
 import io.agora.agoravoice.utils.Const;
 import io.agora.agoravoice.utils.RoomBgUtil;
+import io.agora.agoravoice.utils.ToastUtil;
 
 
 public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickListener{
@@ -32,11 +35,16 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     private ChatRoomBottomBar mBottomBar;
     private RtcStatsView mStatView;
     private RoomMessageList mMessageList;
+    private MessageEditLayout mMessageEdit;
 
     private AbsBottomBar.BottomBarListener mBottomBarListener = new AbsBottomBar.BottomBarListener() {
         @Override
         public void onTextEditClicked() {
-
+            if (mMessageEdit != null && mMessageEdit.getVisibility() == View.GONE) {
+                mMessageEdit.setVisibility(View.VISIBLE);
+                mMessageEdit.setEditClicked();
+                showInputMethodWithView(mMessageEdit.editText());
+            }
         }
 
         @Override
@@ -138,6 +146,16 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
         if (mStatView != null) mStatView.show();
     }
 
+    private MessageEditLayout.MessageEditListener mMessageEditListener = message -> {
+        if (TextUtils.isEmpty(message)) {
+            ToastUtil.showShortToast(ChatRoomActivity.this, R.string.send_empty_message);
+        } else {
+
+        }
+
+        hideInputMethodWithView(mMessageEdit.editText());
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,6 +172,8 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     }
 
     private void initView() {
+        detectKeyboard();
+
         mBackground = findViewById(R.id.chat_room_background_layout);
         initBackground();
 
@@ -165,6 +185,9 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
 
         mMessageList = findViewById(R.id.chat_room_message_list);
         mMessageList.addMessage(RoomMessageList.MSG_TYPE_CHAT, "me", "test message`");
+
+        mMessageEdit = findViewById(R.id.message_edit_text);
+        mMessageEdit.setMessageEditListener(mMessageEditListener);
 
         findViewById(R.id.chat_room_exit_btn).setOnClickListener(this);
     }
@@ -181,6 +204,20 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                     (RelativeLayout.LayoutParams) topLayout.getLayoutParams();
             params.topMargin += systemBarHeight;
             topLayout.setLayoutParams(params);
+        }
+    }
+
+    @Override
+    protected void onInputMethodToggle(boolean shown, int height) {
+        RelativeLayout.LayoutParams params =
+                (RelativeLayout.LayoutParams) mMessageEdit.getLayoutParams();
+
+        params.bottomMargin = height;
+        mMessageEdit.setLayoutParams(params);
+        if (shown) {
+            mMessageEdit.setEditClicked();
+        } else {
+            mMessageEdit.setVisibility(View.GONE);
         }
     }
 

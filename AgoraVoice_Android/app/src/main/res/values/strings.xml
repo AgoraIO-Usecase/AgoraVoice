@@ -20,11 +20,15 @@
     <!-- Policies -->
     <string name="room_restriction_policy">This is a testing product. Please refrain from using it commercially. The max duration per session is 10 minutes, and the max number of participants per channel is 10. </string>
 
+    <string name="permission_not_granted">Necessary permissions not granted</string>
+
     <!-- Prepare Activity -->
     <string name="live_prepare_hint">Room Name</string>
     <string name="go_live">Go Live</string>
     <string name="room_name_too_long_toast_format">Room name cannot be longer than %d characters</string>
     <string name="no_room_name_toast">Please enter your room name</string>
+
+    <string name="send_empty_message">Empty messages are not sent</string>
 
     <string-array name="random_channel_names">
         <item>Cheer</item>

@@ -2,6 +2,8 @@
     <!-- Policies -->
     <string name="room_restriction_policy">本应用为测试产品，请勿商用。单次直播最长10分钟，每个频道最多10人。</string>
 
+    <string name="permission_not_granted">应用未给予必要权限</string>
+
     <!-- Main Activity -->
     <string name="main_navigation_home">主页</string>
     <string name="main_navigation_profile">个人资料</string>
@@ -24,6 +26,8 @@
     <string name="go_live">开始直播</string>
     <string name="room_name_too_long_toast_format">房间名称不能超过%d个字符</string>
     <string name="no_room_name_toast">请输入您的房间名称</string>
+
+    <string name="send_empty_message">您不能发空的消息</string>
 
     <string-array name="random_channel_names">
         <item>陌上花开等你来</item>

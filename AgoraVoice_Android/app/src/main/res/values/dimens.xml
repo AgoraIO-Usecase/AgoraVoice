@@ -67,6 +67,9 @@
     <dimen name="prepare_policy_padding">6dp</dimen>
     <dimen name="prepare_policy_caution_size">16dp</dimen>
 
+    <!-- Live Activity -->
+    <dimen name="message_edit_layout_height">58dp</dimen>
+
     <!-- Action Sheet -->
     <dimen name="action_sheet_title_height">48dp</dimen>
     <dimen name="action_sheet_back_icon_size">36dp</dimen>

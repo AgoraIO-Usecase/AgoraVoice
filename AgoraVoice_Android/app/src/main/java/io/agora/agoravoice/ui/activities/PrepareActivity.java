@@ -128,7 +128,8 @@ public class PrepareActivity extends AbsLiveActivity {
 
         Intent intent = new Intent(this, ChatRoomActivity.class);
         intent.putExtra(Const.KEY_BACKGROUND, mBackgroundSelected);
-        intent.putExtra(Const.KEY_ROOM_NAME, mNameEdit.getText());
+        Editable editable = mNameEdit.getText();
+        intent.putExtra(Const.KEY_ROOM_NAME, editable == null ? "" : editable.toString());
         intent.putExtras(getIntent());
         startActivity(intent);
 
