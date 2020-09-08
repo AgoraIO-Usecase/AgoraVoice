@@ -23,4 +23,9 @@
 
     <color name="main_entry_button_start_color">#FF0048D6</color>
     <color name="main_entry_button_end_color">#FF7B1CD4</color>
+
+    <color name="switch_on_bar_color">#FF1F5375</color>
+    <color name="switch_on_thumb_color">#FF0096FF</color>
+    <color name="switch_off_bar_color">#FF2C3440</color>
+    <color name="switch_off_thumb_color">#FF404A58</color>
 </resources>

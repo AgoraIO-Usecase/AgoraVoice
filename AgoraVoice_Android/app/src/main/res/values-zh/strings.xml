@@ -155,6 +155,7 @@
 
     <string name="action_sheet_sound_effect_enable_electronic_voice">开启电音</string>
     <string name="action_sheet_sound_effect_electronic_tones_hint">选择起始音阶</string>
+    <string name="action_sheet_sound_effect_magic_notes_coming_soon">即将发布</string>
 
     <string-array name="action_sheet_sound_effect_electronic_keys">
         <item>大调</item>

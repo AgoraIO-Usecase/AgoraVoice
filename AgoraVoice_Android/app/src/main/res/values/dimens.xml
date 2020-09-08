@@ -78,7 +78,7 @@
     <dimen name="action_sheet_background_check_size">20dp</dimen>
     <dimen name="action_sheet_background_border_width">3dp</dimen>
 
-    <dimen name="action_sheet_voice_beauty_recycler_height">266dp</dimen>
+    <dimen name="action_sheet_voice_beauty_recycler_height">294dp</dimen>
     <dimen name="action_sheet_voice_beauty_type_width">72dp</dimen>
     <dimen name="action_sheet_voice_beauty_type_margin">12dp</dimen>
 
@@ -90,7 +90,11 @@
     <dimen name="action_sheet_voice_beauty_text_item_height">38dp</dimen>
     <dimen name="action_sheet_voice_beauty_text_item_spacing">8dp</dimen>
 
-    <dimen name="action_sheet_sound_effect_type_text_width">86dp</dimen>
+    <dimen name="action_sheet_electronic_line_height">48dp</dimen>
+    <dimen name="action_sheet_switch_width">48dp</dimen>
+    <dimen name="action_sheet_switch_height">24dp</dimen>
+    <dimen name="action_sheet_switch_bar_height">20dp</dimen>
+    <dimen name="action_sheet_switch_width_point_size">24dp</dimen>
 
     <dimen name="action_sheet_tool_item_icon_size">54dp</dimen>
 

@@ -2,6 +2,7 @@ package io.agora.agoravoice.ui.views.actionsheets;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.action_sheet_souce_effect, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.action_sheet_sound_effect, this);
 
         RecyclerView typeRecyclerView = findViewById(R.id.action_sheet_sound_effect_type_recycler);
         typeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),
@@ -121,17 +122,21 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         View layout = LayoutInflater.from(getContext()).inflate(
                 R.layout.action_sheet_sound_effect_electronic_layout, this, false);
         RecyclerView recyclerView = layout.findViewById(R.id.action_sheet_sound_effect_electronic_key_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), GRID_COUNT));
         recyclerView.setAdapter(new ElectronicKeyAdapter());
+        recyclerView.addItemDecoration(new TextGridItemDecoration());
 
         recyclerView = layout.findViewById(R.id.action_sheet_sound_effect_electronic_tone_recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), GRID_COUNT));
         recyclerView.setAdapter(new ElectronicToneAdapter());
+        recyclerView.addItemDecoration(new TextGridItemDecoration());
         mContentLayout.addView(layout, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     }
 
     private void initMagicNotesSoundEffect() {
-
+        View layout = LayoutInflater.from(getContext()).inflate(
+                R.layout.action_sheet_sound_effect_comming_soon, this, false);
+        mContentLayout.addView(layout, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     }
 
     private class SoundEffectTypeAdapter extends RecyclerView.Adapter<SoundEffectTypeViewHolder> {
@@ -371,6 +376,28 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             super(itemView);
             layout = itemView.findViewById(R.id.action_sheet_voice_beauty_text_item_layout);
             name = itemView.findViewById(R.id.action_sheet_voice_beauty_text_item_view);
+        }
+    }
+
+    private class TextGridItemDecoration extends RecyclerView.ItemDecoration {
+        private int mMargin = getResources().getDimensionPixelOffset(R.dimen.margin_2);
+
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
+                                   @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+            int pos = parent.getChildAdapterPosition(view);
+            outRect.set(mMargin, mMargin, mMargin, mMargin);
+            if (pos < GRID_COUNT) {
+                outRect.top = 0;
+            } else if (pos + GRID_COUNT >= parent.getChildCount()) {
+                outRect.bottom = 0;
+            }
+
+            if (pos % GRID_COUNT == 0) {
+                outRect.left = 0;
+            } else if (pos % GRID_COUNT + 1 == GRID_COUNT) {
+                outRect.right = 0;
+            }
         }
     }
 }
