@@ -13,6 +13,8 @@ import RxRelay
 class AudioEffectViewController: RxViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tabView: TabSelectView!
+    @IBOutlet weak var aecollectionView: UIView!
+    @IBOutlet weak var electronicMusicView: UIView!
     
     weak var collectionVC: AECollectionViewController?
     
@@ -35,6 +37,22 @@ class AudioEffectViewController: RxViewController {
             let vc = segue.destination as! AECollectionViewController
             collectionVC = vc
             vc.audioEffectType = audioEffect
+            
+            vc.selectedAudioSpace.subscribe(onNext: { [unowned self] (space) in
+                if space == .threeDimensionalVoice {
+                    self.performSegue(withIdentifier: "ThreeDimensionalViewController", sender: nil)
+                }
+            }).disposed(by: vc.bag)
+            
+            vc.selectedSoundEffectType.subscribe(onNext: { [unowned self] (type) in
+                if type == .electronicMusic {
+                    self.aecollectionView.isHidden = true
+                    self.electronicMusicView.isHidden = false
+                } else {
+                    self.aecollectionView.isHidden = false
+                    self.electronicMusicView.isHidden = true
+                }
+            }).disposed(by: vc.bag)
         default:
             break
         }

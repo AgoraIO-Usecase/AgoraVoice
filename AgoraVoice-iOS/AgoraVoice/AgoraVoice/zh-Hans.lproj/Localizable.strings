@@ -21,6 +21,10 @@ Lost_Connection_Description="当前网络连接错误，请稍后再试";
 Lost_Connection_Retry="网络不给力，请稍后再试";
 Use_Cellular_Data="当前网络无WIFI，继续使用可能产生流量费用";
 
+// Audio Effect
+Three_Dimensional_Voice="3D人声";
+Three_Dimensional_Voice_Description="调节速度控制声音旋转速度(最快1s转一圈，最慢60s转一圈)";
+
 // LiveType
 Chat_Room="语聊房";
 Start_Chating="开始聊天";

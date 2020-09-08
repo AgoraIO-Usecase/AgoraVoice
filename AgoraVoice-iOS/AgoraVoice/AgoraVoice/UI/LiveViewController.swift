@@ -528,7 +528,13 @@ extension LiveViewController {
         navigation.view.cornerRadius(10)
         vc.audioEffect = type
         
-        let presenetedHeight: CGFloat = 378 + UIScreen.main.heightOfSafeAreaBottom
+        var height: CGFloat
+        switch type {
+        case .belCanto:    height = 378
+        case .soundEffect: height = 566
+        }
+        
+        let presenetedHeight: CGFloat = height + UIScreen.main.heightOfSafeAreaBottom
         let y = UIScreen.main.bounds.height - presenetedHeight
         let presentedFrame = CGRect(x: 0,
                                     y: y,

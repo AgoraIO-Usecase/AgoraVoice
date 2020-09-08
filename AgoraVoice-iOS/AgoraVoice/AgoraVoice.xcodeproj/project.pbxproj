@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		25FE87BC8A59A85C79FC19B9 /* Pods_AgoraVoice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFA6A288AD8BCBB08EA5C83D /* Pods_AgoraVoice.framework */; };
+		A730B83225076F7200126B02 /* ElectronicMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A730B83125076F7200126B02 /* ElectronicMusicViewController.swift */; };
 		A750EC302500A18E006E50E3 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A750EC2F2500A18E006E50E3 /* Popover.storyboard */; };
 		A750EC3C2500A33F006E50E3 /* GIFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC322500A33F006E50E3 /* GIFViewController.swift */; };
 		A750EC3D2500A33F006E50E3 /* CVUserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC332500A33F006E50E3 /* CVUserListViewController.swift */; };
@@ -43,6 +44,7 @@
 		A750EC7525060347006E50E3 /* AudioEffectVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC7425060347006E50E3 /* AudioEffectVM.swift */; };
 		A750EC7725060E3F006E50E3 /* AECollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC7625060E3F006E50E3 /* AECollectionViewController.swift */; };
 		A750EC7A25061647006E50E3 /* AudioEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC7925061647006E50E3 /* AudioEffect.swift */; };
+		A750EC7E25073295006E50E3 /* ThreeDimensionalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC7D25073295006E50E3 /* ThreeDimensionalViewController.swift */; };
 		A75C6F5524FCC387003E5AD9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A75C6F5424FCC387003E5AD9 /* Assets.xcassets */; };
 		A75C6FBD24FCD709003E5AD9 /* UIView+ExProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FB424FCD709003E5AD9 /* UIView+ExProperty.m */; };
 		A75C6FBE24FCD709003E5AD9 /* CSNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FB524FCD709003E5AD9 /* CSNavigationController.swift */; };
@@ -101,6 +103,7 @@
 
 /* Begin PBXFileReference section */
 		9FC5D8282F94142407E449F3 /* Pods-AgoraVoice.lab2020-pre.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraVoice.lab2020-pre.xcconfig"; path = "Target Support Files/Pods-AgoraVoice/Pods-AgoraVoice.lab2020-pre.xcconfig"; sourceTree = "<group>"; };
+		A730B83125076F7200126B02 /* ElectronicMusicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElectronicMusicViewController.swift; sourceTree = "<group>"; };
 		A750EC2F2500A18E006E50E3 /* Popover.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Popover.storyboard; sourceTree = "<group>"; };
 		A750EC322500A33F006E50E3 /* GIFViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GIFViewController.swift; sourceTree = "<group>"; };
 		A750EC332500A33F006E50E3 /* CVUserListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CVUserListViewController.swift; sourceTree = "<group>"; };
@@ -138,6 +141,7 @@
 		A750EC7425060347006E50E3 /* AudioEffectVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEffectVM.swift; sourceTree = "<group>"; };
 		A750EC7625060E3F006E50E3 /* AECollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AECollectionViewController.swift; sourceTree = "<group>"; };
 		A750EC7925061647006E50E3 /* AudioEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEffect.swift; sourceTree = "<group>"; };
+		A750EC7D25073295006E50E3 /* ThreeDimensionalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDimensionalViewController.swift; sourceTree = "<group>"; };
 		A75C6F4824FCC386003E5AD9 /* AgoraVoice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AgoraVoice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A75C6F5424FCC387003E5AD9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A75C6FB424FCD709003E5AD9 /* UIView+ExProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ExProperty.m"; sourceTree = "<group>"; };
@@ -510,6 +514,8 @@
 				A750EC5B2500B661006E50E3 /* ImageSelectViewController.swift */,
 				A750EC6E2505E286006E50E3 /* AudioEffectViewController.swift */,
 				A750EC7625060E3F006E50E3 /* AECollectionViewController.swift */,
+				A750EC7D25073295006E50E3 /* ThreeDimensionalViewController.swift */,
+				A730B83125076F7200126B02 /* ElectronicMusicViewController.swift */,
 			);
 			name = SharedViews;
 			sourceTree = "<group>";
@@ -674,6 +680,7 @@
 				A75C6FBE24FCD709003E5AD9 /* CSNavigationController.swift in Sources */,
 				A75C701724FCE8B8003E5AD9 /* UIImage+CSClipToCycle.m in Sources */,
 				A75C6FD024FCE205003E5AD9 /* RxObject.swift in Sources */,
+				A750EC7E25073295006E50E3 /* ThreeDimensionalViewController.swift in Sources */,
 				A750EC6D2500DCCB006E50E3 /* LiveRole.swift in Sources */,
 				A75C6FFB24FCE41F003E5AD9 /* AGELog.swift in Sources */,
 				A75C6FF524FCE41F003E5AD9 /* LCLLogFile.m in Sources */,
@@ -685,6 +692,7 @@
 				A75C6FF724FCE41F003E5AD9 /* ZipTool.swift in Sources */,
 				A75C701624FCE8B8003E5AD9 /* UIColor+Hex.m in Sources */,
 				A75C702624FCEBBC003E5AD9 /* UserData+CoreDataProperties.swift in Sources */,
+				A730B83225076F7200126B02 /* ElectronicMusicViewController.swift in Sources */,
 				A750EC522500B353006E50E3 /* SubThreadTimer.m in Sources */,
 				A75C70F624FE29AF003E5AD9 /* MineViewController.swift in Sources */,
 				A750EC4F2500B1E6006E50E3 /* MineVM.swift in Sources */,

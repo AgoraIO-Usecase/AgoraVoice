@@ -135,17 +135,19 @@ extension AudioSpace {
                                                           .phonograph,
                                                           .virtualStereo,
                                                           .spacial,
-                                                          .ethereal])
+                                                          .ethereal,
+                                                          .threeDimensionalVoice])
     
     var image: UIImage {
         switch self {
-        case .KTV:            return UIImage(named: "icon-KTV")!
-        case .vocalConcer:    return UIImage(named: "icon-演唱会")!
-        case .studio:         return UIImage(named: "icon-录音棚")!
-        case .phonograph:     return UIImage(named: "icon-留声机")!
-        case .virtualStereo:  return UIImage(named: "icon-虚拟立体声")!
-        case .spacial:        return UIImage(named: "icon-空旷")!
-        case .ethereal:       return UIImage(named: "icon-空灵")!
+        case .KTV:                    return UIImage(named: "icon-KTV")!
+        case .vocalConcer:            return UIImage(named: "icon-演唱会")!
+        case .studio:                 return UIImage(named: "icon-录音棚")!
+        case .phonograph:             return UIImage(named: "icon-留声机")!
+        case .virtualStereo:          return UIImage(named: "icon-虚拟立体声")!
+        case .spacial:                return UIImage(named: "icon-空旷")!
+        case .ethereal:               return UIImage(named: "icon-空灵")!
+        case .threeDimensionalVoice:  return UIImage(named: "icon-3D人声")!
         case .disable:        fatalError()
         @unknown default:
             fatalError()
@@ -154,13 +156,14 @@ extension AudioSpace {
     
     var description: String {
         switch self {
-        case .KTV:            return "KTV"
-        case .vocalConcer:    return "vocalConcer"
-        case .studio:         return "studio"
-        case .phonograph:     return "phonograph"
-        case .virtualStereo:  return "virtualStereo"
-        case .spacial:        return "spacial"
-        case .ethereal:       return "ethereal"
+        case .KTV:                    return "KTV"
+        case .vocalConcer:            return "vocalConcer"
+        case .studio:                 return "studio"
+        case .phonograph:             return "phonograph"
+        case .virtualStereo:          return "virtualStereo"
+        case .spacial:                return "spacial"
+        case .ethereal:               return "ethereal"
+        case .threeDimensionalVoice:  return "threedimVoice"
         case .disable:        fatalError()
         @unknown default:
             fatalError()

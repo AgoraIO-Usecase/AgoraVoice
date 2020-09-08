@@ -66,8 +66,17 @@ class AECollectionViewController: RxViewController {
     
     var audioEffectType = AudioEffectType.belCanto
     
-    var belCantoType = BehaviorRelay<BelCantoType>(value: .chat)
-    var soundEffectType = BehaviorRelay<SoundEffectType>(value: .space)
+    let belCantoType = BehaviorRelay<BelCantoType>(value: .chat)
+    let selectedChatOfBelcanto = PublishRelay<ChatOfBelCanto>()
+    let selectedSingOfBelcanto = PublishRelay<SingOfBelCanto>()
+    let selectedTimbre = PublishRelay<Timbre>()
+    
+    let soundEffectType = BehaviorRelay<SoundEffectType>(value: .space)
+    let selectedSoundEffectType = PublishRelay<SoundEffectType>()
+    let selectedAudioSpace = PublishRelay<AudioSpace>()
+    let selectedTimbreRole = PublishRelay<TimbreRole>()
+    let selectedMusicGenre = PublishRelay<MusicGenre>()
+    
     var selectedIndex: Int = 0
     
     override func viewDidLoad() {
@@ -216,6 +225,8 @@ private extension AECollectionViewController {
                                                    right: space)
         collectionView.setCollectionViewLayout(layout, animated: false)
         
+        selectedSoundEffectType.accept(type)
+        
         switch type {
         case .space:
             let listSubscribe = AudioSpace.list.bind(to: collectionView.rx.items(cellIdentifier: "AEImageLabelCell",
@@ -226,6 +237,9 @@ private extension AECollectionViewController {
             }
             
             let selectSubscribe = collectionView.rx.itemSelected.subscribe(onNext: { [unowned self] (index) in
+                let spaceType = AudioSpace.list.value[index.item]
+                self.selectedAudioSpace.accept(spaceType)
+                
                 self.selectedIndex = index.item
                 self.collectionView.reloadData()
             })
@@ -263,20 +277,7 @@ private extension AECollectionViewController {
             lastSubscribes.append(listSubscribe)
             lastSubscribes.append(selectSubscribe)
         case .electronicMusic:
-            let listSubscribe = ChatOfBelCanto.list.bind(to: collectionView.rx.items(cellIdentifier: "AEImageLabelCell",
-                                                                                 cellType: AEImageLabelCell.self)) { [unowned self] (index, item, cell) in
-                                                                                    cell.tagImageView.image = item.image
-                                                                                    cell.nameLabel.text = "\(item.description)"
-                                                                                    cell.isSelectedNow = (index == self.selectedIndex)
-            }
-            
-            let selectSubscribe = collectionView.rx.itemSelected.subscribe(onNext: { [unowned self] (index) in
-                self.selectedIndex = index.item
-                self.collectionView.reloadData()
-            })
-            
-            lastSubscribes.append(listSubscribe)
-            lastSubscribes.append(selectSubscribe)
+            break
         }
     }
 }

@@ -43,7 +43,8 @@ typedef NS_ENUM(int, AudioSpace) {
     AudioSpacePhonograph,
     AudioSpaceVirtualStereo,
     AudioSpaceSpacial,
-    AudioSpaceEthereal
+    AudioSpaceEthereal,
+    AudioSpaceThreeDimensionalVoice
 };
 
 typedef NS_ENUM(int, TimbreRole) {
@@ -62,7 +63,7 @@ typedef NS_ENUM(int, MusicGenre) {
     MusicGenreRNB,
     MusicGenrePopular,
     MusicGenreRock,
-    MusicGenreHipHop,
+    MusicGenreHipHop
 };
 
 @interface AudioEffect : NSObject
