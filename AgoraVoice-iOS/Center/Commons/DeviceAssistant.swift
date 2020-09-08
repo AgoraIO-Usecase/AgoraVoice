@@ -3,7 +3,7 @@
 //  Center
 //
 //  Created by CavanSu on 2020/2/13.
-//  Copyright © 2020 CavanSu. All rights reserved.
+//  Copyright © 2020 Agora. All rights reserved.
 //
 
 import UIKit

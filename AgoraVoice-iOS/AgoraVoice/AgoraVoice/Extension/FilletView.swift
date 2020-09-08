@@ -3,7 +3,7 @@
 //  FilletView
 //
 //  Created by CavanSu on 2020/3/25.
-//  Copyright © 2020 CavanSu. All rights reserved.
+//  Copyright © 2020 Agora. All rights reserved.
 //
 
 import UIKit
