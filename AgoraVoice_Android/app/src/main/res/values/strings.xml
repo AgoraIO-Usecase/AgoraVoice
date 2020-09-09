@@ -17,6 +17,25 @@
     <string name="text_cancel">Cancel</string>
     <string name="text_done">Done</string>
 
+    <string name="about_title">About</string>
+    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="privacy_website_link">https://www.agora.io/en/privacy-policy/</string>
+
+    <string name="disclaimer_title">Test Product Disclaimer</string>
+    <string name="disclaimer_content">&#160;&#160;&#160;&#160;Agora Live ("this product") is a test product provided by Agora. Agora enjoys the copyright and ownership of this product. It is hereby granted free of charge to anyone who obtains a copy of this product and related documentation (hereinafter referred to as "software") to try the software without limitation, including but not limited to trial, copy, modify, merge, publish, distribute, but this product shall not be used For any commercial use, you may not sublicense and/or sell copies of the software.\n\n &#160;&#160;&#160;&#160;This product is provided "as is" without any express warranty, including but not limited to guarantees of suitability, suitability for specific purposes, and non-infringement. Whether it is due to any contract, infringement or other forms of conduct related to this product or the trial of this product or other methods, Agora will not be responsible for any claims, damages or other liabilities.\n\n &#160;&#160;&#160;&#160;You are free to choose whether to try the services provided by this product. If you download, install, or try the services provided in this product, it means that you trust the owner of the product, and Agora shall not be responsible for any form of loss or injury caused by yourself or others when you try the services provided in this product for any reason.</string>
+
+    <string name="sign_up_agora_title">Sign Up Agora.io</string>
+    <string name="sign_up_website_link">https://sso.agora.io/en/signup</string>
+
+    <string name="version_title">Versions</string>
+    <string name="agoralive_version_title">AgoraLive Version</string>
+    <string name="agoralive_release_time_title">Release</string>
+    <string name="agoralive_release_time" translatable="false">2020.07.06</string>
+    <string name="agoralive_media_sdk_version_title">Media SDK Version</string>
+    <string name="agoralive_media_sdk_version" translatable="false">Ver 3.0.1.1</string>
+
+    <string name="official_website">www.agora.io</string>
+
     <!-- Policies -->
     <string name="room_restriction_policy">This is a testing product. Please refrain from using it commercially. The max duration per session is 10 minutes, and the max number of participants per channel is 10. </string>
 

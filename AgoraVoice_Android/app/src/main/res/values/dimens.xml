@@ -55,6 +55,8 @@
     <dimen name="main_profile_avatar_recycler_top_margin">64dp</dimen>
     <dimen name="main_profile_nickname_edit_height">48dp</dimen>
 
+    <dimen name="main_profile_item_margin">2dp</dimen>
+
     <!-- Prepare Activity -->
     <dimen name="prepare_top_layout_height">64dp</dimen>
     <dimen name="prepare_top_button_size">32dp</dimen>

@@ -61,7 +61,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_go"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -86,7 +87,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_go"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/edit_profile_nickname"
             android:layout_width="wrap_content"
@@ -118,6 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_go"/>
     </RelativeLayout>
 </LinearLayout>

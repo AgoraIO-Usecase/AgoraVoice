@@ -21,6 +21,26 @@
     <string name="text_cancel">取消</string>
     <string name="text_done">完成</string>
 
+    <string name="about_title">关于</string>
+    <string name="privacy_policy_title">隐私条例</string>
+    <string name="privacy_website_link">https://www.agora.io/cn/privacy-policy/</string>
+
+    <string name="disclaimer_title">测试产品免责声明</string>
+    <string name="disclaimer_content">&#160;&#160;&#160;&#160;Agora Live（“本产品”）是由Agora提供的一款测试产品，Agora享有本产品的著作权和所有权。特此免费授予获得本产品和相关文档文件（以下简称“软件”）副本的任何人无限制地试用软件的权利，包括但不限于试用，复制，修改，合并，发布，分发，但本产品不得用于任何商业用途，不得再许可和/或出售该软件的副本。\n\n
+
+&#160;&#160;&#160;&#160;本产品按“现状”提供，没有任何形式的明示担保，包括但不限于对适配性、特定目的的适用性和非侵权性的担保。无论是由于与本产品或本产品的试用或其他方式有关的任何合同、侵权或其他形式的行为，Agora均不对任何索赔、损害或其他责任负责。\n\n
+
+&#160;&#160;&#160;&#160;您可以自由选择是否试用本产品提供的服务，如果您下载、安装、试用本产品中所提供的服务，即表明您信任该产品所有人，Agora对任何原因在试用本产品中提供的服务时可能对您自身或他人造成的任何形式的损失和伤害不承担任何责任。</string>
+
+    <string name="sign_up_agora_title">注册声网账号</string>
+    <string name="sign_up_website_link">https://sso.agora.io/cn/signup</string>
+
+    <string name="version_title">版本说明</string>
+    <string name="agoralive_version_title">AgoraLive 版本</string>
+    <string name="agoralive_release_time_title">发布时间</string>
+    <string name="agoralive_media_sdk_version_title">媒体SDK版本</string>
+
+
     <!-- Prepare Activity -->
     <string name="live_prepare_hint">直播间名字</string>
     <string name="go_live">开始直播</string>
