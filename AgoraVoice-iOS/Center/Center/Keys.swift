@@ -10,6 +10,8 @@ import UIKit
 
 struct Keys {
     static var AgoraAppId: String = ""
+    static var customerId: String = ""
+    static var customerCertificate: String = ""
     static var AgoraRtcToken: String = ""
     static var AgoraRtmToken: String = ""
     static var UserToken: String = ""

@@ -292,11 +292,11 @@ extension LiveViewController {
 
 extension LiveViewController {
     // MARK: - User List
-    func presentUserList(type: CVUserListViewController.ShowType) {
+    func presentUserList(type: UserListViewController.ShowType) {
         self.showMaskView(color: UIColor.clear)
         
-        let vc = UIStoryboard.initViewController(of: "CVUserListViewController",
-                                                 class: CVUserListViewController.self,
+        let vc = UIStoryboard.initViewController(of: "UserListViewController",
+                                                 class: UserListViewController.self,
                                                  on: "Popover")
         
         vc.userListVM = userListVM

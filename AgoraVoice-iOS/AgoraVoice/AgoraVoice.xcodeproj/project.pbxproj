@@ -11,7 +11,7 @@
 		A730B83225076F7200126B02 /* ElectronicMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A730B83125076F7200126B02 /* ElectronicMusicViewController.swift */; };
 		A750EC302500A18E006E50E3 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A750EC2F2500A18E006E50E3 /* Popover.storyboard */; };
 		A750EC3C2500A33F006E50E3 /* GIFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC322500A33F006E50E3 /* GIFViewController.swift */; };
-		A750EC3D2500A33F006E50E3 /* CVUserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC332500A33F006E50E3 /* CVUserListViewController.swift */; };
+		A750EC3D2500A33F006E50E3 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC332500A33F006E50E3 /* UserListViewController.swift */; };
 		A750EC3E2500A33F006E50E3 /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC342500A33F006E50E3 /* MusicViewController.swift */; };
 		A750EC3F2500A33F006E50E3 /* RealDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC352500A33F006E50E3 /* RealDataViewController.swift */; };
 		A750EC402500A33F006E50E3 /* ChatInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC362500A33F006E50E3 /* ChatInputView.swift */; };
@@ -106,7 +106,7 @@
 		A730B83125076F7200126B02 /* ElectronicMusicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElectronicMusicViewController.swift; sourceTree = "<group>"; };
 		A750EC2F2500A18E006E50E3 /* Popover.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Popover.storyboard; sourceTree = "<group>"; };
 		A750EC322500A33F006E50E3 /* GIFViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GIFViewController.swift; sourceTree = "<group>"; };
-		A750EC332500A33F006E50E3 /* CVUserListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CVUserListViewController.swift; sourceTree = "<group>"; };
+		A750EC332500A33F006E50E3 /* UserListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserListViewController.swift; sourceTree = "<group>"; };
 		A750EC342500A33F006E50E3 /* MusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicViewController.swift; sourceTree = "<group>"; };
 		A750EC352500A33F006E50E3 /* RealDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealDataViewController.swift; sourceTree = "<group>"; };
 		A750EC362500A33F006E50E3 /* ChatInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatInputView.swift; sourceTree = "<group>"; };
@@ -503,7 +503,7 @@
 				A750EC3A2500A33F006E50E3 /* BottomToolsViewController.swift */,
 				A750EC362500A33F006E50E3 /* ChatInputView.swift */,
 				A750EC3B2500A33F006E50E3 /* ChatViewController.swift */,
-				A750EC332500A33F006E50E3 /* CVUserListViewController.swift */,
+				A750EC332500A33F006E50E3 /* UserListViewController.swift */,
 				A750EC372500A33F006E50E3 /* ExtensionViewController.swift */,
 				A750EC392500A33F006E50E3 /* GiftAudienceViewController.swift */,
 				A750EC382500A33F006E50E3 /* GIFView.swift */,
@@ -655,7 +655,7 @@
 				A750EC662500D5B5006E50E3 /* GiftViewController.swift in Sources */,
 				A750EC4B2500B1E6006E50E3 /* GiftVM.swift in Sources */,
 				A750EC4E2500B1E6006E50E3 /* ChatVM.swift in Sources */,
-				A750EC3D2500A33F006E50E3 /* CVUserListViewController.swift in Sources */,
+				A750EC3D2500A33F006E50E3 /* UserListViewController.swift in Sources */,
 				A75C6FBD24FCD709003E5AD9 /* UIView+ExProperty.m in Sources */,
 				A75C6FF324FCE41E003E5AD9 /* LogTube.swift in Sources */,
 				A750EC3E2500A33F006E50E3 /* MusicViewController.swift in Sources */,
@@ -885,7 +885,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = GM72UGLGZW;
 				INFOPLIST_FILE = AgoraVoice/Utils/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -914,7 +914,7 @@
 					"PRODUCT=1",
 				);
 				INFOPLIST_FILE = AgoraVoice/Utils/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1001,7 +1001,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = JDPG69R49Z;
 				INFOPLIST_FILE = AgoraVoice/Utils/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1091,7 +1091,7 @@
 					"PREPRODUCT=1",
 				);
 				INFOPLIST_FILE = AgoraVoice/Utils/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

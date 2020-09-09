@@ -1,5 +1,5 @@
 //
-//  CVUserListViewController.swift
+//  UserListViewController.swift
 //  AgoraLive
 //
 //  Created by CavanSu on 2020/7/31.
@@ -11,16 +11,16 @@ import MJRefresh
 import RxSwift
 import RxRelay
 
-protocol CVUserInvitationListCellDelegate: NSObjectProtocol {
-    func cell(_ cell: CVUserInvitationListCell, didTapInvitationButton: UIButton, on index: Int)
+protocol UserInvitationListCellDelegate: NSObjectProtocol {
+    func cell(_ cell: UserInvitationListCell, didTapInvitationButton: UIButton, on index: Int)
 }
 
-protocol CVUserApplicationListCellDelegate: NSObjectProtocol {
-    func cell(_ cell: CVUserApplicationListCell, didTapAcceptButton: UIButton, on index: Int)
-    func cell(_ cell: CVUserApplicationListCell, didTapRejectButton: UIButton, on index: Int)
+protocol UserApplicationListCellDelegate: NSObjectProtocol {
+    func cell(_ cell: UserApplicationListCell, didTapAcceptButton: UIButton, on index: Int)
+    func cell(_ cell: UserApplicationListCell, didTapRejectButton: UIButton, on index: Int)
 }
 
-class CVUserInvitationListCell: UITableViewCell {
+class UserInvitationListCell: UITableViewCell {
     enum InviteButtonState {
         case none, inviting, availableInvite
     }
@@ -29,7 +29,7 @@ class CVUserInvitationListCell: UITableViewCell {
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet weak var inviteButton: UIButton!
     
-    fileprivate weak var delegate: CVUserInvitationListCellDelegate?
+    fileprivate weak var delegate: UserInvitationListCellDelegate?
     private let bag = DisposeBag()
     
     var index: Int = 0
@@ -73,13 +73,13 @@ class CVUserInvitationListCell: UITableViewCell {
     }
 }
 
-class CVUserApplicationListCell: UITableViewCell {
+class UserApplicationListCell: UITableViewCell {
     @IBOutlet weak var headImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var acceptButton: UIButton!
     @IBOutlet weak var rejectButton: UIButton!
     
-    fileprivate weak var delegate: CVUserApplicationListCellDelegate?
+    fileprivate weak var delegate: UserApplicationListCellDelegate?
     private let bag = DisposeBag()
     
     var index: Int = 0
@@ -112,7 +112,7 @@ class CVUserApplicationListCell: UITableViewCell {
     }
 }
 
-class CVUserListViewController: UIViewController {
+class UserListViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var tabView: TabSelectView!
@@ -131,7 +131,7 @@ class CVUserListViewController: UIViewController {
     private var applyingUserListSubscribeOnMultiHosts: Disposable?
     private var invitingUserListSubscribeOnMultiHosts: Disposable?
     
-//    let inviteUser = PublishRelay<LiveRole>()
+    let inviteUser = PublishRelay<LiveRole>()
 //    let rejectApplicationOfUser = PublishRelay<MultiHostsVM.Application>()
 //    let acceptApplicationOfUser = PublishRelay<MultiHostsVM.Application>()
     
@@ -193,8 +193,8 @@ class CVUserListViewController: UIViewController {
         switch showType {
         case .onlyUser:
             userListVM.refetch(onlyAudience: false)
-            userListVM.list.bind(to: tableView.rx.items(cellIdentifier: "CVUserInvitationListCell",
-                                                        cellType: CVUserInvitationListCell.self)) { [unowned images] (index, user, cell) in
+            userListVM.list.bind(to: tableView.rx.items(cellIdentifier: "UserInvitationListCell",
+                                                        cellType: UserInvitationListCell.self)) { [unowned images] (index, user, cell) in
                                                             cell.nameLabel.text = user.info.name
                                                             cell.buttonState = .none
                                                             cell.headImageView.image = images.getHead(index: user.info.imageIndex)
@@ -327,15 +327,15 @@ class CVUserListViewController: UIViewController {
     }
 }
 
-private extension CVUserListViewController {
+private extension UserListViewController {
     /*
     func tableViewBindWithUser(_ list: BehaviorRelay<[LiveRole]>) -> Disposable {
         let images = Center.shared().centerProvideImagesHelper()
         
         let subscribe = list.bind(to: tableView
-            .rx.items(cellIdentifier: "CVUserInvitationListCell",
-                      cellType: CVUserInvitationListCell.self)) { [unowned images, unowned self] (index, user, cell) in
-                        var buttonState = CVUserInvitationListCell.InviteButtonState.availableInvite
+            .rx.items(cellIdentifier: "UserInvitationListCell",
+                      cellType: UserInvitationListCell.self)) { [unowned images, unowned self] (index, user, cell) in
+                        var buttonState = UserInvitationListCell.InviteButtonState.availableInvite
                         
                         for item in self.multiHostsVM.invitingUserList.value where user.info.userId == item.info.userId {
                             buttonState = .inviting
@@ -368,8 +368,8 @@ private extension CVUserListViewController {
         let images = Center.shared().centerProvideImagesHelper()
         
         let subscribe = multiHostsVM.applyingUserList.bind(to: tableView
-            .rx.items(cellIdentifier: "CVUserApplicationListCell",
-                      cellType: CVUserApplicationListCell.self)) { [unowned images, unowned self] (index, user, cell) in
+            .rx.items(cellIdentifier: "UserApplicationListCell",
+                      cellType: UserApplicationListCell.self)) { [unowned images, unowned self] (index, user, cell) in
                         cell.nameLabel.text = user.info.name
                         cell.headImageView.image = images.getHead(index: user.info.imageIndex)
                         cell.index = index
@@ -383,9 +383,9 @@ private extension CVUserListViewController {
         let images = Center.shared().centerProvideImagesHelper()
         
         let subscribe = pkVM.availableRooms.bind(to: tableView
-            .rx.items(cellIdentifier: "CVUserInvitationListCell",
-                      cellType: CVUserInvitationListCell.self)) { [unowned images, unowned self] (index, room, cell) in
-                        var buttonState = CVUserInvitationListCell.InviteButtonState.availableInvite
+            .rx.items(cellIdentifier: "UserInvitationListCell",
+                      cellType: UserInvitationListCell.self)) { [unowned images, unowned self] (index, room, cell) in
+                        var buttonState = UserInvitationListCell.InviteButtonState.availableInvite
                         
                         for item in self.pkVM.invitingRoomList.value where room.roomId == item.roomId {
                             buttonState = .inviting
@@ -414,8 +414,8 @@ private extension CVUserListViewController {
         let images = Center.shared().centerProvideImagesHelper()
         
         let subscribe = pkVM.applyingRoomList.bind(to: tableView
-            .rx.items(cellIdentifier: "CVUserApplicationListCell",
-                      cellType: CVUserApplicationListCell.self)) { [unowned images, unowned self] (index, room, cell) in
+            .rx.items(cellIdentifier: "UserApplicationListCell",
+                      cellType: UserApplicationListCell.self)) { [unowned images, unowned self] (index, room, cell) in
                         cell.nameLabel.text = room.name
                         cell.headImageView.image = images.getRoom(index: room.imageIndex)
                         cell.index = index
@@ -427,9 +427,9 @@ private extension CVUserListViewController {
  */
 }
 
-extension CVUserListViewController: CVUserInvitationListCellDelegate {
+extension UserListViewController: UserInvitationListCellDelegate {
     
-    func cell(_ cell: CVUserInvitationListCell, didTapInvitationButton: UIButton, on index: Int) {
+    func cell(_ cell: UserInvitationListCell, didTapInvitationButton: UIButton, on index: Int) {
         /*
         switch showType {
         case .multiHosts:
@@ -448,9 +448,9 @@ extension CVUserListViewController: CVUserInvitationListCellDelegate {
     }
 }
 
-extension CVUserListViewController: CVUserApplicationListCellDelegate {
+extension UserListViewController: UserApplicationListCellDelegate {
     
-    func cell(_ cell: CVUserApplicationListCell, didTapAcceptButton: UIButton, on index: Int) {
+    func cell(_ cell: UserApplicationListCell, didTapAcceptButton: UIButton, on index: Int) {
         /*
         switch showType {
         case .multiHosts:
@@ -489,7 +489,7 @@ extension CVUserListViewController: CVUserApplicationListCellDelegate {
          */
     }
     
-    func cell(_ cell: CVUserApplicationListCell, didTapRejectButton: UIButton, on index: Int) {
+    func cell(_ cell: UserApplicationListCell, didTapRejectButton: UIButton, on index: Int) {
         /*
         switch showType {
         case .multiHosts:
