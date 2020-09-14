@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MediaDeviceBase.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -66,7 +67,7 @@ typedef NS_ENUM(int, MusicGenre) {
     MusicGenreHipHop
 };
 
-@interface AudioEffect : NSObject
+@interface AudioEffect : MediaDeviceBase
 #pragma mark - Bel Canto 美声类
 // 语聊美声
 - (void)setBelCantoWithChat:(ChatOfBelCanto)chat;

@@ -10,13 +10,11 @@
 
 @interface MediaDevice ()
 @property (nonatomic, strong) Player *player;
-@property (nonatomic, weak) RTCManager *agoraKit;
 @end
 
 @implementation MediaDevice
 - (instancetype)initWithRtcEngine:(RTCManager *)engine {
-    if (self = [super init]) {
-        self.agoraKit = engine;
+    if (self = [super initWithRtcEngine:engine]) {
         self.player = [[Player alloc] initWithRtcEngine:engine];
     }
     return self;

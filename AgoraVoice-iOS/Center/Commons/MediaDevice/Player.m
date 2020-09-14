@@ -12,13 +12,11 @@
 
 @interface Player ()
 @property (nonatomic, strong) SubThreadTimer *timer;
-@property (nonatomic, weak) RTCManager *agoraKit;
 @end
 
 @implementation Player
 - (instancetype)initWithRtcEngine:(RTCManager *)engine {
-    if (self = [super init]) {
-        self.agoraKit = engine;
+    if (self = [super initWithRtcEngine:engine]) {
         self.status = PlayerStatusStop;
         self.timer = [[SubThreadTimer alloc] initWithThreadName:@"MediaDevice-Player-Playing" timeInterval:1.0];
         self.timer.delegate = self;

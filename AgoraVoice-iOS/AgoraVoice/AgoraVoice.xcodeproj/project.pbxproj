@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		25FE87BC8A59A85C79FC19B9 /* Pods_AgoraVoice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFA6A288AD8BCBB08EA5C83D /* Pods_AgoraVoice.framework */; };
 		A730B83225076F7200126B02 /* ElectronicMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A730B83125076F7200126B02 /* ElectronicMusicViewController.swift */; };
+		A735C210250F4AD600707F23 /* MediaDeviceBase.m in Sources */ = {isa = PBXBuildFile; fileRef = A735C20F250F4AD600707F23 /* MediaDeviceBase.m */; };
 		A750EC302500A18E006E50E3 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A750EC2F2500A18E006E50E3 /* Popover.storyboard */; };
 		A750EC3C2500A33F006E50E3 /* GIFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC322500A33F006E50E3 /* GIFViewController.swift */; };
 		A750EC3D2500A33F006E50E3 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC332500A33F006E50E3 /* UserListViewController.swift */; };
@@ -105,6 +106,8 @@
 /* Begin PBXFileReference section */
 		9FC5D8282F94142407E449F3 /* Pods-AgoraVoice.lab2020-pre.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraVoice.lab2020-pre.xcconfig"; path = "Target Support Files/Pods-AgoraVoice/Pods-AgoraVoice.lab2020-pre.xcconfig"; sourceTree = "<group>"; };
 		A730B83125076F7200126B02 /* ElectronicMusicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElectronicMusicViewController.swift; sourceTree = "<group>"; };
+		A735C20E250F4AD600707F23 /* MediaDeviceBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaDeviceBase.h; sourceTree = "<group>"; };
+		A735C20F250F4AD600707F23 /* MediaDeviceBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaDeviceBase.m; sourceTree = "<group>"; };
 		A750EC2F2500A18E006E50E3 /* Popover.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Popover.storyboard; sourceTree = "<group>"; };
 		A750EC322500A33F006E50E3 /* GIFViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GIFViewController.swift; sourceTree = "<group>"; };
 		A750EC332500A33F006E50E3 /* UserListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserListViewController.swift; sourceTree = "<group>"; };
@@ -267,6 +270,8 @@
 				A750EC722505E530006E50E3 /* AudioEffect.m */,
 				A75C70E624FDF2DE003E5AD9 /* Player.h */,
 				A75C70E724FDF2DE003E5AD9 /* Player.m */,
+				A735C20E250F4AD600707F23 /* MediaDeviceBase.h */,
+				A735C20F250F4AD600707F23 /* MediaDeviceBase.m */,
 			);
 			path = MediaDevice;
 			sourceTree = "<group>";
@@ -674,6 +679,7 @@
 				A750EC642500D1C5006E50E3 /* MediaDeviceVM.swift in Sources */,
 				A75C702724FCEBBC003E5AD9 /* UserDataHelper.swift in Sources */,
 				A75C700924FCE41F003E5AD9 /* LogFiles.swift in Sources */,
+				A735C210250F4AD600707F23 /* MediaDeviceBase.m in Sources */,
 				A75C702424FCEBBC003E5AD9 /* AgoraVoice.xcdatamodeld in Sources */,
 				A75C700024FCE41F003E5AD9 /* Keys.swift in Sources */,
 				A750EC5A2500B455006E50E3 /* TabSelectView.swift in Sources */,

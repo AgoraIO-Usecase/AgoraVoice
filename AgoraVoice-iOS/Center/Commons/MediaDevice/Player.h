@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <EduSDK/RTCManager.h>
+#import "MediaDeviceBase.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -31,12 +31,11 @@ typedef NS_ENUM(int, PlayerStatus) {
 - (void)player:(Player *)player didChangePlayerStatusFrom:(PlayerStatus)previous to:(PlayerStatus)current;
 @end
 
-@interface Player : NSObject
+@interface Player : MediaDeviceBase
 @property (nonatomic, copy, nullable) NSString *fileURL;
 @property (nonatomic, weak) id<PlayerDelegate> delegate;
 @property (nonatomic, assign) PlayerStatus status;
 
-- (instancetype)initWithRtcEngine:(RTCManager *)engine;
 - (BOOL)startWithURL:(NSString *)url;
 - (BOOL)pause;
 - (BOOL)resume;

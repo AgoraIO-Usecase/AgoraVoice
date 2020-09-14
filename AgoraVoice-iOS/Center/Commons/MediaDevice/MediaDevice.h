@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <EduSDK/RTCManager.h>
+#import "MediaDeviceBase.h"
 #import "Player.h"
 #import "AudioEffect.h"
 
@@ -37,12 +37,13 @@ typedef NS_ENUM(int, AudioOutputRouting) {
 - (void)mediaDevice:(MediaDevice *)mediaDevice didOccurError:(NSError *)error;
 @end
 
-@interface MediaDevice : NSObject
+@interface MediaDevice : MediaDeviceBase
 @property (nonatomic, strong, readonly) Player *player;
-@property (nonatomic, strong, readonly) AudioEffect *recordAudioEffect;
+//@property (nonatomic, strong, readonly) AudioEffect *recordAudioEffect;
 
-- (instancetype)initWithRtcEngine:(RTCManager *)engine;
 - (void)recordAudioLoop:(BOOL)enable;
 @end
+
+
 
 NS_ASSUME_NONNULL_END
