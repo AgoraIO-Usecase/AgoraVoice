@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AgoraRtcEngineKit/AgoraRtcEngineKit.h>
+#import <EduSDK/RTCManager.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,19 +20,23 @@ typedef NS_ENUM(int, PlayerStatus) {
 @class Player;
 @protocol PlayerDelegate <NSObject>
 @optional
-- (void)player:(Player *)player didReceivedFileDuration:(NSInteger)seconds;
-- (void)player:(Player *)player playingCurrentSecond:(NSInteger)second;
-- (void)player:(Player *)player didStartPlayFile:(NSString *)url;
+- (void)player:(Player *)player didStartPlayFile:(NSString *)url duration:(NSInteger)seconds;
 - (void)player:(Player *)player didPausePlayFile:(NSString *)url;
+- (void)player:(Player *)player didResumePlayFile:(NSString *)url;
 - (void)player:(Player *)player didStopPlayFile:(NSString *)url;
+- (void)player:(Player *)player didPlayFileFinish:(NSString *)url;
 - (void)player:(Player *)player didOccurError:(NSError *)error;
+
+- (void)player:(Player *)player playingCurrentSecond:(NSInteger)second duration:(NSInteger)seconds;
+- (void)player:(Player *)player didChangePlayerStatusFrom:(PlayerStatus)previous to:(PlayerStatus)current;
 @end
 
 @interface Player : NSObject
+@property (nonatomic, copy, nullable) NSString *fileURL;
 @property (nonatomic, weak) id<PlayerDelegate> delegate;
-@property (atomic, assign) PlayerStatus status;
+@property (nonatomic, assign) PlayerStatus status;
 
-- (instancetype)initWithRtcEngine:(AgoraRtcEngineKit *)engine;
+- (instancetype)initWithRtcEngine:(RTCManager *)engine;
 - (BOOL)startWithURL:(NSString *)url;
 - (BOOL)pause;
 - (BOOL)resume;

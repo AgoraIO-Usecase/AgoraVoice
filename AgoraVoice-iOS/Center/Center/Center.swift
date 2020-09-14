@@ -36,10 +36,13 @@ class Center: NSObject {
     
     private lazy var liveManager: EduManager = {
         let configuration = EduConfiguration(appId: "", customerId: "", customerCertificate: "")
-        let manager = EduManager.initWithConfig(configuration)
+        let manager = EduManager(config: configuration)
         return manager
     }()
+    
     private lazy var liveManagerLoginRetry = AfterWorker()
+    private lazy var rtc = RTCManager.share()
+    private lazy var mediaDevice = MediaDevice(rtcEngine: rtc)
     
     private let log = LogTube()
     
@@ -186,19 +189,15 @@ extension Center: CenterHelper {
     }
     
     func centerProvideMediaDevice() -> MediaDevice {
-        return MediaDevice()
+        return mediaDevice
     }
     
     func centerProvideFilesGroup() -> FilesGroup {
-        return self.files
+        return files
     }
-    
-//    func centerProvideRTMHelper() -> RTMClient {
-//        return self.rtm
-//    }
-    
+        
     func centerProvideLogTubeHelper() -> LogTube {
-        return self.log
+        return log
     }
     
     func centerProvideUserDataHelper() -> UserDataHelper {

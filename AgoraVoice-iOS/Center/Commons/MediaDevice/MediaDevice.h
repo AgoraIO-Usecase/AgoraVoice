@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AgoraRtcEngineKit/AgoraRtcEngineKit.h>
-//#import <AgoraRtcKit/AgoraRtcEngineKit.h>
+#import <EduSDK/RTCManager.h>
 #import "Player.h"
 #import "AudioEffect.h"
 
@@ -42,7 +41,7 @@ typedef NS_ENUM(int, AudioOutputRouting) {
 @property (nonatomic, strong, readonly) Player *player;
 @property (nonatomic, strong, readonly) AudioEffect *recordAudioEffect;
 
-- (instancetype)initWithRtcEngine:(AgoraRtcEngineKit *)engine;
+- (instancetype)initWithRtcEngine:(RTCManager *)engine;
 - (void)recordAudioLoop:(BOOL)enable;
 @end
 

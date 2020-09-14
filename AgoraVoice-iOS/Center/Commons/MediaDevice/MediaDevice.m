@@ -10,11 +10,11 @@
 
 @interface MediaDevice ()
 @property (nonatomic, strong) Player *player;
-@property (nonatomic, weak) AgoraRtcEngineKit *agoraKit;
+@property (nonatomic, weak) RTCManager *agoraKit;
 @end
 
 @implementation MediaDevice
-- (instancetype)initWithRtcEngine:(AgoraRtcEngineKit *)engine {
+- (instancetype)initWithRtcEngine:(RTCManager *)engine {
     if (self = [super init]) {
         self.agoraKit = engine;
         self.player = [[Player alloc] initWithRtcEngine:engine];
@@ -23,6 +23,6 @@
 }
 
 - (void)recordAudioLoop:(BOOL)enable {
-    [self.agoraKit enableInEarMonitoring:enable];
+//    [self.agoraKit enableInEarMonitoring:enable];
 }
 @end

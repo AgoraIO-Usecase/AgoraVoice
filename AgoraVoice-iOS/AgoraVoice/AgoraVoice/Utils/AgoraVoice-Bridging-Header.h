@@ -13,3 +13,4 @@
 #import "SubThreadTimer.h"
 #import "MediaDevice.h"
 #import "EduSDK.h"
+#import "RTCManager.h"

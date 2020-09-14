@@ -12,13 +12,15 @@
 @property (nonatomic, strong) NSRunLoop *subRunLoop;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, copy) NSString *threadName;
+@property (nonatomic, assign) NSTimeInterval interval;
 @end
 
 @implementation SubThreadTimer
 
-- (instancetype)initWithThreadName:(NSString *)name {
+- (instancetype)initWithThreadName:(NSString *)name timeInterval:(NSTimeInterval)interval; {
     if (self = [super init]) {
         self.threadName = name;
+        self.interval = interval;
     }
     
     return self;
@@ -51,7 +53,7 @@
 
 - (void)run {
     self.subRunLoop = [NSRunLoop currentRunLoop];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:self.interval
                                                   target:self
                                                 selector:@selector(loop)
                                                 userInfo:nil

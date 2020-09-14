@@ -31,7 +31,7 @@ class TimestampQueue: NSObject {
     var max = 10
     
     init(name: String) {
-        self.timer = SubThreadTimer(threadName: name)
+        self.timer = SubThreadTimer(threadName: name, timeInterval: 1.0)
         super.init()
         self.timer.delegate = self
     }
