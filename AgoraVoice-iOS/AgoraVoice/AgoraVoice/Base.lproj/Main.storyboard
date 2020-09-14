@@ -322,6 +322,7 @@
                         <outlet property="createButton" destination="LGB-uL-CwV" id="1uA-71-nzn"/>
                         <outlet property="placeHolderView" destination="TSG-Ky-85b" id="M7c-Vm-kfK"/>
                         <segue destination="lqR-GX-EdP" kind="show" identifier="CreateLiveNavigation" id="stZ-Tt-Xr4"/>
+                        <segue destination="yCd-vO-GHh" kind="show" identifier="ChatRoomViewController" id="6va-Wb-UwM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -1175,6 +1176,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rxm-Sd-VKs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4365" y="-445"/>
+        </scene>
+        <!--ChatRoomViewController-->
+        <scene sceneID="Xqa-mV-2fu">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Live" referencedIdentifier="ChatRoomViewController" id="yCd-vO-GHh" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="SDS-no-TH0"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XIJ-eM-Ye8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2286" y="-806"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="gwi-MC-pqW">

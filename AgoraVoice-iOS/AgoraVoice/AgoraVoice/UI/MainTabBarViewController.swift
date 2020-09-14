@@ -25,16 +25,15 @@ class MainTabBarViewController: MaskTabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         UITabBar.appearance().barTintColor = .black
+        tabBar.isUserInteractionEnabled = false
+        showHUD()
         
-//        tabBar.isUserInteractionEnabled = false
-//
-//        showHUD()
-//        Center.shared().isWorkNormally.subscribe(onNext: { [unowned self] (normal) in
-//            if normal {
-//                self.tabBar.isUserInteractionEnabled = true
-//                self.hiddenHUD()
-//            }
-//        }).disposed(by: bag)
+        Center.shared().isWorkNormally.subscribe(onNext: { [unowned self] (normal) in
+            if normal {
+                self.tabBar.isUserInteractionEnabled = true
+                self.hiddenHUD()
+            }
+        }).disposed(by: bag)
     }
     
     func findFirstChild<T: Any>(of class: T.Type) -> T? {

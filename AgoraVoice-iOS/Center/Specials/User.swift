@@ -62,20 +62,19 @@ class CurrentUser: NSObject {
     private(set) var info: BehaviorRelay<BasicUserInfo>
     
     static func local() -> CurrentUser? {
-        return nil
-//        guard let userId = UserDefaults.standard.string(forKey: "UserId") else {
-//            return nil
-//        }
-//
-//        let userHelper = Center.shared().centerProvideUserDataHelper()
-//
-//        guard let userData = userHelper.fetch(userId) else {
-//            return nil
-//        }
-//
-//        let info = BasicUserInfo(userId: userId, name: userData.name!, headURL: "")
-//        let current = CurrentUser(info: info)
-//        return current
+        guard let userId = UserDefaults.standard.string(forKey: "UserId") else {
+            return nil
+        }
+
+        let userHelper = Center.shared().centerProvideUserDataHelper()
+
+        guard let userData = userHelper.fetch(userId) else {
+            return nil
+        }
+
+        let info = BasicUserInfo(userId: userId, name: userData.name!, headURL: "")
+        let current = CurrentUser(info: info)
+        return current
     }
     
     init(info: BasicUserInfo) {

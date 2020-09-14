@@ -145,6 +145,6 @@ private extension LiveTypeViewController {
 extension LiveTypeViewController: LiveTypeCellDelegate {
     func cell(_ cell: LiveTypeCell, didPressedStartButton: UIButton, on index: Int) {
         let type = list.value[index]
-        performSegue(withIdentifier: "LiveListViewController", sender: nil)
+        performSegue(withIdentifier: "LiveListViewController", sender: type)
     }
 }

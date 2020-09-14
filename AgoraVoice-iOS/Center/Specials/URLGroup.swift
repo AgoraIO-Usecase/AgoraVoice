@@ -15,10 +15,10 @@ struct URLGroup {
     #else
     private static let host = "http://api-solutions-dev.sh.agoralab.co/"
     #endif
-    private static let mainPath = "ent/v1/"
+    private static let mainPath = "ent/voice/v1/"
     
     static var userRegister: String {
-        return URLGroup.host + URLGroup.mainPath + "user"
+        return URLGroup.host + URLGroup.mainPath + "users"
     }
     
     static var appVersion: String {
@@ -50,7 +50,7 @@ struct URLGroup {
     }
     
     static var liveCreate: String {
-        return URLGroup.host + URLGroup.mainPath + "room"
+        return URLGroup.host + URLGroup.mainPath + "rooms"
     }
     
     static func userUpdateInfo(userId: String) -> String {

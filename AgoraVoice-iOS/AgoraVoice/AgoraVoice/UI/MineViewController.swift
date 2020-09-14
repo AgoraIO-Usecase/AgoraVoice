@@ -67,7 +67,7 @@ class MineViewController: UITableViewController {
     @IBOutlet weak var aboutLabel: UILabel!
     
     private var topView: TopView?
-//    private var mineVM = MineVM()
+    private var mineVM = MineVM()
     private let bag = DisposeBag()
     
     /*
@@ -101,7 +101,7 @@ class MineViewController: UITableViewController {
         case "UserNameViewController":
             let vc = segue.destination as! UserNameViewController
             vc.hidesBottomBarWhenPushed = true
-//            vc.newName = BehaviorRelay(value: mineVM.userName.value)
+            vc.newName = BehaviorRelay(value: mineVM.userName.value)
             updateNameWithNameVC(vc)
             setupCancelBackButton()
             setupNavigationBarColor()
@@ -214,24 +214,24 @@ private extension MineViewController {
 
 private extension MineViewController {
     func updateViewsWithVM() {
-//        mineVM.userName.subscribe(onNext: { [unowned self] (name) in
-//            self.topView?.label.text = name
-//            self.nameValueLabel.text = name
-//        }).disposed(by: bag)
-//
-//        mineVM.head.subscribe(onNext: { [unowned self]  (head) in
-//            self.topView?.imageView.image = head
-//        }).disposed(by: bag)
+        mineVM.userName.subscribe(onNext: { [unowned self] (name) in
+            self.topView?.label.text = name
+            self.nameValueLabel.text = name
+        }).disposed(by: bag)
+
+        mineVM.head.subscribe(onNext: { [unowned self]  (head) in
+            self.topView?.imageView.image = head
+        }).disposed(by: bag)
     }
     
     func updateNameWithNameVC(_ vc: UserNameViewController) {
-//        vc.newName.subscribe(onNext: { [unowned self] (newName) in
-//            guard newName != self.mineVM.userName.value else {
-//                return
-//            }
-//            self.mineVM.updateNewName(newName) {
-//
-//            }
-//        }).disposed(by: bag)
+        vc.newName.subscribe(onNext: { [unowned self] (newName) in
+            guard newName != self.mineVM.userName.value else {
+                return
+            }
+            self.mineVM.updateNewName(newName) {
+
+            }
+        }).disposed(by: bag)
     }
 }

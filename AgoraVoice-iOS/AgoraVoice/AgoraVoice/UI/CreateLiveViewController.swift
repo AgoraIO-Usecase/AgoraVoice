@@ -171,7 +171,7 @@ private extension CreateLiveViewController {
     func startLivingWithName(_ name: String) {
         self.showHUD()
         
-        LiveSession.create(success: { [unowned self] (session) in
+        LiveSession.create(roomName: name, success: { [unowned self] (session) in
             self.joinLiving(session: session)
         }) { [unowned self] (_) in
             self.hiddenHUD()
@@ -182,7 +182,7 @@ private extension CreateLiveViewController {
     func joinLiving(session: LiveSession) {
         self.showHUD()
         
-        session.join(success: { [unowned self] (session) in
+        session.join(role: .owner, success: { [unowned self] (session) in
             self.hiddenHUD()
             switch session.type {
             case .chatRoom:

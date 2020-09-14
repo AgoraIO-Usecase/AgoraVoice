@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AlamoClient
 import RxSwift
 import RxRelay
 
@@ -14,6 +15,7 @@ class LiveSession: NSObject {
     var type: LiveType = .chatRoom
     
     var roomManager: EduClassroomManager
+    var userService: EduUserService?
     
     // User
     var userList = BehaviorRelay(value: [LiveRole]())
@@ -23,27 +25,60 @@ class LiveSession: NSObject {
     // Message
     var chatMessage = PublishRelay<(user: LiveRole, message: String)>()
     
-    init(roomManager: EduClassroomManager) {
-        self.roomManager = roomManager
+    init(roomName: String, roomId: String) {
+        let configuration = EduClassroomConfig(roomName: roomName, roomUuid: roomId, scene: .typeBig)
+        let manager = EduClassroomManager(roomConfig: configuration)
+        self.roomManager = manager
         super.init()
-        self.roomManager.delegate = self
+        manager.delegate = self
     }
     
-    static func create(success: ((LiveSession) -> Void), fail: ErrorCompletion = nil) {
-        let configuration = EduClassroomConfig(roomName: "", roomUuid: "", scene: .typeBig)
-        let room = EduClassroomManager(roomConfig: configuration)
-        let session = LiveSession(roomManager: room)
+    static func create(roomName: String, success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
+        let client = Center.shared().centerProvideRequestHelper()
+        let event = RequestEvent(name: "present-gift")
+        let url = URLGroup.liveCreate
+        let task = RequestTask(event: event,
+                               type: .http(.post, url: url),
+                               timeout: .medium,
+                               header: ["token": Keys.UserToken],
+                               parameters: ["roomName": roomName])
         
-        success(session)
+        client.request(task: task, success: ACResponse.json({ (json) in
+            let roomId = try json.getStringValue(of: "data")
+            let session = LiveSession(roomName: roomName, roomId: roomId)
+            
+            if let success = success {
+                success(session)
+            }
+        })) { (error) -> RetryOptions in
+            if let fail = fail {
+                fail(error)
+            }
+            return .resign
+        }
     }
     
-    func join(success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
-        let options = EduClassroomJoinOptions(userName: "", role: .student)
+    func join(role: LiveRoleType, success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
+        let userName = Center.shared().centerProvideLocalUser().info.value.name
+        var eduRole: EduRoleType
+        switch role {
+        case .owner:
+            eduRole = .teacher
+        case .broadcaster, .audience:
+            eduRole = .student
+        }
+        
+        let options = EduClassroomJoinOptions(userName: userName, role: eduRole)
         roomManager.joinClassroom(options, success: { [unowned self] (userService) in
+            self.userService = userService
             
-            
-        }) { [unowned self] (_) in
-            
+            if let success = success {
+                success(self)
+            }
+        }) { (error) in
+            if let fail = fail, let error = error {
+                fail(error)
+            }
         }
     }
     

@@ -120,6 +120,13 @@ class LiveListViewController: MaskViewController {
             }
             navi.statusBarStyle = .lightContent
             vc.liveType = type
+        case "ChatRoomViewController":
+            guard let vc = segue.destination as? ChatRoomViewController,
+                let session = sender as? LiveSession else {
+                    assert(false)
+                    return
+            }
+            vc.liveSession = session
         default:
             break
         }
@@ -193,6 +200,20 @@ private extension LiveListViewController {
         collectionView.rx.didEndDragging.subscribe(onNext: { [unowned self] (done) in
             if done {
                 self.perMinuterRefresh()
+            }
+        }).disposed(by: bag)
+        
+        collectionView.rx.modelSelected(Room.self).subscribe(onNext: { [unowned self] (room) in
+            self.showHUD()
+            
+            let session = LiveSession(roomName: room.name, roomId: room.roomId)
+            session.join(role: .audience, success: { [unowned self] (session) in
+                self.hiddenHUD()
+                self.performSegue(withIdentifier: "ChatRoomViewController", sender: session)
+            }) { [unowned self] (_) in
+                self.hiddenHUD()
+                self.showAlert(message:"join live fail")
+                self.roomListRefresh()
             }
         }).disposed(by: bag)
     }

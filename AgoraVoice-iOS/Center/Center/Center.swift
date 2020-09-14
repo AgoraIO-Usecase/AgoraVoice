@@ -132,20 +132,11 @@ private extension Center {
             let object = try json.getDataObject()
             let userToken = try object.getStringValue(of: "userToken")
             let rtmToken = try object.getStringValue(of: "rtmToken")
-            let uid = try object.getIntValue(of: "uid")
             Keys.UserToken = userToken
             Keys.AgoraRtmToken = rtmToken
             
             // RTM Login
             self.liveManagerLogin(userId: userId, success: success)
-            
-//            try? self.rtm.connect(rtmId: "\(uid)", token: rtmToken, success: {
-//                if let success = success {
-//                    success()
-//                }
-//            }) { (error) -> RetryOptions in
-//                return .retry(after: 0.5)
-//            }
         }
         let response = ACResponse.json(successCallback)
         
@@ -157,7 +148,7 @@ private extension Center {
     }
     
     func liveManagerLogin(userId: String, success: Completion) {
-        let options = EduLoginOptions(userUuid: "")
+        let options = EduLoginOptions(userUuid: userId)
         options.userUuid = userId
         liveManager.login(with: options, success: {
             if let success = success {
