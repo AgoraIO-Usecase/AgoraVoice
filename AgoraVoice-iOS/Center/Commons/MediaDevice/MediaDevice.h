@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AgoraRtcKit/AgoraRtcEngineKit.h>
+#import <AgoraRtcEngineKit/AgoraRtcEngineKit.h>
+//#import <AgoraRtcKit/AgoraRtcEngineKit.h>
 #import "Player.h"
 #import "AudioEffect.h"
 

@@ -17,9 +17,9 @@ struct Room {
     var imageURL: String
     var personCount: Int
     var image: UIImage
-//    var owner: LiveRole
+    var owner: LiveRole
     
-    init(name: String = "", roomId: String, imageURL: String = "", personCount: Int = 0) {
+    init(name: String = "", roomId: String, imageURL: String = "", personCount: Int = 0, owner: LiveRole) {
         self.name = name
         self.roomId = roomId
         self.imageURL = imageURL
@@ -29,7 +29,7 @@ struct Room {
         let index = Int(Int64(self.roomId)! % Int64(images.roomPreviews.count))
         self.image = images.getRoomPreview(index: index)
         
-//        self.owner = owner
+        self.owner = owner
     }
     
     init(dic: StringAnyDic) throws {
@@ -48,8 +48,8 @@ struct Room {
             self.imageURL = ""
         }
         
-//        let ownerJson = try dic.getDictionaryValue(of: "owner")
-//        self.owner = try LiveRoleItem(dic: ownerJson)
+        let ownerJson = try dic.getDictionaryValue(of: "owner")
+        self.owner = try LiveRoleItem(dic: ownerJson)
         
         let images = Center.shared().centerProvideImagesHelper()
         let index = Int(Int64(self.roomId)! % Int64(images.roomPreviews.count))
@@ -85,7 +85,8 @@ extension LiveListVM {
         for index in 0..<5 {
             let room = Room(name: "room\(index)",
                 roomId: "\(index)",
-                personCount: index)
+                personCount: index,
+                owner: LiveRoleItem(type: .owner, info: BasicUserInfo(userId: "", name: ""), agUId: "0"))
             temp.append(room)
         }
         

@@ -95,6 +95,7 @@
 		A75C70F624FE29AF003E5AD9 /* MineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C70F324FE29AF003E5AD9 /* MineViewController.swift */; };
 		A75C70F724FE29AF003E5AD9 /* UserNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C70F424FE29AF003E5AD9 /* UserNameViewController.swift */; };
 		A75C70FC24FE2B70003E5AD9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A75C70FE24FE2B70003E5AD9 /* Localizable.strings */; };
+		A7C7385B250A1BA70092B948 /* LiveSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C7385A250A1BA70092B948 /* LiveSession.swift */; };
 		A7FFA32024FF667700C66569 /* LiveListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FFA31F24FF667700C66569 /* LiveListViewController.swift */; };
 		A7FFA32324FF6BCC00C66569 /* IconTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FFA32224FF6BCC00C66569 /* IconTextView.swift */; };
 		A7FFA32524FF85CE00C66569 /* CreateLiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FFA32424FF85CE00C66569 /* CreateLiveViewController.swift */; };
@@ -206,6 +207,7 @@
 		A75C70F924FE2AEA003E5AD9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "../zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		A75C70FD24FE2B70003E5AD9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A75C70FF24FE2B7D003E5AD9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A7C7385A250A1BA70092B948 /* LiveSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSession.swift; sourceTree = "<group>"; };
 		A7FFA31F24FF667700C66569 /* LiveListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveListViewController.swift; sourceTree = "<group>"; };
 		A7FFA32224FF6BCC00C66569 /* IconTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconTextView.swift; sourceTree = "<group>"; };
 		A7FFA32424FF85CE00C66569 /* CreateLiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLiveViewController.swift; sourceTree = "<group>"; };
@@ -458,6 +460,7 @@
 				A75C6FF024FCE41E003E5AD9 /* ImageFiles.swift */,
 				A75C6FF124FCE41E003E5AD9 /* LogFiles.swift */,
 				A750EC6C2500DCCB006E50E3 /* LiveRole.swift */,
+				A7C7385A250A1BA70092B948 /* LiveSession.swift */,
 			);
 			path = Specials;
 			sourceTree = "<group>";
@@ -651,6 +654,7 @@
 				A750EC402500A33F006E50E3 /* ChatInputView.swift in Sources */,
 				A7FFA32324FF6BCC00C66569 /* IconTextView.swift in Sources */,
 				A75C702524FCEBBC003E5AD9 /* UserData+CoreDataClass.swift in Sources */,
+				A7C7385B250A1BA70092B948 /* LiveSession.swift in Sources */,
 				A750EC5C2500B661006E50E3 /* ImageSelectViewController.swift in Sources */,
 				A750EC662500D5B5006E50E3 /* GiftViewController.swift in Sources */,
 				A750EC4B2500B1E6006E50E3 /* GiftVM.swift in Sources */,

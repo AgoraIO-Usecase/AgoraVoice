@@ -115,11 +115,12 @@ class LiveSeatView: RxView {
             case (.empty, .owner):
                 self.commands.accept([.invitation, .close])
             case (.normal(let user), .owner):
-                if user.permission.contains(.mic) {
-                    self.commands.accept([.ban, .forceEndBroadcasting, .close])
-                } else {
-                    self.commands.accept([.unban, .forceEndBroadcasting, .close])
-                }
+                break
+//                if user.permission.contains(.mic) {
+//                    self.commands.accept([.ban, .forceEndBroadcasting, .close])
+//                } else {
+//                    self.commands.accept([.unban, .forceEndBroadcasting, .close])
+//                }
             case (.close, .owner):
                 self.commands.accept([.release])
             // broadcaster

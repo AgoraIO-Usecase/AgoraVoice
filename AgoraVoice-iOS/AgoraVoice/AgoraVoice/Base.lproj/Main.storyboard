@@ -1129,9 +1129,6 @@
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#0088EB"/>
                                 </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <segue destination="udD-yQ-9rI" kind="show" identifier="ChatRoomViewController" id="qke-tt-Wjv"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1162,6 +1159,7 @@
                         <outlet property="nameTextField" destination="RqG-At-0uq" id="hTd-Hf-Mrn"/>
                         <outlet property="randomButton" destination="tpv-Lb-8HC" id="nIJ-Me-EJD"/>
                         <outlet property="startButton" destination="DOG-C6-9V9" id="EBn-Tg-wEW"/>
+                        <segue destination="udD-yQ-9rI" kind="show" identifier="ChatRoomViewController" id="Mrt-4N-VRG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9EF-X0-OF7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

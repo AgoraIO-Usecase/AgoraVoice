@@ -24,7 +24,7 @@ class Center: NSObject {
     
     private var current: CurrentUser!
     
-    lazy var appAssistant = AppAssistant()
+    private lazy var appAssistant = AppAssistant()
     
     // Commons
     private lazy var alamo = AlamoClient(delegate: nil,
@@ -33,6 +33,13 @@ class Center: NSObject {
     private lazy var oss = AGOSSClient()
         
     private lazy var userDataHelper = UserDataHelper()
+    
+    private lazy var liveManager: EduManager = {
+        let configuration = EduConfiguration(appId: "", customerId: "", customerCertificate: "")
+        let manager = EduManager.initWithConfig(configuration)
+        return manager
+    }()
+    private lazy var liveManagerLoginRetry = AfterWorker()
     
     private let log = LogTube()
     
@@ -118,7 +125,7 @@ private extension Center {
                                timeout: .low,
                                parameters: ["userId": userId])
         
-        let successCallback: DicEXCompletion = { (json: ([String: Any])) throws in
+        let successCallback: DicEXCompletion = { [unowned self] (json: ([String: Any])) throws in
             let object = try json.getDataObject()
             let userToken = try object.getStringValue(of: "userToken")
             let rtmToken = try object.getStringValue(of: "rtmToken")
@@ -127,6 +134,8 @@ private extension Center {
             Keys.AgoraRtmToken = rtmToken
             
             // RTM Login
+            self.liveManagerLogin(userId: userId, success: success)
+            
 //            try? self.rtm.connect(rtmId: "\(uid)", token: rtmToken, success: {
 //                if let success = success {
 //                    success()
@@ -143,9 +152,27 @@ private extension Center {
         
         alamo.request(task: task, success: response, failRetry: retry)
     }
+    
+    func liveManagerLogin(userId: String, success: Completion) {
+        let options = EduLoginOptions(userUuid: "")
+        options.userUuid = userId
+        liveManager.login(with: options, success: {
+            if let success = success {
+                success()
+            }
+        }) { [unowned self] (_) in
+            self.liveManagerLoginRetry.perform(after: 0.5, on: .main) { [unowned self] in
+                self.liveManagerLogin(userId: userId, success: success)
+            }
+        }
+    }
 }
 
 extension Center: CenterHelper {
+    func centerProvideLiveManager() -> EduManager {
+        return liveManager
+    }
+    
     func centerProvideLocalUser() -> CurrentUser {
         return current
     }

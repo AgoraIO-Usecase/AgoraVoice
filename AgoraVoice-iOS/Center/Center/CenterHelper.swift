@@ -9,6 +9,7 @@ import Foundation
 import AlamoClient
 
 protocol CenterHelper where Self: Center {
+    func centerProvideLiveManager() -> EduManager
     func centerProvideLocalUser() -> CurrentUser
     func centerProvideMediaDevice() -> MediaDevice
     func centerProvideRequestHelper() -> AlamoClient

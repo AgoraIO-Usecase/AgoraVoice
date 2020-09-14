@@ -23,7 +23,8 @@ import MJRefresh
 //}
 
 protocol LiveViewController where Self: MaskViewController {
-    var liveType: LiveType {get set}
+    var liveSession: LiveSession! {get set}
+    
     var tintColor: UIColor {get set}
     
     // ViewController
@@ -191,7 +192,7 @@ extension LiveViewController {
             return
         }
         
-        bottomToolsVC.liveType = liveType
+        bottomToolsVC.liveType = liveSession.type
         bottomToolsVC.tintColor = tintColor
         
         bottomToolsVC.giftButton.rx.tap.subscribe(onNext: { [unowned self] in
@@ -355,7 +356,7 @@ extension LiveViewController {
         let extensionVC = UIStoryboard.initViewController(of: "ExtensionViewController",
                                                           class: ExtensionViewController.self,
                                                           on: "Popover")
-        extensionVC.liveType = liveType
+        extensionVC.liveType = liveSession.type
         extensionVC.perspective = .owner
         extensionVC.view.cornerRadius(10)
         
@@ -401,11 +402,6 @@ extension LiveViewController {
     // MARK: - Real Data
     func presentRealData() {
         showMaskView(color: UIColor.clear)
-        
-//        guard let session = Center.shared().liveSession else {
-//            assert(false)
-//            return
-//        }
         
         let dataVC = UIStoryboard.initViewController(of: "RealDataViewController",
                                                      class: RealDataViewController.self,

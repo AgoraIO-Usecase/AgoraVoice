@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxRelay
 import AlamoClient
-/*
+
 class MultiHostsVM: RTMObserver {
     struct Invitation: TimestampModel {
         var id: Int
@@ -87,81 +87,81 @@ class MultiHostsVM: RTMObserver {
 // MARK: Owner
 extension MultiHostsVM {
     func sendInvitation(to user: LiveRole, on seatIndex: Int, fail: ErrorCompletion = nil) {
-        request(seatIndex: seatIndex,
-                type: 1,
-                userId: "\(user.info.userId)",
-                roomId: room.roomId,
-                success: { [weak self] (json) in
-                    guard let strongSelf = self else {
-                        return
-                    }
-                    
-                    let id = try json.getIntValue(of: "data")
-                    let invitation = Invitation(id: id,
-                                                seatIndex: seatIndex,
-                                                initiator: strongSelf.room.owner,
-                                                receiver: user)
-                    strongSelf.invitationQueue.append(invitation)
-                }, fail: fail)
+//        request(seatIndex: seatIndex,
+//                type: 1,
+//                userId: "\(user.info.userId)",
+//                roomId: room.roomId,
+//                success: { [weak self] (json) in
+//                    guard let strongSelf = self else {
+//                        return
+//                    }
+//
+//                    let id = try json.getIntValue(of: "data")
+//                    let invitation = Invitation(id: id,
+//                                                seatIndex: seatIndex,
+//                                                initiator: strongSelf.room.owner,
+//                                                receiver: user)
+//                    strongSelf.invitationQueue.append(invitation)
+//                }, fail: fail)
     }
     
     func accept(application: Application, fail: ErrorCompletion = nil) {
-        request(seatIndex: application.seatIndex,
-                type: 5,
-                userId: "\(application.initiator.info.userId)",
-                roomId: room.roomId,
-                success: { [weak self] (json) in
-                    self?.applicationQueue.remove(application)
-                }, fail: fail)
+//        request(seatIndex: application.seatIndex,
+//                type: 5,
+//                userId: "\(application.initiator.info.userId)",
+//                roomId: room.roomId,
+//                success: { [weak self] (json) in
+//                    self?.applicationQueue.remove(application)
+//                }, fail: fail)
                 
     }
     
     func reject(application: Application, fail: ErrorCompletion = nil) {
-        request(seatIndex: application.seatIndex,
-                type: 3,
-                userId: "\(application.initiator.info.userId)",
-                roomId: room.roomId,
-                success: { [weak self] (json) in
-                    self?.applicationQueue.remove(application)
-                }, fail: fail)
+//        request(seatIndex: application.seatIndex,
+//                type: 3,
+//                userId: "\(application.initiator.info.userId)",
+//                roomId: room.roomId,
+//                success: { [weak self] (json) in
+//                    self?.applicationQueue.remove(application)
+//                }, fail: fail)
     }
     
     func forceEndBroadcasting(user: LiveRole, on seatIndex: Int, success: Completion = nil, fail: ErrorCompletion = nil) {
-        request(seatIndex: seatIndex,
-                type: 7,
-                userId: "\(user.info.userId)",
-                roomId: room.roomId,
-                success: { (_) in
-                    if let success = success {
-                        success()
-                    }
-                }, fail: fail)
+//        request(seatIndex: seatIndex,
+//                type: 7,
+//                userId: "\(user.info.userId)",
+//                roomId: room.roomId,
+//                success: { (_) in
+//                    if let success = success {
+//                        success()
+//                    }
+//                }, fail: fail)
     }
 }
 
 // MARK: Broadcaster
 extension MultiHostsVM {
     func endBroadcasting(seatIndex: Int, user: LiveRole, success: Completion = nil, fail: ErrorCompletion = nil) {
-        request(seatIndex: seatIndex,
-                type: 8,
-                userId: "\(user.info.userId)",
-                roomId: room.roomId,
-                success: { (_) in
-                    if let success = success {
-                        success()
-                    }
-                }, fail: fail)
+//        request(seatIndex: seatIndex,
+//                type: 8,
+//                userId: "\(user.info.userId)",
+//                roomId: room.roomId,
+//                success: { (_) in
+//                    if let success = success {
+//                        success()
+//                    }
+//                }, fail: fail)
     }
 }
 
 // MARK: Audience
 extension MultiHostsVM {
     func sendApplication(by local: LiveRole, for seatIndex: Int, fail: ErrorCompletion = nil) {
-        request(seatIndex: seatIndex,
-                type: 2,
-                userId: "\(room.owner.info.userId)",
-                roomId: room.roomId,
-                fail: fail)
+//        request(seatIndex: seatIndex,
+//                type: 2,
+//                userId: "\(room.owner.info.userId)",
+//                roomId: room.roomId,
+//                fail: fail)
     }
     
     func accept(invitation: Invitation, success: Completion = nil, fail: ErrorCompletion = nil) {
@@ -176,15 +176,15 @@ extension MultiHostsVM {
             return
         }
         
-        request(seatIndex: invitation.seatIndex,
-                type: 6,
-                userId: "\(invitation.initiator.info.userId)",
-                roomId: room.roomId,
-                success: { (_) in
-                    if let success = success {
-                        success()
-                    }
-                }, fail: fail)
+//        request(seatIndex: invitation.seatIndex,
+//                type: 6,
+//                userId: "\(invitation.initiator.info.userId)",
+//                roomId: room.roomId,
+//                success: { (_) in
+//                    if let success = success {
+//                        success()
+//                    }
+//                }, fail: fail)
     }
     
     func reject(invitation: Invitation, fail: ErrorCompletion = nil) {
@@ -199,11 +199,11 @@ extension MultiHostsVM {
             return
         }
         
-        request(seatIndex: invitation.seatIndex,
-                type: 4,
-                userId: "\(invitation.initiator.info.userId)",
-                roomId: room.roomId,
-                fail: fail)
+//        request(seatIndex: invitation.seatIndex,
+//                type: 4,
+//                userId: "\(invitation.initiator.info.userId)",
+//                roomId: room.roomId,
+//                fail: fail)
     }
 }
 
@@ -237,6 +237,7 @@ private extension MultiHostsVM {
     }
     
     func observe() {
+        /*
         let rtm = Center.shared().centerProvideRTMHelper()
         
         rtm.addReceivedPeerMessage(observer: self.address) { [weak self] (json) in
@@ -365,6 +366,6 @@ private extension MultiHostsVM {
             
             self.invitationTimeout.accept(tList)
         }).disposed(by: bag)
+        */
     }
 }
-*/

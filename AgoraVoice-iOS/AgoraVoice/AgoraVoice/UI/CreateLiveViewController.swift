@@ -65,8 +65,17 @@ class CreateLiveViewController: MaskViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let segueId = segue.identifier else {
+        guard let segueId = segue.identifier,
+            let liveSession = sender as? LiveSession else {
             return
+        }
+        
+        switch segueId {
+        case "ChatViewController":
+            let vc = segue.destination as! ChatRoomViewController
+            vc.liveSession = liveSession
+        default:
+            break
         }
     }
     
@@ -161,10 +170,28 @@ private extension CreateLiveViewController {
 private extension CreateLiveViewController {
     func startLivingWithName(_ name: String) {
         self.showHUD()
+        
+        LiveSession.create(success: { [unowned self] (session) in
+            self.joinLiving(session: session)
+        }) { [unowned self] (_) in
+            self.hiddenHUD()
+            self.showAlert(message:"start live fail")
+        }
     }
     
-    func joinLiving() {
+    func joinLiving(session: LiveSession) {
         self.showHUD()
+        
+        session.join(success: { [unowned self] (session) in
+            self.hiddenHUD()
+            switch session.type {
+            case .chatRoom:
+                self.performSegue(withIdentifier: "ChatRoomViewController", sender: session)
+            }
+        }) { [unowned self] (_) in
+            self.hiddenHUD()
+            self.showAlert(message:"join live fail")
+        }
     }
 }
 

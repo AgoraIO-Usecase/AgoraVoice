@@ -13,7 +13,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
     
     
     // LiveViewController
-    var liveType: LiveType = .chatRoom
+    var liveSession: LiveSession!
     var tintColor = UIColor(hexString: "#000000-0.3")
     
     // ViewController
