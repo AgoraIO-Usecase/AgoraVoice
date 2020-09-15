@@ -39,7 +39,7 @@ typedef NS_ENUM(int, AudioOutputRouting) {
 
 @interface MediaDevice : MediaDeviceBase
 @property (nonatomic, strong, readonly) Player *player;
-//@property (nonatomic, strong, readonly) AudioEffect *recordAudioEffect;
+@property (nonatomic, strong, readonly) AudioEffect *recordAudioEffect;
 
 - (void)recordAudioLoop:(BOOL)enable;
 @end

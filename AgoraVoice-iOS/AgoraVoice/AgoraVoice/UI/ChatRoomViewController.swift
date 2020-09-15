@@ -42,6 +42,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
     var musicVM = MusicVM()
     var chatVM = ChatVM()
     var deviceVM = MediaDeviceVM()
+    var audioEffectVM = AudioEffectVM()
     var monitor = NetworkMonitor(host: "www.apple.com")
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -53,11 +54,11 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         updateViews()
         calculateSeatViewHeight()
         
-        asyncLiveSessionInfo()
-        users()
+//        asyncLiveSessionInfo()
+//        users()
         gift()
-        chatList()
-        musicList()
+//        chatList()
+//        musicList()
         netMonitor()
         bottomTools()
         chatInput()

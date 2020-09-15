@@ -13,11 +13,13 @@ import RxRelay
 class AudioEffectViewController: RxViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tabView: TabSelectView!
+    
     @IBOutlet weak var aecollectionView: UIView!
     @IBOutlet weak var electronicMusicView: UIView!
     
     weak var collectionVC: AECollectionViewController?
     
+    var audioEffectVM: AudioEffectVM!
     var audioEffect: AudioEffectType = .belCanto
     
     override func viewDidLoad() {
@@ -36,23 +38,7 @@ class AudioEffectViewController: RxViewController {
         case "AECollectionViewController":
             let vc = segue.destination as! AECollectionViewController
             collectionVC = vc
-            vc.audioEffectType = audioEffect
-            
-            vc.selectedAudioSpace.subscribe(onNext: { [unowned self] (space) in
-                if space == .threeDimensionalVoice {
-                    self.performSegue(withIdentifier: "ThreeDimensionalViewController", sender: nil)
-                }
-            }).disposed(by: vc.bag)
-            
-            vc.selectedSoundEffectType.subscribe(onNext: { [unowned self] (type) in
-                if type == .electronicMusic {
-                    self.aecollectionView.isHidden = true
-                    self.electronicMusicView.isHidden = false
-                } else {
-                    self.aecollectionView.isHidden = false
-                    self.electronicMusicView.isHidden = true
-                }
-            }).disposed(by: vc.bag)
+            subscribeAECollectionVC(vc)
         default:
             break
         }
@@ -114,5 +100,55 @@ private extension AudioEffectViewController {
 }
 
 private extension AudioEffectViewController {
-    
+    func subscribeAECollectionVC(_ vc: AECollectionViewController) {
+        vc.audioEffectType = audioEffect
+        
+//        audioEffectVM.audioEffectType.accept(audioEffect)
+        
+        // BelCantoType
+        vc.selectedChatOfBelcanto.accept(audioEffectVM.selectedChatOfBelcanto.value)
+        vc.selectedSingOfBelcanto.accept(audioEffectVM.selectedSingOfBelcanto.value)
+        vc.selectedTimbre.accept(audioEffectVM.selectedTimbre.value)
+        
+        vc.selectedChatOfBelcanto.subscribe(onNext: { (item) in
+            
+        }).disposed(by: bag)
+        
+//        audioEffectVM.selectedChatOfBelcanto.asObservable().bind(to: vc.selectedChatOfBelcanto).disposed(by: vc.bag)
+//        audioEffectVM.selectedSingOfBelcanto.asObservable().bind(to: vc.selectedSingOfBelcanto).disposed(by: vc.bag)
+//        audioEffectVM.selectedTimbre.asObservable().bind(to: vc.selectedTimbre).disposed(by: vc.bag)
+              
+        
+        vc.selectedChatOfBelcanto.bind(to: audioEffectVM.selectedChatOfBelcanto).disposed(by: vc.bag)
+        vc.selectedSingOfBelcanto.bind(to: audioEffectVM.selectedSingOfBelcanto).disposed(by: vc.bag)
+        vc.selectedTimbre.bind(to: audioEffectVM.selectedTimbre).disposed(by: vc.bag)
+        
+//        vc.selectedChatOfBelcanto.map { (_) -> AudioEffectType in
+//            return .
+//        }
+        
+        // SoundEffectType
+        vc.selectedAudioSpace.subscribe(onNext: { [unowned self] (space) in
+            self.electronicMusicView.isHidden = true
+            
+            if space == .threeDimensionalVoice {
+                self.performSegue(withIdentifier: "ThreeDimensionalViewController", sender: nil)
+            }
+        }).disposed(by: vc.bag)
+        
+        vc.selectedTimbreRole
+        
+        vc.selectedMusicGenre
+        
+        // special for eletronic music
+        vc.selectedSoundEffectType.subscribe(onNext: { [unowned self] (type) in
+            if type == .electronicMusic {
+                self.aecollectionView.isHidden = true
+                self.electronicMusicView.isHidden = false
+            } else {
+                self.aecollectionView.isHidden = false
+                self.electronicMusicView.isHidden = true
+            }
+        }).disposed(by: vc.bag)
+    }
 }

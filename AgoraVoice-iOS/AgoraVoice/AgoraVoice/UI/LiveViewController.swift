@@ -33,6 +33,7 @@ protocol LiveViewController where Self: MaskViewController {
     var musicVM: MusicVM {get set}
     var chatVM: ChatVM {get set}
     var deviceVM: MediaDeviceVM {get set}
+    var audioEffectVM: AudioEffectVM {get set}
     var monitor: NetworkMonitor {get set}
 }
 
@@ -207,7 +208,8 @@ extension LiveViewController {
             return
         }
         
-        bottomToolsVC.liveType = liveSession.type
+//        bottomToolsVC.liveType = liveSession.type
+        bottomToolsVC.liveType = .chatRoom
         bottomToolsVC.tintColor = tintColor
         
         bottomToolsVC.giftButton.rx.tap.subscribe(onNext: { [unowned self] in
@@ -530,6 +532,7 @@ extension LiveViewController {
         
         navigation.view.cornerRadius(10)
         vc.audioEffect = type
+        vc.audioEffectVM = audioEffectVM
         
         var height: CGFloat
         switch type {
