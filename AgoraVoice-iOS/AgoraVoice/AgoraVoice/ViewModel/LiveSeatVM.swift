@@ -59,7 +59,7 @@ struct LiveSeat {
     }
 }
 /*
-class LiveSeatVM: RTMObserver {
+class LiveSeatVM: CustomObserver {
     private var room: Room
     private(set) var list: BehaviorRelay<[LiveSeat]>
     

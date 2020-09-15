@@ -30,9 +30,11 @@ class LogFiles: NSObject {
     
     override init() {
         super.init()
+        let configuration = AgoraLogConfiguration()
+        configuration.logDirectoryPath = fileName
+        AgoraLogManager.setupLog(configuration)
         FilesGroup.check(folderPath: folderPath)
         checkEarliestFile()
-        createFile()
     }
     
     func upload(success: StringCompletion, fail: ErrorCompletion) {
@@ -48,67 +50,17 @@ class LogFiles: NSObject {
 
 private extension LogFiles {
     func privateUpload(success: StringCompletion, fail: ErrorCompletion) throws {
-        let zipPath = try ZipTool.work(destination: folderPath, to: FilesGroup.cacheDirectory)
-        let fileName = zipPath.components(separatedBy: "/").last!
-        let url = URL(fileURLWithPath: zipPath)
-        let fileData = try Data(contentsOf: url)
-        
-        let client = Center.shared().centerProvideRequestHelper()
-        let parameters: StringAnyDic = ["appId": Keys.AgoraAppId,
-                                        "osType": 1,
-                                        "appVersion": AppAssistant.version,
-                                        "appCode": "ent-super",
-                                        "fileExt": "zip"]
-        
-        let event = RequestEvent(name: "upload-oss-parameters")
-        let task = RequestTask(event: event,
-                               type: .http(.get, url: URLGroup.ossUpload),
-                               timeout: .medium,
-                               parameters: parameters)
-        
-        let successCallback: DicEXCompletion = { (json: ([String: Any])) in
-            let data = try json.getDataObject()
-            let bucketName = try data.getStringValue(of: "bucketName")
-            let callbackBody = try data.getStringValue(of: "callbackBody")
-            let callbackContentType = try data.getStringValue(of: "callbackContentType")
-            let ossEndpoint = try data.getStringValue(of: "ossEndpoint")
-            
-            let object = AGOSSObject()
-            object.bucket = bucketName
-            object.fileData = fileData
-            object.objectKey = fileName
-            object.callbackParam = ["callbackUrl": URLGroup.ossUploadCallback,
-                                    "callbackBody": callbackBody,
-                                    "callbackBodyType": callbackContentType]
-            
-            let oss = Center.shared().centerProvideOSSClient()
-            oss.updateAuthServerURL(URLGroup.ossSTS, endpoint: ossEndpoint)
-            
-            oss.upload(with: object, success: { (logId) in
-                DispatchQueue.main.async {
-                    if let success = success {
-                        success(logId)
-                    }
-                }
-            }) { (error) in
-                DispatchQueue.main.async {
-                    if let fail = fail {
-                        fail(error)
-                    }
-                }
+        let options = AgoraLogUploadOptions()
+        options.appId = Keys.AgoraAppId
+        AgoraLogManager.uploadLog(with: options, progress: nil, success: { (logId) in
+            if let success = success {
+                success(logId)
             }
-        }
-        
-        let response = ACResponse.json(successCallback)
-        
-        let retry: ACErrorRetryCompletion = { (error: Error) -> RetryOptions in
+        }) { (error) in
             if let fail = fail {
                 fail(error)
             }
-            return .resign
         }
-        
-        client.request(task: task, success: response, failRetry: retry)
     }
     
     func checkEarliestFile() {
@@ -157,11 +109,5 @@ private extension LogFiles {
         
         let removeFile = logsList[earliest]
         try? manager.removeItem(atPath: removeFile)
-    }
-    
-    func createFile() {
-        let filePath = folderPath + "/" + fileName
-        LCLLogFile.setEscapesLineFeeds(true)
-        LCLLogFile.setPath(filePath)
     }
 }

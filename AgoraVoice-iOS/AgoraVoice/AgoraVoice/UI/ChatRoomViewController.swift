@@ -11,10 +11,10 @@ import UIKit
 class ChatRoomViewController: MaskViewController, LiveViewController {
     @IBOutlet weak var seatViewHeight: NSLayoutConstraint!
     
-    
     // LiveViewController
     var liveSession: LiveSession!
     var tintColor = UIColor(hexString: "#000000-0.3")
+    var chatWidthLimit: CGFloat = UIScreen.main.bounds.width
     
     // ViewController
     var giftAudienceVC: GiftAudienceViewController?
@@ -53,6 +53,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         updateViews()
         calculateSeatViewHeight()
         
+        asyncLiveSessionInfo()
         users()
         gift()
         chatList()

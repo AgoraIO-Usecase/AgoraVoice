@@ -11,21 +11,11 @@ import RxSwift
 import RxRelay
 import MJRefresh
 
-//enum HostCount {
-//    case single(LiveRole), multi([LiveRole])
-//
-//    var isSingle: Bool {
-//        switch self {
-//        case .single: return true
-//        case .multi:  return false
-//        }
-//    }
-//}
-
 protocol LiveViewController where Self: MaskViewController {
     var liveSession: LiveSession! {get set}
     
     var tintColor: UIColor {get set}
+    var chatWidthLimit: CGFloat {get set}
     
     // ViewController
     var giftAudienceVC: GiftAudienceViewController? {get set}
@@ -48,7 +38,30 @@ protocol LiveViewController where Self: MaskViewController {
 
 // MARK: VM
 extension LiveViewController {
-    // MARK: - Audience
+    func asyncLiveSessionInfo() {
+        liveSession.chatMessage.subscribe(onNext: { [unowned self] (userMessage) in
+            let chat = Chat(name: userMessage.user.info.name,
+                            text: userMessage.message,
+                            widthLimit: self.chatWidthLimit)
+            self.chatVM.newMessages([chat])
+        }).disposed(by: bag)
+
+        // user list
+        liveSession.userList.bind(to: userListVM.list).disposed(by: bag)
+        liveSession.userLeft.bind(to: userListVM.left).disposed(by: bag)
+        liveSession.userJoined.bind(to: userListVM.joined).disposed(by: bag)
+        
+        liveSession.customMessage.bind(to: userListVM.message).disposed(by: bag)
+        
+        // gift
+        liveSession.customMessage.bind(to: giftVM.message).disposed(by: bag)
+        
+        liveSession.end.subscribe(onNext: { [unowned self] in
+            self.dimissSelf()
+        }).disposed(by: bag)
+    }
+    
+    // MARK: - users
     func users() {
         personCountView.backgroundColor = tintColor
         personCountView.offsetLeftX = -4.0
@@ -58,10 +71,6 @@ extension LiveViewController {
         personCountView.label.font = UIFont.systemFont(ofSize: 10)
         
         personCountView.rx.controlEvent(.touchUpInside).subscribe(onNext: { [unowned self] in
-//            guard let session = Center.shared().liveSession,
-//                session.type != .shopping else {
-//                return
-//            }
             self.presentUserList(type: .onlyUser)
         }).disposed(by: bag)
         
@@ -73,7 +82,7 @@ extension LiveViewController {
             self.personCountView.label.text = "\(total)"
         }).disposed(by: bag)
         
-        userListVM?.join.subscribe(onNext: { [unowned self] (list) in
+        userListVM?.joined.subscribe(onNext: { [unowned self] (list) in
             let chats = list.map { (user) -> Chat in
                 let chat = Chat(name: user.info.name,
                                 text: " \(NSLocalizedString("Join_Live_Room"))",
@@ -149,6 +158,12 @@ extension LiveViewController {
         }).disposed(by: bag)
     }
     
+    func mediaDevice() {
+        deviceVM.mic.subscribe(onNext: { [unowned self] (isOn) in
+            self.liveSession.updateLocalAudioStream(isOn: isOn.boolValue)
+        }).disposed(by: bag)
+    }
+    
     // MARK: - Live Session
 //    func liveSession(_ session: LiveSession) {
 //        session.end.subscribe(onNext: { [weak self] (_) in
@@ -205,23 +220,12 @@ extension LiveViewController {
         
         bottomToolsVC.micButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.bottomToolsVC?.micButton.isSelected.toggle()
-            //            self.deviceVM.mic = extensionVC.micButton.isSelected ? .off : .on
-            //
-            //            guard let session = Center.shared().liveSession else {
-            //                assert(false)
-            //                return
-            //            }
-            //
-            //            let role = session.role.value
-            //            var permission = role.permission
-            //            switch self.deviceVM.mic {
-            //            case .on:
-            //                permission.insert(.mic)
-            //            case .off:
-            //                permission.remove(.mic)
-            //            }
-            //
-            //            role.updateLocal(permission: permission, of: session.room.roomId)
+            
+            guard let isSelected = self.bottomToolsVC?.micButton.isSelected else {
+                return
+            }
+            
+            self.deviceVM.mic.accept(isSelected ? .off : .on)
         }).disposed(by: bag)
         
         bottomToolsVC.belcantoButton.rx.tap.subscribe(onNext: { [unowned self] in
@@ -240,18 +244,21 @@ extension LiveViewController {
                 self.hiddenMaskView()
                 self.view.endEditing(true)
                 
-//                guard let session = Center.shared().liveSession else {
-//                        assert(false)
-//                        return
-//                }
-//
-//                let role = session.role.value
-//                if let text = self.chatInputView.textView.text, text.count > 0 {
-//                    self.chatInputView.textView.text = nil
-//                    self.chatVM.sendMessage(text, local: role.info) { [weak self] (_) in
-//                         self?.showAlert(message: NSLocalizedString("Send_Chat_Message_Fail"))
-//                    }
-//                }
+                guard let text = self.chatInputView.textView.text,
+                    text.count > 0 else {
+                    return
+                }
+                
+                self.chatInputView.textView.text = nil
+                self.liveSession.userService?.sendRoomChatMessage(withText: text, success: { [unowned self] in
+                    let local = Center.shared().centerProvideLocalUser().info.value
+                    let chat = Chat(name: local.name,
+                                    text: text,
+                                    widthLimit: self.chatWidthLimit)
+                    self.chatVM.newMessages([chat])
+                    }, failure: { [unowned self] (_) in
+                        self.showAlert(message: NSLocalizedString("Send_Chat_Message_Fail"))
+                })
         }).disposed(by: bag)
         
         NotificationCenter.default.observerKeyboard { [weak self] (info: (endFrame: CGRect, duration: Double)) in
@@ -543,17 +550,12 @@ extension LiveViewController {
     }
 }
 
-extension LiveViewController {
-    func leave() {
-//        Center.shared().liveSession?.leave()
-//        Center.shared().liveSession = nil
-    }
-    
+extension LiveViewController {    
     func dimissSelf() {
         if let _ = self.navigationController?.viewControllers.first as? LiveListViewController {
             self.navigationController?.popViewController(animated: true)
         } else {
-            self.dismiss(animated: true, completion: nil)
+            self.navigationController?.dismiss(animated: true, completion: nil)
         }
     }
 }

@@ -98,110 +98,92 @@ extension LiveListVM {
             return
         }
         
-//        let client = Center.shared().centerProvideRequestHelper()
-//        let requestListType = presentingType
-//        let parameters: StringAnyDic = ["nextId": lastRoom.roomId,
-//                                        "count": count,
-//                                        "type": requestListType.rawValue]
-//
-//        let url = URLGroup.roomPage
-//        let event = RequestEvent(name: "room-page")
-//        let task = RequestTask(event: event,
-//                               type: .http(.get, url: url),
-//                               timeout: .low,
-//                               header: ["token": Keys.UserToken],
-//                               parameters: parameters)
-//
-//        let successCallback: DicEXCompletion = { [weak self] (json: ([String: Any])) in
-//            guard let strongSelf = self else {
-//                return
-//            }
-//
-//            let object = try json.getDataObject()
-//            let jsonList = try object.getValue(of: "list", type: [StringAnyDic].self)
-//            let list = try [Room](dicList: jsonList)
-//
-//            switch requestListType {
-//            case .multi:
-//                strongSelf.multiList.append(contentsOf: list)
-//            case .single:
-//                strongSelf.singleList.append(contentsOf: list)
-//            case .pk:
-//                strongSelf.pkList.append(contentsOf: list)
-//            case .virtual:
-//                strongSelf.virtualList.append(contentsOf: list)
-//            case .shopping:
-//                strongSelf.shoppingList.append(contentsOf: list)
-//            }
-//
-//            if let success = success {
-//                success()
-//            }
-//        }
-//        let response = ACResponse.json(successCallback)
-//
-//        let retry: ACErrorRetryCompletion = { (error: Error) -> RetryOptions in
-//            if let fail = fail {
-//                fail()
-//            }
-//            return .resign
-//        }
-//
-//        client.request(task: task, success: response, failRetry: retry)
+        let client = Center.shared().centerProvideRequestHelper()
+        let requestListType = presentingType
+        let parameters: StringAnyDic = ["nextId": lastRoom.roomId,
+                                        "count": count]
+
+        let url = URLGroup.roomPage
+        let event = RequestEvent(name: "room-page")
+        let task = RequestTask(event: event,
+                               type: .http(.get, url: url),
+                               timeout: .low,
+                               header: ["token": Keys.UserToken],
+                               parameters: parameters)
+
+        let successCallback: DicEXCompletion = { [weak self] (json: ([String: Any])) in
+            guard let strongSelf = self else {
+                return
+            }
+
+            let object = try json.getDataObject()
+            let jsonList = try object.getValue(of: "list", type: [StringAnyDic].self)
+            let list = try [Room](dicList: jsonList)
+
+            switch requestListType {
+            case .chatRoom:
+                strongSelf.chatRoomList.append(contentsOf: list)
+            }
+
+            if let success = success {
+                success()
+            }
+        }
+        let response = ACResponse.json(successCallback)
+
+        let retry: ACErrorRetryCompletion = { (error: Error) -> RetryOptions in
+            if let fail = fail {
+                fail()
+            }
+            return .resign
+        }
+
+        client.request(task: task, success: response, failRetry: retry)
     }
     
     func refetch(success: Completion = nil, fail: Completion = nil) {
-//        let client = Center.shared().centerProvideRequestHelper()
-//        let requestListType = presentingType
-//        let currentCount = presentingList.value.count < 10 ? 10 : presentingList.value.count
-//        let parameters: StringAnyDic = ["count": currentCount,
-//                                        "type": requestListType.rawValue]
-//
-//        let url = URLGroup.roomPage
-//        let event = RequestEvent(name: "room-page-refetch")
-//        let task = RequestTask(event: event,
-//                               type: .http(.get, url: url),
-//                               timeout: .low,
-//                               header: ["token": Keys.UserToken],
-//                               parameters: parameters)
-//
-//        let successCallback: DicEXCompletion = { [weak self] (json: ([String: Any])) in
-//            guard let strongSelf = self else {
-//                return
-//            }
-//
-//            try json.getCodeCheck()
-//            let object = try json.getDataObject()
-//            let jsonList = try object.getValue(of: "list", type: [StringAnyDic].self)
-//            let list = try [Room](dicList: jsonList)
-//
-//            switch requestListType {
-//            case .multi:
-//                strongSelf.multiList = list
-//            case .single:
-//                strongSelf.singleList = list
-//            case .pk:
-//                strongSelf.pkList = list
-//            case .virtual:
-//                strongSelf.virtualList = list
-//            case .shopping:
-//                strongSelf.shoppingList = list
-//            }
-//
-//            if let success = success {
-//                success()
-//            }
-//        }
-//        let response = ACResponse.json(successCallback)
-//
-//        let retry: ACErrorRetryCompletion = { (error: Error) -> RetryOptions in
-//            if let fail = fail {
-//                fail()
-//            }
-//            return .resign
-//        }
-//
-//        client.request(task: task, success: response, failRetry: retry)
+        let client = Center.shared().centerProvideRequestHelper()
+        let requestListType = presentingType
+        let currentCount = presentingList.value.count < 10 ? 10 : presentingList.value.count
+        let parameters: StringAnyDic = ["count": currentCount]
+
+        let url = URLGroup.roomPage
+        let event = RequestEvent(name: "room-page-refetch")
+        let task = RequestTask(event: event,
+                               type: .http(.get, url: url),
+                               timeout: .low,
+                               header: ["token": Keys.UserToken],
+                               parameters: parameters)
+
+        let successCallback: DicEXCompletion = { [weak self] (json: ([String: Any])) in
+            guard let strongSelf = self else {
+                return
+            }
+
+            try json.getCodeCheck()
+            let object = try json.getDataObject()
+            let jsonList = try object.getValue(of: "list", type: [StringAnyDic].self)
+            let list = try [Room](dicList: jsonList)
+
+            switch requestListType {
+            case .chatRoom:
+                strongSelf.chatRoomList = list
+            }
+
+            if let success = success {
+                success()
+            }
+        }
+        let response = ACResponse.json(successCallback)
+
+        let retry: ACErrorRetryCompletion = { (error: Error) -> RetryOptions in
+            if let fail = fail {
+                fail()
+            }
+            return .resign
+        }
+
+        client.request(task: task, success: response, failRetry: retry)
     }
 }
 

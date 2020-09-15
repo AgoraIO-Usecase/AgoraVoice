@@ -42,7 +42,8 @@ struct Chat {
     }
 }
 
-class ChatVM: RTMObserver {
+class ChatVM: CustomObserver {
+//    var sendMessage: PublishRelay
     var chatWidthLimit: CGFloat = UIScreen.main.bounds.width - 60
     var list = BehaviorRelay(value: [Chat]())
     
@@ -66,10 +67,10 @@ class ChatVM: RTMObserver {
     func sendMessage(_ text: String, local: BasicUserInfo, needSparate: Bool = true, fail: ErrorCompletion = nil) {
 //        let rtm = Center.shared().centerProvideRTMHelper()
 //
-//        let chat = ALChannelMessage.AType.chat.rawValue
-//        let subJson: [String: Any] = ["fromUserId": local.userId, "fromUserName": local.name, "message": text]
-//        let json: [String: Any] = ["cmd": chat, "data": subJson]
-//        let jsonString = try! json.jsonString()
+        let chat = ALChannelMessage.AType.chat.rawValue
+        let subJson: [String: Any] = ["fromUserId": local.userId, "fromUserName": local.name, "message": text]
+        let json: [String: Any] = ["cmd": chat, "data": subJson]
+        let jsonString = try! json.jsonString()
 //
 //        try? rtm.writeChannel(message: jsonString, of: RequestEvent(name: "chat-message"), success: { [weak self] in
 //            guard let strongSelf = self else {

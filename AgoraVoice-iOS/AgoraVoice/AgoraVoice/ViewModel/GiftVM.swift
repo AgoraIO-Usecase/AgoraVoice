@@ -84,7 +84,7 @@ enum Gift: Int {
                                .rocket]
 }
 
-class GiftVM: RTMObserver {
+class GiftVM: CustomObserver {
     private var room: Room
     var received = PublishRelay<(userName:String, gift:Gift)>()
     

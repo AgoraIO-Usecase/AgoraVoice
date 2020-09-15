@@ -26,24 +26,24 @@ struct URLGroup {
     }
     
     static var userLogin: String {
-        return URLGroup.host + URLGroup.mainPath + "user/login"
+        return URLGroup.host + URLGroup.mainPath + "users/login"
     }
     
     static var musicList: String {
         return URLGroup.host + URLGroup.mainPath + "musics"
     }
     
-    static var ossSTS: String {
-        return URLGroup.host +  "edu/v1/log/sts"
-    }
-    
-    static var ossUpload: String {
-        return URLGroup.host + "edu/v1/log/params"
-    }
-    
-    static var ossUploadCallback: String {
-        return URLGroup.host + "edu/v1/log/sts/callback"
-    }
+//    static var ossSTS: String {
+//        return URLGroup.host +  "edu/v1/log/sts"
+//    }
+//
+//    static var ossUpload: String {
+//        return URLGroup.host + "edu/v1/log/params"
+//    }
+//
+//    static var ossUploadCallback: String {
+//        return URLGroup.host + "edu/v1/log/sts/callback"
+//    }
     
     static var roomPage: String {
         return URLGroup.host + URLGroup.mainPath + "room/page"
@@ -62,7 +62,7 @@ struct URLGroup {
     }
     
     static func leaveLive(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/exit"
+        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/close"
     }
     
     static func userList(roomId: String) -> String {

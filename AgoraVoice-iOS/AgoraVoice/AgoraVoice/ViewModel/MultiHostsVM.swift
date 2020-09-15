@@ -11,7 +11,7 @@ import RxSwift
 import RxRelay
 import AlamoClient
 
-class MultiHostsVM: RTMObserver {
+class MultiHostsVM: CustomObserver {
     struct Invitation: TimestampModel {
         var id: Int
         var seatIndex: Int

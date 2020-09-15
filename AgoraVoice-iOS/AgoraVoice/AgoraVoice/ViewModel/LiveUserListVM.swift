@@ -38,7 +38,7 @@ fileprivate extension Array where Element == LiveRoleItem {
     }
 }
 
-class LiveUserListVM: RTMObserver {
+class LiveUserListVM: CustomObserver {
     private var room: Room
 
     var giftList = BehaviorRelay(value: [LiveRoleItem]())
@@ -46,8 +46,8 @@ class LiveUserListVM: RTMObserver {
     var list = BehaviorRelay(value: [LiveRole]())
     var audienceList = BehaviorRelay(value: [LiveRole]())
 
-    var join = PublishRelay<[LiveRoleItem]>()
-    var left = PublishRelay<[LiveRoleItem]>()
+    var joined = PublishRelay<[LiveRole]>()
+    var left = PublishRelay<[LiveRole]>()
     var total = BehaviorRelay(value: 0)
     
     init(room: Room) {
@@ -174,46 +174,9 @@ class LiveUserListVM: RTMObserver {
 
 private extension LiveUserListVM {
     func observe() {
-//        let rtm = Center.shared().centerProvideRTMHelper()
-//        rtm.addReceivedChannelMessage(observer: self.address) { [weak self] (json) in
-//            guard let cmd = try? json.getEnum(of: "cmd", type: ALChannelMessage.AType.self) else {
-//                return
-//            }
-//
-//            guard cmd == .userJoinOrLeave || cmd == .ranks else {
-//                return
-//            }
-//
-//            let data = try json.getDataObject()
-//            let listJson = try? data.getListValue(of: "list")
-//
-//            guard let strongSelf = self else {
-//                return
-//            }
-//
-//            switch cmd {
-//            case .userJoinOrLeave:
-//                var list: [(UserJoinOrLeft, LiveRoleItem)]
-//                if let tList = listJson {
-//                    list = try Array(list: tList)
-//                } else {
-//                    list = [(UserJoinOrLeft, LiveRoleItem)]()
-//                }
-//                strongSelf.userJoinOrLeft(list)
-//                let total = try data.getIntValue(of: "total")
-//                strongSelf.total.accept(total)
-//            case .ranks:
-//                var list: [LiveRoleItem]
-//                if let tList = listJson {
-//                    list = try Array(dicList: tList)
-//                } else {
-//                    list = [LiveRoleItem]()
-//                }
-//                strongSelf.giftList.accept(list)
-//            default:
-//                break
-//            }
-//        }
+        message.subscribe(onNext: { (json) in
+            
+        }).disposed(by: bag)
     }
     
 //    func fake(count: Int) -> [LiveRoleItem] {
@@ -227,22 +190,5 @@ private extension LiveUserListVM {
 //            list.append(user)
 //        }
 //        return list
-//    }
-//    
-//    func userJoinOrLeft(_ list: [(UserJoinOrLeft, LiveRoleItem)]) {
-//        var joins = [LiveRoleItem]()
-//        var lefts = [LiveRoleItem]()
-//        
-//        for item in list {
-//            switch item.0 {
-//            case .join:
-//                joins.append(item.1)
-//            case .left:
-//                lefts.append(item.1)
-//            }
-//        }
-//        
-//        self.join.accept(joins)
-//        self.left.accept(lefts)
 //    }
 }

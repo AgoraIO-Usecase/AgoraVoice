@@ -24,12 +24,12 @@ class LogTube: NSObject {
 private extension LogTube {
     func log(formatter: AGELogFormatter) {
         AGELock.synchronized(self.lock) { [unowned self] in
-            self.debugPrint("--------------------------------------------------------------------------")
+            self.debugPrint("--------------------------------------------------------------------------", type: formatter.type)
             let className = "Class: \(formatter.className)"
             let funcName = "Func: \(formatter.funcName)"
             
-            self.debugPrint(className)
-            self.debugPrint(funcName)
+            self.debugPrint(className, type: formatter.type)
+            self.debugPrint(funcName, type: formatter.type)
             
             var typeContent: String
             
@@ -39,26 +39,35 @@ private extension LogTube {
             case .error(let text):   typeContent = "Error: \(text)"
             }
             
-            debugPrint(typeContent)
+            debugPrint(typeContent, type: formatter.type)
            
             if let extra = formatter.extra {
                 let extraContent = "Extra: \(extra)"
-                self.debugPrint(extraContent)
+                self.debugPrint(extraContent, type: formatter.type)
             }
-            self.debugPrint("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            self.debugPrint("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", type: formatter.type)
         }
     }
     
-    func writeToFile(log: String) {
-        var identifier: Int8 = 0
-        LCLLogFile.log(withIdentifier: &identifier, level: 0, path: nil,
-                       line: 0, function: &identifier, message: log)
+    func writeToFile(log: String, type: LogType) {
+        var level: AgoraLogLevel
+        
+        switch type {
+        case .info:
+            level = .info
+        case .warning:
+            level = .warn
+        case .error:
+            level = .error
+        }
+        
+        AgoraLogManager.logMessage(log, level: level)
     }
         
-    func debugPrint(_ log: String) {
-//        #if DEBUG
+    func debugPrint(_ log: String, type: LogType) {
+        #if !RELEASE
         NSLog("%@", log)
-//        #endif
-        writeToFile(log: log)
+        #endif
+        writeToFile(log: log, type: type)
     }
 }

@@ -206,7 +206,7 @@ private extension LiveListViewController {
         collectionView.rx.modelSelected(Room.self).subscribe(onNext: { [unowned self] (room) in
             self.showHUD()
             
-            let session = LiveSession(roomName: room.name, roomId: room.roomId)
+            let session = LiveSession(room: room)
             session.join(role: .audience, success: { [unowned self] (session) in
                 self.hiddenHUD()
                 self.performSegue(withIdentifier: "ChatRoomViewController", sender: session)

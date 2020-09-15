@@ -12,30 +12,42 @@ import RxSwift
 import RxRelay
 
 class LiveSession: NSObject {
-    var type: LiveType = .chatRoom
+    var type: LiveType
     
     var roomManager: EduClassroomManager
+    
+    var room: BehaviorRelay<Room>
     var userService: EduUserService?
+    
+    //
+    var end = PublishRelay<()>()
     
     // User
     var userList = BehaviorRelay(value: [LiveRole]())
     var userJoined = PublishRelay<[LiveRole]>()
     var userLeft = PublishRelay<[LiveRole]>()
     
+    // Stream
+    
     // Message
     var chatMessage = PublishRelay<(user: LiveRole, message: String)>()
+    var customMessage = PublishRelay<[String: Any]>()
     
-    init(roomName: String, roomId: String) {
-        let configuration = EduClassroomConfig(roomName: roomName, roomUuid: roomId, scene: .typeBig)
+    init(room: Room) {
+        let configuration = EduClassroomConfig(roomName: room.name,
+                                               roomUuid: room.roomId,
+                                               scene: .typeBig)
         let manager = EduClassroomManager(roomConfig: configuration)
         self.roomManager = manager
+        self.room = BehaviorRelay(value: room)
+        self.type = .chatRoom
         super.init()
         manager.delegate = self
     }
     
     static func create(roomName: String, success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
         let client = Center.shared().centerProvideRequestHelper()
-        let event = RequestEvent(name: "present-gift")
+        let event = RequestEvent(name: "live-create")
         let url = URLGroup.liveCreate
         let task = RequestTask(event: event,
                                type: .http(.post, url: url),
@@ -45,7 +57,10 @@ class LiveSession: NSObject {
         
         client.request(task: task, success: ACResponse.json({ (json) in
             let roomId = try json.getStringValue(of: "data")
-            let session = LiveSession(roomName: roomName, roomId: roomId)
+            let local = Center.shared().centerProvideLocalUser().info.value
+            let owner = LiveRoleItem(type: .owner, info: local, agUId: "0")
+            let room = Room(name: roomName, roomId: roomId, personCount: 0, owner: owner)
+            let session = LiveSession(room: room)
             
             if let success = success {
                 success(session)
@@ -70,6 +85,24 @@ class LiveSession: NSObject {
         
         let options = EduClassroomJoinOptions(userName: userName, role: eduRole)
         roomManager.joinClassroom(options, success: { [unowned self] (userService) in
+            self.roomManager.getUserList(with: .teacher, from: 0, to: 1, success: { [unowned self] (list) in
+                guard let owner = [LiveRole](list: list).first else {
+                    if let fail = fail {
+                        let error = AGEError.fail("owner nil")
+                        fail(error)
+                    }
+                    return
+                }
+                
+                self.roomManager.getClassroomInfo(success: { [unowned self] (eduRoom) in
+                    let room = Room(name: eduRoom.roomInfo.roomName,
+                                    roomId: eduRoom.roomInfo.roomUuid,
+                                    personCount: Int(eduRoom.roomState.onlineUserCount),
+                                    owner: owner)
+                    self.room.accept(room)
+                }, failure: nil)
+            }, failure: nil)
+            
             self.userService = userService
             
             if let success = success {
@@ -83,7 +116,33 @@ class LiveSession: NSObject {
     }
     
     func leave() {
+        let client = Center.shared().centerProvideRequestHelper()
+        let event = RequestEvent(name: "live-session-leave")
+        let url = URLGroup.leaveLive(roomId: room.value.roomId)
+        let task = RequestTask(event: event,
+                               type: .http(.post, url: url),
+                               header: ["token": Keys.UserToken])
+        client.request(task: task)
         
+        roomManager.leaveClassroom(success: nil, failure: nil)
+    }
+}
+
+extension LiveSession {
+    func updateLocalAudioStream(isOn: Bool) {
+        roomManager.getLocalUser(success: { [unowned self] (local) in
+            let configuration = EduStreamConfig(streamUuid: local.streamUuid)
+            configuration.enableMicrophone = isOn
+            configuration.enableCamera = false
+            self.userService?.startOrUpdateLocalStream(configuration,
+                                                       success: { (stream) in
+                                                        
+            }, failure: { (error) in
+                
+            })
+        }) { (error) in
+            
+        }
     }
 }
 
@@ -94,6 +153,10 @@ extension LiveSession: EduClassroomDelegate {
     }
     
     func classroom(_ classroom: EduClassroom, remoteUsersJoined users: [EduUser]) {
+        roomManager.getFullUserList(success: { [unowned self] (list) in
+            self.userList.accept([LiveRole](list: list))
+        }, failure: nil)
+        
         userJoined.accept([LiveRole](list: users))
     }
     
@@ -102,6 +165,10 @@ extension LiveSession: EduClassroomDelegate {
     }
     
     func classroom(_ classroom: EduClassroom, remoteUsersLeft events: [EduUserEvent]) {
+        roomManager.getFullUserList(success: { [unowned self] (list) in
+            self.userList.accept([LiveRole](list: list))
+        }, failure: nil)
+        
         var list = [LiveRole]()
         
         for event in events {
@@ -120,7 +187,10 @@ extension LiveSession: EduClassroomDelegate {
     }
     
     func classroom(_ classroom: EduClassroom, roomMessageReceived textMessage: EduTextMessage) {
-        
+        guard let json = try? textMessage.message.json() else {
+            return
+        }
+        customMessage.accept(json)
     }
     
     // Stream
@@ -129,7 +199,9 @@ extension LiveSession: EduClassroomDelegate {
     }
     
     func classroom(_ classroom: EduClassroom, remoteStreamsAdded events: [EduStreamEvent]) {
-        
+//        for item in events {
+//            item.modifiedStream.userInfo
+//        }
     }
     
     func classroom(_ classroom: EduClassroom, remoteStreamsUpdated events: [EduStreamEvent]) {
@@ -142,11 +214,14 @@ extension LiveSession: EduClassroomDelegate {
     
     // Room
     func classroom(_ classroom: EduClassroom, stateUpdated reason: EduClassroomChangeReason, operatorUser user: EduBaseUser) {
-        
+        if classroom.roomState.courseState == .stop {
+            leave()
+            end.accept(())
+        }
     }
     
     func classroomPropertyUpdated(_ classroom: EduClassroom) {
-        
+        // Mutit hosts &&
     }
     
     func classroom(_ classroom: EduClassroom, remoteUserPropertiesUpdated users: [EduUser]) {
