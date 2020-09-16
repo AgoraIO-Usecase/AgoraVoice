@@ -31,7 +31,7 @@ class LogFiles: NSObject {
     override init() {
         super.init()
         let configuration = AgoraLogConfiguration()
-        configuration.logDirectoryPath = fileName
+        configuration.logDirectoryPath = folderPath
         AgoraLogManager.setupLog(configuration)
         FilesGroup.check(folderPath: folderPath)
         checkEarliestFile()

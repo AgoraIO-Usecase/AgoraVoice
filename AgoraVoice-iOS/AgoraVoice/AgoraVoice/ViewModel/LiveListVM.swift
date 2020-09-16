@@ -86,7 +86,7 @@ extension LiveListVM {
             let room = Room(name: "room\(index)",
                 roomId: "\(index)",
                 personCount: index,
-                owner: LiveRoleItem(type: .owner, info: BasicUserInfo(userId: "", name: ""), agUId: "0"))
+                owner: LiveRoleItem(type: .owner, info: BasicUserInfo(userId: "index", name: ""), agUId: "0"))
             temp.append(room)
         }
         

@@ -35,7 +35,10 @@ class Center: NSObject {
     private lazy var userDataHelper = UserDataHelper()
     
     private lazy var liveManager: EduManager = {
-        let configuration = EduConfiguration(appId: "", customerId: "", customerCertificate: "")
+        let configuration = EduConfiguration(appId: Keys.AgoraAppId,
+                                             customerId: Keys.customerId,
+                                             customerCertificate: Keys.customerCertificate)
+//        configuration.logDirectoryPath = 
         let manager = EduManager(config: configuration)
         return manager
     }()
@@ -189,6 +192,10 @@ extension Center: CenterHelper {
         
     func centerProvideLogTubeHelper() -> LogTube {
         return log
+    }
+    
+    func centerProvideAppAssistant() -> AppAssistant {
+        return appAssistant
     }
     
     func centerProvideUserDataHelper() -> UserDataHelper {

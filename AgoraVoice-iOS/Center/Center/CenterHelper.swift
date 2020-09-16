@@ -14,6 +14,7 @@ protocol CenterHelper where Self: Center {
     func centerProvideMediaDevice() -> MediaDevice
     func centerProvideRequestHelper() -> AlamoClient
     func centerProvideImagesHelper() -> ImageFiles
+    func centerProvideAppAssistant() -> AppAssistant
     
     func centerProvideFilesGroup() -> FilesGroup
     

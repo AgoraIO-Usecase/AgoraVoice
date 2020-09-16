@@ -22,7 +22,7 @@ struct URLGroup {
     }
     
     static var appVersion: String {
-        return URLGroup.host + URLGroup.mainPath + "app/version"
+        return URLGroup.host + "ent/v1/" + "app/version"
     }
     
     static var userLogin: String {
@@ -46,7 +46,7 @@ struct URLGroup {
 //    }
     
     static var roomPage: String {
-        return URLGroup.host + URLGroup.mainPath + "room/page"
+        return URLGroup.host + URLGroup.mainPath + "rooms/page"
     }
     
     static var liveCreate: String {
@@ -57,9 +57,9 @@ struct URLGroup {
         return URLGroup.host + URLGroup.mainPath + "user/\(userId)"
     }
     
-    static func joinLive(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/entry"
-    }
+//    static func joinLive(roomId: String) -> String {
+//        return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/entry"
+//    }
     
     static func leaveLive(roomId: String) -> String {
         return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/close"

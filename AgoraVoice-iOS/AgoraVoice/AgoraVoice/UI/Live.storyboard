@@ -54,7 +54,7 @@
                                     <segue destination="for-GP-f71" kind="embed" identifier="ChatViewController" id="zYG-QD-uIA"/>
                                 </connections>
                             </containerView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jh9-LM-Ap7" customClass="RemindIconTextView" customModule="AgoraLive" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jh9-LM-Ap7" customClass="RemindIconTextView" customModule="AgoraVoice" customModuleProvider="target">
                                 <rect key="frame" x="343" y="59" width="56" height="28"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
@@ -124,6 +124,7 @@
                     <navigationItem key="navigationItem" id="9Vm-Uq-1hU"/>
                     <connections>
                         <outlet property="backgroundImageView" destination="WYm-Mx-v3T" id="qYT-BL-bqk"/>
+                        <outlet property="closeButton" destination="mD5-5G-Jjd" id="J7g-lS-yde"/>
                         <outlet property="personCountView" destination="jh9-LM-Ap7" id="ztI-KH-V0g"/>
                         <outlet property="seatViewHeight" destination="wfg-XI-zxb" id="NhT-q0-3AK"/>
                     </connections>
@@ -136,7 +137,7 @@
         <scene sceneID="URh-iE-X6u">
             <objects>
                 <viewController id="nQg-WQ-IXw" customClass="LiveSeatViewController" customModule="AgoraVoice" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="lKq-2G-SU4" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                    <view key="view" contentMode="scaleToFill" id="lKq-2G-SU4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="276"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>

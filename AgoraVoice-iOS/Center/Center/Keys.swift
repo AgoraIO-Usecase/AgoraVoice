@@ -15,5 +15,4 @@ struct Keys {
     static var AgoraRtcToken: String = ""
     static var AgoraRtmToken: String = ""
     static var UserToken: String = ""
-    static var BuglyId: String = ""
 }

@@ -30,11 +30,7 @@ class SeatButton: UIButton {
             }
         }
     }
-    
-//    override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
-//        return bounds
-//    }
-    
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.initViews()

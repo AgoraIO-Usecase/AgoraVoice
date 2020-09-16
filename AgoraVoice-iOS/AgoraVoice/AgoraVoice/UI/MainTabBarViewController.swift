@@ -27,7 +27,7 @@ class MainTabBarViewController: MaskTabBarController {
         UITabBar.appearance().barTintColor = .black
         tabBar.isUserInteractionEnabled = false
         showHUD()
-        
+
         Center.shared().isWorkNormally.subscribe(onNext: { [unowned self] (normal) in
             if normal {
                 self.tabBar.isUserInteractionEnabled = true

@@ -10,6 +10,7 @@ import UIKit
 
 class ChatRoomViewController: MaskViewController, LiveViewController {
     @IBOutlet weak var seatViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var closeButton: UIButton!
     
     // LiveViewController
     var liveSession: LiveSession!
@@ -44,6 +45,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
     var deviceVM = MediaDeviceVM()
     var audioEffectVM = AudioEffectVM()
     var monitor = NetworkMonitor(host: "www.apple.com")
+    var backgroundVM = RoomBackgroundVM()
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -58,6 +60,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
 //        users()
         gift()
 //        chatList()
+        background()
 //        musicList()
         netMonitor()
         bottomTools()
@@ -92,6 +95,10 @@ private extension ChatRoomViewController {
     func updateViews() {
         backgroundImageView.image = Center.shared().centerProvideImagesHelper().roomBackgrounds.first
         personCountView.backgroundColor = tintColor
+        
+        closeButton.rx.tap.subscribe(onNext: { [unowned self] in
+            self.dimissSelf()
+        }).disposed(by: bag)
     }
     
     func calculateSeatViewHeight() {

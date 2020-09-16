@@ -68,14 +68,8 @@ class AECollectionViewController: RxViewController {
     var audioEffectVM: AudioEffectVM!
     
     let belCantoType = BehaviorRelay<BelCantoType>(value: .chat)
-//    let selectedChatOfBelcanto = BehaviorRelay<ChatOfBelCanto>(value: .disable)
-//    let selectedSingOfBelcanto = BehaviorRelay<SingOfBelCanto>(value: .disable)
-//    let selectedTimbre = BehaviorRelay<Timbre>(value: .disable)
     
     let soundEffectType = BehaviorRelay<SoundEffectType>(value: .space)
-//    let selectedAudioSpace = BehaviorRelay<AudioSpace>(value: .disable)
-//    let selectedTimbreRole = BehaviorRelay<TimbreRole>(value: .disable)
-//    let selectedMusicGenre = BehaviorRelay<MusicGenre>(value: .disable)
     
     // special for eletronic music
     let selectedSoundEffectType = PublishRelay<SoundEffectType>()
@@ -125,14 +119,14 @@ private extension AECollectionViewController {
                                                                                     
                                                                                     cell.tagImageView.image = item.image
                                                                                     cell.nameLabel.text = "\(item.description)"
-                                                                                    cell.isSelectedNow = (item == self.selectedChatOfBelcanto.value)
+                                                                                    cell.isSelectedNow = (item == self.audioEffectVM.selectedChatOfBelcanto.value)
             }
             
             let selectSubscribe = collectionView.rx.modelSelected(ChatOfBelCanto.self).subscribe(onNext: { [unowned self] (item) in
-                if self.selectedChatOfBelcanto.value == item {
-                    self.selectedChatOfBelcanto.accept(.disable)
+                if self.audioEffectVM.selectedChatOfBelcanto.value == item {
+                    self.audioEffectVM.selectedChatOfBelcanto.accept(.disable)
                 } else {
-                    self.selectedChatOfBelcanto.accept(item)
+                    self.audioEffectVM.selectedChatOfBelcanto.accept(item)
                 }
                 
                 self.collectionView.reloadData()
@@ -163,14 +157,14 @@ private extension AECollectionViewController {
             let listSubscribe = SingOfBelCanto.list.bind(to: collectionView.rx.items(cellIdentifier: "AELabelCell",
                                                                                  cellType: AELabelCell.self)) { [unowned self] (index, item, cell) in
                                                                                     cell.nameLabel.text = "\(item.description)"
-                                                                                    cell.isSelectedNow = (item == self.selectedSingOfBelcanto.value)
+                                                                                    cell.isSelectedNow = (item == self.audioEffectVM.selectedSingOfBelcanto.value)
             }
             
             let selectSubscribe = collectionView.rx.modelSelected(SingOfBelCanto.self).subscribe(onNext: { [unowned self] (item) in
-                if self.selectedSingOfBelcanto.value == item {
-                    self.selectedSingOfBelcanto.accept(.disable)
+                if self.audioEffectVM.selectedSingOfBelcanto.value == item {
+                    self.audioEffectVM.selectedSingOfBelcanto.accept(.disable)
                 } else {
-                    self.selectedSingOfBelcanto.accept(item)
+                    self.audioEffectVM.selectedSingOfBelcanto.accept(item)
                 }
                 
                 self.collectionView.reloadData()
@@ -201,14 +195,14 @@ private extension AECollectionViewController {
             let listSubscribe = Timbre.list.bind(to: collectionView.rx.items(cellIdentifier: "AELabelCell",
                                                                                  cellType: AELabelCell.self)) { [unowned self] (index, item, cell) in
                                                                                     cell.nameLabel.text = "\(item.description)"
-                                                                                    cell.isSelectedNow = (item == self.selectedTimbre.value)
+                                                                                    cell.isSelectedNow = (item == self.audioEffectVM.selectedTimbre.value)
             }
             
             let selectSubscribe = collectionView.rx.modelSelected(Timbre.self).subscribe(onNext: { [unowned self] (item) in
-                if self.selectedTimbre.value == item {
-                    self.selectedTimbre.accept(.disable)
+                if self.audioEffectVM.selectedTimbre.value == item {
+                    self.audioEffectVM.selectedTimbre.accept(.disable)
                 } else {
-                    self.selectedTimbre.accept(item)
+                    self.audioEffectVM.selectedTimbre.accept(item)
                 }
                 
                 self.collectionView.reloadData()
@@ -250,14 +244,14 @@ private extension AECollectionViewController {
                                                                                  cellType: AEImageLabelCell.self)) { [unowned self] (index, item, cell) in
                                                                                     cell.tagImageView.image = item.image
                                                                                     cell.nameLabel.text = "\(item.description)"
-                                                                                    cell.isSelectedNow = (item == self.selectedAudioSpace.value)
+                                                                                    cell.isSelectedNow = (item == self.audioEffectVM.selectedAudioSpace.value)
             }
             
             let selectSubscribe = collectionView.rx.modelSelected(AudioSpace.self).subscribe(onNext: { [unowned self] (item) in
-                if self.selectedAudioSpace.value == item {
-                    self.selectedAudioSpace.accept(.disable)
+                if self.audioEffectVM.selectedAudioSpace.value == item {
+                    self.audioEffectVM.selectedAudioSpace.accept(.disable)
                 } else {
-                    self.selectedAudioSpace.accept(item)
+                    self.audioEffectVM.selectedAudioSpace.accept(item)
                 }
                 
                 self.collectionView.reloadData()
@@ -270,14 +264,14 @@ private extension AECollectionViewController {
                                                                                  cellType: AEImageLabelCell.self)) { [unowned self] (index, item, cell) in
                                                                                     cell.tagImageView.image = item.image
                                                                                     cell.nameLabel.text = "\(item.description)"
-                                                                                    cell.isSelectedNow = (item == self.selectedTimbreRole.value)
+                                                                                    cell.isSelectedNow = (item == self.audioEffectVM.selectedTimbreRole.value)
             }
             
             let selectSubscribe = collectionView.rx.modelSelected(TimbreRole.self).subscribe(onNext: { [unowned self] (item) in
-                if self.selectedTimbreRole.value == item {
-                    self.selectedTimbreRole.accept(.disable)
+                if self.audioEffectVM.selectedTimbreRole.value == item {
+                    self.audioEffectVM.selectedTimbreRole.accept(.disable)
                 } else {
-                    self.selectedTimbreRole.accept(item)
+                    self.audioEffectVM.selectedTimbreRole.accept(item)
                 }
                 
                 self.collectionView.reloadData()
@@ -290,14 +284,14 @@ private extension AECollectionViewController {
                                                                                  cellType: AEImageLabelCell.self)) { [unowned self] (index, item, cell) in
                                                                                     cell.tagImageView.image = item.image
                                                                                     cell.nameLabel.text = "\(item.description)"
-                                                                                    cell.isSelectedNow = (item == self.selectedMusicGenre.value)
+                                                                                    cell.isSelectedNow = (item == self.audioEffectVM.selectedMusicGenre.value)
             }
             
             let selectSubscribe = collectionView.rx.modelSelected(MusicGenre.self).subscribe(onNext: { [unowned self] (item) in
-                if self.selectedMusicGenre.value == item {
-                    self.selectedMusicGenre.accept(.disable)
+                if self.audioEffectVM.selectedMusicGenre.value == item {
+                    self.audioEffectVM.selectedMusicGenre.accept(.disable)
                 } else {
-                    self.selectedMusicGenre.accept(item)
+                    self.audioEffectVM.selectedMusicGenre.accept(item)
                 }
                 
                 self.collectionView.reloadData()

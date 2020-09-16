@@ -35,6 +35,7 @@ protocol LiveViewController where Self: MaskViewController {
     var deviceVM: MediaDeviceVM {get set}
     var audioEffectVM: AudioEffectVM {get set}
     var monitor: NetworkMonitor {get set}
+    var backgroundVM: RoomBackgroundVM {get set}
 }
 
 // MARK: VM
@@ -56,6 +57,9 @@ extension LiveViewController {
         
         // gift
         liveSession.customMessage.bind(to: giftVM.message).disposed(by: bag)
+        
+        // background
+        liveSession.customMessage.bind(to: backgroundVM.message).disposed(by: bag)
         
         liveSession.end.subscribe(onNext: { [unowned self] in
             self.dimissSelf()
@@ -111,6 +115,13 @@ extension LiveViewController {
         if let chatVC = self.chatVC {
             chatVM.list.bind(to: chatVC.list).disposed(by: bag)
         }
+    }
+    
+    // MARK: - Background
+    func background() {
+        backgroundVM.selectedImage.subscribe(onNext: { [unowned self] (image) in
+            self.backgroundImageView.image = image
+        }).disposed(by: bag)
     }
     
     // MARK: - Gift
@@ -515,7 +526,7 @@ extension LiveViewController {
         vc.selectIndex.accept(0)
         vc.selectImage.bind(to: backgroundImageView.rx.image).disposed(by: vc.bag)
         vc.selectIndex.subscribe(onNext: { [unowned self] (index) in
-            
+            self.backgroundVM.commit(index: index)
         }).disposed(by: vc.bag)
     }
     

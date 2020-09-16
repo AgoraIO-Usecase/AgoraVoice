@@ -1130,9 +1130,6 @@
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#0088EB"/>
                                 </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <segue destination="udD-yQ-9rI" kind="show" id="sEg-3P-PTl"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1209,9 +1206,6 @@
             <point key="canvasLocation" x="2454" y="-317"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="Mrt-4N-VRG"/>
-    </inferredMetricsTieBreakers>
     <resources>
         <image name="button-create" width="86" height="86"/>
         <image name="button-get started" width="160" height="44"/>

@@ -24,6 +24,11 @@ class AudioEffectVM: RxObject {
     let selectedAudioSpace = BehaviorRelay<AudioSpace>(value: .disable)
     let selectedTimbreRole = BehaviorRelay<TimbreRole>(value: .disable)
     let selectedMusicGenre = BehaviorRelay<MusicGenre>(value: .disable)
+    
+    override init() {
+        super.init()
+        observe()
+    }
 }
 
 private extension AudioEffectVM {
@@ -43,6 +48,8 @@ private extension AudioEffectVM {
         
         // belCantoType
         selectedChatOfBelcanto.subscribe(onNext: { [unowned self] (item) in
+            self.audioEffectType.accept(.belCanto)
+            
             if item != .disable {
                 self.selectedSingOfBelcanto.accept(.disable)
                 self.selectedTimbre.accept(.disable)
@@ -52,6 +59,8 @@ private extension AudioEffectVM {
         }).disposed(by: bag)
         
         selectedSingOfBelcanto.subscribe(onNext: { [unowned self] (item) in
+            self.audioEffectType.accept(.belCanto)
+            
             if item != .disable {
                 self.selectedChatOfBelcanto.accept(.disable)
                 self.selectedTimbre.accept(.disable)
@@ -61,6 +70,8 @@ private extension AudioEffectVM {
         }).disposed(by: bag)
         
         selectedTimbre.subscribe(onNext: { [unowned self] (item) in
+            self.audioEffectType.accept(.belCanto)
+            
             if item != .disable {
                 self.selectedChatOfBelcanto.accept(.disable)
                 self.selectedSingOfBelcanto.accept(.disable)

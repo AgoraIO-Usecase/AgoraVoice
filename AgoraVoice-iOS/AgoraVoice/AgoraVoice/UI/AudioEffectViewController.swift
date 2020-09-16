@@ -75,6 +75,8 @@ private extension AudioEffectViewController {
         tabView.update(titles)
         
         tabView.selectedIndex.subscribe(onNext: { [unowned self] (index) in
+            print("tabView index: \(index)")
+            
             switch self.audioEffect {
             case .belCanto:    let type = BelCantoType.list.value[index];    self.updateCollectionWithBelCanto(type: type)
             case .soundEffect: let type = SoundEffectType.list.value[index]; self.updateCollectionWithSoundEffect(type: type)
@@ -101,44 +103,17 @@ private extension AudioEffectViewController {
 
 private extension AudioEffectViewController {
     func subscribeAECollectionVC(_ vc: AECollectionViewController) {
+        electronicMusicView.isHidden = true
+        
         vc.audioEffectType = audioEffect
-        
-//        audioEffectVM.audioEffectType.accept(audioEffect)
-        
-        // BelCantoType
-        vc.selectedChatOfBelcanto.accept(audioEffectVM.selectedChatOfBelcanto.value)
-        vc.selectedSingOfBelcanto.accept(audioEffectVM.selectedSingOfBelcanto.value)
-        vc.selectedTimbre.accept(audioEffectVM.selectedTimbre.value)
-        
-        vc.selectedChatOfBelcanto.subscribe(onNext: { (item) in
-            
-        }).disposed(by: bag)
-        
-//        audioEffectVM.selectedChatOfBelcanto.asObservable().bind(to: vc.selectedChatOfBelcanto).disposed(by: vc.bag)
-//        audioEffectVM.selectedSingOfBelcanto.asObservable().bind(to: vc.selectedSingOfBelcanto).disposed(by: vc.bag)
-//        audioEffectVM.selectedTimbre.asObservable().bind(to: vc.selectedTimbre).disposed(by: vc.bag)
-              
-        
-        vc.selectedChatOfBelcanto.bind(to: audioEffectVM.selectedChatOfBelcanto).disposed(by: vc.bag)
-        vc.selectedSingOfBelcanto.bind(to: audioEffectVM.selectedSingOfBelcanto).disposed(by: vc.bag)
-        vc.selectedTimbre.bind(to: audioEffectVM.selectedTimbre).disposed(by: vc.bag)
-        
-//        vc.selectedChatOfBelcanto.map { (_) -> AudioEffectType in
-//            return .
-//        }
-        
-        // SoundEffectType
-        vc.selectedAudioSpace.subscribe(onNext: { [unowned self] (space) in
-            self.electronicMusicView.isHidden = true
-            
+        vc.audioEffectVM = audioEffectVM
+                
+        // SoundEffectType - space
+        audioEffectVM.selectedAudioSpace.subscribe(onNext: { [unowned self] (space) in
             if space == .threeDimensionalVoice {
                 self.performSegue(withIdentifier: "ThreeDimensionalViewController", sender: nil)
             }
         }).disposed(by: vc.bag)
-        
-        vc.selectedTimbreRole
-        
-        vc.selectedMusicGenre
         
         // special for eletronic music
         vc.selectedSoundEffectType.subscribe(onNext: { [unowned self] (type) in

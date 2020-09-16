@@ -16,7 +16,7 @@ class AppAssistant: NSObject {
         let client = Center.shared().centerProvideRequestHelper()
         let url = URLGroup.appVersion
         let event = RequestEvent(name: "app-version")
-        let parameters: StringAnyDic = ["appCode": "ent-super",
+        let parameters: StringAnyDic = ["appCode": "ent-voice",
                                         "osType": 1,
                                         "terminalType": 1,
                                         "version": AppAssistant.version]
@@ -28,9 +28,9 @@ class AppAssistant: NSObject {
         
         let successCallback: ACDicEXCompletion = { (json: ([String: Any])) throws in
             let data = try json.getDataObject()
-            let config = try data.getDictionaryValue(of: "config")
-            let appId = try config.getStringValue(of: "appId")
-            Keys.AgoraAppId = appId
+//            let config = try data.getDictionaryValue(of: "config")
+//            let appId = try config.getStringValue(of: "appId")
+//            Keys.AgoraAppId = appId
             
             if let success = success {
                 success()

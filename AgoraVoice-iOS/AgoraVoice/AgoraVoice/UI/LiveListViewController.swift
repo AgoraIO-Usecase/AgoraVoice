@@ -88,7 +88,6 @@ class LiveListViewController: MaskViewController {
         
         navigation.navigationBar.isHidden = false
         
-        roomListRefresh(false)
         perMinuterRefresh()
     }
     
@@ -159,8 +158,6 @@ private extension LiveListViewController {
     }
     
     func subscribeList() {
-        listVM.fake()
-        
         placeHolderView.tap.subscribe(onNext: { [unowned self] in
             self.roomListRefresh(true)
         }).disposed(by: bag)

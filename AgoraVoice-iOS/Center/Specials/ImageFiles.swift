@@ -18,7 +18,7 @@ class ImageFiles: NSObject {
     private let folderName = "Images/"
     private let headFolder = "Heads/"
     
-    private(set) lazy var originalHeads: [UIImage] = {
+    private lazy var originalHeads: [UIImage] = {
         var list = [UIImage]()
         
         for i in 0..<9 {
@@ -30,7 +30,7 @@ class ImageFiles: NSObject {
         return list
     }()
     
-    private(set) lazy var originalRoomPreviews: [UIImage] = {
+    private lazy var originalRoomPreviews: [UIImage] = {
         var list = [UIImage]()
         
         for i in 0..<9 {
@@ -61,8 +61,6 @@ class ImageFiles: NSObject {
         return FilesGroup.cacheDirectory + folderName
     }
     
-    let clipQueue = DispatchQueue(label: "ImageClipQueue")
-    
     override init() {
         super.init()
         FilesGroup.check(folderPath: folderPath)
@@ -89,32 +87,28 @@ class ImageFiles: NSObject {
 
 private extension ImageFiles {
     func headClip() {
-        self.clipQueue.async { [unowned self] in
-            var list = [UIImage]()
-            for image in self.originalHeads {
-                let clip = UIImage(clipImage: image,
-                                   borderWidth: 0,
-                                   borderColor: nil)
-                list.append(clip)
-            }
-            
-            self.heads = list
+        var list = [UIImage]()
+        for image in self.originalHeads {
+            let clip = UIImage(clipImage: image,
+                               borderWidth: 0,
+                               borderColor: nil)
+            list.append(clip)
         }
+        
+        self.heads = list
     }
     
     func roomClip() {
-        self.clipQueue.async { [unowned self] in
-            var list = [UIImage]()
-            for image in self.originalRoomPreviews {
-                let clip = UIImage(clipImage: image,
-                                   cornerRadius: 7,
-                                   borderWidth: 0,
-                                   borderColor: nil)
-                list.append(clip)
-            }
-            
-            self.roomPreviews = list
+        var list = [UIImage]()
+        for image in self.originalRoomPreviews {
+            let clip = UIImage(clipImage: image,
+                               cornerRadius: 7,
+                               borderWidth: 0,
+                               borderColor: nil)
+            list.append(clip)
         }
+        
+        self.roomPreviews = list
     }
 }
 

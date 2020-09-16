@@ -46,6 +46,7 @@ class CreateLiveViewController: MaskViewController {
     @IBOutlet weak var randomButton: UIButton!
     
     var liveType: LiveType = .chatRoom
+    var backgroundVM = RoomBackgroundVM()
     var selectedImageIndex = 0
     
     override func viewDidLoad() {
@@ -74,6 +75,7 @@ class CreateLiveViewController: MaskViewController {
         case "ChatViewController":
             let vc = segue.destination as! ChatRoomViewController
             vc.liveSession = liveSession
+            vc.backgroundVM.selectedIndex.accept(selectedImageIndex)
         default:
             break
         }
@@ -115,6 +117,8 @@ private extension CreateLiveViewController {
                 self.showAlert("未输入房间名")
                 return
             }
+            
+            self.startLivingWithName(title)
         }).disposed(by: bag)
     }
     
