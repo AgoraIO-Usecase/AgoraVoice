@@ -30,7 +30,7 @@ struct URLGroup {
     }
     
     static var musicList: String {
-        return URLGroup.host + URLGroup.mainPath + "musics"
+        return URLGroup.host + "ent/v1/" + "musics"
     }
     
 //    static var ossSTS: String {
@@ -54,7 +54,7 @@ struct URLGroup {
     }
     
     static func userUpdateInfo(userId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "user/\(userId)"
+        return URLGroup.host + URLGroup.mainPath + "users/\(userId)"
     }
     
 //    static func joinLive(roomId: String) -> String {

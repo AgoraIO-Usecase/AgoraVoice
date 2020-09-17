@@ -45,7 +45,7 @@ class LiveSession: NSObject {
         manager.delegate = self
     }
     
-    static func create(roomName: String, success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
+    static func create(roomName: String, backgroundIndex:Int, success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
         let client = Center.shared().centerProvideRequestHelper()
         let event = RequestEvent(name: "live-create")
         let url = URLGroup.liveCreate
@@ -53,7 +53,8 @@ class LiveSession: NSObject {
                                type: .http(.post, url: url),
                                timeout: .medium,
                                header: ["token": Keys.UserToken],
-                               parameters: ["roomName": roomName])
+                               parameters: ["roomName": roomName,
+                                            "backgroundImage": "\(backgroundIndex)"])
         
         client.request(task: task, success: ACResponse.json({ (json) in
             let roomId = try json.getStringValue(of: "data")
@@ -103,6 +104,11 @@ class LiveSession: NSObject {
                 }, failure: nil)
             }, failure: nil)
             
+            // all users
+            self.roomManager.getFullUserList(success: { [unowned self] (list) in
+                self.userList.accept([LiveRole](list: list))
+            }, failure: nil)
+            
             self.userService = userService
             
             if let success = success {
@@ -149,7 +155,9 @@ extension LiveSession {
 extension LiveSession: EduClassroomDelegate {
     // User
     func classroom(_ classroom: EduClassroom, remoteUsersInit users: [EduUser]) {
-        userList.accept([LiveRole](list: users))
+        roomManager.getFullUserList(success: { [unowned self] (list) in
+            self.userList.accept([LiveRole](list: list))
+        }, failure: nil)
     }
     
     func classroom(_ classroom: EduClassroom, remoteUsersJoined users: [EduUser]) {
@@ -256,8 +264,8 @@ fileprivate extension Array where Element == LiveRole {
     init(list: [EduUser]) {
         var array = [LiveRole]()
         
-        for item in list {
-            let role = LiveRoleItem(eduUser: item)
+        for user in list {
+            let role = LiveRoleItem(eduUser: user)
             array.append(role)
         }
         

@@ -125,6 +125,8 @@
                     <connections>
                         <outlet property="backgroundImageView" destination="WYm-Mx-v3T" id="qYT-BL-bqk"/>
                         <outlet property="closeButton" destination="mD5-5G-Jjd" id="J7g-lS-yde"/>
+                        <outlet property="ownerImageView" destination="cLp-JY-t6F" id="qPv-yx-wzV"/>
+                        <outlet property="ownerLabel" destination="iK6-cS-GtW" id="1PT-mh-tyP"/>
                         <outlet property="personCountView" destination="jh9-LM-Ap7" id="ztI-KH-V0g"/>
                         <outlet property="seatViewHeight" destination="wfg-XI-zxb" id="NhT-q0-3AK"/>
                     </connections>

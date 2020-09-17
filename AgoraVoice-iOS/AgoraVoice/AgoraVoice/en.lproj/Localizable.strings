@@ -33,6 +33,26 @@ Start_Chating="Start";
 Create_A_Room="Create a room to start";
 No_Data_Please_Try_Again_Later="No data, please try again later";
 
+// LiveRoom
+Live_Text_Input_Placeholder="Say something...";
+BGM="Background music";
+Tool="Tools";
+Real_Data="Statistics";
+
+Join_Live_Room="entered the room";
+Leave_Live_Room="left the room";
+
+Send_Chat_Message_Fail="send message fail";
+Give_Owner_A_Gift="gives";
+Present_Gift_Fail="gives gift fail";
+User_List="Member listing";
+Live_End="Live End";
+Confirm_End_Live="Do you want to end this live streaming?";
+Confirm_End_Broadcasting="End Live Streaming?";
+Please_Input_Headset="Plug in a headphone";
+
+Online_User="Online user";
+
 // Create Room
 Create_Start="Go Live";
 Create_NameLabel="Channel name: ";

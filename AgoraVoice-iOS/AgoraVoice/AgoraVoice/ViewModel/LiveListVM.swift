@@ -48,7 +48,7 @@ struct Room {
             self.imageURL = ""
         }
         
-        let ownerJson = try dic.getDictionaryValue(of: "owner")
+        let ownerJson = try dic.getDictionaryValue(of: "ownerUserInfo")
         self.owner = try LiveRoleItem(dic: ownerJson)
         
         let images = Center.shared().centerProvideImagesHelper()

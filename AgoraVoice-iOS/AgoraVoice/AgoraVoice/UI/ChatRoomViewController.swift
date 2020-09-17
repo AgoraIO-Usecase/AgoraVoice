@@ -9,6 +9,9 @@
 import UIKit
 
 class ChatRoomViewController: MaskViewController, LiveViewController {
+    @IBOutlet weak var ownerImageView: UIImageView!
+    @IBOutlet weak var ownerLabel: UILabel!
+    
     @IBOutlet weak var seatViewHeight: NSLayoutConstraint!
     @IBOutlet weak var closeButton: UIButton!
     
@@ -38,7 +41,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
     }()
     
     // ViewModel
-    var userListVM: LiveUserListVM!
+    var userListVM = LiveUserListVM()
     var giftVM: GiftVM!
     var musicVM = MusicVM()
     var chatVM = ChatVM()
@@ -56,12 +59,12 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         updateViews()
         calculateSeatViewHeight()
         
-//        asyncLiveSessionInfo()
-//        users()
+        syncLiveSessionInfo()
+        users()
         gift()
-//        chatList()
+        chatList()
         background()
-//        musicList()
+        musicList()
         netMonitor()
         bottomTools()
         chatInput()
@@ -98,6 +101,11 @@ private extension ChatRoomViewController {
         
         closeButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.dimissSelf()
+        }).disposed(by: bag)
+        
+        liveSession.room.subscribe(onNext: { [unowned self] (room) in
+            self.ownerImageView.image = room.owner.info.image
+            self.ownerLabel.text = room.owner.info.name
         }).disposed(by: bag)
     }
     

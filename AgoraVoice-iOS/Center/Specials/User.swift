@@ -18,7 +18,8 @@ struct BasicUserInfo {
     
     init(dic: StringAnyDic) throws {
         self.userId = try dic.getStringValue(of: "userId")
-        self.name = (try? dic.getStringValue(of: "userName")) ?? ""
+        self.name = try dic.getStringValue(of: "userName")
+        
         self.headURL = (try? dic.getStringValue(of: "avatar")) ?? ""
         let index = Int(Int64(self.userId)! % 12)
         self.image = Center.shared().centerProvideImagesHelper().heads[index]

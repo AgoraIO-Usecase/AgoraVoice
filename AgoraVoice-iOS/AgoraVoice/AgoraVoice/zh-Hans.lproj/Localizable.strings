@@ -33,6 +33,26 @@ Start_Chating="开始聊天";
 Create_A_Room="请创建一个房间";
 No_Data_Please_Try_Again_Later="暂无数据，请稍后再试";
 
+// LiveRoom
+Live_Text_Input_Placeholder="说点什么...";
+BGM="背景音乐";
+Tool="工具";
+Real_Data="实时数据";
+
+Join_Live_Room="加入房间";
+Leave_Live_Room="离开房间";
+
+Send_Chat_Message_Fail="发送聊天消息失败";
+Present_Gift_Fail="赠送礼物失败";
+Give_Owner_A_Gift="向主播赠送一个";
+User_List="成员列表";
+Live_End="直播结束";
+Confirm_End_Live="是否结束直播？";
+Confirm_End_Broadcasting="确定是否下麦？";
+Please_Input_Headset="请插上耳机";
+
+Online_User="在线用户";
+
 // Create Room
 Create_Start="开始直播";
 Create_NameLabel="直播间的名字: ";

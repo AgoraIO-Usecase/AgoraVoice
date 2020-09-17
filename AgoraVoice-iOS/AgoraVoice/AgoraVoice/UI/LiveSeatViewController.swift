@@ -140,7 +140,6 @@ class LiveSeatView: RxView {
         }).disposed(by: bag)
         
         //commandButton.type = .close
-        commandButton.imageView?.backgroundColor = .red
         
         addSubview(commandButton)
     }

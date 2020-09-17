@@ -75,8 +75,6 @@ private extension AudioEffectViewController {
         tabView.update(titles)
         
         tabView.selectedIndex.subscribe(onNext: { [unowned self] (index) in
-            print("tabView index: \(index)")
-            
             switch self.audioEffect {
             case .belCanto:    let type = BelCantoType.list.value[index];    self.updateCollectionWithBelCanto(type: type)
             case .soundEffect: let type = SoundEffectType.list.value[index]; self.updateCollectionWithSoundEffect(type: type)

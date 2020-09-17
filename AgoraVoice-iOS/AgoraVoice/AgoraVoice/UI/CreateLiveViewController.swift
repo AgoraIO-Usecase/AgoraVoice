@@ -48,6 +48,7 @@ class CreateLiveViewController: MaskViewController {
     var liveType: LiveType = .chatRoom
     var backgroundVM = RoomBackgroundVM()
     var selectedImageIndex = 0
+    var tempSession: LiveSession?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,7 +73,7 @@ class CreateLiveViewController: MaskViewController {
         }
         
         switch segueId {
-        case "ChatViewController":
+        case "ChatRoomViewController":
             let vc = segue.destination as! ChatRoomViewController
             vc.liveSession = liveSession
             vc.backgroundVM.selectedIndex.accept(selectedImageIndex)
@@ -175,7 +176,7 @@ private extension CreateLiveViewController {
     func startLivingWithName(_ name: String) {
         self.showHUD()
         
-        LiveSession.create(roomName: name, success: { [unowned self] (session) in
+        LiveSession.create(roomName: name, backgroundIndex: selectedImageIndex, success: { [unowned self] (session) in
             self.joinLiving(session: session)
         }) { [unowned self] (_) in
             self.hiddenHUD()
@@ -186,8 +187,11 @@ private extension CreateLiveViewController {
     func joinLiving(session: LiveSession) {
         self.showHUD()
         
+        tempSession = session
+        
         session.join(role: .owner, success: { [unowned self] (session) in
             self.hiddenHUD()
+            
             switch session.type {
             case .chatRoom:
                 self.performSegue(withIdentifier: "ChatRoomViewController", sender: session)

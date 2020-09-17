@@ -36,7 +36,7 @@ class ExtensionButton: UIButton {
     }
 }
 
-class ExtensionViewController: UIViewController {
+class ExtensionViewController: RxViewController {
     @IBOutlet weak var titleLabel: UILabel!
     
     lazy var dataButton = ExtensionButton(frame: CGRect.zero)

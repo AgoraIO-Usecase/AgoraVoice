@@ -117,6 +117,8 @@ private extension MusicVM {
         }
         
         // play
+        let player = Center.shared().centerProvideMediaDevice().player
+        
 //        mediaKit.player.startMixingFileAudio(url: item.url) { [weak self] in
 //            guard let strongSelf = self,
 //                let selectedIndex = strongSelf.listSelectedIndex else {

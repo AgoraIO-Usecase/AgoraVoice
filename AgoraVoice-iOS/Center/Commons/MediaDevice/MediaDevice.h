@@ -13,22 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(int, AudioOutputRouting) {
-    /** Default. */
-    AudioOutputRoutingDefault = -1,
-    /** Headset.*/
-    AudioOutputRoutingHeadset = 0,
-    /** Earpiece. */
-    AudioOutputRoutingEarpiece = 1,
-    /** Headset with no microphone. */
-    AudioOutputRoutingHeadsetNoMic = 2,
-    /** Speakerphone. */
-    AudioOutputRoutingSpeakerphone = 3,
-    /** Loudspeaker. */
-    AudioOutputRoutingLoudspeaker = 4,
-    /** Bluetooth headset. */
-    AudioOutputRoutingHeadsetBluetooth = 5
-};
+typedef AgoraAudioOutputRouting AudioOutputRouting;
 
 @class MediaDevice;
 @protocol MediaDeviceDelegate <NSObject>
@@ -40,6 +25,7 @@ typedef NS_ENUM(int, AudioOutputRouting) {
 @interface MediaDevice : MediaDeviceBase
 @property (nonatomic, strong, readonly) Player *player;
 @property (nonatomic, strong, readonly) AudioEffect *recordAudioEffect;
+@property (nonatomic, weak) id<MediaDeviceDelegate> delegate;
 
 - (void)recordAudioLoop:(BOOL)enable;
 @end

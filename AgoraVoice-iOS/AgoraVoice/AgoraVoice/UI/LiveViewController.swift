@@ -28,7 +28,7 @@ protocol LiveViewController where Self: MaskViewController {
     var chatInputView: ChatInputView {get set}
     
     // View Model
-    var userListVM: LiveUserListVM! {get set}
+    var userListVM: LiveUserListVM {get set}
     var giftVM: GiftVM! {get set}
     var musicVM: MusicVM {get set}
     var chatVM: ChatVM {get set}
@@ -40,7 +40,7 @@ protocol LiveViewController where Self: MaskViewController {
 
 // MARK: VM
 extension LiveViewController {
-    func asyncLiveSessionInfo() {
+    func syncLiveSessionInfo() {
         liveSession.chatMessage.subscribe(onNext: { [unowned self] (userMessage) in
             let chat = Chat(name: userMessage.user.info.name,
                             text: userMessage.message,
@@ -56,7 +56,7 @@ extension LiveViewController {
         liveSession.customMessage.bind(to: userListVM.message).disposed(by: bag)
         
         // gift
-        liveSession.customMessage.bind(to: giftVM.message).disposed(by: bag)
+       // liveSession.customMessage.bind(to: giftVM.message).disposed(by: bag)
         
         // background
         liveSession.customMessage.bind(to: backgroundVM.message).disposed(by: bag)
@@ -83,11 +83,11 @@ extension LiveViewController {
             userListVM.giftList.bind(to: giftAudienceVC.list).disposed(by: bag)
         }
         
-        userListVM?.total.subscribe(onNext: { [unowned self] (total) in
+        userListVM.total.subscribe(onNext: { [unowned self] (total) in
             self.personCountView.label.text = "\(total)"
         }).disposed(by: bag)
         
-        userListVM?.joined.subscribe(onNext: { [unowned self] (list) in
+        userListVM.joined.subscribe(onNext: { [unowned self] (list) in
             let chats = list.map { (user) -> Chat in
                 let chat = Chat(name: user.info.name,
                                 text: " \(NSLocalizedString("Join_Live_Room"))",
@@ -97,8 +97,8 @@ extension LiveViewController {
 
             self.chatVM.newMessages(chats)
         }).disposed(by: bag)
-
-        userListVM?.left.subscribe(onNext: { [unowned self] (list) in
+        
+        userListVM.left.subscribe(onNext: { [unowned self] (list) in
             let chats = list.map { (user) -> Chat in
                 let chat = Chat(name: user.info.name,
                                 text: " \(NSLocalizedString("Leave_Live_Room"))",
@@ -395,26 +395,34 @@ extension LiveViewController {
         extensionVC.dataButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.hiddenMaskView()
             self.presentRealData()
-        }).disposed(by: bag)
+        }).disposed(by: extensionVC.bag)
         
         extensionVC.audioLoopButton.rx.tap.subscribe(onNext: { [unowned extensionVC, unowned self] in
-//            guard self.deviceVM.audioOutput.value.isSupportLoop else {
-//                self.showTextToast(text: NSLocalizedString("Please_Input_Headset"))
-//                return
-//            }
-//            extensionVC.audioLoopButton.isSelected.toggle()
-//            self.deviceVM.audioLoop(extensionVC.audioLoopButton.isSelected ? .off : .on)
-        }).disposed(by: bag)
+            guard self.deviceVM.audioOutput.value.isSupportLoop else {
+                self.showTextToast(text: NSLocalizedString("Please_Input_Headset"))
+                return
+            }
+            extensionVC.audioLoopButton.isSelected.toggle()
+            self.deviceVM.localAudioLoop.accept(extensionVC.audioLoopButton.isSelected ? .off : .on)
+        }).disposed(by: extensionVC.bag)
+        
+        deviceVM.audioOutput.subscribe(onNext: { [unowned extensionVC, unowned self] (routing) in
+            if routing.isSupportLoop {
+                extensionVC.audioLoopButton.isSelected = self.deviceVM.localAudioLoop.value.boolValue
+            } else {
+                extensionVC.audioLoopButton.isSelected = false
+            }
+        }).disposed(by: extensionVC.bag)
         
         extensionVC.backgroudButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.hiddenMaskView()
             self.presentBackground()
-        }).disposed(by: bag)
+        }).disposed(by: extensionVC.bag)
         
         extensionVC.musicButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.hiddenMaskView()
             self.presentMusicList()
-        }).disposed(by: bag)
+        }).disposed(by: extensionVC.bag)
         
     }
     

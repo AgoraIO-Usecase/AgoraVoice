@@ -20,7 +20,7 @@
         self.status = PlayerStatusStop;
         self.timer = [[SubThreadTimer alloc] initWithThreadName:@"MediaDevice-Player-Playing" timeInterval:1.0];
         self.timer.delegate = self;
-        engine.delegate = self;
+        engine.audioMixingDelegate = self;
     }
     return self;
 }
