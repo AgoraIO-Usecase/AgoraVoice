@@ -10,8 +10,9 @@
 #import <EduSDK/RTCManagerDelegate.h>
 #import "SubThreadTimer.h"
 
-@interface Player ()
+@interface Player () <SubThreadTimerDelegate, RTCAudioMixingDelegate>
 @property (nonatomic, strong) SubThreadTimer *timer;
+@property (nonatomic, copy) NSString *lastURL;
 @end
 
 @implementation Player
@@ -26,11 +27,11 @@
 }
 
 - (BOOL)startWithURL:(NSString *)url {
+    self.status = PlayerStatusStop;
     int result = [self.agoraKit startAudioMixing:url loopback:true replace:false cycle:1];
     BOOL success = result == 0 ? YES : NO;
     if (success) {
         self.fileURL = url;
-        //        self.status = PlayerStatusPlaying;
     }
     return success;
 }
@@ -38,36 +39,24 @@
 - (BOOL)resume {
     int result = [self.agoraKit resumeAudioMixing];
     BOOL success = result == 0 ? YES : NO;
-    //    if (success) {
-    //        self.status = PlayerStatusPlaying;
-    //    }
     return success;
 }
 
 - (BOOL)pause {
     int result = [self.agoraKit pauseAudioMixing];
     BOOL success = result == 0 ? YES : NO;
-    //    if (success) {
-    //        self.status = PlayerStatusPause;
-    //    }
     return success;
 }
 
 - (BOOL)seekWithSecond:(NSInteger)second {
     int result = [self.agoraKit setAudioMixingPosition:second];
     BOOL success = result == 0 ? YES : NO;
-    if (success) {
-        self.status = PlayerStatusPlaying;
-    }
     return success;
 }
 
 - (BOOL)stop {
     int result = [self.agoraKit stopAudioMixing];
     BOOL success = result == 0 ? YES : NO;
-    //    if (success) {
-    //        self.status = PlayerStatusStop;
-    //    }
     return success;
 }
 
@@ -89,11 +78,12 @@
 
 #pragma mark - AudioMixingDelegate
 - (void)rtcLocalAudioMixingDidFinish {
+    if ([self.delegate respondsToSelector:@selector(player:didPlayFileFinish:)]) {
+        [self.delegate player:self didPlayFileFinish:self.fileURL];
+    }
+    
     if (self.status == PlayerStatusPlaying) {
         self.status = PlayerStatusStop;
-        if ([self.delegate respondsToSelector:@selector(player:didStopPlayFile:)]) {
-            [self.delegate player:self didStopPlayFile:self.fileURL];
-        }
     }
 }
 
@@ -103,11 +93,16 @@
     }
     
     PlayerStatus previous = _status;
+    _status = status;
     PlayerStatus current = _status;
-    [self.delegate player:self didChangePlayerStatusFrom:previous to:current];
+    
+    if ([self.delegate respondsToSelector:@selector(player:didChangePlayerStatusFrom:to:)]) {
+        [self.delegate player:self didChangePlayerStatusFrom:previous to:current];
+    }
 }
 
 - (void)rtcLocalAudioMixingStateDidChanged:(AgoraAudioMixingStateCode)state errorCode:(AgoraAudioMixingErrorCode)errorCode {
+    printf("");
     if ((!self.fileURL && state != AgoraAudioMixingStateFailed)
         && [self.delegate respondsToSelector:@selector(player:didOccurError:)]) {
         NSError *error = [[NSError alloc] initWithDomain:@"Player url nil" code:-1 userInfo:nil];

@@ -7,50 +7,38 @@
 //
 
 import UIKit
+import RxSwift
+import RxRelay
 
 class MusicCell: UITableViewCell {
     @IBOutlet weak var tagImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var singerLabel: UILabel!
     
-    weak var underline: CALayer? = nil
-    
     var isPlaying: Bool = false {
         didSet {
-            self.contentView.backgroundColor = isPlaying ? UIColor(hexString: "#0088EB") : .white
-            self.nameLabel.textColor = isPlaying ? .white : UIColor(hexString: "#333333")
-            self.singerLabel.textColor = isPlaying ? .white : UIColor(hexString: "#666666")
-            self.underline?.isHidden = isPlaying
+            self.contentView.backgroundColor = isPlaying ? UIColor(hexString: "#0088EB") : UIColor(hexString: "#161D27")
+            self.nameLabel.textColor = isPlaying ? UIColor(hexString: "#FFFFFF") : UIColor(hexString: "#EEEEEE")
+            self.singerLabel.textColor = isPlaying ? UIColor(hexString: "#FFFFFF") : UIColor(hexString: "#9BA2AB")
         }
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        let color = UIColor(hexString: "#D8D8D8")
-        let x: CGFloat = 15.0
-        let width = UIScreen.main.bounds.width - (x * 2)
-        self.underline = contentView.containUnderline(color,
-                                                      x: x,
-                                                      width: width)
     }
 }
 
-class MusicViewController: UITableViewController {
+class MusicViewController: RxTableViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var musicLinkLabel: UILabel!
+    
+    let list = BehaviorRelay(value: [Music]())
     
     var playingImage = UIImage(named: "icon-pause")
     var pauseImage = UIImage(named: "icon-play")
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let color = UIColor(hexString: "#D8D8D8")
-        let x: CGFloat = 15.0
-        let width = UIScreen.main.bounds.width - (x * 2)
-        self.titleLabel.containUnderline(color,
-                                         x: x,
-                                         width: width)
-        
         self.titleLabel.text = NSLocalizedString("BGM")
         
         self.tableView.rowHeight = 58.0
@@ -61,7 +49,7 @@ class MusicViewController: UITableViewController {
         let content = (music + link) as NSString
         let attrContent = NSMutableAttributedString(string: (content as String))
         
-        attrContent.addAttributes([.foregroundColor: UIColor(hexString: "#333333"),
+        attrContent.addAttributes([.foregroundColor: UIColor(hexString: "#999999"),
                                    .font: UIFont.systemFont(ofSize: 12)],
                                   range: NSRange(location: 0, length: music.count))
         
@@ -70,11 +58,19 @@ class MusicViewController: UITableViewController {
                                   range: NSRange(location: music.count, length: link.count))
         
         musicLinkLabel.attributedText = attrContent
-        musicLinkLabel.backgroundColor = UIColor(hexString: "#EEEEEE")
+        musicLinkLabel.backgroundColor = UIColor(hexString: "#0A0F17")
         musicLinkLabel.cornerRadius(4)
         musicLinkLabel.layer.masksToBounds = true
         
         tableView.delegate = nil
         tableView.dataSource = nil
+        
+        list.bind(to: tableView.rx.items(cellIdentifier: "MusicCell",
+                                         cellType: MusicCell.self)) { [unowned self] (index, music, cell) in
+                                            cell.tagImageView.image = music.isPlaying ? self.playingImage : self.pauseImage
+                                            cell.isPlaying = music.isPlaying
+                                            cell.nameLabel.text = music.name
+                                            cell.singerLabel.text = music.singer
+        }.disposed(by: bag)
     }
 }

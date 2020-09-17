@@ -8,7 +8,7 @@
 
 #import "MediaDevice.h"
 
-@interface MediaDevice ()
+@interface MediaDevice () <RTCMediaDeviceDelegate>
 @property (nonatomic, strong) Player *player;
 @end
 

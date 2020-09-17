@@ -662,6 +662,9 @@
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="hexTextColor" value="#EEEEEE"/>
+                            </userDefinedRuntimeAttributes>
                         </label>
                         <view key="tableFooterView" contentMode="scaleToFill" id="1XK-fd-MpF">
                             <rect key="frame" x="0.0" y="164" width="414" height="84"/>
@@ -681,6 +684,9 @@
                                 <constraint firstItem="XHn-kX-gIV" firstAttribute="top" secondItem="1XK-fd-MpF" secondAttribute="top" constant="20" id="IRx-tj-0JB"/>
                                 <constraint firstAttribute="bottom" secondItem="XHn-kX-gIV" secondAttribute="bottom" constant="20" id="Jmc-uK-6Li"/>
                             </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#161D27"/>
+                            </userDefinedRuntimeAttributes>
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MusicCell" rowHeight="58" id="79U-95-Pzf" customClass="MusicCell" customModule="AgoraVoice" customModuleProvider="target">
@@ -704,7 +710,7 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                             <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="hexTextColor" value="#333333"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="hexTextColor" value="#EEEEEE"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ksw-lT-3m8">
@@ -713,7 +719,7 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                             <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="hexTextColor" value="#666666"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="hexTextColor" value="#9BA2AB"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                     </subviews>
@@ -725,6 +731,9 @@
                                         <constraint firstItem="hq8-zl-H38" firstAttribute="centerY" secondItem="a8q-ge-mD2" secondAttribute="centerY" id="sAR-R1-Jih"/>
                                         <constraint firstAttribute="bottom" secondItem="ksw-lT-3m8" secondAttribute="bottom" constant="8" id="xgq-E0-9Cj"/>
                                     </constraints>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#161D27"/>
+                                    </userDefinedRuntimeAttributes>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="nameLabel" destination="YQS-EE-GMB" id="caa-W3-suf"/>
@@ -733,6 +742,9 @@
                                 </connections>
                             </tableViewCell>
                         </prototypes>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#161D27"/>
+                        </userDefinedRuntimeAttributes>
                     </tableView>
                     <connections>
                         <outlet property="musicLinkLabel" destination="XHn-kX-gIV" id="NXo-UC-Ixe"/>
@@ -1063,7 +1075,7 @@
             <objects>
                 <viewController id="tmg-g8-Dzq" customClass="AECollectionViewController" customModule="AgoraVoice" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ITb-Xg-pqY">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="505"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="723"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="HuX-1B-uuV">
@@ -1183,7 +1195,7 @@
             <objects>
                 <viewController id="eD6-Ga-vfj" customClass="ElectronicMusicViewController" customModule="AgoraVoice" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mqz-7Z-uXb">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="505"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="723"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LL6-4t-1CD">

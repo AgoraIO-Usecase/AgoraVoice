@@ -143,7 +143,7 @@ extension LiveViewController {
     // MARK: - Music List
     func musicList() {
         musicVM.refetch()
-        musicVM.isPlaying.subscribe(onNext: { [unowned self] (isPlaying) in
+        musicVM.playerStatus.subscribe(onNext: { [unowned self] (isPlaying) in
 //            self.bottomToolsVC?.musicButton.isSelected = isPlaying
         }).disposed(by: bag)
     }
@@ -356,17 +356,40 @@ extension LiveViewController {
                           animated: true,
                           presentedFrame: presentedFrame)
         
-        musicVM.list.bind(to: musicVC.tableView.rx.items(cellIdentifier: "MusicCell",
-                                                          cellType: MusicCell.self)) { index, music, cell in
-                                                            cell.tagImageView.image = music.isPlaying ? musicVC.playingImage : musicVC.pauseImage
-                                                            cell.isPlaying = music.isPlaying
-                                                            cell.nameLabel.text = music.name
-                                                            cell.singerLabel.text = music.singer
-        }.disposed(by: bag)
+        musicVM.list.bind(to: musicVC.list).disposed(by: musicVC.bag)
         
-        musicVC.tableView.rx.itemSelected.subscribe(onNext: { [unowned self] (index) in
-            self.musicVM.listSelectedIndex = index.row
-        }).disposed(by: bag)
+//        musicVM.list.bind(to: musicVC.tableView.rx.items(cellIdentifier: "MusicCell",
+//                                                          cellType: MusicCell.self)) { index, music, cell in
+//                                                            cell.tagImageView.image = music.isPlaying ? musicVC.playingImage : musicVC.pauseImage
+//                                                            cell.isPlaying = music.isPlaying
+//                                                            cell.nameLabel.text = music.name
+//                                                            cell.singerLabel.text = music.singer
+//        }.disposed(by: bag)
+        
+        musicVC.tableView.rx.modelSelected(Music.self).subscribe(onNext: { [unowned self] (music) in
+            if let last = self.musicVM.lastMusic {
+                
+                if last == music {
+                    if music.isPlaying {
+                        self.musicVM.pause(music: music)
+                    } else {
+                        self.musicVM.resume(music: music)
+                    }
+                } else {
+                    self.musicVM.stop()
+                    
+                    self.musicVM.play(music: music)
+                }
+                
+                
+            } else {
+                self.musicVM.play(music: music)
+            }
+        }).disposed(by: musicVC.bag)
+        
+//        musicVC.tableView.rx.itemSelected.subscribe(onNext: { [unowned self] (index) in
+//            self.musicVM.listSelectedIndex = index.row
+//        }).disposed(by: musicVC.bag)
     }
     
     // MARK: - ExtensionFunctions
