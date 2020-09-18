@@ -38,7 +38,7 @@ class GiftCell: UICollectionViewCell {
     }
 }
 
-class GiftViewController: UIViewController {
+class GiftViewController: RxViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var confirmButton: UIButton!

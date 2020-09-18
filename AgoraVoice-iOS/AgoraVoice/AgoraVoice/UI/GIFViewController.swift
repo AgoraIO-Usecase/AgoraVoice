@@ -9,7 +9,7 @@
 import UIKit
 import FLAnimatedImage
 
-class GIFViewController: UIViewController {
+class GIFViewController: RxViewController {
     @IBOutlet weak var imageView: FLAnimatedImageView!
     
     private var currentRepeatCount = 0

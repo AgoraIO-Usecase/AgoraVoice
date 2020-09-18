@@ -13,21 +13,25 @@ import RxRelay
 
 class LiveSession: NSObject {
     var type: LiveType
-    
     var roomManager: EduClassroomManager
-    
     var room: BehaviorRelay<Room>
     var userService: EduUserService?
     
     //
-    var end = PublishRelay<()>()
+    let end = PublishRelay<()>()
+    
+    // Statistic
+    let sessionReport = BehaviorRelay(value: RTCStatistics(type: .local(RTCStatistics.Local(stats: AgoraChannelStats()))))
     
     // User
-    var userList = BehaviorRelay(value: [LiveRole]())
-    var userJoined = PublishRelay<[LiveRole]>()
-    var userLeft = PublishRelay<[LiveRole]>()
+    let userList = BehaviorRelay(value: [LiveRole]())
+    let userJoined = PublishRelay<[LiveRole]>()
+    let userLeft = PublishRelay<[LiveRole]>()
     
     // Stream
+    let streamList = BehaviorRelay(value: [LiveStream]())
+    let streamJoined = PublishRelay<LiveStream>()
+    let streamLeft = PublishRelay<LiveStream>()
     
     // Message
     var chatMessage = PublishRelay<(user: LiveRole, message: String)>()
@@ -43,6 +47,9 @@ class LiveSession: NSObject {
         self.type = .chatRoom
         super.init()
         manager.delegate = self
+        let channelDelegateConfiguration = RTCChannelDelegateConfig()
+        channelDelegateConfiguration.statisticsReportDelegate = self
+        RTCManager.share().setChannelDelegateWith(channelDelegateConfiguration, channelId: room.roomId)
     }
     
     static func create(roomName: String, backgroundIndex:Int, success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
@@ -86,6 +93,8 @@ class LiveSession: NSObject {
         
         let options = EduClassroomJoinOptions(userName: userName, role: eduRole)
         roomManager.joinClassroom(options, success: { [unowned self] (userService) in
+            (userService as! EduTeacherService).delegate = self
+            
             self.roomManager.getUserList(with: .teacher, from: 0, to: 1, success: { [unowned self] (list) in
                 guard let owner = [LiveRole](list: list).first else {
                     if let fail = fail {
@@ -152,6 +161,49 @@ extension LiveSession {
     }
 }
 
+fileprivate extension LiveSession {
+    func addNewStream(eduStream: EduStream) {
+        let stream = LiveStream(eduStream: eduStream)
+        var new = streamList.value
+        new.append(stream)
+        streamList.accept(new)
+        
+        streamJoined.accept(stream)
+    }
+    
+    func removeStream(eduStream: EduStream) {
+        let index = streamList.value.firstIndex { (stream) -> Bool in
+            return eduStream.streamUuid == stream.streamId
+        }
+        
+        guard let tIndex = index else {
+            return
+        }
+        
+        var new = streamList.value
+        let left = new[tIndex]
+        new.remove(at: tIndex)
+        streamList.accept(new)
+        
+        streamLeft.accept(left)
+    }
+    
+    func updateStream(eduStream: EduStream) {
+        let index = streamList.value.firstIndex { (stream) -> Bool in
+            return eduStream.streamUuid == stream.streamId
+        }
+        
+        guard let tIndex = index else {
+            return
+        }
+        
+        var new = streamList.value
+        let stream = LiveStream(eduStream: eduStream)
+        new[tIndex] = stream
+        streamList.accept(new)
+    }
+}
+
 extension LiveSession: EduClassroomDelegate {
     // User
     func classroom(_ classroom: EduClassroom, remoteUsersInit users: [EduUser]) {
@@ -203,21 +255,27 @@ extension LiveSession: EduClassroomDelegate {
     
     // Stream
     func classroom(_ classroom: EduClassroom, remoteStreamsInitAdded streams: [EduStream]) {
-        
+        for item in streams {
+            addNewStream(eduStream: item)
+        }
     }
     
     func classroom(_ classroom: EduClassroom, remoteStreamsAdded events: [EduStreamEvent]) {
-//        for item in events {
-//            item.modifiedStream.userInfo
-//        }
+        for item in events {
+            addNewStream(eduStream: item.modifiedStream)
+        }
     }
     
     func classroom(_ classroom: EduClassroom, remoteStreamsUpdated events: [EduStreamEvent]) {
-        
+        for item in events {
+            updateStream(eduStream: item.modifiedStream)
+        }
     }
     
     func classroom(_ classroom: EduClassroom, remoteStreamsRemoved events: [EduStreamEvent]) {
-        
+        for item in events {
+            removeStream(eduStream: item.modifiedStream)
+        }
     }
     
     // Room
@@ -234,6 +292,28 @@ extension LiveSession: EduClassroomDelegate {
     
     func classroom(_ classroom: EduClassroom, remoteUserPropertiesUpdated users: [EduUser]) {
         
+    }
+}
+
+extension LiveSession: EduTeacherDelegate {
+    func localStreamAdded(_ event: EduStreamEvent) {
+        
+    }
+    
+    func localStreamRemoved(_ event: EduStreamEvent) {
+        
+    }
+    
+    func localStreamUpdated(_ event: EduStreamEvent) {
+        
+    }
+}
+
+extension LiveSession: RTCStatisticsReportDelegate {
+    func rtcReportRtcStats(_ stats: AgoraChannelStats) {
+        var new = self.sessionReport.value
+        new.updateChannelStats(stats)
+        sessionReport.accept(new)
     }
 }
 
@@ -270,5 +350,30 @@ fileprivate extension Array where Element == LiveRole {
         }
         
         self = array
+    }
+}
+
+fileprivate extension LiveStream {
+    convenience init(eduStream: EduStream) {
+        var type: LiveRoleType
+        switch eduStream.userInfo.role {
+        case .teacher:
+            type = .owner
+        case .student:
+            type = .broadcaster
+        default:
+            fatalError()
+        }
+         
+        let info = BasicUserInfo(userId: eduStream.userInfo.userUuid,
+                                 name: eduStream.userInfo.userName)
+        
+        let user = LiveRoleItem(type: type,
+                                info: info,
+                                agUId: eduStream.streamUuid)
+        
+        self.init(streamId: eduStream.streamUuid,
+                  hasAudio: eduStream.hasAudio,
+                  owner: user)
     }
 }

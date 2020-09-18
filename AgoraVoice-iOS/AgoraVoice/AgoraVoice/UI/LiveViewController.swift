@@ -56,7 +56,7 @@ extension LiveViewController {
         liveSession.customMessage.bind(to: userListVM.message).disposed(by: bag)
         
         // gift
-       // liveSession.customMessage.bind(to: giftVM.message).disposed(by: bag)
+        liveSession.customMessage.bind(to: giftVM.message).disposed(by: bag)
         
         // background
         liveSession.customMessage.bind(to: backgroundVM.message).disposed(by: bag)
@@ -175,39 +175,6 @@ extension LiveViewController {
             self.liveSession.updateLocalAudioStream(isOn: isOn.boolValue)
         }).disposed(by: bag)
     }
-    
-    // MARK: - Live Session
-//    func liveSession(_ session: LiveSession) {
-//        session.end.subscribe(onNext: { [weak self] (_) in
-//            guard let strongSelf = self else {
-//                return
-//            }
-//
-//            strongSelf.leave()
-//
-//            if let vc = strongSelf.presentedViewController {
-//                vc.dismiss(animated: false, completion: nil)
-//            }
-//
-//            strongSelf.showAlert(NSLocalizedString("Live_End")) { [weak self] (_) in
-//                guard let strongSelf = self else {
-//                    return
-//                }
-//                strongSelf.dimissSelf()
-//            }
-//        }).disposed(by: bag)
-//    }
-//
-//    func liveRole(_ session: LiveSession) {
-//        let role = session.role
-//
-//        role.subscribe(onNext: { [unowned self] (local) in
-//            self.deviceVM.camera = (local.type == .audience) ? .off : .on
-//            self.deviceVM.mic = (local.type == .audience) ? .off : .on
-//            self.hiddenMaskView()
-//            self.bottomToolsVC?.perspective = local.type
-//        }).disposed(by: bag)
-//    }
 }
 
 // MARK: - View
@@ -219,7 +186,7 @@ extension LiveViewController {
             return
         }
         
-//        bottomToolsVC.liveType = liveSession.type
+        bottomToolsVC.liveType = liveSession.type
         bottomToolsVC.liveType = .chatRoom
         bottomToolsVC.tintColor = tintColor
         
@@ -357,15 +324,7 @@ extension LiveViewController {
                           presentedFrame: presentedFrame)
         
         musicVM.list.bind(to: musicVC.list).disposed(by: musicVC.bag)
-        
-//        musicVM.list.bind(to: musicVC.tableView.rx.items(cellIdentifier: "MusicCell",
-//                                                          cellType: MusicCell.self)) { index, music, cell in
-//                                                            cell.tagImageView.image = music.isPlaying ? musicVC.playingImage : musicVC.pauseImage
-//                                                            cell.isPlaying = music.isPlaying
-//                                                            cell.nameLabel.text = music.name
-//                                                            cell.singerLabel.text = music.singer
-//        }.disposed(by: bag)
-        
+                
         musicVC.tableView.rx.modelSelected(Music.self).subscribe(onNext: { [unowned self] (music) in
             if let last = self.musicVM.lastMusic {
                 
@@ -377,19 +336,12 @@ extension LiveViewController {
                     }
                 } else {
                     self.musicVM.stop()
-                    
                     self.musicVM.play(music: music)
                 }
-                
-                
             } else {
                 self.musicVM.play(music: music)
             }
         }).disposed(by: musicVC.bag)
-        
-//        musicVC.tableView.rx.itemSelected.subscribe(onNext: { [unowned self] (index) in
-//            self.musicVM.listSelectedIndex = index.row
-//        }).disposed(by: musicVC.bag)
     }
     
     // MARK: - ExtensionFunctions
@@ -410,7 +362,7 @@ extension LiveViewController {
         let presentedFrame = CGRect(x: 0,
                                     y: y,
                                     width: UIScreen.main.bounds.width,
-                                    height: UIScreen.main.bounds.height)
+                                    height: presenetedHeight)
         self.presentChild(extensionVC,
                           animated: true,
                           presentedFrame: presentedFrame)
@@ -446,9 +398,7 @@ extension LiveViewController {
             self.hiddenMaskView()
             self.presentMusicList()
         }).disposed(by: extensionVC.bag)
-        
     }
-    
     
     // MARK: - Real Data
     func presentRealData() {
@@ -475,7 +425,7 @@ extension LiveViewController {
         
         dataVC.closeButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.hiddenMaskView()
-        }).disposed(by: bag)
+        }).disposed(by: dataVC.bag)
     }
     
     // MARK: - Gift List
@@ -501,10 +451,10 @@ extension LiveViewController {
         
         giftVC.selectGift.subscribe(onNext: { [unowned self] (gift) in
             self.hiddenMaskView()
-            self.giftVM?.present(gift: gift) {
+            self.giftVM?.present(gift: gift) { [unowned self] in
                 self.showAlert(message: NSLocalizedString("Present_Gift_Fail"))
             }
-        }).disposed(by: bag)
+        }).disposed(by: giftVC.bag)
     }
     
     // MARK: - GIF

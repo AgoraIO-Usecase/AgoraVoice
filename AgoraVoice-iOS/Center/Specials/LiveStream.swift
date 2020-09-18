@@ -9,5 +9,13 @@
 import UIKit
 
 class LiveStream: NSObject {
+    var streamId: String
+    var hasAudio: Bool
+    var owner: LiveRole
     
+    init(streamId: String, hasAudio: Bool, owner: LiveRole) {
+        self.streamId = streamId
+        self.hasAudio = hasAudio
+        self.owner = owner
+    }
 }

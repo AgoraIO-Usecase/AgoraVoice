@@ -77,6 +77,7 @@ class CreateLiveViewController: MaskViewController {
             let vc = segue.destination as! ChatRoomViewController
             vc.liveSession = liveSession
             vc.backgroundVM.selectedIndex.accept(selectedImageIndex)
+            vc.giftVM = GiftVM(room: liveSession.room.value)
         default:
             break
         }

@@ -77,31 +77,11 @@ struct URLGroup {
         return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/user/\(userId)"
     }
     
-    static func receivedGift(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/gift"
-    }
-    
-    static func pkLive(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/pk"
-    }
-    
-    static func pkLiveBattle(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/pk/notice"
+    static func presentGift(roomId: String) -> String {
+        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/gift"
     }
     
     static func multiHosts(userId: String, roomId: String) -> String {
         return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/users/\(userId)/seats"
-    }
-    
-    static func goodsPurchase(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/commerce/purchase"
-    }
-    
-    static func goodsList(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/commerce/products"
-    }
-    
-    static func goodsOnShelf(roomId: String, state: Int, goodsId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath +  "room/\(roomId)/commerce/products/\(goodsId)/state/\(state)"
     }
 }

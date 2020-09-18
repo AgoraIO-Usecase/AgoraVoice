@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RealDataViewController: UIViewController {
+class RealDataViewController: RxViewController {
     @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
     

@@ -126,6 +126,7 @@ class LiveListViewController: MaskViewController {
                     return
             }
             vc.liveSession = session
+            vc.giftVM = GiftVM(room: session.room.value)
         default:
             break
         }

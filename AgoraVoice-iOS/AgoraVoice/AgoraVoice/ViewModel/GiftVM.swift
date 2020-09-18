@@ -105,7 +105,7 @@ class GiftVM: CustomObserver {
         let local = Center.shared().centerProvideLocalUser()
         
         let event = RequestEvent(name: "present-gift")
-        let url = URLGroup.receivedGift(roomId: room.roomId)
+        let url = URLGroup.presentGift(roomId: room.roomId)
         let task = RequestTask(event: event,
                                type: .http(.post, url: url),
                                timeout: .medium,
@@ -120,29 +120,8 @@ class GiftVM: CustomObserver {
 
 private extension GiftVM {
     func observe() {
-//        let rtm = Center.shared().centerProvideRTMHelper()
-//        rtm.addReceivedChannelMessage(observer: self.address) { [weak self] (json) in
-//            guard let cmd = try? json.getEnum(of: "cmd", type: ALChannelMessage.AType.self) else {
-//                return
-//            }
-//            guard cmd == .gift else  {
-//                return
-//            }
-//            
-//            let data = try json.getDataObject()
-//            let gift = try data.getEnum(of: "giftId", type: Gift.self)
-//            let userId = try data.getStringValue(of: "fromUserId")
-//            let userName = try data.getStringValue(of: "fromUserName")
-//            
-//            guard let user = Center.shared().liveSession?.role.value else {
-//                return
-//            }
-//            
-//            guard user.info.userId != userId else {
-//                return
-//            }
-//            
-//            self?.received.accept((userName, gift))
-//        }
+        message.subscribe(onNext: { (json) in
+            
+        }).disposed(by: bag)
     }
 }
