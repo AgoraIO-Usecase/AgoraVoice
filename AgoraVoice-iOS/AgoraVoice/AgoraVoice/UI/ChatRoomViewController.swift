@@ -85,9 +85,12 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         case "BottomToolsViewController":
             let vc = segue.destination as! BottomToolsViewController
             vc.liveType = .chatRoom
-            vc.perspective = .owner
             vc.tintColor = tintColor
             bottomToolsVC = vc
+            
+            liveSession.localRole.subscribe(onNext: { [unowned vc] (local) in
+                vc.perspective = local.type
+            }).disposed(by: vc.bag)
         default:
             break
         }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BottomToolsViewController: UIViewController {
+class BottomToolsViewController: RxViewController {
     lazy var textInput = TextInputView()
     lazy var belcantoButton = UIButton()
     lazy var soundEffectButton = UIButton()

@@ -79,6 +79,8 @@ class LiveListViewController: MaskViewController {
     private let monitor = NetworkMonitor(host: "www.apple.com")
     private var timer: Timer?
     
+    var type: LiveType!
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         guard let navigation = self.navigationController as? CSNavigationController else {
@@ -204,8 +206,17 @@ private extension LiveListViewController {
         collectionView.rx.modelSelected(Room.self).subscribe(onNext: { [unowned self] (room) in
             self.showHUD()
             
-            let session = LiveSession(room: room)
-            session.join(role: .audience, success: { [unowned self] (session) in
+            let local = Center.shared().centerProvideLocalUser().info.value
+            var localType: LiveRoleType
+            
+            if room.owner.info == local {
+                localType = .owner
+            } else {
+                localType = .audience
+            }
+            
+            let session = LiveSession(room: room, role: localType)
+            session.join(success: { [unowned self] (session) in
                 self.hiddenHUD()
                 self.performSegue(withIdentifier: "ChatRoomViewController", sender: session)
             }) { [unowned self] (_) in

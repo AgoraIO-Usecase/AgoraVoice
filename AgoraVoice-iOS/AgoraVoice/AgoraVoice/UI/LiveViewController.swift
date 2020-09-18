@@ -61,6 +61,7 @@ extension LiveViewController {
         // background
         liveSession.customMessage.bind(to: backgroundVM.message).disposed(by: bag)
         
+        // end
         liveSession.end.subscribe(onNext: { [unowned self] in
             self.dimissSelf()
         }).disposed(by: bag)
@@ -143,9 +144,6 @@ extension LiveViewController {
     // MARK: - Music List
     func musicList() {
         musicVM.refetch()
-        musicVM.playerStatus.subscribe(onNext: { [unowned self] (isPlaying) in
-//            self.bottomToolsVC?.musicButton.isSelected = isPlaying
-        }).disposed(by: bag)
     }
     
     // MARK: - Net Monitor
@@ -352,7 +350,7 @@ extension LiveViewController {
                                                           class: ExtensionViewController.self,
                                                           on: "Popover")
         extensionVC.liveType = liveSession.type
-        extensionVC.perspective = .owner
+        extensionVC.perspective = liveSession.localRole.value.type
         extensionVC.view.cornerRadius(10)
         
         let height: CGFloat = 171.0
@@ -366,6 +364,12 @@ extension LiveViewController {
         self.presentChild(extensionVC,
                           animated: true,
                           presentedFrame: presentedFrame)
+        
+        liveSession.localRole.subscribe(onNext: { [unowned extensionVC] (local) in
+            if extensionVC.perspective != local.type {
+                self.hiddenMaskView()
+            }
+        }).disposed(by: extensionVC.bag)
         
         extensionVC.dataButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.hiddenMaskView()
@@ -410,9 +414,9 @@ extension LiveViewController {
         
         dataVC.view.cornerRadius(10)
         
-//        session.rtcChannelReport?.subscribe(onNext: { [weak dataVC] (info) in
-//            dataVC?.infoLabel.text = info.description()
-//        }).disposed(by: bag)
+        liveSession.sessionReport.subscribe(onNext: { [unowned dataVC] (statistics) in
+            dataVC.infoLabel.text = statistics.description(onlyAudio: true)
+        }).disposed(by: dataVC.bag)
         
         let leftSpace: CGFloat = 15.0
         let y: CGFloat = UIScreen.main.heightOfSafeAreaTop + 157.0

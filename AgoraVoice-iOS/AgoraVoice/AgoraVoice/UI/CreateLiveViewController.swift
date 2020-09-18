@@ -190,7 +190,7 @@ private extension CreateLiveViewController {
         
         tempSession = session
         
-        session.join(role: .owner, success: { [unowned self] (session) in
+        session.join(success: { [unowned self] (session) in
             self.hiddenHUD()
             
             switch session.type {

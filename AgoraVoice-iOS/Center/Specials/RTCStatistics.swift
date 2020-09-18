@@ -71,10 +71,10 @@ struct RTCStatistics {
         }
     }
     
-    func description() -> String {
+    func description(onlyAudio: Bool = false) -> String {
         var full: String
         switch type {
-        case .local(let info):  full = localDescription(info: info)
+        case .local(let info):  full = localDescription(info: info, onlyAudio: onlyAudio)
         case .remote(let info): full = remoteDescription(info: info)
         }
         return full

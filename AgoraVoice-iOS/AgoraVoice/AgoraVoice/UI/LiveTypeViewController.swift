@@ -77,7 +77,13 @@ class LiveTypeViewController: RxViewController {
         
         switch segueId {
         case "LiveListViewController":
+            guard let type = sender as? LiveType else {
+                assert(false)
+                return
+            }
+            
             let vc = segue.destination as! LiveListViewController
+            vc.type = type
             setupBackButton()
             setupNavigationBarColor()
             setupNavigationTitleFontColor()

@@ -11,7 +11,7 @@ import AlamoClient
 import RxSwift
 import RxRelay
 
-class LiveSession: NSObject {
+class LiveSession: RxObject {
     var type: LiveType
     var roomManager: EduClassroomManager
     var room: BehaviorRelay<Room>
@@ -19,6 +19,9 @@ class LiveSession: NSObject {
     
     //
     let end = PublishRelay<()>()
+    
+    // Local role
+    let localRole: BehaviorRelay<LiveRole>
     
     // Statistic
     let sessionReport = BehaviorRelay(value: RTCStatistics(type: .local(RTCStatistics.Local(stats: AgoraChannelStats()))))
@@ -37,19 +40,23 @@ class LiveSession: NSObject {
     var chatMessage = PublishRelay<(user: LiveRole, message: String)>()
     var customMessage = PublishRelay<[String: Any]>()
     
-    init(room: Room) {
+    init(room: Room, role: LiveRoleType) {
         let configuration = EduClassroomConfig(roomName: room.name,
                                                roomUuid: room.roomId,
                                                scene: .typeBig)
         let manager = EduClassroomManager(roomConfig: configuration)
+        self.type = .chatRoom
         self.roomManager = manager
         self.room = BehaviorRelay(value: room)
-        self.type = .chatRoom
+        let userInfo = Center.shared().centerProvideLocalUser().info.value
+        let localRole = LiveRoleItem(type: role, info: userInfo, agUId: "0")
+        self.localRole = BehaviorRelay(value: localRole)
         super.init()
         manager.delegate = self
         let channelDelegateConfiguration = RTCChannelDelegateConfig()
         channelDelegateConfiguration.statisticsReportDelegate = self
-        RTCManager.share().setChannelDelegateWith(channelDelegateConfiguration, channelId: room.roomId)
+        RTCManager.share().setChannelDelegateWith(channelDelegateConfiguration,
+                                                  channelId: room.roomId)
     }
     
     static func create(roomName: String, backgroundIndex:Int, success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
@@ -68,7 +75,7 @@ class LiveSession: NSObject {
             let local = Center.shared().centerProvideLocalUser().info.value
             let owner = LiveRoleItem(type: .owner, info: local, agUId: "0")
             let room = Room(name: roomName, roomId: roomId, personCount: 0, owner: owner)
-            let session = LiveSession(room: room)
+            let session = LiveSession(room: room, role: .owner)
             
             if let success = success {
                 success(session)
@@ -81,10 +88,10 @@ class LiveSession: NSObject {
         }
     }
     
-    func join(role: LiveRoleType, success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
+    func join(success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
         let userName = Center.shared().centerProvideLocalUser().info.value.name
         var eduRole: EduRoleType
-        switch role {
+        switch localRole.value.type {
         case .owner:
             eduRole = .teacher
         case .broadcaster, .audience:
@@ -110,13 +117,13 @@ class LiveSession: NSObject {
                                     personCount: Int(eduRoom.roomState.onlineUserCount),
                                     owner: owner)
                     self.room.accept(room)
+                    }, failure: nil)
                 }, failure: nil)
-            }, failure: nil)
             
             // all users
             self.roomManager.getFullUserList(success: { [unowned self] (list) in
                 self.userList.accept([LiveRole](list: list))
-            }, failure: nil)
+                }, failure: nil)
             
             self.userService = userService
             
@@ -150,10 +157,23 @@ extension LiveSession {
             configuration.enableMicrophone = isOn
             configuration.enableCamera = false
             self.userService?.startOrUpdateLocalStream(configuration,
-                                                       success: { (stream) in
+                                                       success: { [unowned self] (stream) in
                                                         
-            }, failure: { (error) in
-                
+                                                        if isOn {
+                                                            self.userService?.publishStream(stream, success: {
+                                                                
+                                                            }, failure: { (error) in
+                                                                
+                                                            })
+                                                        } else {
+                                                            self.userService?.unpublishStream(stream, success: {
+                                                                
+                                                            }, failure: { (error) in
+                                                                
+                                                            })
+                                                        }
+                }, failure: { (error) in
+                    
             })
         }) { (error) in
             
@@ -167,6 +187,12 @@ fileprivate extension LiveSession {
         var new = streamList.value
         new.append(stream)
         streamList.accept(new)
+        
+        if stream.owner.info == localRole.value.info {
+            var local = localRole.value
+            local.agUId = stream.streamId
+            localRole.accept(local)
+        }
         
         streamJoined.accept(stream)
     }
@@ -202,6 +228,31 @@ fileprivate extension LiveSession {
         new[tIndex] = stream
         streamList.accept(new)
     }
+    
+    func observer() {
+        // Determine whether local user is a broadcaster or an audience
+        // If local user is owner, no need this judgment
+        streamList.subscribe(onNext: { [unowned self] (list) in
+            guard self.localRole.value.type == .owner else {
+                return
+            }
+            
+            var local = self.localRole.value
+            var hasLocalStream = false
+            
+            for item in list where item.streamId == local.agUId {
+                hasLocalStream = true
+                break
+            }
+            
+            let newType: LiveRoleType = (hasLocalStream ? .broadcaster : .audience)
+            
+            if newType != local.type {
+                local.type = newType
+                self.localRole.accept(local)
+            }
+        }).disposed(by: bag)
+    }
 }
 
 extension LiveSession: EduClassroomDelegate {
@@ -209,13 +260,13 @@ extension LiveSession: EduClassroomDelegate {
     func classroom(_ classroom: EduClassroom, remoteUsersInit users: [EduUser]) {
         roomManager.getFullUserList(success: { [unowned self] (list) in
             self.userList.accept([LiveRole](list: list))
-        }, failure: nil)
+            }, failure: nil)
     }
     
     func classroom(_ classroom: EduClassroom, remoteUsersJoined users: [EduUser]) {
         roomManager.getFullUserList(success: { [unowned self] (list) in
             self.userList.accept([LiveRole](list: list))
-        }, failure: nil)
+            }, failure: nil)
         
         userJoined.accept([LiveRole](list: users))
     }
@@ -227,7 +278,7 @@ extension LiveSession: EduClassroomDelegate {
     func classroom(_ classroom: EduClassroom, remoteUsersLeft events: [EduUserEvent]) {
         roomManager.getFullUserList(success: { [unowned self] (list) in
             self.userList.accept([LiveRole](list: list))
-        }, failure: nil)
+            }, failure: nil)
         
         var list = [LiveRole]()
         
@@ -297,15 +348,18 @@ extension LiveSession: EduClassroomDelegate {
 
 extension LiveSession: EduTeacherDelegate {
     func localStreamAdded(_ event: EduStreamEvent) {
-        
+        var new = localRole.value
+        new.agUId = event.modifiedStream.streamUuid
+        localRole.accept(new)
+        addNewStream(eduStream: event.modifiedStream)
     }
     
     func localStreamRemoved(_ event: EduStreamEvent) {
-        
+        removeStream(eduStream: event.modifiedStream)
     }
     
     func localStreamUpdated(_ event: EduStreamEvent) {
-        
+        updateStream(eduStream: event.modifiedStream)
     }
 }
 
@@ -364,7 +418,7 @@ fileprivate extension LiveStream {
         default:
             fatalError()
         }
-         
+        
         let info = BasicUserInfo(userId: eduStream.userInfo.userUuid,
                                  name: eduStream.userInfo.userName)
         
