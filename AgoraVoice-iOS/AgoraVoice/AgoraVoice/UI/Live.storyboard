@@ -63,7 +63,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mD5-5G-Jjd">
-                                <rect key="frame" x="0.0" y="51.5" width="43" height="43"/>
+                                <rect key="frame" x="15" y="51.5" width="43" height="43"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="43" id="oxs-kN-Vpa"/>
                                     <constraint firstAttribute="height" constant="43" id="pvY-PJ-13b"/>
@@ -104,7 +104,7 @@
                             <constraint firstItem="WYm-Mx-v3T" firstAttribute="leading" secondItem="RtG-sd-BY7" secondAttribute="leading" id="KD2-0k-8n6"/>
                             <constraint firstItem="jXq-i0-QOp" firstAttribute="leading" secondItem="RtG-sd-BY7" secondAttribute="leading" id="Mdj-Rr-yOL"/>
                             <constraint firstItem="QC5-sr-fAc" firstAttribute="top" secondItem="iK6-cS-GtW" secondAttribute="bottom" constant="46" id="Mfg-SK-hvx"/>
-                            <constraint firstItem="mD5-5G-Jjd" firstAttribute="leading" secondItem="RtG-sd-BY7" secondAttribute="leading" id="Rq9-QV-7wR"/>
+                            <constraint firstItem="mD5-5G-Jjd" firstAttribute="leading" secondItem="RtG-sd-BY7" secondAttribute="leading" constant="15" id="Rq9-QV-7wR"/>
                             <constraint firstItem="f6M-WM-TTo" firstAttribute="top" secondItem="jXq-i0-QOp" secondAttribute="bottom" constant="15" id="bf5-fR-52g"/>
                             <constraint firstItem="iK6-cS-GtW" firstAttribute="top" secondItem="cLp-JY-t6F" secondAttribute="bottom" constant="15" id="d8E-ph-Aaa"/>
                             <constraint firstItem="RtG-sd-BY7" firstAttribute="trailing" secondItem="f6M-WM-TTo" secondAttribute="trailing" id="eNr-5L-fsX"/>

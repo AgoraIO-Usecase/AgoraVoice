@@ -51,8 +51,8 @@ struct Room {
         let ownerJson = try dic.getDictionaryValue(of: "ownerUserInfo")
         self.owner = try LiveRoleItem(dic: ownerJson)
         
+        let index = Int(try dic.getStringValue(of: "backgroundImage"))!
         let images = Center.shared().centerProvideImagesHelper()
-        let index = Int(Int64(self.roomId)! % Int64(images.roomPreviews.count))
         self.image = images.getRoomPreview(index: index)
     }
 }

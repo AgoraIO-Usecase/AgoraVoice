@@ -46,7 +46,6 @@ class CreateLiveViewController: MaskViewController {
     @IBOutlet weak var randomButton: UIButton!
     
     var liveType: LiveType = .chatRoom
-    var backgroundVM = RoomBackgroundVM()
     var selectedImageIndex = 0
     var tempSession: LiveSession?
     
@@ -76,8 +75,11 @@ class CreateLiveViewController: MaskViewController {
         case "ChatRoomViewController":
             let vc = segue.destination as! ChatRoomViewController
             vc.liveSession = liveSession
-            vc.backgroundVM.selectedIndex.accept(selectedImageIndex)
+            vc.backgroundVM = RoomBackgroundVM(room: liveSession.room.value)
             vc.giftVM = GiftVM(room: liveSession.room.value)
+            
+            vc.multiHostsVM = MultiHostsVM(room: liveSession.room.value)
+            vc.seatsVM = LiveSeatsVM(room: liveSession.room.value)
         default:
             break
         }

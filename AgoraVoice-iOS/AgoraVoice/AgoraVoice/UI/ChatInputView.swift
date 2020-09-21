@@ -23,10 +23,11 @@ class ChatInputView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.white
-        textView.backgroundColor = UIColor(hexString: "#E3E3E3")
+        backgroundColor = UIColor(hexString: "#1B1C1D")
+        textView.backgroundColor = UIColor(hexString: "#272829")
         textView.returnKeyType = .done
-        self.addSubview(textView)
+        textView.textColor = .white
+        addSubview(textView)
     }
     
     required init?(coder: NSCoder) {

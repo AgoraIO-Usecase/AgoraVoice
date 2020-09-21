@@ -18,7 +18,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
     // LiveViewController
     var liveSession: LiveSession!
     var tintColor = UIColor(hexString: "#000000-0.3")
-    var chatWidthLimit: CGFloat = UIScreen.main.bounds.width
+    var chatWidthLimit: CGFloat = UIScreen.main.bounds.width - 60
     
     // ViewController
     var giftAudienceVC: GiftAudienceViewController?
@@ -42,13 +42,18 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
     
     // ViewModel
     var userListVM = LiveUserListVM()
-    var giftVM: GiftVM!
     var musicVM = MusicVM()
     var chatVM = ChatVM()
     var deviceVM = MediaDeviceVM()
     var audioEffectVM = AudioEffectVM()
     var monitor = NetworkMonitor(host: "www.apple.com")
-    var backgroundVM = RoomBackgroundVM()
+    
+    var backgroundVM: RoomBackgroundVM!
+    var giftVM: GiftVM!
+    
+    // multi hosts & live seats
+    var multiHostsVM: MultiHostsVM!
+    var seatsVM: LiveSeatsVM!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -68,6 +73,9 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         netMonitor()
         bottomTools()
         chatInput()
+        
+        multiHosts()
+        liveSeats()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -82,6 +90,9 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
             vc.seatCommands.subscribe(onNext: { [unowned self] (seatCommands) in
                 self.presentCommandCollection(seatCommands: seatCommands)
             }).disposed(by: vc.bag)
+        case "GiftAudienceViewController":
+            let vc = segue.destination as! GiftAudienceViewController
+            self.giftAudienceVC = vc
         case "BottomToolsViewController":
             let vc = segue.destination as! BottomToolsViewController
             vc.liveType = .chatRoom
@@ -91,6 +102,10 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
             liveSession.localRole.subscribe(onNext: { [unowned vc] (local) in
                 vc.perspective = local.type
             }).disposed(by: vc.bag)
+        case "ChatViewController":
+            let vc = segue.destination as! ChatViewController
+            vc.cellColor = tintColor
+            self.chatVC = vc
         default:
             break
         }
@@ -103,6 +118,7 @@ private extension ChatRoomViewController {
         personCountView.backgroundColor = tintColor
         
         closeButton.rx.tap.subscribe(onNext: { [unowned self] in
+            self.liveSession.leave()
             self.dimissSelf()
         }).disposed(by: bag)
         
@@ -143,5 +159,15 @@ private extension ChatRoomViewController {
         let frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: height)
         
         presentChild(vc, animated: true, presentedFrame: frame)
+    }
+}
+
+private extension ChatRoomViewController {
+    func multiHosts() {
+        
+    }
+    
+    func liveSeats() {
+        
     }
 }

@@ -35,7 +35,7 @@
 		A750EC5C2500B661006E50E3 /* ImageSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC5B2500B661006E50E3 /* ImageSelectViewController.swift */; };
 		A750EC5E2500D0D8006E50E3 /* LiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC5D2500D0D8006E50E3 /* LiveViewController.swift */; };
 		A750EC622500D1C5006E50E3 /* MusicVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC5F2500D1C5006E50E3 /* MusicVM.swift */; };
-		A750EC632500D1C5006E50E3 /* LiveSeatVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC602500D1C5006E50E3 /* LiveSeatVM.swift */; };
+		A750EC632500D1C5006E50E3 /* LiveSeatsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC602500D1C5006E50E3 /* LiveSeatsVM.swift */; };
 		A750EC642500D1C5006E50E3 /* MediaDeviceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC612500D1C5006E50E3 /* MediaDeviceVM.swift */; };
 		A750EC662500D5B5006E50E3 /* GiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC652500D5B5006E50E3 /* GiftViewController.swift */; };
 		A750EC692500D730006E50E3 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC682500D730006E50E3 /* ChatRoomViewController.swift */; };
@@ -137,7 +137,7 @@
 		A750EC5B2500B661006E50E3 /* ImageSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSelectViewController.swift; sourceTree = "<group>"; };
 		A750EC5D2500D0D8006E50E3 /* LiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveViewController.swift; sourceTree = "<group>"; };
 		A750EC5F2500D1C5006E50E3 /* MusicVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicVM.swift; sourceTree = "<group>"; };
-		A750EC602500D1C5006E50E3 /* LiveSeatVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSeatVM.swift; sourceTree = "<group>"; };
+		A750EC602500D1C5006E50E3 /* LiveSeatsVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSeatsVM.swift; sourceTree = "<group>"; };
 		A750EC612500D1C5006E50E3 /* MediaDeviceVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaDeviceVM.swift; sourceTree = "<group>"; };
 		A750EC652500D5B5006E50E3 /* GiftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiftViewController.swift; sourceTree = "<group>"; };
 		A750EC682500D730006E50E3 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
@@ -367,7 +367,7 @@
 		A75C6FBC24FCD709003E5AD9 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				A750EC602500D1C5006E50E3 /* LiveSeatVM.swift */,
+				A750EC602500D1C5006E50E3 /* LiveSeatsVM.swift */,
 				A750EC612500D1C5006E50E3 /* MediaDeviceVM.swift */,
 				A750EC5F2500D1C5006E50E3 /* MusicVM.swift */,
 				A750EC492500B1E6006E50E3 /* ChatVM.swift */,
@@ -726,7 +726,7 @@
 				A75C702D24FCEF1E003E5AD9 /* DeviceAssistant.swift in Sources */,
 				A75C6FF924FCE41F003E5AD9 /* DataExtension.swift in Sources */,
 				A75C6FF624FCE41F003E5AD9 /* TypeAlias.swift in Sources */,
-				A750EC632500D1C5006E50E3 /* LiveSeatVM.swift in Sources */,
+				A750EC632500D1C5006E50E3 /* LiveSeatsVM.swift in Sources */,
 				A750EC7A25061647006E50E3 /* AudioEffect.swift in Sources */,
 				A75C6FFE24FCE41F003E5AD9 /* NetworkMonitor.swift in Sources */,
 				A75C6FCE24FCD986003E5AD9 /* ToastView.swift in Sources */,

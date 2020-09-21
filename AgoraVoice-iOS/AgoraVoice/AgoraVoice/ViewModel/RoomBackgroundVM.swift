@@ -12,11 +12,13 @@ import RxRelay
 import AlamoClient
 
 class RoomBackgroundVM: CustomObserver {
+    var room: Room
     let selectedIndex = BehaviorRelay<Int>(value: 0)
     let selectedImage = BehaviorRelay<UIImage>(value: Center.shared().centerProvideImagesHelper().roomBackgrounds.first!)
     let fail = PublishRelay<String>()
     
-    override init() {
+    init(room: Room) {
+        self.room = room
         super.init()
         observe()
     }
@@ -27,9 +29,9 @@ class RoomBackgroundVM: CustomObserver {
         
         let client = Center.shared().centerProvideRequestHelper()
     
-        let parameters: StringAnyDic = ["": 0]
+        let parameters: StringAnyDic = ["backgroundImage": "\(index)"]
 
-        let url = ""
+        let url = URLGroup.roomBackground(roomId: room.roomId)
         let event = RequestEvent(name: "update-room-background")
         let task = RequestTask(event: event,
                                type: .http(.post, url: url),
@@ -37,8 +39,11 @@ class RoomBackgroundVM: CustomObserver {
                                header: ["token": Keys.UserToken],
                                parameters: parameters)
         
-        client.request(task: task, success: ACResponse.json({ (_) in
-            
+        client.request(task: task, success: ACResponse.json({ [weak self] (_) in
+            guard let strongSelf = self else {
+                return
+            }
+            strongSelf.selectedIndex.accept(index)
         })) { [weak self] (_) -> RetryOptions in
             guard let strongSelf = self else {
                 return .resign
@@ -52,8 +57,14 @@ class RoomBackgroundVM: CustomObserver {
 
 private extension RoomBackgroundVM {
     func observe() {
-        message.subscribe(onNext: { (json) in
-            
+        message.subscribe(onNext: { [unowned self] (json) in
+            do {
+                let basic = try json.getDictionaryValue(of: "basic")
+                let index = try basic.getStringValue(of: "backgroundImage")
+                self.selectedIndex.accept(Int(index)!)
+            } catch {
+                self.log(error: error)
+            }
         }).disposed(by: bag)
         
         selectedIndex.map { (index) -> UIImage in

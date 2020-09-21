@@ -69,8 +69,8 @@ struct URLGroup {
         return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/user/page"
     }
     
-    static func liveSeatCommand(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/seat"
+    static func liveSeatStatus(roomId: String) -> String {
+        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/seats"
     }
     
     static func userCommand(userId: String, roomId: String) -> String {
@@ -83,5 +83,9 @@ struct URLGroup {
     
     static func multiHosts(userId: String, roomId: String) -> String {
         return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/users/\(userId)/seats"
+    }
+    
+    static func roomBackground(roomId: String) -> String {
+        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)"
     }
 }

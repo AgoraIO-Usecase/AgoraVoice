@@ -29,20 +29,21 @@ protocol LiveViewController where Self: MaskViewController {
     
     // View Model
     var userListVM: LiveUserListVM {get set}
-    var giftVM: GiftVM! {get set}
     var musicVM: MusicVM {get set}
     var chatVM: ChatVM {get set}
     var deviceVM: MediaDeviceVM {get set}
     var audioEffectVM: AudioEffectVM {get set}
     var monitor: NetworkMonitor {get set}
-    var backgroundVM: RoomBackgroundVM {get set}
+    
+    var backgroundVM: RoomBackgroundVM! {get set}
+    var giftVM: GiftVM! {get set}
 }
 
 // MARK: VM
 extension LiveViewController {
     func syncLiveSessionInfo() {
         liveSession.chatMessage.subscribe(onNext: { [unowned self] (userMessage) in
-            let chat = Chat(name: userMessage.user.info.name,
+            let chat = Chat(name: userMessage.user.info.name + ": ",
                             text: userMessage.message,
                             widthLimit: self.chatWidthLimit)
             self.chatVM.newMessages([chat])
@@ -84,15 +85,15 @@ extension LiveViewController {
             userListVM.giftList.bind(to: giftAudienceVC.list).disposed(by: bag)
         }
         
-        userListVM.total.subscribe(onNext: { [unowned self] (total) in
-            self.personCountView.label.text = "\(total)"
-        }).disposed(by: bag)
+        userListVM.total.map { (total) -> String in
+            return "\(total)"
+        }.bind(to: self.personCountView.label.rx.text).disposed(by: bag)
         
         userListVM.joined.subscribe(onNext: { [unowned self] (list) in
             let chats = list.map { (user) -> Chat in
                 let chat = Chat(name: user.info.name,
                                 text: " \(NSLocalizedString("Join_Live_Room"))",
-                          widthLimit: self.chatVM.chatWidthLimit)
+                          widthLimit: self.chatWidthLimit)
                 return chat
             }
 
@@ -103,7 +104,7 @@ extension LiveViewController {
             let chats = list.map { (user) -> Chat in
                 let chat = Chat(name: user.info.name,
                                 text: " \(NSLocalizedString("Leave_Live_Room"))",
-                          widthLimit: self.chatVM.chatWidthLimit)
+                          widthLimit: self.chatWidthLimit)
                 return chat
             }
 
@@ -120,9 +121,7 @@ extension LiveViewController {
     
     // MARK: - Background
     func background() {
-        backgroundVM.selectedImage.subscribe(onNext: { [unowned self] (image) in
-            self.backgroundImageView.image = image
-        }).disposed(by: bag)
+        backgroundVM.selectedImage.bind(to: backgroundImageView.rx.image).disposed(by: bag)
     }
     
     // MARK: - Gift
@@ -130,7 +129,7 @@ extension LiveViewController {
         giftVM?.received.subscribe(onNext: { [unowned self] (userGift) in
             let chat = Chat(name: userGift.userName,
                             text: " " + NSLocalizedString("Give_Owner_A_Gift"),
-                            image: userGift.gift.image, widthLimit: self.chatVM.chatWidthLimit)
+                            image: userGift.gift.image, widthLimit: self.chatWidthLimit)
             self.chatVM.newMessages([chat])
             
             guard userGift.gift.hasGIF else {
@@ -217,6 +216,8 @@ extension LiveViewController {
     
     // MARK: - Chat Input
     func chatInput() {
+        chatInputView.textView.textColor = .white
+        
         chatInputView.textView.rx.controlEvent([.editingDidEndOnExit])
             .subscribe(onNext: { [unowned self] in
                 self.hiddenMaskView()
@@ -230,7 +231,7 @@ extension LiveViewController {
                 self.chatInputView.textView.text = nil
                 self.liveSession.userService?.sendRoomChatMessage(withText: text, success: { [unowned self] in
                     let local = Center.shared().centerProvideLocalUser().info.value
-                    let chat = Chat(name: local.name,
+                    let chat = Chat(name: local.name + ": ",
                                     text: text,
                                     widthLimit: self.chatWidthLimit)
                     self.chatVM.newMessages([chat])

@@ -1,5 +1,5 @@
 //
-//  LiveSeatVM.swift
+//  LiveSeatsVM.swift
 //  AgoraLive
 //
 //  Created by CavanSu on 2020/3/26.
@@ -58,39 +58,29 @@ struct LiveSeat {
         }
     }
 }
-/*
-class LiveSeatVM: CustomObserver {
+
+class LiveSeatsVM: CustomObserver {
     private var room: Room
-    private(set) var list: BehaviorRelay<[LiveSeat]>
+    let list = BehaviorRelay(value: [LiveSeat]())
     
-    init(room: Room, list: [StringAnyDic]) throws {
+    init(room: Room) {
         self.room = room
-        
-        var tempList = [LiveSeat]()
-        
-        for item in list {
-            let seat = try LiveSeat(dic: item)
-            tempList.append(seat)
-        }
-        
-        self.list = BehaviorRelay(value: tempList.sorted(by: {$0.index < $1.index}))
-        
         super.init()
         observe()
     }
     
     deinit {
         #if !RELEASE
-        print("deinit LiveSeatVM")
+        print("deinit LiveSeatsVM")
         #endif
     }
     
     func update(state: SeatState, index: Int, fail: ErrorCompletion) {
         let client = Center.shared().centerProvideRequestHelper()
         let task = RequestTask(event: RequestEvent(name: "multi-seat-state \(state)"),
-                               type: .http(.post, url: URLGroup.liveSeatCommand(roomId: room.roomId)),
+                               type: .http(.post, url: URLGroup.liveSeatStatus(roomId: room.roomId)),
                                timeout: .medium,
-                               header: ["token": ALKeys.ALUserToken],
+                               header: ["token": Keys.UserToken],
                                parameters: ["no": index, "state": state.rawValue])
         client.request(task: task) { (error) -> RetryOptions in
             if let fail = fail {
@@ -101,25 +91,35 @@ class LiveSeatVM: CustomObserver {
     }
 }
 
-private extension LiveSeatVM {
+private extension LiveSeatsVM {
     func observe() {
-        let rtm = Center.shared().centerProvideRTMHelper()
-        
-        rtm.addReceivedChannelMessage(observer: self.address) { [weak self] (json) in
-            guard let cmd = try? json.getEnum(of: "cmd", type: ALChannelMessage.AType.self),
-                cmd == .seatList,
-                let strongSelf = self else {
-                return
-            }
+        message.subscribe(onNext: { (json) in
             
-            let list = try json.getListValue(of: "data")
-            var tempList = [LiveSeat]()
-            for item in list {
-                let seat = try LiveSeat(dic: item)
-                tempList.append(seat)
-            }
-            strongSelf.list.accept(tempList.sorted(by: {$0.index < $1.index}))
-        }
+        }).disposed(by: bag)
+        
+//        rtm.addReceivedChannelMessage(observer: self.address) { [weak self] (json) in
+//            guard let cmd = try? json.getEnum(of: "cmd", type: ALChannelMessage.AType.self),
+//                cmd == .seatList,
+//                let strongSelf = self else {
+//                return
+//            }
+//
+//            /*
+//             for item in list {
+//                 let seat = try LiveSeat(dic: item)
+//                 tempList.append(seat)
+//             }
+//
+//             self.list = BehaviorRelay(value: tempList.sorted(by: {$0.index < $1.index}))
+//             */
+//
+//            let list = try json.getListValue(of: "data")
+//            var tempList = [LiveSeat]()
+//            for item in list {
+//                let seat = try LiveSeat(dic: item)
+//                tempList.append(seat)
+//            }
+//            strongSelf.list.accept(tempList.sorted(by: {$0.index < $1.index}))
+//        }
     }
 }
-*/

@@ -70,6 +70,10 @@ class LiveUserListVM: CustomObserver {
 
 private extension LiveUserListVM {
     func observe() {
+        list.map { (list) -> Int in
+            return list.count
+        }.bind(to: total).disposed(by: bag)
+        
         message.subscribe(onNext: { (json) in
             
         }).disposed(by: bag)

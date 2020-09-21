@@ -38,7 +38,7 @@ class LiveSession: RxObject {
     
     // Message
     var chatMessage = PublishRelay<(user: LiveRole, message: String)>()
-    var customMessage = PublishRelay<[String: Any]>()
+    var customMessage = BehaviorRelay(value: [String: Any]())
     
     init(room: Room, role: LiveRoleType) {
         let configuration = EduClassroomConfig(roomName: room.name,
@@ -52,11 +52,14 @@ class LiveSession: RxObject {
         let localRole = LiveRoleItem(type: role, info: userInfo, agUId: "0")
         self.localRole = BehaviorRelay(value: localRole)
         super.init()
+        
         manager.delegate = self
         let channelDelegateConfiguration = RTCChannelDelegateConfig()
         channelDelegateConfiguration.statisticsReportDelegate = self
         RTCManager.share().setChannelDelegateWith(channelDelegateConfiguration,
                                                   channelId: room.roomId)
+        
+        observer()
     }
     
     static func create(roomName: String, backgroundIndex:Int, success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
@@ -100,7 +103,11 @@ class LiveSession: RxObject {
         
         let options = EduClassroomJoinOptions(userName: userName, role: eduRole)
         roomManager.joinClassroom(options, success: { [unowned self] (userService) in
-            (userService as! EduTeacherService).delegate = self
+            if let service = userService as? EduTeacherService {
+                service.delegate = self
+            } else if let service = userService as? EduStudentService {
+                service.delegate = self
+            }
             
             self.roomManager.getUserList(with: .teacher, from: 0, to: 1, success: { [unowned self] (list) in
                 guard let owner = [LiveRole](list: list).first else {
@@ -117,15 +124,22 @@ class LiveSession: RxObject {
                                     personCount: Int(eduRoom.roomState.onlineUserCount),
                                     owner: owner)
                     self.room.accept(room)
-                    }, failure: nil)
+                    
+                    if let json = eduRoom.roomProperties as? [String: Any] {
+                        self.customMessage.accept(json)
+                    }
                 }, failure: nil)
+            }, failure: nil)
             
             // all users
             self.roomManager.getFullUserList(success: { [unowned self] (list) in
                 self.userList.accept([LiveRole](list: list))
-                }, failure: nil)
+            }, failure: nil)
             
             self.userService = userService
+            
+            let role = self.localRole.value
+            self.localRole.accept(role)
             
             if let success = success {
                 success(self)
@@ -152,6 +166,10 @@ class LiveSession: RxObject {
 
 extension LiveSession {
     func updateLocalAudioStream(isOn: Bool) {
+        guard let _ = userService else {
+            return
+        }
+        
         roomManager.getLocalUser(success: { [unowned self] (local) in
             let configuration = EduStreamConfig(streamUuid: local.streamUuid)
             configuration.enableMicrophone = isOn
@@ -233,7 +251,7 @@ fileprivate extension LiveSession {
         // Determine whether local user is a broadcaster or an audience
         // If local user is owner, no need this judgment
         streamList.subscribe(onNext: { [unowned self] (list) in
-            guard self.localRole.value.type == .owner else {
+            guard self.localRole.value.type != .owner else {
                 return
             }
             
@@ -250,6 +268,15 @@ fileprivate extension LiveSession {
             if newType != local.type {
                 local.type = newType
                 self.localRole.accept(local)
+            }
+        }).disposed(by: bag)
+        
+        localRole.subscribe(onNext: { [unowned self] (local) in
+            switch local.type {
+            case .owner, .broadcaster:
+                self.updateLocalAudioStream(isOn: true)
+            case .audience:
+                self.updateLocalAudioStream(isOn: false)
             }
         }).disposed(by: bag)
     }
@@ -339,6 +366,9 @@ extension LiveSession: EduClassroomDelegate {
     
     func classroomPropertyUpdated(_ classroom: EduClassroom) {
         // Mutit hosts &&
+        if let json = classroom.roomProperties as? [String: Any] {
+            customMessage.accept(json)
+        }
     }
     
     func classroom(_ classroom: EduClassroom, remoteUserPropertiesUpdated users: [EduUser]) {
@@ -346,7 +376,7 @@ extension LiveSession: EduClassroomDelegate {
     }
 }
 
-extension LiveSession: EduTeacherDelegate {
+extension LiveSession: EduTeacherDelegate, EduStudentDelegate {
     func localStreamAdded(_ event: EduStreamEvent) {
         var new = localRole.value
         new.agUId = event.modifiedStream.streamUuid

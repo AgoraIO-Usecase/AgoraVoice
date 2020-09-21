@@ -40,6 +40,7 @@ class BottomToolsViewController: RxViewController {
         super.viewDidLoad()
         view.backgroundColor = .clear
         
+        textInput.textColor = .white
         textInput.returnKeyType = .done
         textInput.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Live_Text_Input_Placeholder"),
                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor(hexString: "#CCCCCC"),
