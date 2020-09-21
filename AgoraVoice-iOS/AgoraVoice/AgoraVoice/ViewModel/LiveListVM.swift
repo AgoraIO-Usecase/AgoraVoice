@@ -36,7 +36,7 @@ struct Room {
         self.name = try dic.getStringValue(of: "roomName")
         self.roomId = try dic.getStringValue(of: "roomId")
         
-        if let personCount = try? dic.getIntValue(of: "currentUsers") {
+        if let personCount = try? dic.getIntValue(of: "onlineUsers") {
             self.personCount = personCount
         } else {
             self.personCount = 0

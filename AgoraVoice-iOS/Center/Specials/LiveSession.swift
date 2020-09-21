@@ -17,11 +17,15 @@ class LiveSession: RxObject {
     var room: BehaviorRelay<Room>
     var userService: EduUserService?
     
+    let fail = PublishRelay<String>()
+    
     //
     let end = PublishRelay<()>()
     
     // Local role
     let localRole: BehaviorRelay<LiveRole>
+    // Local stream
+    let localStream = BehaviorRelay<LiveStream?>(value: nil)
     
     // Statistic
     let sessionReport = BehaviorRelay(value: RTCStatistics(type: .local(RTCStatistics.Local(stats: AgoraChannelStats()))))
@@ -305,7 +309,7 @@ extension LiveSession: EduClassroomDelegate {
     func classroom(_ classroom: EduClassroom, remoteUsersLeft events: [EduUserEvent]) {
         roomManager.getFullUserList(success: { [unowned self] (list) in
             self.userList.accept([LiveRole](list: list))
-            }, failure: nil)
+        }, failure: nil)
         
         var list = [LiveRole]()
         
@@ -365,7 +369,7 @@ extension LiveSession: EduClassroomDelegate {
     }
     
     func classroomPropertyUpdated(_ classroom: EduClassroom) {
-        // Mutit hosts &&
+        // Mutit hosts && Live Seats
         if let json = classroom.roomProperties as? [String: Any] {
             customMessage.accept(json)
         }
@@ -381,14 +385,25 @@ extension LiveSession: EduTeacherDelegate, EduStudentDelegate {
         var new = localRole.value
         new.agUId = event.modifiedStream.streamUuid
         localRole.accept(new)
+        
+        let stream = LiveStream(streamId: event.modifiedStream.streamUuid,
+                                hasAudio: event.modifiedStream.hasAudio,
+                                owner: new)
+        localStream.accept(stream)
         addNewStream(eduStream: event.modifiedStream)
     }
     
     func localStreamRemoved(_ event: EduStreamEvent) {
+        localStream.accept(nil)
         removeStream(eduStream: event.modifiedStream)
     }
     
     func localStreamUpdated(_ event: EduStreamEvent) {
+        let role = localRole.value
+        let stream = LiveStream(streamId: event.modifiedStream.streamUuid,
+                                hasAudio: event.modifiedStream.hasAudio,
+                                owner: role)
+        localStream.accept(stream)
         updateStream(eduStream: event.modifiedStream)
     }
 }
@@ -398,6 +413,50 @@ extension LiveSession: RTCStatisticsReportDelegate {
         var new = self.sessionReport.value
         new.updateChannelStats(stats)
         sessionReport.accept(new)
+    }
+}
+
+extension EduUserService {
+    func muteOther(stream: LiveStream, fail: Completion = nil) {
+        let eduUser = EduBaseUser()
+        eduUser.setValue("\(stream.owner.info.userId)", forKey: "userUuid")
+        eduUser.setValue("\(stream.owner.info.name)", forKey: "userUuid")
+        eduUser.setValue("\(1)", forKey: "role")
+        
+        let eduStream = EduStream(streamUuid: stream.streamId,
+                                  streamName: "",
+                                  sourceType: .none,
+                                  hasVideo: false,
+                                  hasAudio: false,
+                                  user: eduUser)
+        publishStream(eduStream, success: {
+            
+        }) { (_) in
+            if let fail = fail {
+                fail()
+            }
+        }
+    }
+    
+    func ummuteOther(stream: LiveStream, fail: Completion = nil) {
+        let eduUser = EduBaseUser()
+        eduUser.setValue("\(stream.owner.info.userId)", forKey: "userUuid")
+        eduUser.setValue("\(stream.owner.info.name)", forKey: "userUuid")
+        eduUser.setValue("\(1)", forKey: "role")
+        
+        let eduStream = EduStream(streamUuid: stream.streamId,
+                                  streamName: "",
+                                  sourceType: .none,
+                                  hasVideo: false,
+                                  hasAudio: true,
+                                  user: eduUser)
+        publishStream(eduStream, success: {
+            
+        }) { (_) in
+            if let fail = fail {
+                fail()
+            }
+        }
     }
 }
 
@@ -438,7 +497,7 @@ fileprivate extension Array where Element == LiveRole {
 }
 
 fileprivate extension LiveStream {
-    convenience init(eduStream: EduStream) {
+    init(eduStream: EduStream) {
         var type: LiveRoleType
         switch eduStream.userInfo.role {
         case .teacher:

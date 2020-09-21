@@ -121,7 +121,7 @@ class GiftVM: CustomObserver {
 private extension GiftVM {
     func observe() {
         message.subscribe(onNext: { (json) in
-            
+            print("json: \(json)")
         }).disposed(by: bag)
     }
 }

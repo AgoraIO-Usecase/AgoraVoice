@@ -367,17 +367,16 @@
 		A75C6FBC24FCD709003E5AD9 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				A750EC602500D1C5006E50E3 /* LiveSeatsVM.swift */,
+				A7FFA32624FF959D00C66569 /* LiveListVM.swift */,
+				A750EC4A2500B1E6006E50E3 /* MineVM.swift */,
 				A750EC612500D1C5006E50E3 /* MediaDeviceVM.swift */,
 				A750EC5F2500D1C5006E50E3 /* MusicVM.swift */,
 				A750EC492500B1E6006E50E3 /* ChatVM.swift */,
 				A750EC462500B1E6006E50E3 /* GiftVM.swift */,
 				A750EC472500B1E6006E50E3 /* LiveUserListVM.swift */,
-				A750EC4A2500B1E6006E50E3 /* MineVM.swift */,
-				A750EC482500B1E6006E50E3 /* MultiHostsVM.swift */,
-				A7FFA32624FF959D00C66569 /* LiveListVM.swift */,
 				A750EC7425060347006E50E3 /* AudioEffectVM.swift */,
 				A75FA9102511E576001B3AFC /* RoomBackgroundVM.swift */,
+				A75FA91425188199001B3AFC /* ChatRoom */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -510,6 +509,15 @@
 				A75C70F424FE29AF003E5AD9 /* UserNameViewController.swift */,
 			);
 			name = Mine;
+			sourceTree = "<group>";
+		};
+		A75FA91425188199001B3AFC /* ChatRoom */ = {
+			isa = PBXGroup;
+			children = (
+				A750EC482500B1E6006E50E3 /* MultiHostsVM.swift */,
+				A750EC602500D1C5006E50E3 /* LiveSeatsVM.swift */,
+			);
+			path = ChatRoom;
 			sourceTree = "<group>";
 		};
 		A7FFA32124FF6BC200C66569 /* SharedViews */ = {

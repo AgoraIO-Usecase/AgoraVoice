@@ -67,9 +67,12 @@ class MultiHostsVM: CustomObserver {
     var applicationByRejected = PublishRelay<Application>()
     var applicationByAccepted = PublishRelay<Application>()
     
-    //
+    // notification of role change
     var audienceBecameBroadcaster = PublishRelay<LiveRole>()
     var broadcasterBecameAudience = PublishRelay<LiveRole>()
+    
+    // fail
+    let fail = PublishRelay<String>()
     
     init(room: Room) {
         self.room = room
@@ -126,7 +129,7 @@ extension MultiHostsVM {
                 }, fail: fail)
     }
     
-    func forceEndBroadcasting(user: LiveRole, on seatIndex: Int, success: Completion = nil, fail: ErrorCompletion = nil) {
+    func forceEndWith(user: LiveRole, on seatIndex: Int, success: Completion = nil, fail: ErrorCompletion = nil) {
         request(seatIndex: seatIndex,
                 type: 7,
                 userId: "\(user.info.userId)",
@@ -225,8 +228,22 @@ private extension MultiHostsVM {
                 try success(json)
             }
         })) { [weak self] (error) -> RetryOptions in
-            guard let _ = self else {
+            guard let strongSelf = self else {
                 return .resign
+            }
+            
+            switch type {
+            case 1: strongSelf.fail.accept("send invitation fail")
+            case 2: strongSelf.fail.accept("send application fail")
+            case 3: strongSelf.fail.accept("owner rejects application fail")
+            case 4: strongSelf.fail.accept("audience rejects invitation fail")
+            case 5: strongSelf.fail.accept("owner accepts application fail")
+            case 6: strongSelf.fail.accept("audience accepts invitation fail")
+            case 7: strongSelf.fail.accept("owner force broadcaster to end fail")
+            case 8: strongSelf.fail.accept("broadcaster end fail")
+            default:
+                assert(false)
+                break
             }
             
             if let fail = fail {

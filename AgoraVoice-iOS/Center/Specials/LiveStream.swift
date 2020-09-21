@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LiveStream: NSObject {
+struct LiveStream {
     var streamId: String
     var hasAudio: Bool
     var owner: LiveRole

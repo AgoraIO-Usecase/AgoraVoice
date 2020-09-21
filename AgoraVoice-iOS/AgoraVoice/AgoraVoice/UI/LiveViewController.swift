@@ -62,9 +62,24 @@ extension LiveViewController {
         // background
         liveSession.customMessage.bind(to: backgroundVM.message).disposed(by: bag)
         
+        // local stream
+        liveSession.localStream.subscribe(onNext: { [unowned self] (stream) in
+            if let stream = stream {
+                self.deviceVM.mic.accept(stream.hasAudio ? .on : .off)
+            } else {
+                self.deviceVM.mic.accept(.off)
+            }
+        }).disposed(by: bag)
+        
         // end
         liveSession.end.subscribe(onNext: { [unowned self] in
-            self.dimissSelf()
+            if let vc = self.presentedViewController {
+                vc.dismiss(animated: false, completion: nil)
+            }
+            
+            self.showAlert(NSLocalizedString("Live_End")) { [unowned self] (_) in
+                self.dimissSelf()
+            }
         }).disposed(by: bag)
     }
     
@@ -552,7 +567,7 @@ extension LiveViewController {
 
 extension LiveViewController {    
     func dimissSelf() {
-        if let _ = self.navigationController?.viewControllers.first as? LiveListViewController {
+        if let _ = self.navigationController?.viewControllers.first as? LiveTypeViewController {
             self.navigationController?.popViewController(animated: true)
         } else {
             self.navigationController?.dismiss(animated: true, completion: nil)

@@ -24,9 +24,9 @@ class SeatButton: UIButton {
     var type: SeatState = .empty {
         didSet {
             switch type {
-            case .empty:            setImage(UIImage(named: "icon-invite")!, for: .normal)
-            case .close:            setImage(UIImage(named: "icon-lock")!, for: .normal)
-            case .normal(let user): setImage(user.info.image, for: .normal)
+            case .empty:              setImage(UIImage(named: "icon-invite")!, for: .normal)
+            case .close:              setImage(UIImage(named: "icon-lock")!, for: .normal)
+            case .normal(let stream): setImage(stream.owner.info.image, for: .normal)
             }
         }
     }
@@ -55,7 +55,7 @@ class SeatButton: UIButton {
 class LiveSeatView: RxView {
     enum Command {
         // 禁麦， 解禁， 封麦，下麦， 解封， 邀请，
-        case ban, unban, close, forceEndBroadcasting, release, invitation
+        case ban, unban, close, forceBroadcasteEnd, release, invitation
         // 申请成为主播， 主播下麦
         case application, endBroadcasting
         
@@ -63,7 +63,7 @@ class LiveSeatView: RxView {
             switch self {
             case .ban:                  return NSLocalizedString("Seat_Ban")
             case .unban:                return NSLocalizedString("Seat_Unban")
-            case .forceEndBroadcasting: return NSLocalizedString("End_Broadcasting")
+            case .forceBroadcasteEnd:   return NSLocalizedString("End_Broadcasting")
             case .close:                return NSLocalizedString("Seat_Close")
             case .release:              return NSLocalizedString("Seat_Release")
             case .invitation:           return NSLocalizedString("Invitation")
@@ -90,6 +90,8 @@ class LiveSeatView: RxView {
         }
     }
     
+    var audioSilenceTag = UIImageView()
+    
     init(index: Int, frame: CGRect) {
         super.init(frame: frame)
         self.index = index
@@ -110,7 +112,7 @@ class LiveSeatView: RxView {
             // owner
             case (.empty, .owner):
                 self.commands.accept([.invitation, .close])
-            case (.normal(let user), .owner):
+            case (.normal(let stream), .owner):
                 break
 //                if user.permission.contains(.mic) {
 //                    self.commands.accept([.ban, .forceEndBroadcasting, .close])
@@ -122,8 +124,8 @@ class LiveSeatView: RxView {
             // broadcaster
             case (.empty, .broadcaster):
                 break
-            case (.normal(let user), .broadcaster):
-                guard user.info == Center.shared().centerProvideLocalUser().info.value else {
+            case (.normal(let stream), .broadcaster):
+                guard stream.owner.info == Center.shared().centerProvideLocalUser().info.value else {
                     return
                 }
                 self.commands.accept([.endBroadcasting])
@@ -142,11 +144,20 @@ class LiveSeatView: RxView {
         //commandButton.type = .close
         
         addSubview(commandButton)
+        
+        audioSilenceTag.image = UIImage(named: "icon-Microphone off")
+        audioSilenceTag.isHidden = true
+        self.addSubview(audioSilenceTag)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         commandButton.frame = bounds
+        
+        audioSilenceTag.frame = CGRect(x: self.bounds.width - 20,
+                                       y: self.bounds.height - 20,
+                                       width: 20,
+                                       height: 20)
     }
 }
 
@@ -183,11 +194,16 @@ class LiveSeatViewController: MaskViewController {
         return BehaviorRelay(value: temp)
     }()
     
-    let userAudioSilence = PublishRelay<LiveRoleItem>()
-    let actionFire = PublishRelay<LiveSeatAction>()
+    //let userAudioSilence = PublishRelay<LiveRoleItem>()
+    //let actionFire = PublishRelay<LiveSeatAction>()
     let seatCommands = PublishRelay<LiveSeatCommands>()
     
-    var perspective: LiveRoleType = .audience
+    var perspective: LiveRoleType = .audience {
+        didSet {
+            let value = seats.value
+            seats.accept(value)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -246,6 +262,12 @@ private extension LiveSeatViewController {
             let view = seatViews[index]
             view.perspective = self.perspective
             view.commandButton.type = item.state
+            
+            if let stream = item.state.stream {
+                view.audioSilenceTag.isHidden = !stream.hasAudio
+            } else {
+                view.audioSilenceTag.isHidden = true
+            }
         }
     }
 }

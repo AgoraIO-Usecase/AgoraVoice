@@ -78,6 +78,7 @@ class LiveListViewController: MaskViewController {
     private let listVM = LiveListVM()
     private let monitor = NetworkMonitor(host: "www.apple.com")
     private var timer: Timer?
+    private var tempLiveSession: LiveSession?
     
     var type: LiveType!
     
@@ -220,6 +221,8 @@ private extension LiveListViewController {
             }
             
             let session = LiveSession(room: room, role: localType)
+            self.tempLiveSession = session
+            
             session.join(success: { [unowned self] (session) in
                 self.hiddenHUD()
                 self.performSegue(withIdentifier: "ChatRoomViewController", sender: session)
