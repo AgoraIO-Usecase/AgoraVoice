@@ -78,7 +78,7 @@ struct URLGroup {
     }
     
     static func presentGift(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/gift"
+        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/gifts"
     }
     
     static func multiHosts(userId: String, roomId: String) -> String {

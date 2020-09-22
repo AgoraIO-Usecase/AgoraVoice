@@ -35,7 +35,7 @@ fi
 
 Plist_Path=../Build/plist/${Export_Plist_File}
 
-cd ../../AgoraLive/
+cd ../../AgoraVoice/
 
 TARGET_FILE=""
 if [ ! -f "Podfile" ];then

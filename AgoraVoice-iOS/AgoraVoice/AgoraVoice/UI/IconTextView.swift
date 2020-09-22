@@ -17,10 +17,6 @@ class IconTextView: UIControl {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.backgroundColor = UIColor(red: 0,
-                                       green: 0,
-                                       blue: 0,
-                                       alpha: 0.4)
         label.textAlignment = .right
         
         self.addSubview(imageView)

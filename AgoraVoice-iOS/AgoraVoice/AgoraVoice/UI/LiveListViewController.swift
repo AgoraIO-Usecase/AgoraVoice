@@ -66,6 +66,7 @@ class RoomCell: UICollectionViewCell {
         roomPersonCountView.imageView.image = UIImage(named: "icon-audience")
         roomPersonCountView.label.textColor = UIColor.white
         roomPersonCountView.label.font = UIFont.systemFont(ofSize: 10)
+        roomPersonCountView.backgroundColor = .clear
         contentView.cornerRadius(7)
     }
 }

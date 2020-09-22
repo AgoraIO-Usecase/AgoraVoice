@@ -140,6 +140,7 @@ class LiveSession: RxObject {
                 self.userList.accept([LiveRole](list: list))
             }, failure: nil)
             
+            // local user
             self.userService = userService
             
             let role = self.localRole.value
