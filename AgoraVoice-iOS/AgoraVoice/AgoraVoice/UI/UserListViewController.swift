@@ -222,9 +222,13 @@ private extension UserListViewController {
                       cellType: UserInvitationListCell.self)) { [unowned self] (index, user, cell) in
                         var buttonState = UserInvitationListCell.InviteButtonState.availableInvite
                         
-                        for item in self.multiHostsVM.invitingUserList.value where user.info.userId == item.info.userId {
-                            buttonState = .inviting
-                            break
+                        if self.showType == .multiHosts {
+                            buttonState = .none
+                        } else {
+                            for item in self.multiHostsVM.invitingUserList.value where user.info.userId == item.info.userId {
+                                buttonState = .inviting
+                                break
+                            }
                         }
                         
                         if user.type != .audience {

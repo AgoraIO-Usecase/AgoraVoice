@@ -258,6 +258,36 @@ private extension ChatRoomViewController {
                           presentedFrame: presentedFrame)
     }
     
+    func presentInvitationList(selected: ((LiveRole) -> Void)? = nil) {
+        self.showMaskView(color: UIColor.clear)
+        
+        let vc = UIStoryboard.initViewController(of: "UserListViewController",
+                                                 class: UserListViewController.self,
+                                                 on: "Popover")
+        
+        vc.userListVM = userListVM
+        vc.multiHostsVM = multiHostsVM
+        vc.showType = .onlyInvitationOfMultiHosts
+        vc.view.cornerRadius(10)
+        
+        let presenetedHeight: CGFloat = 526.0 + UIScreen.main.heightOfSafeAreaTop
+        let y = UIScreen.main.bounds.height - presenetedHeight
+        let presentedFrame = CGRect(x: 0,
+                                    y: y,
+                                    width: UIScreen.main.bounds.width,
+                                    height: presenetedHeight)
+        
+        vc.inviteUser.subscribe(onNext: { (user) in
+            if let selected = selected {
+                selected(user)
+            }
+        }).disposed(by: vc.bag)
+        
+        self.presentChild(vc,
+                          animated: true,
+                          presentedFrame: presentedFrame)
+    }
+    
     func presentCommandCollection(seatCommands: LiveSeatCommands) {
         showMaskView(color: .clear)
         
@@ -383,14 +413,16 @@ private extension ChatRoomViewController {
     func multiHosts() {
         // owner
         multiHostsVM.receivedApplication.subscribe(onNext: { [unowned self] (application) in
-            self.showAlert(message: "\"\(application.initiator.info.name)\" " + NSLocalizedString("Apply_For_Broadcasting"),
-                           action1: NSLocalizedString("Reject"),
-                           action2: NSLocalizedString("Confirm"),
-                           handler1: { [unowned self] (_) in
-                            self.multiHostsVM.reject(application: application)
-            }) { [unowned self] (_) in
-                self.multiHostsVM.accept(application: application)
-            }
+            self.personCountView.needRemind = true
+            
+//            self.showAlert(message: "\"\(application.initiator.info.name)\" " + NSLocalizedString("Apply_For_Broadcasting"),
+//                           action1: NSLocalizedString("Reject"),
+//                           action2: NSLocalizedString("Confirm"),
+//                           handler1: { [unowned self] (_) in
+//                            self.multiHostsVM.reject(application: application)
+//            }) { [unowned self] (_) in
+//                self.multiHostsVM.accept(application: application)
+//            }
         }).disposed(by: bag)
         
         multiHostsVM.invitationByRejected.subscribe(onNext: { [unowned self] (invitation) in
@@ -522,35 +554,5 @@ private extension ChatRoomViewController {
             assert(false)
             return ""
         }
-    }
-    
-    func presentInvitationList(selected: ((LiveRole) -> Void)? = nil) {
-        self.showMaskView(color: UIColor.clear)
-        
-        let vc = UIStoryboard.initViewController(of: "UserListViewController",
-                                                 class: UserListViewController.self,
-                                                 on: "Popover")
-        
-        vc.userListVM = userListVM
-        vc.multiHostsVM = multiHostsVM
-        vc.showType = .onlyInvitationOfMultiHosts
-        vc.view.cornerRadius(10)
-        
-        let presenetedHeight: CGFloat = 526.0 + UIScreen.main.heightOfSafeAreaTop
-        let y = UIScreen.main.bounds.height - presenetedHeight
-        let presentedFrame = CGRect(x: 0,
-                                    y: y,
-                                    width: UIScreen.main.bounds.width,
-                                    height: presenetedHeight)
-        
-        vc.inviteUser.subscribe(onNext: { (user) in
-            if let selected = selected {
-                selected(user)
-            }
-        }).disposed(by: bag)
-        
-        self.presentChild(vc,
-                          animated: true,
-                          presentedFrame: presentedFrame)
     }
 }

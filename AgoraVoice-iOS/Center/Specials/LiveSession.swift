@@ -419,17 +419,10 @@ extension LiveSession: RTCStatisticsReportDelegate {
 
 extension EduUserService {
     func muteOther(stream: LiveStream, fail: Completion = nil) {
-        let eduUser = EduBaseUser()
-        eduUser.setValue("\(stream.owner.info.userId)", forKey: "userUuid")
-        eduUser.setValue("\(stream.owner.info.name)", forKey: "userUuid")
-        eduUser.setValue("\(1)", forKey: "role")
+        var new = stream
+        new.hasAudio = false
+        let eduStream = EduStream(liveStream: new)
         
-        let eduStream = EduStream(streamUuid: stream.streamId,
-                                  streamName: "",
-                                  sourceType: .none,
-                                  hasVideo: false,
-                                  hasAudio: false,
-                                  user: eduUser)
         publishStream(eduStream, success: {
             
         }) { (_) in
@@ -440,18 +433,35 @@ extension EduUserService {
     }
     
     func ummuteOther(stream: LiveStream, fail: Completion = nil) {
-        let eduUser = EduBaseUser()
-        eduUser.setValue("\(stream.owner.info.userId)", forKey: "userUuid")
-        eduUser.setValue("\(stream.owner.info.name)", forKey: "userUuid")
-        eduUser.setValue("\(1)", forKey: "role")
+        var new = stream
+        new.hasAudio = true
+        let eduStream = EduStream(liveStream: new)
         
-        let eduStream = EduStream(streamUuid: stream.streamId,
-                                  streamName: "",
-                                  sourceType: .none,
-                                  hasVideo: false,
-                                  hasAudio: true,
-                                  user: eduUser)
         publishStream(eduStream, success: {
+            
+        }) { (_) in
+            if let fail = fail {
+                fail()
+            }
+        }
+    }
+    
+    func publishNewStream(_ stream: LiveStream, fail: Completion = nil) {
+        let eduStream = EduStream(liveStream: stream)
+        
+        publishStream(eduStream, success: {
+            
+        }) { (_) in
+            if let fail = fail {
+                fail()
+            }
+        }
+    }
+    
+    func unpublishNewStream(_ stream: LiveStream, fail: Completion = nil) {
+        let eduStream = EduStream(liveStream: stream)
+        
+        unpublishStream(eduStream, success: {
             
         }) { (_) in
             if let fail = fail {
@@ -519,5 +529,26 @@ fileprivate extension LiveStream {
         self.init(streamId: eduStream.streamUuid,
                   hasAudio: eduStream.hasAudio,
                   owner: user)
+    }
+}
+
+fileprivate extension EduStream {
+    convenience init(liveStream: LiveStream) {
+        let eduUser = EduBaseUser(userUuid: liveStream.owner.info.userId)
+        eduUser.userName = liveStream.owner.info.name
+        
+        switch liveStream.owner.type {
+        case .owner:
+            eduUser.role = .teacher
+        case .broadcaster, .audience:
+            eduUser.role = .student
+        }
+        
+        self.init(streamUuid: liveStream.streamId,
+                  streamName: "",
+                  sourceType: .none,
+                  hasVideo: false,
+                  hasAudio: liveStream.hasAudio,
+                  user: eduUser)
     }
 }

@@ -40,7 +40,7 @@ fileprivate extension Array where Element == LiveRoleItem {
 
 class LiveUserListVM: CustomObserver {
     var list = BehaviorRelay(value: [LiveRole]())
-    var giftList = BehaviorRelay(value: [LiveRoleItem]())
+    var giftList = BehaviorRelay(value: [LiveRole]())
     var audienceList = BehaviorRelay(value: [LiveRole]())
 
     var joined = PublishRelay<[LiveRole]>()
@@ -74,8 +74,27 @@ private extension LiveUserListVM {
             return list.count
         }.bind(to: total).disposed(by: bag)
         
-        message.subscribe(onNext: { (json) in
+        message.subscribe(onNext: { [unowned self] (json) in
+            guard let giftJson = try? json.getDictionaryValue(of: "gift") else {
+                return
+            }
             
+            do {
+                let ranks = try giftJson.getListValue(of: "ranks")
+                var temp = [LiveRoleItem]()
+                
+                for item in ranks {
+                    let userId = try item.getStringValue(of: "userId")
+                    let userName = try item.getStringValue(of: "userName")
+                    let rank = try item.getIntValue(of: "rank")
+                    let info = BasicUserInfo(userId: userId, name: userName)
+                    let role = LiveRoleItem(type: .audience, info: info, agUId: "0", giftRank: rank)
+                    temp.append(role)
+                }
+                self.giftList.accept(temp.sorted(by: {$0.giftRank > $1.giftRank}))
+            } catch {
+                self.log(error: error)
+            }
         }).disposed(by: bag)
     }
 }

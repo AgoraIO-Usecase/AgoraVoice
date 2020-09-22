@@ -120,8 +120,21 @@ class GiftVM: CustomObserver {
 
 private extension GiftVM {
     func observe() {
-        message.subscribe(onNext: { (json) in
-            print("json: \(json)")
+        message.subscribe(onNext: { [unowned self] (json) in
+            guard let giftJson = try? json.getDictionaryValue(of: "gift") else {
+                return
+            }
+            
+            do {
+                let lastest = try giftJson.getDictionaryValue(of: "lastest")
+                let userName = try lastest.getStringValue(of: "userName")
+                let giftId = try lastest.getStringValue(of: "giftId")
+                let gift = Gift(rawValue: Int(giftId)!)!
+                
+                self.received.accept((userName, gift))
+            } catch {
+                self.log(error: error)
+            }
         }).disposed(by: bag)
     }
 }

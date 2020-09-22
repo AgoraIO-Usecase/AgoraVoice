@@ -133,6 +133,9 @@ extension LiveViewController {
     // MARK: - Background
     func background() {
         backgroundVM.selectedImage.bind(to: backgroundImageView.rx.image).disposed(by: bag)
+        backgroundVM.fail.subscribe(onNext: { [unowned self] (text) in
+            self.showTextToast(text: text)
+        }).disposed(by: bag)
     }
     
     // MARK: - Gift

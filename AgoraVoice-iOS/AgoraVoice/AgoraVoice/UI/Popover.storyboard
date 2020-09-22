@@ -893,7 +893,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d1v-zy-aMq" customClass="TabSelectView" customModule="AgoraVoice" customModuleProvider="target">
-                                <rect key="frame" x="10" y="105" width="394" height="48"/>
+                                <rect key="frame" x="0.0" y="105" width="414" height="48"/>
                                 <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="HFJ-2p-dVy"/>
@@ -1044,7 +1044,7 @@
                             <constraint firstItem="w6g-Vf-87n" firstAttribute="centerX" secondItem="h47-HB-z0B" secondAttribute="centerX" id="F2I-Px-wd5"/>
                             <constraint firstItem="w6g-Vf-87n" firstAttribute="top" secondItem="h47-HB-z0B" secondAttribute="bottom" constant="14" id="I1M-8r-nSj"/>
                             <constraint firstItem="d1v-zy-aMq" firstAttribute="centerX" secondItem="h47-HB-z0B" secondAttribute="centerX" id="Ml4-e4-C9n"/>
-                            <constraint firstItem="d1v-zy-aMq" firstAttribute="leading" secondItem="oH5-zo-9Q8" secondAttribute="leading" constant="10" id="NOZ-XY-gKh"/>
+                            <constraint firstItem="d1v-zy-aMq" firstAttribute="leading" secondItem="oH5-zo-9Q8" secondAttribute="leading" id="NOZ-XY-gKh"/>
                             <constraint firstItem="bwc-hR-bxM" firstAttribute="leading" secondItem="oH5-zo-9Q8" secondAttribute="leading" constant="15" id="O2v-G4-zMO"/>
                             <constraint firstItem="h47-HB-z0B" firstAttribute="top" secondItem="oH5-zo-9Q8" secondAttribute="top" constant="16" id="Yrz-2x-Yhy"/>
                             <constraint firstItem="oH5-zo-9Q8" firstAttribute="trailing" secondItem="w6g-Vf-87n" secondAttribute="trailing" constant="15" id="csf-0E-KJJ"/>
