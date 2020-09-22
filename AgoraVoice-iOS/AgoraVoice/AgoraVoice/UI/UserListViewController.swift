@@ -142,10 +142,18 @@ class UserListViewController: RxViewController {
         tableView.rowHeight = 48
         tableViewBottom.constant = UIScreen.main.heightOfSafeAreaBottom
         
+        tabView.titleTopSpace = 14
         tabView.underlineWidth = 68
         tabView.alignment = .center
         tabView.titleSpace = 80
         tabView.underlineHeight = 3
+        
+        tabView.selectedTitle = TabSelectView.TitleProperty(color: UIColor(hexString: "#EEEEEE"),
+                                                            font: UIFont.systemFont(ofSize: 14, weight: .medium))
+        
+        tabView.unselectedTitle = TabSelectView.TitleProperty(color: UIColor(hexString: "#9BA2AB"),
+                                                              font: UIFont.systemFont(ofSize: 14))
+        tabView.backgroundColor = UIColor(hexString: "#0A0F17")
         
         tableView.delegate = nil
         tableView.dataSource = nil

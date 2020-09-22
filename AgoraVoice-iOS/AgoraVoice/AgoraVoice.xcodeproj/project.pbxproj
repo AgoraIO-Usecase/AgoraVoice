@@ -8,16 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		25FE87BC8A59A85C79FC19B9 /* Pods_AgoraVoice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFA6A288AD8BCBB08EA5C83D /* Pods_AgoraVoice.framework */; };
-		A706382025199FB70078A5EE /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = A706381525199FB70078A5EE /* .gitkeep */; };
-		A706382125199FB70078A5EE /* SuperBell.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706381725199FB70078A5EE /* SuperBell.gif */; };
-		A706382225199FB70078A5EE /* SuperCake.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706381825199FB70078A5EE /* SuperCake.gif */; };
-		A706382325199FB70078A5EE /* SuperWatch.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706381925199FB70078A5EE /* SuperWatch.gif */; };
-		A706382425199FB70078A5EE /* SuperWine.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706381A25199FB70078A5EE /* SuperWine.gif */; };
-		A706382525199FB70078A5EE /* SuperRocket.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706381B25199FB70078A5EE /* SuperRocket.gif */; };
-		A706382625199FB70078A5EE /* SuperRing.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706381C25199FB70078A5EE /* SuperRing.gif */; };
-		A706382725199FB70078A5EE /* SuperIcecream.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706381D25199FB70078A5EE /* SuperIcecream.gif */; };
-		A706382825199FB70078A5EE /* SuperDiamond.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706381E25199FB70078A5EE /* SuperDiamond.gif */; };
-		A706382925199FB70078A5EE /* sound.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706381F25199FB70078A5EE /* sound.gif */; };
+		A70638362519EC170078A5EE /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = A706382B2519EC170078A5EE /* .gitkeep */; };
+		A70638372519EC170078A5EE /* SuperBell.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706382D2519EC170078A5EE /* SuperBell.gif */; };
+		A70638382519EC170078A5EE /* SuperCake.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706382E2519EC170078A5EE /* SuperCake.gif */; };
+		A70638392519EC170078A5EE /* SuperWatch.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706382F2519EC170078A5EE /* SuperWatch.gif */; };
+		A706383A2519EC170078A5EE /* SuperWine.gif in Resources */ = {isa = PBXBuildFile; fileRef = A70638302519EC170078A5EE /* SuperWine.gif */; };
+		A706383B2519EC170078A5EE /* SuperRocket.gif in Resources */ = {isa = PBXBuildFile; fileRef = A70638312519EC170078A5EE /* SuperRocket.gif */; };
+		A706383C2519EC170078A5EE /* SuperRing.gif in Resources */ = {isa = PBXBuildFile; fileRef = A70638322519EC170078A5EE /* SuperRing.gif */; };
+		A706383D2519EC170078A5EE /* SuperIcecream.gif in Resources */ = {isa = PBXBuildFile; fileRef = A70638332519EC170078A5EE /* SuperIcecream.gif */; };
+		A706383E2519EC170078A5EE /* SuperDiamond.gif in Resources */ = {isa = PBXBuildFile; fileRef = A70638342519EC170078A5EE /* SuperDiamond.gif */; };
+		A706383F2519EC170078A5EE /* sound.gif in Resources */ = {isa = PBXBuildFile; fileRef = A70638352519EC170078A5EE /* sound.gif */; };
 		A730B83225076F7200126B02 /* ElectronicMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A730B83125076F7200126B02 /* ElectronicMusicViewController.swift */; };
 		A735C210250F4AD600707F23 /* MediaDeviceBase.m in Sources */ = {isa = PBXBuildFile; fileRef = A735C20F250F4AD600707F23 /* MediaDeviceBase.m */; };
 		A735C215250F88D800707F23 /* LiveStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A735C214250F88D800707F23 /* LiveStream.swift */; };
@@ -118,16 +118,16 @@
 
 /* Begin PBXFileReference section */
 		9FC5D8282F94142407E449F3 /* Pods-AgoraVoice.lab2020-pre.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraVoice.lab2020-pre.xcconfig"; path = "Target Support Files/Pods-AgoraVoice/Pods-AgoraVoice.lab2020-pre.xcconfig"; sourceTree = "<group>"; };
-		A706381525199FB70078A5EE /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
-		A706381725199FB70078A5EE /* SuperBell.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperBell.gif; sourceTree = "<group>"; };
-		A706381825199FB70078A5EE /* SuperCake.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperCake.gif; sourceTree = "<group>"; };
-		A706381925199FB70078A5EE /* SuperWatch.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperWatch.gif; sourceTree = "<group>"; };
-		A706381A25199FB70078A5EE /* SuperWine.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperWine.gif; sourceTree = "<group>"; };
-		A706381B25199FB70078A5EE /* SuperRocket.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperRocket.gif; sourceTree = "<group>"; };
-		A706381C25199FB70078A5EE /* SuperRing.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperRing.gif; sourceTree = "<group>"; };
-		A706381D25199FB70078A5EE /* SuperIcecream.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperIcecream.gif; sourceTree = "<group>"; };
-		A706381E25199FB70078A5EE /* SuperDiamond.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperDiamond.gif; sourceTree = "<group>"; };
-		A706381F25199FB70078A5EE /* sound.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = sound.gif; sourceTree = "<group>"; };
+		A706382B2519EC170078A5EE /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		A706382D2519EC170078A5EE /* SuperBell.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperBell.gif; sourceTree = "<group>"; };
+		A706382E2519EC170078A5EE /* SuperCake.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperCake.gif; sourceTree = "<group>"; };
+		A706382F2519EC170078A5EE /* SuperWatch.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperWatch.gif; sourceTree = "<group>"; };
+		A70638302519EC170078A5EE /* SuperWine.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperWine.gif; sourceTree = "<group>"; };
+		A70638312519EC170078A5EE /* SuperRocket.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperRocket.gif; sourceTree = "<group>"; };
+		A70638322519EC170078A5EE /* SuperRing.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperRing.gif; sourceTree = "<group>"; };
+		A70638332519EC170078A5EE /* SuperIcecream.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperIcecream.gif; sourceTree = "<group>"; };
+		A70638342519EC170078A5EE /* SuperDiamond.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SuperDiamond.gif; sourceTree = "<group>"; };
+		A70638352519EC170078A5EE /* sound.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = sound.gif; sourceTree = "<group>"; };
 		A730B83125076F7200126B02 /* ElectronicMusicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElectronicMusicViewController.swift; sourceTree = "<group>"; };
 		A735C20E250F4AD600707F23 /* MediaDeviceBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaDeviceBase.h; sourceTree = "<group>"; };
 		A735C20F250F4AD600707F23 /* MediaDeviceBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaDeviceBase.m; sourceTree = "<group>"; };
@@ -278,27 +278,28 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		A706381425199FB70078A5EE /* Resource */ = {
+		A706382A2519EC170078A5EE /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				A706381525199FB70078A5EE /* .gitkeep */,
-				A706381625199FB70078A5EE /* Gif */,
+				A706382B2519EC170078A5EE /* .gitkeep */,
+				A706382C2519EC170078A5EE /* Gif */,
 			);
-			path = Resource;
+			name = Resource;
+			path = ../Resource;
 			sourceTree = "<group>";
 		};
-		A706381625199FB70078A5EE /* Gif */ = {
+		A706382C2519EC170078A5EE /* Gif */ = {
 			isa = PBXGroup;
 			children = (
-				A706381725199FB70078A5EE /* SuperBell.gif */,
-				A706381825199FB70078A5EE /* SuperCake.gif */,
-				A706381925199FB70078A5EE /* SuperWatch.gif */,
-				A706381A25199FB70078A5EE /* SuperWine.gif */,
-				A706381B25199FB70078A5EE /* SuperRocket.gif */,
-				A706381C25199FB70078A5EE /* SuperRing.gif */,
-				A706381D25199FB70078A5EE /* SuperIcecream.gif */,
-				A706381E25199FB70078A5EE /* SuperDiamond.gif */,
-				A706381F25199FB70078A5EE /* sound.gif */,
+				A706382D2519EC170078A5EE /* SuperBell.gif */,
+				A706382E2519EC170078A5EE /* SuperCake.gif */,
+				A706382F2519EC170078A5EE /* SuperWatch.gif */,
+				A70638302519EC170078A5EE /* SuperWine.gif */,
+				A70638312519EC170078A5EE /* SuperRocket.gif */,
+				A70638322519EC170078A5EE /* SuperRing.gif */,
+				A70638332519EC170078A5EE /* SuperIcecream.gif */,
+				A70638342519EC170078A5EE /* SuperDiamond.gif */,
+				A70638352519EC170078A5EE /* sound.gif */,
 			);
 			path = Gif;
 			sourceTree = "<group>";
@@ -340,6 +341,7 @@
 			children = (
 				A75C6F4A24FCC386003E5AD9 /* AgoraVoice */,
 				A75C6FD224FCE41E003E5AD9 /* Center */,
+				A706382A2519EC170078A5EE /* Resource */,
 				A75C6F4924FCC386003E5AD9 /* Products */,
 				4C0D09B8F449675255951093 /* Pods */,
 				66094781AA092F1D3BCDE821 /* Frameworks */,
@@ -362,7 +364,6 @@
 				A75C6FB324FCD709003E5AD9 /* Extension */,
 				A75C6FB924FCD709003E5AD9 /* Utils */,
 				A75C6FCA24FCD767003E5AD9 /* Supporting Files */,
-				A706381425199FB70078A5EE /* Resource */,
 			);
 			path = AgoraVoice;
 			sourceTree = "<group>";
@@ -656,18 +657,18 @@
 				A75C70E224FDF121003E5AD9 /* Live.storyboard in Resources */,
 				A75C6FC924FCD75D003E5AD9 /* LaunchScreen.storyboard in Resources */,
 				A75C6F5524FCC387003E5AD9 /* Assets.xcassets in Resources */,
-				A706382325199FB70078A5EE /* SuperWatch.gif in Resources */,
+				A70638392519EC170078A5EE /* SuperWatch.gif in Resources */,
 				A750EC302500A18E006E50E3 /* Popover.storyboard in Resources */,
-				A706382925199FB70078A5EE /* sound.gif in Resources */,
-				A706382525199FB70078A5EE /* SuperRocket.gif in Resources */,
+				A706383F2519EC170078A5EE /* sound.gif in Resources */,
+				A706383B2519EC170078A5EE /* SuperRocket.gif in Resources */,
 				A75C70FC24FE2B70003E5AD9 /* Localizable.strings in Resources */,
-				A706382225199FB70078A5EE /* SuperCake.gif in Resources */,
-				A706382725199FB70078A5EE /* SuperIcecream.gif in Resources */,
-				A706382025199FB70078A5EE /* .gitkeep in Resources */,
-				A706382825199FB70078A5EE /* SuperDiamond.gif in Resources */,
-				A706382625199FB70078A5EE /* SuperRing.gif in Resources */,
-				A706382125199FB70078A5EE /* SuperBell.gif in Resources */,
-				A706382425199FB70078A5EE /* SuperWine.gif in Resources */,
+				A70638382519EC170078A5EE /* SuperCake.gif in Resources */,
+				A706383D2519EC170078A5EE /* SuperIcecream.gif in Resources */,
+				A70638362519EC170078A5EE /* .gitkeep in Resources */,
+				A706383E2519EC170078A5EE /* SuperDiamond.gif in Resources */,
+				A706383C2519EC170078A5EE /* SuperRing.gif in Resources */,
+				A70638372519EC170078A5EE /* SuperBell.gif in Resources */,
+				A706383A2519EC170078A5EE /* SuperWine.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -969,6 +970,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 100;
 				DEVELOPMENT_TEAM = GM72UGLGZW;
 				INFOPLIST_FILE = AgoraVoice/Utils/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -993,6 +995,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 100;
 				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1085,6 +1088,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 100;
 				DEVELOPMENT_TEAM = JDPG69R49Z;
 				INFOPLIST_FILE = AgoraVoice/Utils/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -1170,6 +1174,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 100;
 				DEVELOPMENT_TEAM = GM72UGLGZW;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",

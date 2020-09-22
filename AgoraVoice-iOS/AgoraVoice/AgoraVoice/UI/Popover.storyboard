@@ -893,17 +893,17 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d1v-zy-aMq" customClass="TabSelectView" customModule="AgoraVoice" customModuleProvider="target">
-                                <rect key="frame" x="10" y="105" width="394" height="34"/>
+                                <rect key="frame" x="10" y="105" width="394" height="48"/>
                                 <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="34" id="HFJ-2p-dVy"/>
+                                    <constraint firstAttribute="height" constant="48" id="HFJ-2p-dVy"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#FAFAFA"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="130" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bwc-hR-bxM">
-                                <rect key="frame" x="15" y="139" width="384" height="723"/>
+                                <rect key="frame" x="15" y="153" width="384" height="709"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="UserInvitationListCell" rowHeight="133" id="Pvz-Gc-tPo" customClass="UserInvitationListCell" customModule="AgoraVoice" customModuleProvider="target">
@@ -1039,7 +1039,7 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="bwc-hR-bxM" firstAttribute="top" secondItem="w6g-Vf-87n" secondAttribute="bottom" constant="47" id="12i-QV-LAO"/>
+                            <constraint firstItem="bwc-hR-bxM" firstAttribute="top" secondItem="w6g-Vf-87n" secondAttribute="bottom" constant="61" id="12i-QV-LAO"/>
                             <constraint firstItem="oH5-zo-9Q8" firstAttribute="trailing" secondItem="bwc-hR-bxM" secondAttribute="trailing" constant="15" id="6ia-VQ-afq"/>
                             <constraint firstItem="w6g-Vf-87n" firstAttribute="centerX" secondItem="h47-HB-z0B" secondAttribute="centerX" id="F2I-Px-wd5"/>
                             <constraint firstItem="w6g-Vf-87n" firstAttribute="top" secondItem="h47-HB-z0B" secondAttribute="bottom" constant="14" id="I1M-8r-nSj"/>
@@ -1079,7 +1079,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="HuX-1B-uuV">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="471"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="723"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="LMw-Wh-eFq">
                                     <size key="itemSize" width="128" height="128"/>
@@ -1125,7 +1125,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AELabelCell" id="KJs-Wd-h91" customClass="AELabelCell" customModule="AgoraVoice" customModuleProvider="target">
-                                        <rect key="frame" x="157.5" y="0.0" width="128" height="128"/>
+                                        <rect key="frame" x="143" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="tMz-5U-IQH">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
@@ -1213,7 +1213,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dZd-hJ-Xqh">
-                                <rect key="frame" x="200" y="64" width="200" height="32"/>
+                                <rect key="frame" x="107" y="64" width="200" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="HS2-WJ-xJp"/>
                                 </constraints>
@@ -1224,7 +1224,7 @@
                                 </segments>
                             </segmentedControl>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="LdH-Ui-1d0">
-                                <rect key="frame" x="0.0" y="152" width="600" height="319"/>
+                                <rect key="frame" x="0.0" y="152" width="414" height="571"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="GsE-A2-YsR">
                                     <size key="itemSize" width="128" height="128"/>

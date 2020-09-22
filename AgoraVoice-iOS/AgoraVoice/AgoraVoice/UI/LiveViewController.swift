@@ -92,10 +92,6 @@ extension LiveViewController {
         personCountView.label.textColor = UIColor.white
         personCountView.label.font = UIFont.systemFont(ofSize: 10)
         
-        personCountView.rx.controlEvent(.touchUpInside).subscribe(onNext: { [unowned self] in
-            self.presentUserList(type: .onlyUser)
-        }).disposed(by: bag)
-        
         if let giftAudienceVC = self.giftAudienceVC {
             userListVM.giftList.bind(to: giftAudienceVC.list).disposed(by: bag)
         }

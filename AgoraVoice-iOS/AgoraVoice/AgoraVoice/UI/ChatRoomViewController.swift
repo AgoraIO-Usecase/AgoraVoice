@@ -142,6 +142,15 @@ private extension ChatRoomViewController {
             self.ownerImageView.image = room.owner.info.image
             self.ownerLabel.text = room.owner.info.name
         }).disposed(by: bag)
+        
+        personCountView.rx.controlEvent(.touchUpInside).subscribe(onNext: { [unowned self] in
+            if self.liveSession.localRole.value.type == .owner {
+                self.presentUserList(type: .multiHosts)
+            } else {
+                self.presentUserList(type: .onlyUser)
+            }
+            
+        }).disposed(by: bag)
     }
     
     func calculateSeatViewHeight() {
@@ -153,6 +162,102 @@ private extension ChatRoomViewController {
 }
 
 private extension ChatRoomViewController {
+    func presentUserList(type: UserListViewController.ShowType) {
+        guard (type == .multiHosts) || (type == .onlyUser) else {
+            return
+        }
+        
+        self.showMaskView(color: UIColor.clear)
+        
+        let vc = UIStoryboard.initViewController(of: "UserListViewController",
+                                                 class: UserListViewController.self,
+                                                 on: "Popover")
+        
+        vc.userListVM = userListVM
+        vc.multiHostsVM = multiHostsVM
+        vc.showType = type
+        vc.view.cornerRadius(10)
+        
+        vc.inviteUser.subscribe(onNext: { [unowned self] (user) in
+            self.hiddenMaskView()
+            
+            var message: String
+            if DeviceAssistant.Language.isChinese {
+                message = "你是否要邀请\"\(user.info.name)\"上麦?"
+            } else {
+                message = "Do you send a invitation to \(user.info.name)?"
+            }
+            
+            self.showAlert(message: message,
+                           action1: NSLocalizedString("Cancel"),
+                           action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
+                            self.multiHostsVM.sendInvitation(to: user, on: 1) { [unowned self] (_) in
+                                self.showTextToast(text: NSLocalizedString("Invite_Broadcasting_Fail"))
+                            }
+            }
+        }).disposed(by: vc.bag)
+        
+        if type == .multiHosts {
+            vc.tabView.needRemind(personCountView.needRemind,
+                                  index: 1)
+            
+            vc.tabView.selectedIndex.subscribe(onNext: { [unowned self] (index) in
+                if index == 1 {
+                    self.personCountView.needRemind = false
+                }
+            }).disposed(by: vc.bag)
+        }
+        
+        vc.rejectApplicationOfUser.subscribe(onNext: { [unowned self] (application) in
+            self.hiddenMaskView()
+            
+            var message: String
+            if DeviceAssistant.Language.isChinese {
+                message = "你是否要拒绝\"\(application.initiator.info.name)\"的上麦申请?"
+            } else {
+                message = "Do you reject \(application.initiator.info.name)'s application?"
+            }
+            
+            self.showAlert(message: message,
+                           action1: NSLocalizedString("Cancel"),
+                           action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
+                            self.multiHostsVM.reject(application: application) { [unowned self] (_) in
+                                self.showTextToast(text: "Reject application fail")
+                            }
+            }
+        }).disposed(by: vc.bag)
+        
+        vc.acceptApplicationOfUser.subscribe(onNext: { [unowned self] (application) in
+            self.hiddenMaskView()
+            
+            var message: String
+            if DeviceAssistant.Language.isChinese {
+                message = "你是否要接受\"\(application.initiator.info.name)\"的上麦申请?"
+            } else {
+                message = "Do you accept \(application.initiator.info.name)'s application?"
+            }
+            
+            self.showAlert(message: message,
+                           action1: NSLocalizedString("Cancel"),
+                           action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
+                            self.multiHostsVM.accept(application: application) { [unowned self] (_) in
+                                self.showTextToast(text: "Accept application fail")
+                            }
+            }
+        }).disposed(by: vc.bag)
+        
+        let presenetedHeight: CGFloat = 526.0
+        let y = UIScreen.main.bounds.height - presenetedHeight
+        let presentedFrame = CGRect(x: 0,
+                                    y: y,
+                                    width: UIScreen.main.bounds.width,
+                                    height: presenetedHeight)
+        
+        self.presentChild(vc,
+                          animated: true,
+                          presentedFrame: presentedFrame)
+    }
+    
     func presentCommandCollection(seatCommands: LiveSeatCommands) {
         showMaskView(color: .clear)
         
