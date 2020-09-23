@@ -101,8 +101,9 @@ private extension LiveTypeViewController {
             - UIScreen.main.heightOfSafeAreaTop
             - collectionTop - UINavigationBar.height
         
-        let width = CGFloat(310) / CGFloat(508) * height
-        let space = (UIScreen.main.bounds.width - width) / 2
+        let space: CGFloat = 33
+        let width = UIScreen.main.bounds.width - (space * 2)
+        
         layout.itemSize = CGSize(width: width, height: height)
         layout.sectionInset = UIEdgeInsets(top: 0, left: space, bottom: 0, right: space)
         layout.scrollDirection = .horizontal

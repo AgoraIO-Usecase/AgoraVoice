@@ -104,7 +104,7 @@ extension LiveViewController {
         
         userListVM.total.map { (total) -> String in
             return "\(total)"
-        }.bind(to: self.personCountView.label.rx.text).disposed(by: bag)
+        }.bind(to: personCountView.label.rx.text).disposed(by: bag)
         
         userListVM.joined.subscribe(onNext: { [unowned self] (list) in
             let chats = list.map { (user) -> Chat in
@@ -239,6 +239,7 @@ extension LiveViewController {
     // MARK: - Chat Input
     func chatInput() {
         chatInputView.textView.textColor = .white
+        chatInputView.textView.returnKeyType = .send
         
         chatInputView.textView.rx.controlEvent([.editingDidEndOnExit])
             .subscribe(onNext: { [unowned self] in
@@ -251,15 +252,15 @@ extension LiveViewController {
                 }
                 
                 self.chatInputView.textView.text = nil
-                self.liveSession.userService?.sendRoomChatMessage(withText: text, success: { [unowned self] in
+                self.liveSession.sendChat(text, success: { [unowned self] in
                     let local = Center.shared().centerProvideLocalUser().info.value
                     let chat = Chat(name: local.name + ": ",
                                     text: text,
                                     widthLimit: self.chatWidthLimit)
                     self.chatVM.newMessages([chat])
-                    }, failure: { [unowned self] (_) in
-                        self.showAlert(message: NSLocalizedString("Send_Chat_Message_Fail"))
-                })
+                }) { [unowned self] (_) in
+                    self.showAlert(message: NSLocalizedString("Send_Chat_Message_Fail"))
+                }
         }).disposed(by: bag)
         
         NotificationCenter.default.observerKeyboard { [weak self] (info: (endFrame: CGRect, duration: Double)) in
@@ -388,7 +389,7 @@ extension LiveViewController {
                           animated: true,
                           presentedFrame: presentedFrame)
         
-        liveSession.localRole.subscribe(onNext: { [unowned extensionVC] (local) in
+        liveSession.localRole.subscribe(onNext: { [unowned extensionVC, unowned self] (local) in
             if extensionVC.perspective != local.type {
                 self.hiddenMaskView()
             }

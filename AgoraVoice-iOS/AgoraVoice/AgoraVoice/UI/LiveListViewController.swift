@@ -180,7 +180,7 @@ private extension LiveListViewController {
                                               cellType: RoomCell.self)) { index, item, cell in
                                                 cell.roomNameLabel.text = item.name
                                                 cell.roomPersonCountView.label.text = "\(item.personCount)"
-                                                cell.roomImageView.image = item.image
+                                                cell.roomImageView.image = item.owner.info.originImage
         }.disposed(by: bag)
         
         collectionView.mj_header = MJRefreshNormalHeader(refreshingBlock: { [unowned self] in

@@ -12,10 +12,11 @@ import RxSwift
 import RxRelay
 
 class LiveSession: RxObject {
+    private var userService: EduUserService?
+    
     var type: LiveType
     var roomManager: EduClassroomManager
     var room: BehaviorRelay<Room>
-    var userService: EduUserService?
     
     let fail = PublishRelay<String>()
     
@@ -197,6 +198,7 @@ class LiveSession: RxObject {
     }
 }
 
+// MARK: - Stream
 extension LiveSession {
     func updateLocalAudioStream(isOn: Bool, success: Completion = nil, fail: ErrorCompletion = nil) {
         guard let _ = userService else {
@@ -213,7 +215,6 @@ extension LiveSession {
             return
         }
         
-        
         let configuration = EduStreamConfig(streamUuid: stream.streamId)
         configuration.enableMicrophone = isOn
         configuration.enableCamera = false
@@ -227,6 +228,37 @@ extension LiveSession {
                 if let fail = fail {
                     fail(error ?? AGEError.unknown())
                 }
+        })
+    }
+    
+    func muteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
+        userService?.muteOther(stream: stream, fail: fail)
+    }
+    
+    func ummuteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
+        userService?.ummuteOther(stream: stream, fail: fail)
+    }
+    
+    func publishNewStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
+        userService?.publishNewStream(stream, success: success, fail: fail)
+    }
+    
+    func unpublishNewStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
+        userService?.unpublishNewStream(stream, success: success, fail: fail)
+    }
+}
+
+// MARK: - Chat Message
+extension LiveSession {
+    func sendChat(_ text: String, success: Completion = nil, fail: ErrorCompletion = nil) {
+        userService?.sendRoomChatMessage(withText: text, success: {
+            if let success = success {
+                success()
+            }
+        }, failure: { (error) in
+            if let fail = fail {
+                fail(error ?? AGEError.unknown())
+            }
         })
     }
 }
@@ -294,6 +326,7 @@ fileprivate extension LiveSession {
     }
 }
 
+// MARK: - EduClassroomDelegate
 extension LiveSession: EduClassroomDelegate {
     // User
     func classroom(_ classroom: EduClassroom, remoteUsersInit users: [EduUser]) {
@@ -388,6 +421,7 @@ extension LiveSession: EduClassroomDelegate {
     }
 }
 
+// MARK: - EduTeacherDelegate, EduStudentDelegate
 extension LiveSession: EduTeacherDelegate, EduStudentDelegate {
     func localStreamAdded(_ event: EduStreamEvent) {
         var new = localRole.value
@@ -416,6 +450,7 @@ extension LiveSession: EduTeacherDelegate, EduStudentDelegate {
     }
 }
 
+// MARK: - RTCStatisticsReportDelegate
 extension LiveSession: RTCStatisticsReportDelegate {
     func rtcReportRtcStats(_ stats: AgoraChannelStats) {
         var new = self.sessionReport.value
@@ -425,30 +460,30 @@ extension LiveSession: RTCStatisticsReportDelegate {
 }
 
 extension EduUserService {
-    func muteOther(stream: LiveStream, fail: Completion = nil) {
+    func muteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
         var new = stream
         new.hasAudio = false
         let eduStream = EduStream(liveStream: new)
         
         publishStream(eduStream, success: {
             
-        }) { (_) in
+        }) { (error) in
             if let fail = fail {
-                fail()
+                fail(error ?? AGEError.unknown())
             }
         }
     }
     
-    func ummuteOther(stream: LiveStream, fail: Completion = nil) {
+    func ummuteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
         var new = stream
         new.hasAudio = true
         let eduStream = EduStream(liveStream: new)
         
         publishStream(eduStream, success: {
             
-        }) { (_) in
+        }) { (error) in
             if let fail = fail {
-                fail()
+                fail(error ?? AGEError.unknown())
             }
         }
     }

@@ -18,24 +18,24 @@ class ImageFiles: NSObject {
     private let folderName = "Images/"
     private let headFolder = "Heads/"
     
-    private lazy var originalHeads: [UIImage] = {
-        var list = [UIImage]()
-        
-        for i in 0..<9 {
-            let index = String(format: "%02d", i + 1)
-            let name = "portrait\(index)"
-            let image = UIImage(named: name)
-            list.append(image!)
-        }
-        return list
-    }()
-    
     private lazy var originalRoomPreviews: [UIImage] = {
         var list = [UIImage]()
         
         for i in 0..<9 {
             let index = String(format: "%02d", i + 1)
             let name = "BG\(index)-preview"
+            let image = UIImage(named: name)
+            list.append(image!)
+        }
+        return list
+    }()
+    
+    private(set) lazy var originalHeads: [UIImage] = {
+        var list = [UIImage]()
+        
+        for i in 0..<9 {
+            let index = String(format: "%02d", i + 1)
+            let name = "portrait\(index)"
             let image = UIImage(named: name)
             list.append(image!)
         }

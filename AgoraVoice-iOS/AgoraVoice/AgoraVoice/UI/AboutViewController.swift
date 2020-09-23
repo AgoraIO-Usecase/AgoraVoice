@@ -74,7 +74,7 @@ class AboutViewController: MaskTableViewController {
         uploadLogLabel.text = NSLocalizedString("Upload_Log")
         
         agoraLabel.text = "www.agora.io"
-        agoraLabel.font = UIFont.systemFont(ofSize: 10)
+        agoraLabel.font = UIFont.systemFont(ofSize: 16)
         agoraLabel.textColor = UIColor(hexString: "#686E78")
         agoraLabel.textAlignment = .center
         

@@ -15,6 +15,7 @@ struct BasicUserInfo {
     var name: String
     var headURL: String
     var image: UIImage
+    var originImage: UIImage
     
     init(dic: StringAnyDic) throws {
         self.userId = try dic.getStringValue(of: "userId")
@@ -23,6 +24,7 @@ struct BasicUserInfo {
         self.headURL = (try? dic.getStringValue(of: "avatar")) ?? ""
         let index = Int(Int64(self.userId)! % 12)
         self.image = Center.shared().centerProvideImagesHelper().heads[index]
+        self.originImage = Center.shared().centerProvideImagesHelper().originalHeads[index]
     }
     
     init(userId: String, name: String, headURL: String = "") {
@@ -31,6 +33,7 @@ struct BasicUserInfo {
         self.headURL = headURL
         let index = Int(Int64(self.userId)! % 12)
         self.image = Center.shared().centerProvideImagesHelper().heads[index]
+        self.originImage = Center.shared().centerProvideImagesHelper().originalHeads[index]
     }
     
     static func == (left: BasicUserInfo, right: BasicUserInfo) -> Bool {

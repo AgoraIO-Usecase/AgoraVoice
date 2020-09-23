@@ -69,6 +69,7 @@ struct LiveSeat {
 }
 
 class LiveSeatsVM: CustomObserver {
+    private let seatCount = 8
     private var room: Room
     let fail = PublishRelay<String>()
     let streamList = BehaviorRelay(value: [LiveStream]())
@@ -120,8 +121,45 @@ private extension LiveSeatsVM {
             self.streamMatchSeat()
         }).disposed(by: bag)
         
-        message.subscribe(onNext: { (json) in
-            print("json: \(json.description)")
+        message.subscribe(onNext: { [unowned self] (json) in
+            print("LiveSeatsVM json: \(json.description)")
+            guard let seatsJson = try? json.getListValue(of: "seats") else {
+                return
+            }
+            
+            do {
+                guard seatsJson.count == self.seatCount else {
+                    throw AGEError.fail("seat count invalid", extra:"count: \(seatsJson.count)")
+                }
+                
+                var list = [LiveSeat]()
+                
+                for item in seatsJson {
+                    let index = try item.getIntValue(of: "no")
+                    let intState = try item.getIntValue(of: "state")
+                    var state: SeatState
+                    
+                    switch intState {
+                    case 0:
+                        state = .empty
+                    case 1:
+                        
+                        state = .empty
+                    case 2:
+                        state = .close
+                    default:
+                        throw AGEError.fail("seat state invalid")
+                    }
+                    
+                    let seat = LiveSeat(index: index, state: state)
+                    list.append(seat)
+                }
+                
+                self.seatList.accept(list)
+            } catch {
+                self.log(error: error)
+            }
+            
         }).disposed(by: bag)
         
 //        rtm.addReceivedChannelMessage(observer: self.address) { [weak self] (json) in
@@ -150,7 +188,7 @@ private extension LiveSeatsVM {
 //        }
     }
     
-    func seatMatchStream() {
+    func seatMatchStreamWith() {
         for seat in seatList.value {
             for stream in streamList.value  {
                 

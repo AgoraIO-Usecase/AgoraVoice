@@ -11,6 +11,7 @@ import UIKit
 class ChatRoomViewController: MaskViewController, LiveViewController {
     @IBOutlet weak var ownerImageView: UIImageView!
     @IBOutlet weak var ownerLabel: UILabel!
+    @IBOutlet weak var ownerLabelWidth: NSLayoutConstraint!
     
     @IBOutlet weak var seatViewHeight: NSLayoutConstraint!
     @IBOutlet weak var closeButton: UIButton!
@@ -142,6 +143,14 @@ private extension ChatRoomViewController {
         liveSession.room.subscribe(onNext: { [unowned self] (room) in
             self.ownerImageView.image = room.owner.info.image
             self.ownerLabel.text = room.owner.info.name
+            
+            let size = room.owner.info.name.size(font: self.ownerLabel.font,
+                                                 drawRange: CGSize(width: CGFloat(MAXFLOAT), height: 25))
+            var width = size.width + 24
+            if width < 42 {
+                width = 42
+            }
+            self.ownerLabelWidth.constant = width
         }).disposed(by: bag)
         
         personCountView.rx.controlEvent(.touchUpInside).subscribe(onNext: { [unowned self] in
@@ -150,7 +159,6 @@ private extension ChatRoomViewController {
             } else {
                 self.presentUserList(type: .onlyUser)
             }
-            
         }).disposed(by: bag)
     }
     

@@ -82,14 +82,22 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iK6-cS-GtW">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iK6-cS-GtW">
                                 <rect key="frame" x="186" y="207" width="42" height="25"/>
                                 <constraints>
+                                    <constraint firstAttribute="width" constant="42" id="duK-9c-PkL"/>
                                     <constraint firstAttribute="height" constant="25" id="obY-kD-wK6"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#000000-0.5"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="12.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="masksToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -127,6 +135,7 @@
                         <outlet property="closeButton" destination="mD5-5G-Jjd" id="J7g-lS-yde"/>
                         <outlet property="ownerImageView" destination="cLp-JY-t6F" id="qPv-yx-wzV"/>
                         <outlet property="ownerLabel" destination="iK6-cS-GtW" id="1PT-mh-tyP"/>
+                        <outlet property="ownerLabelWidth" destination="duK-9c-PkL" id="hqm-Wh-B79"/>
                         <outlet property="personCountView" destination="jh9-LM-Ap7" id="ztI-KH-V0g"/>
                         <outlet property="seatViewHeight" destination="wfg-XI-zxb" id="NhT-q0-3AK"/>
                     </connections>

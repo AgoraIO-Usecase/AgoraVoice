@@ -139,7 +139,7 @@ class UserListViewController: RxViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.rowHeight = 48
+        tableView.rowHeight = 54
         tableViewBottom.constant = UIScreen.main.heightOfSafeAreaBottom
         
         tabView.titleTopSpace = 14
