@@ -34,7 +34,7 @@ class RoomBackgroundVM: CustomObserver {
         let url = URLGroup.roomBackground(roomId: room.roomId)
         let event = RequestEvent(name: "update-room-background")
         let task = RequestTask(event: event,
-                               type: .http(.post, url: url),
+                               type: .http(.put, url: url),
                                timeout: .low,
                                header: ["token": Keys.UserToken],
                                parameters: parameters)

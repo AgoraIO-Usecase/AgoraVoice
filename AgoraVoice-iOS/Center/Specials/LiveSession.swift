@@ -183,13 +183,15 @@ class LiveSession: RxObject {
     }
     
     func leave() {
-        let client = Center.shared().centerProvideRequestHelper()
-        let event = RequestEvent(name: "live-session-leave")
-        let url = URLGroup.leaveLive(roomId: room.value.roomId)
-        let task = RequestTask(event: event,
-                               type: .http(.post, url: url),
-                               header: ["token": Keys.UserToken])
-        client.request(task: task)
+        if localRole.value.type == .owner {
+            let client = Center.shared().centerProvideRequestHelper()
+            let event = RequestEvent(name: "live-session-leave")
+            let url = URLGroup.leaveLive(roomId: room.value.roomId)
+            let task = RequestTask(event: event,
+                                   type: .http(.post, url: url),
+                                   header: ["token": Keys.UserToken])
+            client.request(task: task)
+        }
         
         roomManager.leaveClassroom(success: nil, failure: nil)
     }
