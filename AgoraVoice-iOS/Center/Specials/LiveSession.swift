@@ -143,12 +143,38 @@ class LiveSession: RxObject {
             // local user
             self.userService = userService
             
+            // If local is owner, auto publish a stream
             let role = self.localRole.value
-            self.localRole.accept(role)
-            
-            if let success = success {
-                success(self)
+            if role.type == .owner {
+                self.roomManager.getLocalUser(success: { (local) in
+                    if let _ = local.streams.first {
+                        if let success = success {
+                            success(self)
+                        }
+                    } else {
+                        let stream = LiveStream(streamId: role.agUId,
+                                                hasAudio: true,
+                                                owner: role)
+                        
+                        userService.publishNewStream(stream, success: { [unowned self] in
+                            if let success = success {
+                                success(self)
+                            }
+                        }, fail: fail)
+                    }
+                }) { [unowned self] (error) in
+                    self.leave()
+                    
+                    if let fail = fail {
+                        fail(error ?? AGEError.unknown())
+                    }
+                }
+            } else {
+                if let success = success {
+                    success(self)
+                }
             }
+        
         }) { (error) in
             if let fail = fail, let error = error {
                 fail(error)
@@ -170,37 +196,36 @@ class LiveSession: RxObject {
 }
 
 extension LiveSession {
-    func updateLocalAudioStream(isOn: Bool) {
+    func updateLocalAudioStream(isOn: Bool, success: Completion = nil, fail: ErrorCompletion = nil) {
         guard let _ = userService else {
+            if let fail = fail {
+                fail(AGEError.valueNil("userService"))
+            }
             return
         }
         
-        roomManager.getLocalUser(success: { [unowned self] (local) in
-            let configuration = EduStreamConfig(streamUuid: local.streamUuid)
-            configuration.enableMicrophone = isOn
-            configuration.enableCamera = false
-            self.userService?.startOrUpdateLocalStream(configuration,
-                                                       success: { [unowned self] (stream) in
-                                                        
-                                                        if isOn {
-                                                            self.userService?.publishStream(stream, success: {
-                                                                
-                                                            }, failure: { (error) in
-                                                                
-                                                            })
-                                                        } else {
-                                                            self.userService?.unpublishStream(stream, success: {
-                                                                
-                                                            }, failure: { (error) in
-                                                                
-                                                            })
-                                                        }
-                }, failure: { (error) in
-                    
-            })
-        }) { (error) in
-            
+        guard let stream = localStream.value else {
+            if let fail = fail {
+                fail(AGEError.valueNil("localStream"))
+            }
+            return
         }
+        
+        
+        let configuration = EduStreamConfig(streamUuid: stream.streamId)
+        configuration.enableMicrophone = isOn
+        configuration.enableCamera = false
+        
+        self.userService?.startOrUpdateLocalStream(configuration,
+                                                   success: { (stream) in
+                                                    if let success = success {
+                                                        success()
+                                                    }
+        }, failure: { (error) in
+                if let fail = fail {
+                    fail(error ?? AGEError.unknown())
+                }
+        })
     }
 }
 
@@ -210,13 +235,6 @@ fileprivate extension LiveSession {
         var new = streamList.value
         new.append(stream)
         streamList.accept(new)
-        
-        if stream.owner.info == localRole.value.info {
-            var local = localRole.value
-            local.agUId = stream.streamId
-            localRole.accept(local)
-        }
-        
         streamJoined.accept(stream)
     }
     
@@ -255,33 +273,20 @@ fileprivate extension LiveSession {
     func observer() {
         // Determine whether local user is a broadcaster or an audience
         // If local user is owner, no need this judgment
-        streamList.subscribe(onNext: { [unowned self] (list) in
-            guard self.localRole.value.type != .owner else {
+        localStream.subscribe(onNext: { [unowned self] (stream) in
+            var role = self.localRole.value
+            
+            guard role.type == .owner else {
                 return
             }
             
-            var local = self.localRole.value
-            var hasLocalStream = false
-            
-            for item in list where item.streamId == local.agUId {
-                hasLocalStream = true
-                break
-            }
-            
-            let newType: LiveRoleType = (hasLocalStream ? .broadcaster : .audience)
-            
-            if newType != local.type {
-                local.type = newType
-                self.localRole.accept(local)
-            }
-        }).disposed(by: bag)
-        
-        localRole.subscribe(onNext: { [unowned self] (local) in
-            switch local.type {
-            case .owner, .broadcaster:
-                self.updateLocalAudioStream(isOn: true)
-            case .audience:
-                self.updateLocalAudioStream(isOn: false)
+            // update role
+            if let _ = stream, role.type == .audience {
+                role.type = .broadcaster
+                self.localRole.accept(role)
+            } else if stream == nil, role.type == .broadcaster {
+                role.type = .audience
+                self.localRole.accept(role)
             }
         }).disposed(by: bag)
     }
@@ -446,26 +451,30 @@ extension EduUserService {
         }
     }
     
-    func publishNewStream(_ stream: LiveStream, fail: Completion = nil) {
+    func publishNewStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
         let eduStream = EduStream(liveStream: stream)
         
         publishStream(eduStream, success: {
-            
-        }) { (_) in
+            if let success = success {
+                success()
+            }
+        }) { (error) in
             if let fail = fail {
-                fail()
+                fail(error ?? AGEError.unknown())
             }
         }
     }
     
-    func unpublishNewStream(_ stream: LiveStream, fail: Completion = nil) {
+    func unpublishNewStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
         let eduStream = EduStream(liveStream: stream)
         
         unpublishStream(eduStream, success: {
-            
-        }) { (_) in
+            if let success = success {
+                success()
+            }
+        }) { (error) in
             if let fail = fail {
-                fail()
+                fail(error ?? AGEError.unknown())
             }
         }
     }

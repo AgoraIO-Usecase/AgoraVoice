@@ -65,8 +65,14 @@ extension LiveViewController {
         // local stream
         liveSession.localStream.subscribe(onNext: { [unowned self] (stream) in
             if let stream = stream {
+                guard stream.hasAudio != self.deviceVM.mic.value.boolValue else {
+                    return
+                }
                 self.deviceVM.mic.accept(stream.hasAudio ? .on : .off)
             } else {
+                guard self.deviceVM.mic.value != .off else {
+                    return
+                }
                 self.deviceVM.mic.accept(.off)
             }
         }).disposed(by: bag)
@@ -210,14 +216,16 @@ extension LiveViewController {
         }).disposed(by: bag)
         
         bottomToolsVC.micButton.rx.tap.subscribe(onNext: { [unowned self] in
-            self.bottomToolsVC?.micButton.isSelected.toggle()
-            
             guard let isSelected = self.bottomToolsVC?.micButton.isSelected else {
                 return
             }
             
-            self.deviceVM.mic.accept(isSelected ? .off : .on)
+            self.deviceVM.mic.accept(!isSelected ? .off : .on)
         }).disposed(by: bag)
+        
+        deviceVM.mic.map { (isOn) -> Bool in
+            return !isOn.boolValue
+        }.bind(to: bottomToolsVC.micButton.rx.isSelected).disposed(by: bottomToolsVC.bag)
         
         bottomToolsVC.belcantoButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.presentAudioEffect(type: .belCanto)

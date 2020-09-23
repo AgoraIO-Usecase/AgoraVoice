@@ -89,6 +89,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         netMonitor()
         bottomTools()
         chatInput()
+        mediaDevice()
         
         multiHosts()
         liveSeats()
