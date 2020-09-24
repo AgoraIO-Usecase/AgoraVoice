@@ -104,10 +104,16 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         switch segueId {
         case "LiveSeatViewController":
             let vc = segue.destination as! LiveSeatViewController
-            vc.perspective = .owner
+            
             vc.seatCommands.subscribe(onNext: { [unowned self] (seatCommands) in
                 self.presentCommandCollection(seatCommands: seatCommands)
             }).disposed(by: vc.bag)
+            
+            liveSession.localRole.map { (user) -> LiveRoleType in
+                return user.type
+            }.bind(to: vc.perspective).disposed(by: vc.bag)
+            
+            seatsVM.seatList.bind(to: vc.seats).disposed(by: bag)
         case "GiftAudienceViewController":
             let vc = segue.destination as! GiftAudienceViewController
             self.giftAudienceVC = vc
@@ -325,7 +331,7 @@ private extension ChatRoomViewController {
             case .close, .release:
                 let handler: ((UIAlertAction) -> Void)? = { [unowned self] (_) in
                     let update = { [unowned self] in
-                        self.seatsVM.update(state: .close,
+                        self.seatsVM.update(state: (command == .close ? .close : .empty),
                                             index: seatCommands.seat.index)
                     }
                     
@@ -407,7 +413,7 @@ private extension ChatRoomViewController {
                 }
             // Audience
             case .application:
-                self.showAlert(message: NSLocalizedString("Confirm_Apply_For_Broadcasting"),
+                self.showAlert(message: NSLocalizedString("Confirm_Application_Of_Broadcasting"),
                                action1: NSLocalizedString("Cancel"),
                                action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
                                 self.multiHostsVM.sendApplication(by: self.liveSession.localRole.value,
@@ -420,18 +426,11 @@ private extension ChatRoomViewController {
 
 private extension ChatRoomViewController {
     func multiHosts() {
+        liveSession.customMessage.bind(to: multiHostsVM.message).disposed(by: bag)
+        
         // owner
         multiHostsVM.receivedApplication.subscribe(onNext: { [unowned self] (application) in
             self.personCountView.needRemind = true
-            
-//            self.showAlert(message: "\"\(application.initiator.info.name)\" " + NSLocalizedString("Apply_For_Broadcasting"),
-//                           action1: NSLocalizedString("Reject"),
-//                           action2: NSLocalizedString("Confirm"),
-//                           handler1: { [unowned self] (_) in
-//                            self.multiHostsVM.reject(application: application)
-//            }) { [unowned self] (_) in
-//                self.multiHostsVM.accept(application: application)
-//            }
         }).disposed(by: bag)
         
         multiHostsVM.invitationByRejected.subscribe(onNext: { [unowned self] (invitation) in

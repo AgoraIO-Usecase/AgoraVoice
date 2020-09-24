@@ -42,18 +42,19 @@ class UserInvitationListCell: UITableViewCell {
                 inviteButton.isHidden = false
                 inviteButton.isEnabled = false
                 inviteButton.setTitle(NSLocalizedString("Inviting"), for: .disabled)
-                inviteButton.setTitleColor(.white, for: .normal)
-                inviteButton.backgroundColor = UIColor(hexString: "#CCCCCC")
+                inviteButton.setTitleColor(UIColor(hexString: "#161D27"), for: .normal)
+                inviteButton.backgroundColor = UIColor(hexString: "#556272")
                 inviteButton.cornerRadius(16)
+                inviteButton.layer.borderWidth = 0
             case .availableInvite:
                 inviteButton.isHidden = false
                 inviteButton.isEnabled = true
                 inviteButton.setTitle(NSLocalizedString("Invite"), for: .normal)
                 inviteButton.setTitleColor(UIColor(hexString: "#0088EB"), for: .normal)
-                inviteButton.backgroundColor = .white
-                inviteButton.layer.borderWidth = 2
-                inviteButton.layer.borderColor = UIColor(hexString: "#CCCCCC").cgColor
+                inviteButton.backgroundColor = UIColor(hexString: "#161D27")
                 inviteButton.cornerRadius(16)
+                inviteButton.layer.borderWidth = 2
+                inviteButton.layer.borderColor = UIColor(hexString: "#556272").cgColor
             }
         }
     }
@@ -94,16 +95,17 @@ class UserApplicationListCell: UITableViewCell {
                                           width: width)
         
         self.rejectButton.setTitle(NSLocalizedString("Reject"), for: .normal)
-        self.rejectButton.setTitleColor(UIColor(hexString: "#333333"), for: .normal)
+        self.rejectButton.setTitleColor(UIColor(hexString: "#0088EB"), for: .normal)
         self.rejectButton.layer.borderWidth = 1
-        self.rejectButton.layer.borderColor = UIColor(hexString: "#CCCCCC").cgColor
+        self.rejectButton.layer.borderColor = UIColor(hexString: "#556272").cgColor
+        self.rejectButton.backgroundColor = UIColor(hexString: "#161D27")
         self.rejectButton.cornerRadius(16)
         self.rejectButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.delegate?.cell(self, didTapRejectButton: self.rejectButton, on: self.index)
         }).disposed(by: bag)
         
         self.acceptButton.setTitle(NSLocalizedString("Accept"), for: .normal)
-        self.acceptButton.setTitleColor(UIColor.white, for: .normal)
+        self.acceptButton.setTitleColor(.white, for: .normal)
         self.acceptButton.backgroundColor = UIColor(hexString: "#0088EB")
         self.acceptButton.cornerRadius(16)
         self.acceptButton.rx.tap.subscribe(onNext: { [unowned self] in

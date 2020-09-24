@@ -13,13 +13,13 @@ import AlamoClient
 
 class MultiHostsVM: CustomObserver {
     struct Invitation: TimestampModel {
-        var id: Int
+        var id: String
         var seatIndex: Int
         var initiator: LiveRole
         var receiver: LiveRole
         var timestamp: TimeInterval
         
-        init(id: Int, seatIndex: Int, initiator: LiveRole, receiver: LiveRole) {
+        init(id: String, seatIndex: Int, initiator: LiveRole, receiver: LiveRole) {
             self.id = id
             self.seatIndex = seatIndex
             self.initiator = initiator
@@ -29,13 +29,13 @@ class MultiHostsVM: CustomObserver {
     }
     
     struct Application: TimestampModel {
-        var id: Int
+        var id: String
         var seatIndex: Int
         var initiator: LiveRole
         var receiver: LiveRole
         var timestamp: TimeInterval
         
-        init(id: Int, seatIndex: Int, initiator: LiveRole, receiver: LiveRole) {
+        init(id: String, seatIndex: Int, initiator: LiveRole, receiver: LiveRole) {
             self.id = id
             self.seatIndex = seatIndex
             self.initiator = initiator
@@ -99,7 +99,7 @@ extension MultiHostsVM {
                         return
                     }
 
-                    let id = try json.getIntValue(of: "data")
+                    let id = try json.getStringValue(of: "data")
                     let invitation = Invitation(id: id,
                                                 seatIndex: seatIndex,
                                                 initiator: strongSelf.room.owner,
@@ -344,7 +344,7 @@ private extension MultiHostsVM {
         */
         
         message.subscribe(onNext: { (json) in
-            
+            print("MultiHostsVM json: \(json)")
         }).disposed(by: bag)
         
         // Owner

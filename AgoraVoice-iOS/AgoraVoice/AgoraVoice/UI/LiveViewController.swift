@@ -53,6 +53,7 @@ extension LiveViewController {
         liveSession.userList.bind(to: userListVM.list).disposed(by: bag)
         liveSession.userLeft.bind(to: userListVM.left).disposed(by: bag)
         liveSession.userJoined.bind(to: userListVM.joined).disposed(by: bag)
+        liveSession.audienceList.bind(to: userListVM.audienceList).disposed(by: bag)
         
         liveSession.customMessage.bind(to: userListVM.message).disposed(by: bag)
         
@@ -532,7 +533,7 @@ extension LiveViewController {
                      animated: true,
                      presentedFrame: presentedFrame)
         
-        vc.selectIndex.accept(0)
+        vc.selectIndex.accept(backgroundVM.selectedIndex.value)
         vc.selectImage.bind(to: backgroundImageView.rx.image).disposed(by: vc.bag)
         vc.selectIndex.subscribe(onNext: { [unowned self] (index) in
             self.backgroundVM.commit(index: index)

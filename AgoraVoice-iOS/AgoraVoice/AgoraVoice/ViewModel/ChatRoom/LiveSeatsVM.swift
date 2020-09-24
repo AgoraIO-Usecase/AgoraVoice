@@ -44,28 +44,6 @@ struct LiveSeat {
         self.index = index
         self.state = state
     }
-    
-//    init(dic: StringAnyDic) throws {
-//        let seatJson = try dic.getDictionaryValue(of: "seat")
-//        self.index = try seatJson.getIntValue(of: "no")
-//
-//        let state = try seatJson.getIntValue(of: "state")
-//
-//        switch state {
-//        case 0:
-//            self.state = .empty
-//        case 1:
-//            let broadcaster = try dic.getDictionaryValue(of: "user")
-//            let user = try LiveRoleItem(dic: broadcaster)
-//            livest
-//            self.state = .normal(user)
-//        case 2:
-//            self.state = .close
-//        default:
-//            assert(false)
-//            throw AGEError.fail("LiveSeat init fail", extra: "json: \(dic)")
-//        }
-//    }
 }
 
 class LiveSeatsVM: CustomObserver {
@@ -112,11 +90,7 @@ class LiveSeatsVM: CustomObserver {
 }
 
 private extension LiveSeatsVM {
-    func observe() {
-//        streamList.filter { [unowned self] (_) -> Bool in
-//            return self.seatList.value.count > 0 ? tru :
-//        }
-        
+    func observe() {        
         streamList.subscribe(onNext: { [unowned self] (streams) in
             self.streamMatchSeat()
         }).disposed(by: bag)
@@ -143,8 +117,12 @@ private extension LiveSeatsVM {
                     case 0:
                         state = .empty
                     case 1:
-                        
-                        state = .empty
+                        let userId = try item.getStringValue(of: "userId")
+                        let userName = try item.getStringValue(of: "userName")
+                        let info = BasicUserInfo(userId: userId, name: userName)
+                        let user = LiveRoleItem(type: .broadcaster, info: info, agUId: "0")
+                        let stream = try self.seatMatchStreamWith(role: user)
+                        state = .normal(stream)
                     case 2:
                         state = .close
                     default:
@@ -161,38 +139,18 @@ private extension LiveSeatsVM {
             }
             
         }).disposed(by: bag)
-        
-//        rtm.addReceivedChannelMessage(observer: self.address) { [weak self] (json) in
-//            guard let cmd = try? json.getEnum(of: "cmd", type: ALChannelMessage.AType.self),
-//                cmd == .seatList,
-//                let strongSelf = self else {
-//                return
-//            }
-//
-//            /*
-//             for item in list {
-//                 let seat = try LiveSeat(dic: item)
-//                 tempList.append(seat)
-//             }
-//
-//             self.list = BehaviorRelay(value: tempList.sorted(by: {$0.index < $1.index}))
-//             */
-//
-//            let list = try json.getListValue(of: "data")
-//            var tempList = [LiveSeat]()
-//            for item in list {
-//                let seat = try LiveSeat(dic: item)
-//                tempList.append(seat)
-//            }
-//            strongSelf.list.accept(tempList.sorted(by: {$0.index < $1.index}))
-//        }
     }
     
-    func seatMatchStreamWith() {
-        for seat in seatList.value {
-            for stream in streamList.value  {
-                
-            }
+    func seatMatchStreamWith(role: LiveRole) throws -> LiveStream {
+        var stream: LiveStream?
+        for item in streamList.value where item.owner.info.userId == role.info.userId {
+            stream = item
+        }
+        
+        if let tStream = stream {
+            return tStream
+        } else {
+            throw AGEError.fail("no match stream", extra: "role userId: \(role.info.userId)")
         }
     }
     

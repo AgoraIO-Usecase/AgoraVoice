@@ -33,18 +33,6 @@ struct URLGroup {
         return URLGroup.host + "ent/v1/" + "musics"
     }
     
-//    static var ossSTS: String {
-//        return URLGroup.host +  "edu/v1/log/sts"
-//    }
-//
-//    static var ossUpload: String {
-//        return URLGroup.host + "edu/v1/log/params"
-//    }
-//
-//    static var ossUploadCallback: String {
-//        return URLGroup.host + "edu/v1/log/sts/callback"
-//    }
-    
     static var roomPage: String {
         return URLGroup.host + URLGroup.mainPath + "rooms/page"
     }
@@ -57,18 +45,10 @@ struct URLGroup {
         return URLGroup.host + URLGroup.mainPath + "users/\(userId)"
     }
     
-//    static func joinLive(roomId: String) -> String {
-//        return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/entry"
-//    }
-    
     static func leaveLive(roomId: String) -> String {
         return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/close"
     }
-    
-    static func userList(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/user/page"
-    }
-    
+        
     static func liveSeatStatus(roomId: String) -> String {
         return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/seats"
     }
@@ -82,7 +62,7 @@ struct URLGroup {
     }
     
     static func multiHosts(userId: String, roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/users/\(userId)/seats"
+        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/users/\(userId)/seats"
     }
     
     static func roomBackground(roomId: String) -> String {

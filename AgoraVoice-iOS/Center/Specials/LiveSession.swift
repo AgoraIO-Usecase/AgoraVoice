@@ -33,6 +33,7 @@ class LiveSession: RxObject {
     
     // User
     let userList = BehaviorRelay(value: [LiveRole]())
+    let audienceList = BehaviorRelay(value: [LiveRole]())
     let userJoined = PublishRelay<[LiveRole]>()
     let userLeft = PublishRelay<[LiveRole]>()
     
@@ -42,8 +43,8 @@ class LiveSession: RxObject {
     let streamLeft = PublishRelay<LiveStream>()
     
     // Message
-    var chatMessage = PublishRelay<(user: LiveRole, message: String)>()
-    var customMessage = BehaviorRelay(value: [String: Any]())
+    let chatMessage = PublishRelay<(user: LiveRole, message: String)>()
+    let customMessage = BehaviorRelay(value: [String: Any]())
     
     init(room: Room, role: LiveRoleType) {
         let configuration = EduClassroomConfig(roomName: room.name,
@@ -220,10 +221,16 @@ extension LiveSession {
         configuration.enableCamera = false
         
         self.userService?.startOrUpdateLocalStream(configuration,
-                                                   success: { (stream) in
-                                                    if let success = success {
-                                                        success()
-                                                    }
+                                                   success: { [unowned self] (stream) in
+                                                    self.userService?.publishStream(stream, success: {
+                                                        if let success = success {
+                                                            success()
+                                                        }
+                                                    }, failure: { (error) in
+                                                        if let fail = fail {
+                                                            fail(error ?? AGEError.unknown())
+                                                        }
+                                                    })
         }, failure: { (error) in
                 if let fail = fail {
                     fail(error ?? AGEError.unknown())
@@ -323,6 +330,31 @@ fileprivate extension LiveSession {
                 self.localRole.accept(role)
             }
         }).disposed(by: bag)
+        
+        // Check the audience list after the stream list is updated
+        streamList.subscribe(onNext: { [unowned self] (_) in
+            self.userList.accept(self.userList.value)
+        }).disposed(by: bag)
+        
+        userList.subscribe(onNext: { [unowned self] (all) in
+            var temp = [LiveRole]()
+            
+            for item in all {
+                var isAudience = true
+                for stream in self.streamList.value where stream.owner.info == item.info {
+                    isAudience = false
+                    break
+                }
+                
+                if isAudience {
+                    temp.append(item)
+                }
+            }
+            
+            self.audienceList.accept(temp)
+        }).disposed(by: bag)
+        
+        Center.shared().customMessage.bind(to: customMessage).disposed(by: bag)
     }
 }
 

@@ -48,7 +48,6 @@ Present_Gift_Fail="gives gift fail";
 User_List="Member listing";
 Live_End="Live End";
 Confirm_End_Live="Do you want to end this live streaming?";
-Confirm_End_Broadcasting="End Live Streaming?";
 Please_Input_Headset="Plug in a headphone";
 
 Online_User="Online user";
@@ -73,14 +72,52 @@ Upload_Log="Upload Log";
 
 Test_Product_Disclaimer="Test product disclaimer ";
 
-Disclaimer_Detail="Agora Live (\"this product\") is a test product provided by Agora . Agora enjoys the copyright and ownership of this product. It is hereby granted free of charge to anyone who obtains a copy of this product and related documentation (hereinafter referred to as \"software\") to try the software without limitation, including but not limited to trial, copy, modify, merge, publish, distribute, but this product shall not be used For any commercial use, you may not sublicense and / or sell copies of the software.
+Disclaimer_Detail="Agora Voice (\"this product\") is a test product provided by Agora . Agora enjoys the copyright and ownership of this product. It is hereby granted free of charge to anyone who obtains a copy of this product and related documentation (hereinafter referred to as \"software\") to try the software without limitation, including but not limited to trial, copy, modify, merge, publish, distribute, but this product shall not be used For any commercial use, you may not sublicense and / or sell copies of the software.
 
 This product is provided \"as is\" without any express warranty, including but not limited to guarantees of suitability, suitability for specific purposes, and non-infringement. Whether it is due to any contract, infringement or other forms of conduct related to this product or the trial of this product or other methods, Agora will not be responsible for any claims, damages or other liabilities.
 
 You are free to choose whether to try the services provided by this product. If you download, install, or try the services provided in this product, it means that you trust the owner of the product, and Agora shall not be responsible for any form of loss or injury caused by yourself or others when you try the services provided in this product for any reason.";
 
-// Live Seats && Multi Hosts
-Confirm_Accept_Broadcasting_Invitation="Do you agree to become a host？";
-
+// Multi Hosts
+Became_A_Host="became a host";
+Stopped_Hosting="stopped hosting";
 End_Broadcasting="End";
-Confirm_End_Broadcasting="Are you sure to end this?";
+
+// Owner
+Force_Broadcaster_To_End="End hosting";
+Audience_Reject_Broadcasting="Audience rejected";
+Invite_Broadcasting_Fail="Invite a host fail";
+Invitation_Rejected="Invitation Rejected";
+Invite_Broadcasting="Invite";
+Invitation_Rejected_Description="Your Invitation has been rejected by";
+
+// Broadcaster
+Confirm_Accept_Broadcasting_Invitation="Do you agree to become a host？";
+Confirm_End_Broadcasting="End Live Streaming?";
+Owner_Forces_You_End_Broadcasting="Owner forced you to become a audience";
+
+// Audience
+Application_Of_Broadcasting="Become a host";
+Owner_Reject_Broadcasting_Application="Owner reject your application";
+Application_Of_Broadcasting_Fail="Apply to be a host fail";
+
+// Live Seat
+Seat_Ban="Mute";
+Seat_Unban="Un-mute";
+Seat_Close="Block";
+Seat_Release="Unblock";
+Seat_Release_Description="Unblock this seat";
+Seat_Command_Fail="Command fail";
+
+// Gift
+Gift="Gift";
+Small_Bell="Bell";
+Ice_Cream="Ice cream";
+Wine="Wine";
+Cake="Cake";
+Ring="Ring";
+Watch="Watch";
+Crystal="Diamond";
+Rocket="Rocket";
+Coin="Coin";
+Present="Give";

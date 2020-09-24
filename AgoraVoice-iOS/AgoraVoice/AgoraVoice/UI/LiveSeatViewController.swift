@@ -67,7 +67,7 @@ class LiveSeatView: RxView {
             case .close:                return NSLocalizedString("Seat_Close")
             case .release:              return NSLocalizedString("Seat_Release")
             case .invitation:           return NSLocalizedString("Invitation")
-            case .application:          return NSLocalizedString("Apply_For_Broadcasting")
+            case .application:          return NSLocalizedString("Application_Of_Broadcasting")
             case .endBroadcasting:      return NSLocalizedString("End_Broadcasting")
             }
         }
@@ -198,15 +198,14 @@ class LiveSeatViewController: MaskViewController {
     //let actionFire = PublishRelay<LiveSeatAction>()
     let seatCommands = PublishRelay<LiveSeatCommands>()
     
-    var perspective: LiveRoleType = .audience {
-        didSet {
-            let value = seats.value
-            seats.accept(value)
-        }
-    }
+    let perspective = BehaviorRelay<LiveRoleType>(value: .audience)
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        perspective.subscribe(onNext: { [unowned self] (type) in
+            let value = self.seats.value
+            self.seats.accept(value)
+        }).disposed(by: bag)
         
         seats.subscribe(onNext: { (seats) in
             self.updateSeats(seats)
@@ -254,13 +253,12 @@ class LiveSeatViewController: MaskViewController {
 private extension LiveSeatViewController {
     func updateSeats(_ seats: [LiveSeat]) {
         guard seats.count == seatCount else {
-            assert(false)
             return
         }
         
         for (index, item) in seats.enumerated() {
             let view = seatViews[index]
-            view.perspective = self.perspective
+            view.perspective = self.perspective.value
             view.commandButton.type = item.state
             
             if let stream = item.state.stream {

@@ -49,6 +49,10 @@ class CreateLiveViewController: MaskViewController {
     var selectedImageIndex = 0
     var tempSession: LiveSession?
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         updateViews()

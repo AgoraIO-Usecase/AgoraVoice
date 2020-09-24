@@ -17,7 +17,8 @@ class Center: NSObject {
         return instance
     }
     
-    var isWorkNormally = BehaviorRelay(value: false)
+    let isWorkNormally = BehaviorRelay(value: false)
+    let customMessage = BehaviorRelay(value: [String: Any]())
     
     // Specials
     private var files = FilesGroup()
@@ -40,6 +41,7 @@ class Center: NSObject {
                                              customerCertificate: Keys.customerCertificate)
 //        configuration.logDirectoryPath = 
         let manager = EduManager(config: configuration)
+        manager.delegate = self
         return manager
     }()
     
@@ -162,6 +164,15 @@ private extension Center {
                 self.liveManagerLogin(userId: userId, success: success)
             }
         }
+    }
+}
+
+extension Center: EduManagerDelegate {
+    func userMessageReceived(_ textMessage: EduTextMessage) {
+        guard let json = try? textMessage.message.json() else {
+            return
+        }
+        customMessage.accept(json)
     }
 }
 

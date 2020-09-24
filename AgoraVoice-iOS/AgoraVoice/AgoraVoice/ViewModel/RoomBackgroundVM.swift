@@ -25,6 +25,10 @@ class RoomBackgroundVM: CustomObserver {
     
     func commit(index: Int) {
         let lastIndex = selectedIndex.value
+        guard lastIndex != index else {
+            return
+        }
+        
         selectedIndex.accept(index)
         
         let client = Center.shared().centerProvideRequestHelper()
