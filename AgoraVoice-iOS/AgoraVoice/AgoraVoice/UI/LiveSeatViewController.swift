@@ -132,11 +132,9 @@ class LiveSeatView: RxView {
             }
         }).disposed(by: bag)
         
-        //commandButton.type = .close
-        
         addSubview(commandButton)
         
-        audioSilenceTag.image = UIImage(named: "icon-Microphone off")
+        audioSilenceTag.image = UIImage(named: "icon-Mic-off-tag")
         audioSilenceTag.isHidden = true
         self.addSubview(audioSilenceTag)
     }
@@ -253,7 +251,7 @@ private extension LiveSeatViewController {
             view.commandButton.type = item.state
             
             if let stream = item.state.stream {
-                view.audioSilenceTag.isHidden = !stream.hasAudio
+                view.audioSilenceTag.isHidden = stream.hasAudio
             } else {
                 view.audioSilenceTag.isHidden = true
             }
