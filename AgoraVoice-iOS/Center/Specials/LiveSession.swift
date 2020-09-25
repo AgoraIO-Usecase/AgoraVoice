@@ -271,7 +271,7 @@ extension LiveSession {
         userService?.publishNewStream(eduStream, success: success, fail: fail)
     }
     
-    func unpublishNewStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
+    func unpublishStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
         let eduStream = EduStream(liveStream: stream)
         userService?.unpublishNewStream(eduStream, success: success, fail: fail)
     }
@@ -333,6 +333,16 @@ fileprivate extension LiveSession {
         streamList.accept(new)
     }
     
+    func endLocalStreamCapture() {
+        let configuration = EduStreamConfig(streamUuid: "0")
+        configuration.enableMicrophone = false
+        configuration.enableCamera = false
+        
+        self.userService?.startOrUpdateLocalStream(configuration, success: { (_) in
+            
+        }, failure: nil)
+    }
+    
     func observer() {
         // Determine whether local user is a broadcaster or an audience
         // If local user is owner, no need this judgment
@@ -351,6 +361,7 @@ fileprivate extension LiveSession {
             } else if stream == nil, role.type == .broadcaster {
                 role.type = .audience
                 self.localRole.accept(role)
+                self.endLocalStreamCapture()
             }
         }).disposed(by: bag)
         
@@ -494,6 +505,10 @@ extension LiveSession: EduTeacherDelegate, EduStudentDelegate {
     func localStreamRemoved(_ event: EduStreamEvent) {
         localStream.accept(nil)
         removeStream(eduStream: event.modifiedStream)
+        
+        if let _ = event.operatorUser {
+            localStreamByRemoved.accept(())
+        }
     }
     
     func localStreamUpdated(_ event: EduStreamEvent) {

@@ -86,7 +86,7 @@ enum Gift: Int {
 
 class GiftVM: CustomObserver {
     private var room: Room
-    var received = PublishRelay<(userName:String, gift:Gift)>()
+    let received = PublishRelay<(userName:String, gift:Gift)>()
     
     init(room: Room) {
         self.room = room
@@ -112,9 +112,10 @@ class GiftVM: CustomObserver {
                                header: ["token": Keys.UserToken],
                                parameters: ["giftId": gift.rawValue, "count": 1])
         
-        client.request(task: task, success: ACResponse.blank({ [weak self] in
-            self?.received.accept((local.info.value.name, gift))
-        }))
+        client.request(task: task) { [unowned self] (_) -> RetryOptions in
+            self.fail.accept("give a gift fail")
+            return .resign
+        }
     }
 }
 

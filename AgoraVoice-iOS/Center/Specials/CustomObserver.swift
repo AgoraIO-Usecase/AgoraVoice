@@ -15,7 +15,8 @@ class CustomObserver: RxObject, AGELogBase {
         return Center.shared().centerProvideLogTubeHelper()
     }()
     
-    var message = PublishRelay<[String : Any]>()
+    let message = PublishRelay<[String : Any]>()
+    let fail = PublishRelay<String>()
 }
 
 extension CustomObserver {

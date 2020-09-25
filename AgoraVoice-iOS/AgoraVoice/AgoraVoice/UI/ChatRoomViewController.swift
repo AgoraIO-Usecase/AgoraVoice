@@ -189,25 +189,6 @@ private extension ChatRoomViewController {
         vc.showType = type
         vc.view.cornerRadius(10)
         
-        vc.inviteUser.subscribe(onNext: { [unowned self] (user) in
-            self.hiddenMaskView()
-            
-            var message: String
-            if DeviceAssistant.Language.isChinese {
-                message = "你是否要邀请\"\(user.info.name)\"上麦?"
-            } else {
-                message = "Do you send a invitation to \(user.info.name)?"
-            }
-            
-            self.showAlert(message: message,
-                           action1: NSLocalizedString("Cancel"),
-                           action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
-                            self.multiHostsVM.sendInvitation(to: user, on: 1) { [unowned self] (_) in
-                                self.showTextToast(text: NSLocalizedString("Invite_Broadcasting_Fail"))
-                            }
-            }
-        }).disposed(by: vc.bag)
-        
         if type == .multiHosts {
             vc.tabView.needRemind(personCountView.needRemind,
                                   index: 1)
@@ -232,9 +213,7 @@ private extension ChatRoomViewController {
             self.showAlert(message: message,
                            action1: NSLocalizedString("Cancel"),
                            action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
-                            self.multiHostsVM.reject(application: application) { [unowned self] (_) in
-                                self.showTextToast(text: "Reject application fail")
-                            }
+                            self.multiHostsVM.reject(application: application)
             }
         }).disposed(by: vc.bag)
         
@@ -251,9 +230,9 @@ private extension ChatRoomViewController {
             self.showAlert(message: message,
                            action1: NSLocalizedString("Cancel"),
                            action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
-                            self.multiHostsVM.accept(application: application) { [unowned self] (_) in
-                                self.showTextToast(text: "Accept application fail")
-                            }
+                            self.multiHostsVM.accept(application: application, success: { [unowned self] in
+                                self.liveSession.publishNewStream(for: application.initiator)
+                            })
             }
         }).disposed(by: vc.bag)
         
@@ -333,11 +312,12 @@ private extension ChatRoomViewController {
                     
                     if command == .release {
                         update()
-                    } else {
-                        if let user = seatCommands.seat.state.stream?.owner {
-                            self.multiHostsVM.forceEndWith(user: user,
+                    } else { // close
+                        if let stream = seatCommands.seat.state.stream {
+                            self.multiHostsVM.forceEndWith(user: stream.owner,
                                                            on: seatCommands.seat.index,
-                                                           success: {
+                                                           success: { [unowned self] in
+                                                            self.liveSession.unpublishStream(stream)
                                                             update()
                             })
                         } else {
@@ -377,9 +357,12 @@ private extension ChatRoomViewController {
                 }
                 
                 let handler: ((UIAlertAction) -> Void)? = { [unowned self] (_) in
-                    if command == .forceBroadcasterEnd {
+                    if command == .forceBroadcasterEnd, let stream = seatCommands.seat.state.stream {
                         self.multiHostsVM.forceEndWith(user: stream.owner,
-                                                       on: seatCommands.seat.index)
+                                                       on: seatCommands.seat.index,
+                                                       success: { [unowned self] in
+                                                        self.liveSession.unpublishStream(stream)
+                                                       })
                     } else if command == .unban, let stream = seatCommands.seat.state.stream {
                         self.liveSession.unmuteOther(stream: stream)
                     } else if command == .ban, let stream = seatCommands.seat.state.stream {

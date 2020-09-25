@@ -49,7 +49,6 @@ struct LiveSeat {
 class LiveSeatsVM: CustomObserver {
     private let seatCount = 8
     private var room: Room
-    let fail = PublishRelay<String>()
     let streamList = BehaviorRelay(value: [LiveStream]())
     let seatList = BehaviorRelay(value: [LiveSeat]())
     
@@ -159,8 +158,8 @@ private extension LiveSeatsVM {
         
         for stream in streamList.value {
             for seat in preSeats  {
-                guard let streamId = seat.state.stream?.streamId,
-                    streamId == stream.streamId else {
+                guard let user = seat.state.stream?.owner,
+                    user.info == stream.owner.info else {
                     continue
                 }
                 

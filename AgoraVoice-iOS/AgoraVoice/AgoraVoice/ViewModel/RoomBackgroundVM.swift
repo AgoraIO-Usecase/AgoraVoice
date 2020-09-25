@@ -15,7 +15,6 @@ class RoomBackgroundVM: CustomObserver {
     var room: Room
     let selectedIndex = BehaviorRelay<Int>(value: 0)
     let selectedImage = BehaviorRelay<UIImage>(value: Center.shared().centerProvideImagesHelper().roomBackgrounds.first!)
-    let fail = PublishRelay<String>()
     
     init(room: Room) {
         self.room = room

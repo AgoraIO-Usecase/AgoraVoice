@@ -78,11 +78,9 @@ class LiveSeatView: RxView {
     
     private(set) var index: Int = 0
     
-    let commandFire = PublishRelay<Command>()
+    let audioSilenceTag = UIImageView()
     
     var perspective: LiveRoleType = .audience
-    
-    var audioSilenceTag = UIImageView()
     
     init(index: Int, frame: CGRect) {
         super.init(frame: frame)
@@ -124,7 +122,7 @@ class LiveSeatView: RxView {
                 break
             // audience
             case (.empty, .audience):
-                self.commandFire.accept(.application)
+                self.commands.accept([.application])
             case (.normal, .audience):
                 break
             case (.close, .audience):
@@ -183,10 +181,7 @@ class LiveSeatViewController: MaskViewController {
         return BehaviorRelay(value: temp)
     }()
     
-    //let userAudioSilence = PublishRelay<LiveRoleItem>()
-    //let actionFire = PublishRelay<LiveSeatAction>()
     let seatCommands = PublishRelay<LiveSeatCommands>()
-    
     let perspective = BehaviorRelay<LiveRoleType>(value: .audience)
     
     override func viewDidLoad() {

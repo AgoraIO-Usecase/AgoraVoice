@@ -71,9 +71,6 @@ class MultiHostsVM: CustomObserver {
     var audienceBecameBroadcaster = PublishRelay<LiveRole>()
     var broadcasterBecameAudience = PublishRelay<LiveRole>()
     
-    // fail
-    let fail = PublishRelay<String>()
-    
     let actionMessage = PublishRelay<ActionMessage>()
     let localRole = BehaviorRelay<LiveRole?>(value: nil)
     
@@ -97,29 +94,27 @@ extension MultiHostsVM {
                 type: 1,
                 userId: "\(user.info.userId)",
                 roomId: room.roomId,
-                success: { [weak self] (json) in
-                    guard let strongSelf = self else {
-                        return
-                    }
-
+                success: { [unowned self] (json) in
                     let id = try json.getStringValue(of: "data")
                     let invitation = Invitation(id: id,
                                                 seatIndex: seatIndex,
-                                                initiator: strongSelf.room.owner,
+                                                initiator: self.room.owner,
                                                 receiver: user)
-                    strongSelf.invitationQueue.append(invitation)
+                    self.invitationQueue.append(invitation)
                 }, fail: fail)
     }
     
-    func accept(application: Application, fail: ErrorCompletion = nil) {
+    func accept(application: Application, success: Completion = nil, fail: ErrorCompletion = nil) {
         request(seatIndex: application.seatIndex,
                 type: 5,
                 userId: "\(application.initiator.info.userId)",
                 roomId: room.roomId,
-                success: { [weak self] (json) in
-                    self?.applicationQueue.remove(application)
+                success: { [unowned self] (json) in
+                    self.applicationQueue.remove(application)
+                    if let success = success {
+                        success()
+                    }
                 }, fail: fail)
-                
     }
     
     func reject(application: Application, fail: ErrorCompletion = nil) {
@@ -127,8 +122,8 @@ extension MultiHostsVM {
                 type: 3,
                 userId: "\(application.initiator.info.userId)",
                 roomId: room.roomId,
-                success: { [weak self] (json) in
-                    self?.applicationQueue.remove(application)
+                success: { [unowned self] (json) in
+                    self.applicationQueue.remove(application)
                 }, fail: fail)
     }
     
