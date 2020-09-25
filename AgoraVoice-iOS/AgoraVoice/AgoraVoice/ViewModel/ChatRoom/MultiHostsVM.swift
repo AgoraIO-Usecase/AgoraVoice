@@ -74,6 +74,9 @@ class MultiHostsVM: CustomObserver {
     // fail
     let fail = PublishRelay<String>()
     
+    let actionMessage = PublishRelay<ActionMessage>()
+    let localRole = BehaviorRelay<LiveRole?>(value: nil)
+    
     init(room: Room) {
         self.room = room
         super.init()
@@ -254,97 +257,68 @@ private extension MultiHostsVM {
     }
     
     func observe() {
-        /*
-        let rtm = Center.shared().centerProvideRTMHelper()
-        
-        rtm.addReceivedPeerMessage(observer: self.address) { [weak self] (json) in
-            guard let cmd = try? json.getEnum(of: "cmd", type: ALPeerMessage.AType.self),
-                cmd == .multiHosts,
-                let strongSelf = self else {
+        actionMessage.subscribe(onNext: { [unowned self] (message) in
+            guard let payload = message.payload as? [String: Any] else {
                 return
             }
             
-            let data = try json.getDataObject()
-            
-            let type = try data.getIntValue(of: "type")
-            let seatIndex = try data.getIntValue(of: "no")
-            
-            let userJson = try data.getDictionaryValue(of: "fromUser")
-            let role = try LiveRoleItem(dic: userJson)
-            
-            guard let local = Center.shared().liveSession?.role.value else {
-                return
-            }
-            
-            switch type {
-            // Owner
-            case  2: // receivedApplication:
-                let id = try data.getIntValue(of: "processId")
-                let application = Application(id: id, seatIndex: seatIndex, initiator: role, receiver: local)
-                strongSelf.applicationQueue.append(application)
-                strongSelf.receivedApplication.accept(application)
-            case  4: // audience rejected invitation
-                let id = try data.getIntValue(of: "processId")
-                let invitation = Invitation(id: id, seatIndex: seatIndex, initiator: local, receiver: role)
-                strongSelf.invitationQueue.remove(invitation)
-                strongSelf.invitationByRejected.accept(invitation)
-            case  6: // audience accepted invitation:
-                let id = try data.getIntValue(of: "processId")
-                let invitation = Invitation(id: id, seatIndex: seatIndex, initiator: local, receiver: role)
-                strongSelf.invitationQueue.remove(invitation)
-                strongSelf.invitationByAccepted.accept(invitation)
-            
-            // Broadcaster
-            case 7: //
-                strongSelf.receivedEndBroadcasting.accept(())
+            do {
+                let fromUserName = message.fromUser.userName
+                let fromUserId = message.fromUser.userUuid
+                let info = BasicUserInfo(userId: fromUserId, name: fromUserName)
+                let fromUser = LiveRoleItem(type:(message.fromUser.role == .teacher ? .owner : .audience),
+                                            info: info, agUId: "0")
                 
-            // Audience
-            case  1: // receivedInvitation
-                let id = try data.getIntValue(of: "processId")
-                let invitation = Invitation(id: id, seatIndex: seatIndex, initiator: role, receiver: local)
-                strongSelf.invitationQueue.append(invitation)
-                strongSelf.receivedInvitation.accept(invitation)
-            case  3: // applicationByRejected
-                let id = try data.getIntValue(of: "processId")
-                let application = Application(id: id, seatIndex: seatIndex, initiator: local, receiver: role)
-                strongSelf.applicationByRejected.accept(application)
-            case  5: // applicationByAccepted:
-                let id = try data.getIntValue(of: "processId")
-                let application = Application(id: id, seatIndex: seatIndex, initiator: local, receiver: role)
-                strongSelf.applicationByAccepted.accept(application)
-            // broadcaster end live
-            case 8:
-                break
-            default:
-                assert(false)
-                break
+                let processId = message.processUuid
+                let event = try payload.getIntValue(of: "type")
+                let seatIndex = try payload.getIntValue(of: "no")
+                
+                guard let local = self.localRole.value else {
+                    throw AGEError.valueNil("local role")
+                }
+                
+                switch event {
+                // Owner
+                case 2: // received application:
+                    let initiator = fromUser
+                    let receiver = local
+                    let application = Application(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
+                    self.applicationQueue.append(application)
+                    self.receivedApplication.accept(application)
+                case  4: // audience rejected invitation
+                    let initiator = local
+                    let receiver = fromUser
+                    let invitation = Invitation(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
+                    self.invitationByRejected.accept(invitation)
+                case  6: // audience accepted invitation:
+                    let initiator = local
+                    let receiver = fromUser
+                    let invitation = Invitation(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
+                    self.invitationByAccepted.accept(invitation)
+                    
+                // Audience
+                case  1: // receivedInvitation
+                    let initiator = fromUser
+                    let receiver = local
+                    let invitation = Invitation(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
+                    self.invitationQueue.append(invitation)
+                    self.receivedInvitation.accept(invitation)
+                case  3: // application by rejected
+                    let initiator = local
+                    let receiver = fromUser
+                    let application = Application(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
+                    self.applicationByRejected.accept(application)
+                case  5: // application by accepted:
+                    let initiator = local
+                    let receiver = fromUser
+                    let application = Application(id: processId, seatIndex: 0, initiator: initiator, receiver: receiver)
+                    self.applicationByAccepted.accept(application)
+                default:
+                    break
+                }
+            } catch {
+                self.log(error: error)
             }
-        }
-        
-        rtm.addReceivedChannelMessage(observer: self.address) { [weak self] (json) in
-            guard let command = try? json.getIntValue(of: "cmd"),
-                command == 11,
-                let strongSelf = self else {
-                    return
-            }
-            
-            let data = try json.getDataObject()
-            let userJson = try data.getDictionaryValue(of: "fromUser")
-            var user = try LiveRoleItem(dic: userJson)
-            let old = try data.getEnum(of: "originRole", type: LiveRoleType.self)
-            let new = try data.getEnum(of: "currentRole", type: LiveRoleType.self)
-            user.type = new
-            
-            if old == .audience, new == .broadcaster {
-                strongSelf.audienceBecameBroadcaster.accept(user)
-            } else if old == .broadcaster, new == .audience {
-                strongSelf.broadcasterBecameAudience.accept(user)
-            }
-        }
-        */
-        
-        message.subscribe(onNext: { (json) in
-            print("MultiHostsVM json: \(json)")
         }).disposed(by: bag)
         
         // Owner
@@ -354,6 +328,14 @@ private extension MultiHostsVM {
         
         invitationByAccepted.subscribe(onNext: { [unowned self] (invitaion) in
             self.invitationQueue.remove(invitaion)
+        }).disposed(by: bag)
+        
+        applicationByRejected.subscribe(onNext: { [unowned self] (application) in
+            self.applicationQueue.remove(application)
+        }).disposed(by: bag)
+        
+        applicationByAccepted.subscribe(onNext: { [unowned self] (application) in
+            self.applicationQueue.remove(application)
         }).disposed(by: bag)
         
         //

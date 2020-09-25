@@ -122,10 +122,6 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
             vc.liveType = .chatRoom
             vc.tintColor = tintColor
             bottomToolsVC = vc
-            
-            liveSession.localRole.subscribe(onNext: { [unowned vc] (local) in
-                vc.perspective = local.type
-            }).disposed(by: vc.bag)
         case "ChatViewController":
             let vc = segue.destination as! ChatViewController
             vc.cellColor = tintColor
@@ -374,20 +370,20 @@ private extension ChatRoomViewController {
                                    action2: NSLocalizedString("Confirm"),
                                    handler2: handler)
                 }
-            case .forceBroadcasteEnd, .unban, .ban:
+            case .forceBroadcasterEnd, .unban, .ban:
                 guard let stream = seatCommands.seat.state.stream else {
                                    assert(false)
                                    break
                 }
                 
                 let handler: ((UIAlertAction) -> Void)? = { [unowned self] (_) in
-                    if command == .forceBroadcasteEnd {
+                    if command == .forceBroadcasterEnd {
                         self.multiHostsVM.forceEndWith(user: stream.owner,
                                                        on: seatCommands.seat.index)
-                    } else if command == .unban {
-                        
-                    } else if command == .ban {
-                        
+                    } else if command == .unban, let stream = seatCommands.seat.state.stream {
+                        self.liveSession.unmuteOther(stream: stream)
+                    } else if command == .ban, let stream = seatCommands.seat.state.stream {
+                        self.liveSession.muteOther(stream: stream)
                     }
                 }
                 
@@ -427,10 +423,28 @@ private extension ChatRoomViewController {
 private extension ChatRoomViewController {
     func multiHosts() {
         liveSession.customMessage.bind(to: multiHostsVM.message).disposed(by: bag)
+        liveSession.actionMessage.bind(to: multiHostsVM.actionMessage).disposed(by: bag)
+        liveSession.localRole.bind(to: multiHostsVM.localRole).disposed(by: bag)
+        
+        multiHostsVM.fail.subscribe(onNext: { [unowned self] (text) in
+            self.showTextToast(text: text)
+        }).disposed(by: bag)
         
         // owner
         multiHostsVM.receivedApplication.subscribe(onNext: { [unowned self] (application) in
             self.personCountView.needRemind = true
+        }).disposed(by: bag)
+        
+        multiHostsVM.invitationByRejected.subscribe(onNext: { [unowned self] (invitation) in
+            if DeviceAssistant.Language.isChinese {
+                self.showTextToast(text: invitation.receiver.info.name + "拒绝了这次邀请")
+            } else {
+                self.showTextToast(text: invitation.receiver.info.name + "rejected this invitation")
+            }
+        }).disposed(by: bag)
+        
+        multiHostsVM.invitationByAccepted.subscribe(onNext: { [unowned self] (invitation) in
+            self.liveSession.publishNewStream(for: invitation.receiver)
         }).disposed(by: bag)
         
         multiHostsVM.invitationByRejected.subscribe(onNext: { [unowned self] (invitation) in
@@ -538,7 +552,7 @@ private extension ChatRoomViewController {
             } else {
                 return "Unmute \(userName!)?"
             }
-        case .forceBroadcasteEnd:
+        case .forceBroadcasterEnd:
             if DeviceAssistant.Language.isChinese {
                 return "确定\"\(userName!)\"下麦?"
             } else {

@@ -11,6 +11,8 @@ import RxSwift
 import RxRelay
 import AlamoClient
 
+typealias ActionMessage = EduActionMessage
+
 class Center: NSObject {
     static let instance = Center()
     static func shared() -> Center {
@@ -18,7 +20,8 @@ class Center: NSObject {
     }
     
     let isWorkNormally = BehaviorRelay(value: false)
-    let customMessage = BehaviorRelay(value: [String: Any]())
+    let customMessage = PublishRelay<[String: Any]>()
+    let actionMessage = PublishRelay<ActionMessage>()
     
     // Specials
     private var files = FilesGroup()
@@ -73,11 +76,6 @@ extension Center {
                 self.isWorkNormally.accept(true)
             }
         }
-    }
-    
-    func reinitAgoraServe() {
-//        mediaKit.reinitRTC()
-//        rtm = RTMClient(logTube: log)
     }
 }
 
@@ -173,6 +171,10 @@ extension Center: EduManagerDelegate {
             return
         }
         customMessage.accept(json)
+    }
+    
+    func userActionMessageReceived(_ actionMessage: EduActionMessage) {
+        self.actionMessage.accept(actionMessage)
     }
 }
 

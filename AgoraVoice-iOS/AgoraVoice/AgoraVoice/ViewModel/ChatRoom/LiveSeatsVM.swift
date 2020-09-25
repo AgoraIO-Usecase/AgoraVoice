@@ -121,7 +121,7 @@ private extension LiveSeatsVM {
                         let userName = try item.getStringValue(of: "userName")
                         let info = BasicUserInfo(userId: userId, name: userName)
                         let user = LiveRoleItem(type: .broadcaster, info: info, agUId: "0")
-                        let stream = try self.seatMatchStreamWith(role: user)
+                        let stream = self.seatMatchStreamWith(role: user)
                         state = .normal(stream)
                     case 2:
                         state = .close
@@ -137,11 +137,10 @@ private extension LiveSeatsVM {
             } catch {
                 self.log(error: error)
             }
-            
         }).disposed(by: bag)
     }
     
-    func seatMatchStreamWith(role: LiveRole) throws -> LiveStream {
+    func seatMatchStreamWith(role: LiveRole) -> LiveStream {
         var stream: LiveStream?
         for item in streamList.value where item.owner.info.userId == role.info.userId {
             stream = item
@@ -150,7 +149,7 @@ private extension LiveSeatsVM {
         if let tStream = stream {
             return tStream
         } else {
-            throw AGEError.fail("no match stream", extra: "role userId: \(role.info.userId)")
+            return LiveStream(streamId: role.agUId, hasAudio: true, owner: role)
         }
     }
     
@@ -167,7 +166,7 @@ private extension LiveSeatsVM {
                 
                 var new = seat
                 new.state = .normal(stream)
-                newSeats[seat.index] = new
+                newSeats[seat.index - 1] = new
                 break
             }
         }

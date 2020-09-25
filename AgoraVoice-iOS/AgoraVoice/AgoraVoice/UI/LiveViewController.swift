@@ -78,6 +78,12 @@ extension LiveViewController {
             }
         }).disposed(by: bag)
         
+        if let vc = bottomToolsVC {
+            liveSession.localRole.map({ (role) -> LiveRoleType in
+                return role.type
+            }).bind(to: vc.perspective).disposed(by: bag)
+        }
+        
         // end
         liveSession.end.subscribe(onNext: { [unowned self] in
             if let vc = self.presentedViewController {

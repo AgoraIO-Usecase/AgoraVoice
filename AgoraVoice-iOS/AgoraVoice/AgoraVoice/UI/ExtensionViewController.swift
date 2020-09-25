@@ -60,7 +60,7 @@ class ExtensionViewController: RxViewController {
         view.addSubview(dataButton)
         
         switch perspective {
-        case .owner, .broadcaster:
+        case .owner:
             musicButton.setImage(UIImage(named: "icon-music"), for: .normal)
             musicButton.setTitle(NSLocalizedString("Music"), for: .normal)
             view.addSubview(musicButton)
@@ -69,6 +69,12 @@ class ExtensionViewController: RxViewController {
             backgroudButton.setTitle(NSLocalizedString("Background"), for: .normal)
             view.addSubview(backgroudButton)
             
+            audioLoopButton.setImage(UIImage(named: "icon-耳返-off"), for: .normal)
+            audioLoopButton.setImage(UIImage(named: "icon-耳返-on"), for: .selected)
+            audioLoopButton.setTitle(NSLocalizedString("Audio_Loop"), for: .normal)
+            audioLoopButton.setTitle(NSLocalizedString("Audio_Loop"), for: .selected)
+            view.addSubview(audioLoopButton)
+        case .broadcaster:
             audioLoopButton.setImage(UIImage(named: "icon-耳返-off"), for: .normal)
             audioLoopButton.setImage(UIImage(named: "icon-耳返-on"), for: .selected)
             audioLoopButton.setTitle(NSLocalizedString("Audio_Loop"), for: .normal)

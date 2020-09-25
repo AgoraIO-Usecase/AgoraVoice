@@ -55,7 +55,7 @@ class SeatButton: UIButton {
 class LiveSeatView: RxView {
     enum Command {
         // 禁麦， 解禁， 封麦，下麦， 解封， 邀请，
-        case ban, unban, close, forceBroadcasteEnd, release, invitation
+        case ban, unban, close, forceBroadcasterEnd, release, invitation
         // 申请成为主播， 主播下麦
         case application, endBroadcasting
         
@@ -63,7 +63,7 @@ class LiveSeatView: RxView {
             switch self {
             case .ban:                  return NSLocalizedString("Seat_Ban")
             case .unban:                return NSLocalizedString("Seat_Unban")
-            case .forceBroadcasteEnd:   return NSLocalizedString("End_Broadcasting")
+            case .forceBroadcasterEnd:  return NSLocalizedString("End_Broadcasting")
             case .close:                return NSLocalizedString("Seat_Close")
             case .release:              return NSLocalizedString("Seat_Release")
             case .invitation:           return NSLocalizedString("Invitation")
@@ -80,15 +80,7 @@ class LiveSeatView: RxView {
     
     let commandFire = PublishRelay<Command>()
     
-    var perspective: LiveRoleType = .audience {
-        didSet {
-            if commandButton.type != .empty && perspective == .audience {
-                commandButton.isUserInteractionEnabled = false
-            } else {
-                commandButton.isUserInteractionEnabled = true
-            }
-        }
-    }
+    var perspective: LiveRoleType = .audience
     
     var audioSilenceTag = UIImageView()
     
@@ -113,12 +105,11 @@ class LiveSeatView: RxView {
             case (.empty, .owner):
                 self.commands.accept([.invitation, .close])
             case (.normal(let stream), .owner):
-                break
-//                if user.permission.contains(.mic) {
-//                    self.commands.accept([.ban, .forceEndBroadcasting, .close])
-//                } else {
-//                    self.commands.accept([.unban, .forceEndBroadcasting, .close])
-//                }
+                if stream.hasAudio {
+                    self.commands.accept([.ban, .forceBroadcasterEnd, .close])
+                } else {
+                    self.commands.accept([.unban, .forceBroadcasterEnd, .close])
+                }
             case (.close, .owner):
                 self.commands.accept([.release])
             // broadcaster

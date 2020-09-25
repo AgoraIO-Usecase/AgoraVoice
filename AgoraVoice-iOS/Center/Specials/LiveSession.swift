@@ -27,6 +27,7 @@ class LiveSession: RxObject {
     let localRole: BehaviorRelay<LiveRole>
     // Local stream
     let localStream = BehaviorRelay<LiveStream?>(value: nil)
+    let localStreamByRemoved = PublishRelay<()>()
     
     // Statistic
     let sessionReport = BehaviorRelay(value: RTCStatistics(type: .local(RTCStatistics.Local(stats: AgoraChannelStats()))))
@@ -45,6 +46,7 @@ class LiveSession: RxObject {
     // Message
     let chatMessage = PublishRelay<(user: LiveRole, message: String)>()
     let customMessage = BehaviorRelay(value: [String: Any]())
+    let actionMessage = PublishRelay<ActionMessage>()
     
     init(room: Room, role: LiveRoleType) {
         let configuration = EduClassroomConfig(roomName: room.name,
@@ -158,7 +160,7 @@ class LiveSession: RxObject {
                                                 hasAudio: true,
                                                 owner: role)
                         
-                        userService.publishNewStream(stream, success: { [unowned self] in
+                        self.publishNewStream(stream, success: { [unowned self] in
                             if let success = success {
                                 success(self)
                             }
@@ -168,7 +170,7 @@ class LiveSession: RxObject {
                     self.leave()
                     
                     if let fail = fail {
-                        fail(error ?? AGEError.unknown())
+                        fail(error)
                     }
                 }
             } else {
@@ -178,7 +180,7 @@ class LiveSession: RxObject {
             }
         
         }) { (error) in
-            if let fail = fail, let error = error {
+            if let fail = fail {
                 fail(error)
             }
         }
@@ -228,12 +230,12 @@ extension LiveSession {
                                                         }
                                                     }, failure: { (error) in
                                                         if let fail = fail {
-                                                            fail(error ?? AGEError.unknown())
+                                                            fail(error)
                                                         }
                                                     })
         }, failure: { (error) in
                 if let fail = fail {
-                    fail(error ?? AGEError.unknown())
+                    fail(error)
                 }
         })
     }
@@ -242,16 +244,36 @@ extension LiveSession {
         userService?.muteOther(stream: stream, fail: fail)
     }
     
-    func ummuteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
+    func unmuteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
         userService?.ummuteOther(stream: stream, fail: fail)
     }
     
     func publishNewStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
-        userService?.publishNewStream(stream, success: success, fail: fail)
+        let eduStream = EduStream(liveStream: stream)
+        userService?.publishNewStream(eduStream, success: success, fail: fail)
+    }
+    
+    func publishNewStream(for user: LiveRole, success: Completion = nil, fail: ErrorCompletion = nil) {
+        let streamUser = audienceList.value.first { (item) -> Bool in
+            return item.info == user.info
+        }
+        
+        guard let tUser = streamUser else {
+            if let fail = fail {
+                fail(AGEError.fail("this user is not on audience list"))
+            }
+            return
+        }
+        
+        let liveStream = LiveStream(streamId: tUser.agUId, hasAudio: true, owner: tUser)
+        let eduStream = EduStream(liveStream: liveStream)
+        
+        userService?.publishNewStream(eduStream, success: success, fail: fail)
     }
     
     func unpublishNewStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
-        userService?.unpublishNewStream(stream, success: success, fail: fail)
+        let eduStream = EduStream(liveStream: stream)
+        userService?.unpublishNewStream(eduStream, success: success, fail: fail)
     }
 }
 
@@ -264,7 +286,7 @@ extension LiveSession {
             }
         }, failure: { (error) in
             if let fail = fail {
-                fail(error ?? AGEError.unknown())
+                fail(error)
             }
         })
     }
@@ -317,14 +339,15 @@ fileprivate extension LiveSession {
         localStream.subscribe(onNext: { [unowned self] (stream) in
             var role = self.localRole.value
             
-            guard role.type == .owner else {
+            guard role.type != .owner else {
                 return
             }
             
             // update role
-            if let _ = stream, role.type == .audience {
+            if let stream = stream, role.type == .audience {
                 role.type = .broadcaster
                 self.localRole.accept(role)
+                self.updateLocalAudioStream(isOn: stream.hasAudio)
             } else if stream == nil, role.type == .broadcaster {
                 role.type = .audience
                 self.localRole.accept(role)
@@ -355,6 +378,7 @@ fileprivate extension LiveSession {
         }).disposed(by: bag)
         
         Center.shared().customMessage.bind(to: customMessage).disposed(by: bag)
+        Center.shared().actionMessage.bind(to: actionMessage).disposed(by: bag)
     }
 }
 
@@ -364,13 +388,13 @@ extension LiveSession: EduClassroomDelegate {
     func classroom(_ classroom: EduClassroom, remoteUsersInit users: [EduUser]) {
         roomManager.getFullUserList(success: { [unowned self] (list) in
             self.userList.accept([LiveRole](list: list))
-            }, failure: nil)
+        }, failure: nil)
     }
     
     func classroom(_ classroom: EduClassroom, remoteUsersJoined users: [EduUser]) {
         roomManager.getFullUserList(success: { [unowned self] (list) in
             self.userList.accept([LiveRole](list: list))
-            }, failure: nil)
+        }, failure: nil)
         
         userJoined.accept([LiveRole](list: users))
     }
@@ -498,10 +522,10 @@ extension EduUserService {
         let eduStream = EduStream(liveStream: new)
         
         publishStream(eduStream, success: {
-            
+            print("muteOther success")
         }) { (error) in
             if let fail = fail {
-                fail(error ?? AGEError.unknown())
+                fail(error)
             }
         }
     }
@@ -515,35 +539,31 @@ extension EduUserService {
             
         }) { (error) in
             if let fail = fail {
-                fail(error ?? AGEError.unknown())
+                fail(error)
             }
         }
     }
     
-    func publishNewStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
-        let eduStream = EduStream(liveStream: stream)
-        
-        publishStream(eduStream, success: {
+    func publishNewStream(_ stream: EduStream, success: Completion = nil, fail: ErrorCompletion = nil) {
+        publishStream(stream, success: {
             if let success = success {
                 success()
             }
         }) { (error) in
             if let fail = fail {
-                fail(error ?? AGEError.unknown())
+                fail(error)
             }
         }
     }
     
-    func unpublishNewStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
-        let eduStream = EduStream(liveStream: stream)
-        
-        unpublishStream(eduStream, success: {
+    func unpublishNewStream(_ stream: EduStream, success: Completion = nil, fail: ErrorCompletion = nil) {
+        unpublishStream(stream, success: {
             if let success = success {
                 success()
             }
         }) { (error) in
             if let fail = fail {
-                fail(error ?? AGEError.unknown())
+                fail(error)
             }
         }
     }

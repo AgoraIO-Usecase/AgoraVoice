@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxRelay
 
 class BottomToolsViewController: RxViewController {
     lazy var textInput = TextInputView()
@@ -29,12 +31,7 @@ class BottomToolsViewController: RxViewController {
     
     var liveType: LiveType = .chatRoom
     
-    var perspective: LiveRoleType = .owner {
-        didSet {
-            updateViews()
-            viewDidLayoutSubviews()
-        }
-    }
+    let perspective = BehaviorRelay<LiveRoleType>(value: .owner)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +47,10 @@ class BottomToolsViewController: RxViewController {
         extensionButton.setImage(UIImage(named: "icon-more"), for: .normal)
         view.addSubview(extensionButton)
         
-        updateViews()
+        perspective.subscribe(onNext: { [unowned self] (role) in
+            self.updateViews()
+            self.viewDidLayoutSubviews()
+        }).disposed(by: bag)
     }
     
     override func viewDidLayoutSubviews() {
@@ -81,14 +81,19 @@ class BottomToolsViewController: RxViewController {
             }
         }
         
-        switch (liveType, perspective) {
+        switch (liveType, perspective.value) {
         case (.chatRoom, .owner):
             buttonsLayout([soundEffectButton, belcantoButton, micButton],
                           extensionButton: extensionButton,
                           buttonWH: buttonWH,
                           space: space)
             lastButton = micButton
-        case (.chatRoom, .broadcaster): fallthrough
+        case (.chatRoom, .broadcaster):
+            buttonsLayout([giftButton, micButton],
+                          extensionButton: extensionButton,
+                          buttonWH: buttonWH,
+                          space: space)
+            lastButton = micButton
         case (.chatRoom, .audience):
             buttonsLayout([giftButton],
                           extensionButton: extensionButton,
@@ -112,7 +117,7 @@ private extension BottomToolsViewController {
         micButton.isHidden = true
         giftButton.isHidden = true
         
-        switch (liveType, perspective) {
+        switch (liveType, perspective.value) {
         case (.chatRoom, .owner):
             belcantoButton.isHidden = false
             belcantoButton.setImage(UIImage(named: "icon-美声"), for: .normal)
@@ -126,7 +131,15 @@ private extension BottomToolsViewController {
             micButton.setImage(UIImage(named: "icon-microphone-on"), for: .normal)
             micButton.setImage(UIImage(named: "icon-microphone-off"), for: .selected)
             view.addSubview(micButton)
-        case (.chatRoom, .broadcaster): fallthrough
+        case (.chatRoom, .broadcaster):
+            micButton.isHidden = false
+            micButton.setImage(UIImage(named: "icon-microphone-on"), for: .normal)
+            micButton.setImage(UIImage(named: "icon-microphone-off"), for: .selected)
+            view.addSubview(micButton)
+            
+            giftButton.isHidden = false
+            giftButton.setImage(UIImage(named: "icon-gift"), for: .normal)
+            view.addSubview(giftButton)
         case (.chatRoom, .audience):
             giftButton.isHidden = false
             giftButton.setImage(UIImage(named: "icon-gift"), for: .normal)
