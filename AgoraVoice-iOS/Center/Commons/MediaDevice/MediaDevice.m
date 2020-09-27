@@ -10,6 +10,7 @@
 
 @interface MediaDevice () <RTCMediaDeviceDelegate>
 @property (nonatomic, strong) Player *player;
+@property (nonatomic, strong) AudioEffect *recordAudioEffect;
 @end
 
 @implementation MediaDevice
@@ -17,6 +18,7 @@
     if (self = [super initWithRtcEngine:engine]) {
         self.agoraKit.deviceDelegate = self;
         self.player = [[Player alloc] initWithRtcEngine:engine];
+        self.recordAudioEffect = [[AudioEffect alloc] initWithRtcEngine:engine];
     }
     return self;
 }

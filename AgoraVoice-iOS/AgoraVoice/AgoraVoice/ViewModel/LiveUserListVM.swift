@@ -75,12 +75,12 @@ private extension LiveUserListVM {
         }.bind(to: total).disposed(by: bag)
         
         message.subscribe(onNext: { [unowned self] (json) in
-            guard let giftJson = try? json.getDictionaryValue(of: "gift") else {
+            guard let giftJson = try? json.getDictionaryValue(of: "gift"),
+                let ranks = try? giftJson.getListValue(of: "ranks") else {
                 return
             }
             
             do {
-                let ranks = try giftJson.getListValue(of: "ranks")
                 var temp = [LiveRoleItem]()
                 
                 for item in ranks {

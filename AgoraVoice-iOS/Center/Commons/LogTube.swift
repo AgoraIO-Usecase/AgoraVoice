@@ -65,9 +65,37 @@ private extension LogTube {
     }
         
     func debugPrint(_ log: String, type: LogType) {
-        #if !RELEASE
-        NSLog("%@", log)
-        #endif
         writeToFile(log: log, type: type)
+    }
+    
+    func consolePrint(_ log: String) {
+        var remainder = log.count
+        let perCount = 800
+        var text = ""
+
+        if remainder < perCount {
+            NSLog("%@", log)
+        } else {
+            for i in stride(from: 0, to: log.count, by: perCount) {
+                let start = log.index(log.startIndex, offsetBy: i)
+                let end = log.index(log.startIndex, offsetBy: i + perCount)
+                let range = start..<end
+
+                text = String(log[range])
+                remainder -= perCount
+
+                NSLog("%@", text)
+
+                if remainder < perCount {
+                    break
+                }
+            }
+
+            if remainder > 0 {
+                let index = log.index(log.endIndex, offsetBy: -remainder)
+                let text = String(log[index...])
+                NSLog("%@", text)
+            }
+        }
     }
 }

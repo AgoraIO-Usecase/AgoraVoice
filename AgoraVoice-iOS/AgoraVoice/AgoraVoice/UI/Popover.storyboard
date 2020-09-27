@@ -377,7 +377,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GEA-ku-dWR">
                                 <rect key="frame" x="0.0" y="139" width="414" height="723"/>
                                 <connections>
-                                    <segue destination="eD6-Ga-vfj" kind="embed" id="AO0-sS-2T7"/>
+                                    <segue destination="eD6-Ga-vfj" kind="embed" identifier="ElectronicMusicViewController" id="AO0-sS-2T7"/>
                                 </connections>
                             </containerView>
                         </subviews>
@@ -445,7 +445,7 @@
                                 </constraints>
                                 <state key="normal" image="icon-back"/>
                             </button>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="aaQ-kt-Sjs">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="60" translatesAutoresizingMaskIntoConstraints="NO" id="aaQ-kt-Sjs">
                                 <rect key="frame" x="38" y="157" width="338" height="31"/>
                                 <color key="minimumTrackTintColor" red="0.43529411764705883" green="0.76470588235294112" blue="1" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                             </slider>

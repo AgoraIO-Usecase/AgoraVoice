@@ -39,6 +39,12 @@ class AudioEffectViewController: RxViewController {
             let vc = segue.destination as! AECollectionViewController
             collectionVC = vc
             subscribeAECollectionVC(vc)
+        case "ThreeDimensionalViewController":
+            let vc = segue.destination as! ThreeDimensionalViewController
+            vc.audioEffectVM = audioEffectVM
+        case "ElectronicMusicViewController":
+            let vc = segue.destination as! ElectronicMusicViewController
+            vc.audioEffectVM = audioEffectVM
         default:
             break
         }
@@ -106,12 +112,10 @@ private extension AudioEffectViewController {
         vc.audioEffectType = audioEffect
         vc.audioEffectVM = audioEffectVM
                 
-        // SoundEffectType - space
-        audioEffectVM.selectedAudioSpace.subscribe(onNext: { [unowned self] (space) in
-            if space == .threeDimensionalVoice {
-                self.performSegue(withIdentifier: "ThreeDimensionalViewController", sender: nil)
-            }
-        }).disposed(by: vc.bag)
+        // SoundEffectType - ThreeDimension
+        vc.selectedThreeDimension.subscribe(onNext: { [unowned self] in
+            self.performSegue(withIdentifier: "ThreeDimensionalViewController", sender: nil)
+        }).disposed(by: bag)
         
         // special for eletronic music
         vc.selectedSoundEffectType.subscribe(onNext: { [unowned self] (type) in

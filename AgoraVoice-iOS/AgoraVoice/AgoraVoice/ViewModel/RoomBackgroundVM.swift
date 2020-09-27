@@ -61,8 +61,11 @@ class RoomBackgroundVM: CustomObserver {
 private extension RoomBackgroundVM {
     func observe() {
         message.subscribe(onNext: { [unowned self] (json) in
+            guard let basic = try? json.getDictionaryValue(of: "basic") else {
+                return
+            }
+            
             do {
-                let basic = try json.getDictionaryValue(of: "basic")
                 let index = try basic.getStringValue(of: "backgroundImage")
                 self.selectedIndex.accept(Int(index)!)
             } catch {

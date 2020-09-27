@@ -80,13 +80,17 @@ typedef NS_ENUM(int, MusicGenre) {
 #pragma mark - Sound Effect 音效类
 // 空间塑造
 - (void)setSoundEffectWithSpace:(AudioSpace)space;
-- (void)setThreedimVoiceOfSoundEffect;
+- (void)setThreedimVoiceOfSoundEffect:(NSInteger)value;
 
 // 变声音效
 - (void)setSoundEffectWithRole:(TimbreRole)role;
 
 // 曲风音效
 - (void)setSoundEffectWithMusicGenre:(MusicGenre)genre;
+
+// 电音
+- (void)setElectronicMusicWithType:(NSInteger)type value:(NSInteger)value;
+- (void)cancelElectronicMusic;
 @end
 
 NS_ASSUME_NONNULL_END

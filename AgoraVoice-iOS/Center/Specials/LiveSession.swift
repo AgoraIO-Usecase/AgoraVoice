@@ -444,7 +444,7 @@ extension LiveSession: EduClassroomDelegate {
     }
     
     // Stream
-    func classroom(_ classroom: EduClassroom, remoteStreamsInitAdded streams: [EduStream]) {
+    func classroom(_ classroom: EduClassroom, remoteStreamsInit streams: [EduStream]) {
         for item in streams {
             addNewStream(eduStream: item)
         }
@@ -476,9 +476,13 @@ extension LiveSession: EduClassroomDelegate {
         }
     }
     
-    func classroomPropertyUpdated(_ classroom: EduClassroom) {
+    func classroomPropertyUpdated(_ classroom: EduClassroom, cause: [AnyHashable : Any]?) {
         // Mutit hosts && Live Seats
-        if let json = classroom.roomProperties as? [String: Any] {
+        if var json = classroom.roomProperties as? [String: Any] {
+            if let cause = cause as? [String: Any] {
+                json["cause"] = cause
+            }
+            
             customMessage.accept(json)
         }
     }

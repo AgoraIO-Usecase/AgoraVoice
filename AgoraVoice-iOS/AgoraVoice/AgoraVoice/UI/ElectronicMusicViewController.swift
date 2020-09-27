@@ -41,17 +41,58 @@ class ElectronicMusicViewController: RxViewController {
     @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var selectScaleLabel: UILabel!
     
+    var audioEffectVM: AudioEffectVM!
+    
     let scaleList = BehaviorRelay<[String]>(value: ["A", "Bb", "B",
                                                     "C", "Db", "D",
                                                     "Eb", "E", "F",
                                                     "Gb", "G", "Ab"])
-    var selectedIndex: Int = 0
+    
+    var selectedValueIndex = BehaviorRelay<Int>(value: 0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         switchNameLabel.text = "启动电音"
         selectScaleLabel.text = "选择起始音阶"
+        
+        // audioEffectVM
+        audioEffectVM.selectedElectronicMusic.bind(to: ableSwitch.rx.isOn).disposed(by: bag)
+        audioEffectVM.selectedElectronicMusic.bind(to: segmentControl.rx.isEnabled).disposed(by: bag)
+        audioEffectVM.selectedElectronicMusic.bind(to: collectionView.rx.isUserInteractionEnabled).disposed(by: bag)
+        
+        audioEffectVM.selectedElectronicMusicType.map { (type) -> Int in
+            return type - 1
+        }.bind(to: segmentControl.rx.selectedSegmentIndex).disposed(by: bag)
+        
+        // ableSwitch
+        ableSwitch.rx.isOn.bind(to: audioEffectVM.selectedElectronicMusic).disposed(by: bag)
+        ableSwitch.rx.isOn.subscribe(onNext: { [unowned self] (isOn) in
+            guard isOn else {
+                return
+            }
+            
+            let type = (self.segmentControl.selectedSegmentIndex + 1)
+            let value = (self.selectedValueIndex.value + 1)
+            self.audioEffectVM.selectedElectronicMusicType.accept(type)
+            self.audioEffectVM.selectedElectronicMusicValue.accept(value)
+        }).disposed(by: bag)
+        
+        // segmentControl
+        segmentControl.rx.selectedSegmentIndex.map { (index) -> Int in
+            return index + 1
+        }.bind(to: audioEffectVM.selectedElectronicMusicType).disposed(by: bag)
+        
+        // collectionView
+        selectedValueIndex.accept(audioEffectVM.selectedElectronicMusicValue.value)
+        selectedValueIndex.map { (index) -> Int in
+            return index + 1
+        }.bind(to: audioEffectVM.selectedElectronicMusicValue).disposed(by: bag)
+
+        collectionView.rx.itemSelected.subscribe(onNext: { [unowned self] (index) in
+            self.selectedValueIndex.accept(index.item)
+            self.collectionView.reloadData()
+        }).disposed(by: bag)
         
         modeSegment()
         scaleCollection()
@@ -100,12 +141,7 @@ private extension ElectronicMusicViewController {
         scaleList.bind(to: collectionView.rx.items(cellIdentifier: "ScaleCell",
                                                    cellType: ScaleCell.self)) { [unowned self] (index, item, cell) in
                                                     cell.nameLabel.text = item.description
-                                                    cell.isSelectedNow = (index == self.selectedIndex)
+                                                    cell.isSelectedNow = (index == self.selectedValueIndex.value)
         }.disposed(by: bag)
-        
-        collectionView.rx.itemSelected.subscribe(onNext: { [unowned self] (index) in
-            self.selectedIndex = index.item
-            self.collectionView.reloadData()
-        }).disposed(by: bag)
     }
 }

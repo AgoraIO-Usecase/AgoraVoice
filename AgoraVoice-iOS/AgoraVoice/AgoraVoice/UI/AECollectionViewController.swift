@@ -71,6 +71,8 @@ class AECollectionViewController: RxViewController {
     
     let soundEffectType = BehaviorRelay<SoundEffectType>(value: .space)
     
+    let selectedThreeDimension = PublishRelay<()>()
+    
     // special for eletronic music
     let selectedSoundEffectType = PublishRelay<SoundEffectType>()
     
@@ -248,6 +250,11 @@ private extension AECollectionViewController {
             }
             
             let selectSubscribe = collectionView.rx.modelSelected(AudioSpace.self).subscribe(onNext: { [unowned self] (item) in
+                guard item != .threeDimensionalVoice else {
+                    self.selectedThreeDimension.accept(())
+                    return
+                }
+                
                 if self.audioEffectVM.selectedAudioSpace.value == item {
                     self.audioEffectVM.selectedAudioSpace.accept(.disable)
                 } else {
@@ -257,8 +264,13 @@ private extension AECollectionViewController {
                 self.collectionView.reloadData()
             })
             
+            let threeDimensionSubscribe = audioEffectVM.selectedAudioSpace.subscribe(onNext: { [unowned self] (space) in
+                self.collectionView.reloadData()
+            })
+            
             lastSubscribes.append(listSubscribe)
             lastSubscribes.append(selectSubscribe)
+            lastSubscribes.append(threeDimensionSubscribe)
         case .role:
             let listSubscribe = TimbreRole.list.bind(to: collectionView.rx.items(cellIdentifier: "AEImageLabelCell",
                                                                                  cellType: AEImageLabelCell.self)) { [unowned self] (index, item, cell) in

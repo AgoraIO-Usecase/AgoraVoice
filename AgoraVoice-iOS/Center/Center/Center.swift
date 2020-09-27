@@ -42,7 +42,6 @@ class Center: NSObject {
         let configuration = EduConfiguration(appId: Keys.AgoraAppId,
                                              customerId: Keys.customerId,
                                              customerCertificate: Keys.customerCertificate)
-//        configuration.logDirectoryPath = 
         let manager = EduManager(config: configuration)
         manager.delegate = self
         return manager
@@ -56,6 +55,7 @@ class Center: NSObject {
     
     override init() {
         super.init()
+        _ = liveManager
         appInfo()
     }
 }
