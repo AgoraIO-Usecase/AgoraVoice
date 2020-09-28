@@ -33,10 +33,10 @@
 - (void)setBelCantoWithSing:(SingOfBelCanto)sing {
     switch (sing) {
         case SingOfBelCantoMale:
-//            [self.agoraKit setLocalVoiceChanger:AgoraAudioGeneralBeautySingMale];
+            [self.agoraKit setLocalVoiceChanger:AgoraAudioGeneralBeautySingMale];
             break;
         case SingOfBelCantoFemale:
-//            [self.agoraKit setLocalVoiceChanger:AgoraAudioGeneralBeautySingFemale];
+            [self.agoraKit setLocalVoiceChanger:AgoraAudioGeneralBeautySingFemale];
             break;
         case SingOfBelCantoDisable:
             [self.agoraKit setLocalVoiceReverbPreset:AgoraAudioReverbPresetOff];
