@@ -339,7 +339,7 @@ extension LiveViewController {
         let musicVC = UIStoryboard.initViewController(of: "MusicViewController",
                                                       class: MusicViewController.self,
                                                       on: "Popover")
-        
+        musicVC.musicVM = musicVM
         musicVC.view.cornerRadius(10)
         
         let presenetedHeight: CGFloat = 526.0 + UIScreen.main.heightOfSafeAreaBottom
@@ -351,26 +351,6 @@ extension LiveViewController {
         self.presentChild(musicVC,
                           animated: true,
                           presentedFrame: presentedFrame)
-        
-        musicVM.list.bind(to: musicVC.list).disposed(by: musicVC.bag)
-                
-        musicVC.tableView.rx.modelSelected(Music.self).subscribe(onNext: { [unowned self] (music) in
-            if let last = self.musicVM.lastMusic {
-                
-                if last == music {
-                    if music.isPlaying {
-                        self.musicVM.pause(music: music)
-                    } else {
-                        self.musicVM.resume(music: music)
-                    }
-                } else {
-                    self.musicVM.stop()
-                    self.musicVM.play(music: music)
-                }
-            } else {
-                self.musicVM.play(music: music)
-            }
-        }).disposed(by: musicVC.bag)
     }
     
     // MARK: - ExtensionFunctions

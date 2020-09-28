@@ -55,11 +55,13 @@ class MusicVM: RxObject {
     
     let playerStatus = BehaviorRelay(value: PlayerStatus.stop)
     let list = BehaviorRelay(value: [Music]())
+    let volume = BehaviorRelay<Int>(value: 100)
     
     override init() {
         operatorObj = Center.shared().centerProvideMediaDevice().player
         super.init()
         operatorObj.delegate = self
+        observe()
     }
     
     func refetch() {
@@ -181,6 +183,12 @@ private extension MusicVM {
             let next = musicList[index + 1]
             play(music: next)
         }
+    }
+    
+    func observe() {
+        volume.subscribe(onNext: { [unowned self] (volume) in
+            self.operatorObj.adjustAudioMixingVolume(volume)
+        }).disposed(by: bag)
     }
 }
 

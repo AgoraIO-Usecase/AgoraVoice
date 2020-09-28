@@ -656,18 +656,46 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <label key="tableHeaderView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3gU-cX-xT8">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="JHp-TD-51U">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="107"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ffk-Sb-67B">
+                                    <rect key="frame" x="189.5" y="20" width="35.5" height="17"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="hexTextColor" value="#EEEEEE"/>
+                                    </userDefinedRuntimeAttributes>
+                                </label>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon-volume" translatesAutoresizingMaskIntoConstraints="NO" id="qzm-HA-dLP">
+                                    <rect key="frame" x="15" y="58" width="32" height="32"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="32" id="F2g-zV-0dw"/>
+                                        <constraint firstAttribute="height" constant="32" id="Ita-lf-b7C"/>
+                                    </constraints>
+                                </imageView>
+                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="100" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="HEj-n2-N6D">
+                                    <rect key="frame" x="56" y="59" width="343" height="31"/>
+                                </slider>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <constraints>
+                                <constraint firstItem="qzm-HA-dLP" firstAttribute="top" secondItem="JHp-TD-51U" secondAttribute="top" constant="58" id="9Rg-xA-hB7"/>
+                                <constraint firstItem="HEj-n2-N6D" firstAttribute="centerY" secondItem="qzm-HA-dLP" secondAttribute="centerY" id="HUO-Jf-mzt"/>
+                                <constraint firstAttribute="trailing" secondItem="HEj-n2-N6D" secondAttribute="trailing" constant="17" id="SU7-Kp-KP6"/>
+                                <constraint firstItem="qzm-HA-dLP" firstAttribute="leading" secondItem="JHp-TD-51U" secondAttribute="leading" constant="15" id="XfE-cI-6nO"/>
+                                <constraint firstItem="HEj-n2-N6D" firstAttribute="leading" secondItem="qzm-HA-dLP" secondAttribute="trailing" constant="11" id="kmM-Bi-bXn"/>
+                                <constraint firstItem="Ffk-Sb-67B" firstAttribute="centerX" secondItem="JHp-TD-51U" secondAttribute="centerX" id="rwk-Yf-x9x"/>
+                                <constraint firstItem="Ffk-Sb-67B" firstAttribute="top" secondItem="JHp-TD-51U" secondAttribute="top" constant="20" id="ybm-3L-wkz"/>
+                            </constraints>
                             <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="string" keyPath="hexTextColor" value="#EEEEEE"/>
+                                <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#161D27"/>
                             </userDefinedRuntimeAttributes>
-                        </label>
+                        </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="1XK-fd-MpF">
-                            <rect key="frame" x="0.0" y="164" width="414" height="84"/>
+                            <rect key="frame" x="0.0" y="221" width="414" height="84"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XHn-kX-gIV">
@@ -690,7 +718,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MusicCell" rowHeight="58" id="79U-95-Pzf" customClass="MusicCell" customModule="AgoraVoice" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="78" width="414" height="58"/>
+                                <rect key="frame" x="0.0" y="135" width="414" height="58"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="79U-95-Pzf" id="a8q-ge-mD2">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="58"/>
@@ -748,12 +776,13 @@
                     </tableView>
                     <connections>
                         <outlet property="musicLinkLabel" destination="XHn-kX-gIV" id="NXo-UC-Ixe"/>
-                        <outlet property="titleLabel" destination="3gU-cX-xT8" id="8zW-zv-LWM"/>
+                        <outlet property="titleLabel" destination="Ffk-Sb-67B" id="ave-zQ-Cah"/>
+                        <outlet property="volumeSlider" destination="HEj-n2-N6D" id="Bqf-Mv-267"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zWc-J7-yOp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5739" y="1647"/>
+            <point key="canvasLocation" x="-5739.130434782609" y="1646.6517857142856"/>
         </scene>
         <!--Extension View Controller-->
         <scene sceneID="s2Y-wT-pyk">
@@ -1312,5 +1341,6 @@
         <image name="icon-check" width="26" height="26"/>
         <image name="icon-close-gray" width="38" height="38"/>
         <image name="icon-pause" width="30" height="30"/>
+        <image name="icon-volume" width="32" height="32"/>
     </resources>
 </document>

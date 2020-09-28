@@ -31,17 +31,17 @@ class MusicCell: UITableViewCell {
 class MusicViewController: RxTableViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var musicLinkLabel: UILabel!
-    
-    let list = BehaviorRelay(value: [Music]())
+    @IBOutlet weak var volumeSlider: UISlider!
     
     var playingImage = UIImage(named: "icon-pause")
     var pauseImage = UIImage(named: "icon-play")
+    var musicVM: MusicVM!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.titleLabel.text = NSLocalizedString("BGM")
-        
-        self.tableView.rowHeight = 58.0
+        titleLabel.text = NSLocalizedString("BGM")
+        volumeSlider.setThumbImage(UIImage(named: "icon-volume handle"), for: .normal)
+        tableView.rowHeight = 58.0
         
         let music = "Music: "
         let link = "https://www.bensound.com"
@@ -65,12 +65,38 @@ class MusicViewController: RxTableViewController {
         tableView.delegate = nil
         tableView.dataSource = nil
         
-        list.bind(to: tableView.rx.items(cellIdentifier: "MusicCell",
+        musicVM.list.bind(to: tableView.rx.items(cellIdentifier: "MusicCell",
                                          cellType: MusicCell.self)) { [unowned self] (index, music, cell) in
                                             cell.tagImageView.image = music.isPlaying ? self.playingImage : self.pauseImage
                                             cell.isPlaying = music.isPlaying
                                             cell.nameLabel.text = music.name
                                             cell.singerLabel.text = music.singer
         }.disposed(by: bag)
+        
+        tableView.rx.modelSelected(Music.self).subscribe(onNext: { [unowned self] (music) in
+            if let last = self.musicVM.lastMusic {
+                
+                if last == music {
+                    if music.isPlaying {
+                        self.musicVM.pause(music: music)
+                    } else {
+                        self.musicVM.resume(music: music)
+                    }
+                } else {
+                    self.musicVM.stop()
+                    self.musicVM.play(music: music)
+                }
+            } else {
+                self.musicVM.play(music: music)
+            }
+        }).disposed(by: bag)
+        
+        musicVM.volume.map { (volume) -> Float in
+            return Float(volume)
+        }.bind(to: volumeSlider.rx.value).disposed(by: bag)
+        
+        volumeSlider.rx.value.map { (volume) -> Int in
+            return Int(volume)
+        }.bind(to: musicVM.volume).disposed(by: bag)
     }
 }

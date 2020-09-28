@@ -41,6 +41,8 @@ typedef NS_ENUM(int, PlayerStatus) {
 - (BOOL)resume;
 - (BOOL)seekWithSecond:(NSInteger)second;
 - (BOOL)stop;
+- (BOOL)adjustAudioMixingVolume:(NSInteger)volume;
+- (NSInteger)getAudioMixingVolume;
 @end
 
 NS_ASSUME_NONNULL_END

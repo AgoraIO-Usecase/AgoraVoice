@@ -60,6 +60,18 @@
     return success;
 }
 
+- (BOOL)adjustAudioMixingVolume:(NSInteger)volume {
+    int result = [self.agoraKit adjustAudioMixingPublishVolume:volume];
+    result = [self.agoraKit adjustAudioMixingPlayoutVolume:volume];
+    BOOL success = result == 0 ? YES : NO;
+    return success;
+}
+
+- (NSInteger)getAudioMixingVolume {
+    NSInteger volume = [self.agoraKit getAudioMixingPlayoutVolume];
+    return volume;
+}
+
 #pragma mark - Private
 - (void)checkOccurErrorWithAPICallResult:(int)result {
     if (result == 0) {
