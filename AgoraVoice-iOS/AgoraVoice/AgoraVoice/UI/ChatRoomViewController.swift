@@ -56,6 +56,12 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
     var multiHostsVM: MultiHostsVM!
     var seatsVM: LiveSeatsVM!
     
+    fileprivate lazy var erorToast: TagImageTextToast = {
+        let view = TagImageTextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
+        view.tagImage = UIImage(named: "icon-red warning")
+        return view
+    }()
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -389,6 +395,9 @@ private extension ChatRoomViewController {
                                 }
                                 
                                 self.multiHostsVM.endBroadcasting(seatIndex: seatCommands.seat.index, user: user)
+                                if let stream = seatCommands.seat.state.stream {
+                                    self.liveSession.unpublishStream(stream)
+                                }
                 }
             // Audience
             case .application:
@@ -410,7 +419,7 @@ private extension ChatRoomViewController {
         liveSession.localRole.bind(to: multiHostsVM.localRole).disposed(by: bag)
         
         multiHostsVM.fail.subscribe(onNext: { [unowned self] (text) in
-            self.showTextToast(text: text)
+            self.showErrorToast(text)
         }).disposed(by: bag)
         
         // owner
@@ -458,7 +467,7 @@ private extension ChatRoomViewController {
                 self.multiHostsVM.accept(invitation: invitation, success: {
                     
                 }) { [unowned self] (_) in
-                    self.showTextToast(text: "accept invitation fail")
+                    self.showErrorToast("accept invitation fail")
                 }
             }
         }).disposed(by: bag)
@@ -559,5 +568,12 @@ private extension ChatRoomViewController {
             assert(false)
             return ""
         }
+    }
+}
+
+private extension ChatRoomViewController {
+    func showErrorToast(_ text: String) {
+        erorToast.text = text
+        showToastView(erorToast)
     }
 }

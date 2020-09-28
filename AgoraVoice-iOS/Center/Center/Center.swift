@@ -96,7 +96,8 @@ private extension Center {
     func register(success: ((BasicUserInfo) -> Void)?) {
         let url = URLGroup.userRegister
         let event = RequestEvent(name: "user-register")
-        let name = "Uknow"
+        let random = (Int(arc4random()) % Array.names.count) - 1
+        let name = Array.names[random]
         let parameters = ["userName": name]
         let task = RequestTask(event: event,
                                type: .http(.post, url: url),
@@ -253,4 +254,16 @@ extension Center: ACLogTube {
                                         extra: extral)
         log.logFromClass(formatter: fromatter)
     }
+}
+
+extension Array where Element == String {
+    static let names = ["Alexander",
+                        "Halley",
+                        "Rickey",
+                        "Xavior",
+                        "Yolanda",
+                        "Corynn",
+                        "Daniel",
+                        "Kelly",
+                        "Lauren"]
 }

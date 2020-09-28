@@ -393,7 +393,7 @@ extension LiveViewController {
                 return
             }
             extensionVC.audioLoopButton.isSelected.toggle()
-            self.deviceVM.localAudioLoop.accept(extensionVC.audioLoopButton.isSelected ? .off : .on)
+            self.deviceVM.localAudioLoop.accept(extensionVC.audioLoopButton.isSelected ? .on : .off)
         }).disposed(by: extensionVC.bag)
         
         deviceVM.audioOutput.subscribe(onNext: { [unowned extensionVC, unowned self] (routing) in

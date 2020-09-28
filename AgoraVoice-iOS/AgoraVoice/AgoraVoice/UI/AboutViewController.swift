@@ -112,7 +112,7 @@ class AboutViewController: MaskTableViewController {
                 return
             }
             
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.privateOpenURL(url)
         case 1:
             break
         case 2:
@@ -127,24 +127,30 @@ class AboutViewController: MaskTableViewController {
                 return
             }
             
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.privateOpenURL(url)
         case 6:
             self.showHUD()
-//            let log = Center.shared().centerProvideFilesGroup().logs
-//            log.upload(success: { [weak self] (logId) in
-//                self?.hiddenHUD()
-//
-//                let pasteboard = UIPasteboard.general
-//                pasteboard.string = logId
-//
-//                let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
-//                view.text = "LogId 已经复制"
-//                self?.showToastView(view, duration: 1)
-//            }) { [weak self] (_) in
-//                self?.hiddenHUD()
-//            }
+            let log = Center.shared().centerProvideFilesGroup().logs
+            log.upload(success: { [weak self] (logId) in
+                self?.hiddenHUD()
+
+                let pasteboard = UIPasteboard.general
+                pasteboard.string = logId
+
+                let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
+                view.text = "LogId 已经复制"
+                self?.showToastView(view, duration: 1)
+            }) { [weak self] (_) in
+                self?.hiddenHUD()
+            }
         default:
             break
         }
+    }
+}
+
+extension UIApplication {
+    func privateOpenURL(_ url: URL) {
+        open(url, options: [UIApplication.OpenExternalURLOptionsKey(rawValue: ""): ""], completionHandler: nil)
     }
 }

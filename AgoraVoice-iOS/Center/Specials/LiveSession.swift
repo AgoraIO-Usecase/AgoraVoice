@@ -273,7 +273,7 @@ extension LiveSession {
     
     func unpublishStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
         let eduStream = EduStream(liveStream: stream)
-        userService?.unpublishNewStream(eduStream, success: success, fail: fail)
+        userService?.unpublishStream(eduStream, success: success, fail: fail)
     }
 }
 
@@ -541,7 +541,7 @@ extension EduUserService {
         let eduStream = EduStream(liveStream: new)
         
         publishStream(eduStream, success: {
-            print("muteOther success")
+            
         }) { (error) in
             if let fail = fail {
                 fail(error)
@@ -575,7 +575,7 @@ extension EduUserService {
         }
     }
     
-    func unpublishNewStream(_ stream: EduStream, success: Completion = nil, fail: ErrorCompletion = nil) {
+    func unpublishStream(_ stream: EduStream, success: Completion = nil, fail: ErrorCompletion = nil) {
         unpublishStream(stream, success: {
             if let success = success {
                 success()

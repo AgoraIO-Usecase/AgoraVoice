@@ -102,8 +102,6 @@ class GiftVM: CustomObserver {
     
     func present(gift: Gift, fail: Completion) {
         let client = Center.shared().centerProvideRequestHelper()
-        let local = Center.shared().centerProvideLocalUser()
-        
         let event = RequestEvent(name: "present-gift")
         let url = URLGroup.presentGift(roomId: room.roomId)
         let task = RequestTask(event: event,

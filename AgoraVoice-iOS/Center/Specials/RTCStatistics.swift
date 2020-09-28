@@ -94,7 +94,7 @@ struct RTCStatistics {
         let audioSendRecv = "Audio Send/Recv: \(info.stats.txAudioKBitrate)kbps/\(info.stats.rxAudioKBitrate)kbps"
         
         if onlyAudio {
-            return dimensionFps + join + lastmile + join + audioSendRecv + join + cpu + join + quality +  join + sendRecvLoss
+            return lastmile + join + audioSendRecv + join + cpu + join + quality +  join + sendRecvLoss
         } else {
             return dimensionFps + join + lastmile + join + videoSendRecv + join + audioSendRecv + join + cpu + join + quality +  join + sendRecvLoss
         }

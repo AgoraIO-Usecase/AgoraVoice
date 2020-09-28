@@ -89,7 +89,7 @@ class BottomToolsViewController: RxViewController {
                           space: space)
             lastButton = micButton
         case (.chatRoom, .broadcaster):
-            buttonsLayout([giftButton, micButton],
+            buttonsLayout([giftButton, soundEffectButton, belcantoButton, micButton],
                           extensionButton: extensionButton,
                           buttonWH: buttonWH,
                           space: space)
@@ -136,6 +136,14 @@ private extension BottomToolsViewController {
             micButton.setImage(UIImage(named: "icon-microphone-on"), for: .normal)
             micButton.setImage(UIImage(named: "icon-microphone-off"), for: .selected)
             view.addSubview(micButton)
+            
+            belcantoButton.isHidden = false
+            belcantoButton.setImage(UIImage(named: "icon-美声"), for: .normal)
+            view.addSubview(belcantoButton)
+            
+            soundEffectButton.isHidden = false
+            soundEffectButton.setImage(UIImage(named: "icon-音效"), for: .normal)
+            view.addSubview(soundEffectButton)
             
             giftButton.isHidden = false
             giftButton.setImage(UIImage(named: "icon-gift"), for: .normal)
