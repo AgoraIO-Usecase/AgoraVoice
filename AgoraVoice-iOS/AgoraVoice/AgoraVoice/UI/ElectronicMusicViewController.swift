@@ -43,12 +43,12 @@ class ElectronicMusicViewController: RxViewController {
     
     var audioEffectVM: AudioEffectVM!
     
-    let scaleList = BehaviorRelay<[String]>(value: ["A", "Bb", "B",
+    private let scaleList = BehaviorRelay<[String]>(value: ["A", "Bb", "B",
                                                     "C", "Db", "D",
                                                     "Eb", "E", "F",
                                                     "Gb", "G", "Ab"])
     
-    var selectedValueIndex = BehaviorRelay<Int>(value: 0)
+    private let selectedValueIndex = BehaviorRelay<Int>(value: 0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,37 +57,45 @@ class ElectronicMusicViewController: RxViewController {
         selectScaleLabel.text = "选择起始音阶"
         
         // audioEffectVM
-        audioEffectVM.selectedElectronicMusic.bind(to: ableSwitch.rx.isOn).disposed(by: bag)
-        audioEffectVM.selectedElectronicMusic.bind(to: segmentControl.rx.isEnabled).disposed(by: bag)
-        audioEffectVM.selectedElectronicMusic.bind(to: collectionView.rx.isUserInteractionEnabled).disposed(by: bag)
+        audioEffectVM.selectedElectronicMusic.map { (music) -> Bool in
+            return music.isAvailable
+        }.bind(to: ableSwitch.rx.isOn).disposed(by: bag)
         
-        audioEffectVM.selectedElectronicMusicType.map { (type) -> Int in
-            return type - 1
-        }.bind(to: segmentControl.rx.selectedSegmentIndex).disposed(by: bag)
+        audioEffectVM.selectedElectronicMusic.map { (music) -> Bool in
+            return music.isAvailable
+        }.bind(to: segmentControl.rx.isEnabled).disposed(by: bag)
         
+        audioEffectVM.selectedElectronicMusic.map { (music) -> Bool in
+            return music.isAvailable
+        }.bind(to: collectionView.rx.isUserInteractionEnabled).disposed(by: bag)
+       
         // ableSwitch
-        ableSwitch.rx.isOn.bind(to: audioEffectVM.selectedElectronicMusic).disposed(by: bag)
         ableSwitch.rx.isOn.subscribe(onNext: { [unowned self] (isOn) in
-            guard isOn else {
-                return
-            }
-            
             let type = (self.segmentControl.selectedSegmentIndex + 1)
             let value = (self.selectedValueIndex.value + 1)
-            self.audioEffectVM.selectedElectronicMusicType.accept(type)
-            self.audioEffectVM.selectedElectronicMusicValue.accept(value)
+            let music = ElectronicMusic(isAvailable: isOn, type: type, value: value)
+            self.audioEffectVM.selectedElectronicMusic.accept(music)
         }).disposed(by: bag)
         
         // segmentControl
-        segmentControl.rx.selectedSegmentIndex.map { (index) -> Int in
-            return index + 1
-        }.bind(to: audioEffectVM.selectedElectronicMusicType).disposed(by: bag)
+        segmentControl.rx.selectedSegmentIndex.map { [unowned self] (index) -> ElectronicMusic in
+            var music = self.audioEffectVM.selectedElectronicMusic.value
+            music.type = index + 1
+            return music
+        }.bind(to: audioEffectVM.selectedElectronicMusic).disposed(by: bag)
+
+        audioEffectVM.selectedElectronicMusic.map { (music) -> Int in
+            return music.type - 1
+        }.bind(to: segmentControl.rx.selectedSegmentIndex).disposed(by: bag)
         
         // collectionView
-        selectedValueIndex.accept(audioEffectVM.selectedElectronicMusicValue.value)
-        selectedValueIndex.map { (index) -> Int in
-            return index + 1
-        }.bind(to: audioEffectVM.selectedElectronicMusicValue).disposed(by: bag)
+        selectedValueIndex.accept(audioEffectVM.selectedElectronicMusic.value.value - 1)
+        
+        selectedValueIndex.map { [unowned self] (index) -> ElectronicMusic in
+            var music = self.audioEffectVM.selectedElectronicMusic.value
+            music.value = index + 1
+            return music
+        }.bind(to: audioEffectVM.selectedElectronicMusic).disposed(by: bag)
 
         collectionView.rx.itemSelected.subscribe(onNext: { [unowned self] (index) in
             self.selectedValueIndex.accept(index.item)

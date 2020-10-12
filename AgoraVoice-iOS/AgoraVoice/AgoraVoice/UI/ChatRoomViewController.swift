@@ -87,7 +87,6 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         updateViews()
         calculateSeatViewHeight()
         
-        syncLiveSessionInfo()
         users()
         gift()
         chatList()
@@ -97,6 +96,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         bottomTools()
         chatInput()
         mediaDevice()
+        syncLiveSessionInfo()
         
         multiHosts()
         liveSeats()
@@ -144,8 +144,13 @@ private extension ChatRoomViewController {
         personCountView.backgroundColor = tintColor
         
         closeButton.rx.tap.subscribe(onNext: { [unowned self] in
-            self.liveSession.leave()
-            self.dimissSelf()
+            self.showAlert(NSLocalizedString("Live_End"),
+                           message: NSLocalizedString("Confirm_End_Live"),
+                           action1: NSLocalizedString("Cancel"),
+                           action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
+                            self.liveSession.leave()
+                            self.dimissSelf()
+            }
         }).disposed(by: bag)
         
         liveSession.room.subscribe(onNext: { [unowned self] (room) in

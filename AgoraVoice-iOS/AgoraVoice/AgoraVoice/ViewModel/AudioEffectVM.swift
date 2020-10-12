@@ -10,6 +10,12 @@ import UIKit
 import RxSwift
 import RxRelay
 
+struct ElectronicMusic {
+    var isAvailable: Bool = false
+    var type: Int = 1
+    var value: Int = 1
+}
+
 class AudioEffectVM: RxObject {
     private lazy var operateObj: AudioEffect = {
         return Center.shared().centerProvideMediaDevice().recordAudioEffect
@@ -25,9 +31,7 @@ class AudioEffectVM: RxObject {
     let selectedTimbreRole = BehaviorRelay<TimbreRole>(value: .disable)
     let selectedMusicGenre = BehaviorRelay<MusicGenre>(value: .disable)
     
-    let selectedElectronicMusic = BehaviorRelay<Bool>(value: false)
-    let selectedElectronicMusicType = BehaviorRelay<Int>(value: 1)
-    let selectedElectronicMusicValue = BehaviorRelay<Int>(value: 1)
+    let selectedElectronicMusic = BehaviorRelay<ElectronicMusic>(value: ElectronicMusic())
     
     let threeDimensionalVoice = BehaviorRelay<Int>(value: 0)
     
@@ -116,29 +120,14 @@ private extension AudioEffectVM {
         }).disposed(by: bag)
         
         // Electronic Music
-        selectedElectronicMusic.subscribe(onNext: { [unowned self] (isSelected) in
-            if isSelected {
+        selectedElectronicMusic.subscribe(onNext: { [unowned self] (music) in
+            if music.isAvailable {
                 self.disableBelCanto()
                 self.disableSoundEffect()
+                self.operateObj.setElectronicMusicWithType(music.type, value: music.value)
             } else {
                 self.operateObj.cancelElectronicMusic()
             }
-        }).disposed(by: bag)
-        
-        selectedElectronicMusicType.subscribe(onNext: { [unowned self] (type) in
-            guard self.selectedElectronicMusic.value else {
-                return
-            }
-            let value = self.selectedElectronicMusicValue.value
-            self.operateObj.setElectronicMusicWithType(type, value: value)
-        }).disposed(by: bag)
-        
-        selectedElectronicMusicValue.subscribe(onNext: { [unowned self] (value) in
-            guard self.selectedElectronicMusic.value else {
-                return
-            }
-            let type = self.selectedElectronicMusicType.value
-            self.operateObj.setElectronicMusicWithType(type, value: value)
         }).disposed(by: bag)
     }
 }
@@ -157,6 +146,6 @@ private extension AudioEffectVM {
     }
     
     func disableElectronicMusic() {
-        self.selectedElectronicMusic.accept(false)
+        self.selectedElectronicMusic.accept(ElectronicMusic(isAvailable: false, type: 1, value: 1))
     }
 }

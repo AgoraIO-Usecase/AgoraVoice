@@ -110,6 +110,7 @@ class LiveSession: RxObject {
         }
         
         let options = EduClassroomJoinOptions(userName: userName, role: eduRole)
+        options.mediaOption.publishType = .remove
         roomManager.joinClassroom(options, success: { [unowned self] (userService) in
             if let service = userService as? EduTeacherService {
                 service.delegate = self

@@ -1,13 +1,13 @@
 {
   "images" : [
     {
-      "filename" : "Agora voice 40.png",
+      "filename" : "Agora voice 20@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "Agora voice 60.png",
+      "filename" : "Agora voice 20@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"

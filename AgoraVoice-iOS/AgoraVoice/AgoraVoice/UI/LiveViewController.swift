@@ -63,7 +63,13 @@ extension LiveViewController {
         // background
         liveSession.customMessage.bind(to: backgroundVM.message).disposed(by: bag)
         
-        // local stream
+        // local role & stream
+        liveSession.localRole.filter { (local) -> Bool in
+            return local.type == .owner
+        }.map { (local) -> [LiveRole] in
+            return [local]
+        }.bind(to: userListVM.joined).dispose()
+        
         liveSession.localStream.subscribe(onNext: { [unowned self] (stream) in
             if let stream = stream {
                 guard stream.hasAudio != self.deviceVM.mic.value.boolValue else {
@@ -180,14 +186,14 @@ extension LiveViewController {
             case .notReachable:
                 let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
                 view.text = NSLocalizedString("Lost_Connection_Retry")
-                self.showToastView(view, duration: 2.0)
+                self.showToastView(view, duration: 3.0)
             case .reachable(let type):
                 guard type == .wwan else {
                     return
                 }
                 let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
                 view.text = NSLocalizedString("Use_Cellular_Data")
-                self.showToastView(view, duration: 2.0)
+                self.showToastView(view, duration: 3.0)
             default:
                 break
             }

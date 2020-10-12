@@ -28,7 +28,7 @@
 
 - (BOOL)startWithURL:(NSString *)url {
     self.status = PlayerStatusStop;
-    int result = [self.agoraKit startAudioMixing:url loopback:true replace:false cycle:1];
+    int result = [self.agoraKit startAudioMixing:url loopback:NO replace:NO cycle:1];
     BOOL success = result == 0 ? YES : NO;
     if (success) {
         self.fileURL = url;
