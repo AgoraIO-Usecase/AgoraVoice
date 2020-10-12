@@ -29,6 +29,9 @@ Export_Plist_File=exportPlist_Lab2020.plist
 elif [[ $MODE =~ "Test2019" ]] 
 then
 Export_Plist_File=exportPlist_Test2019.plist
+elif [[ $MODE =~ "Test2020" ]] 
+then
+Export_Plist_File=exportPlist_Test2020.plist
 else 
 Export_Plist_File=exportPlist.plist
 fi
