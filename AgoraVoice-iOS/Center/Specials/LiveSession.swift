@@ -49,10 +49,11 @@ class LiveSession: RxObject {
     let actionMessage = PublishRelay<ActionMessage>()
     
     init(room: Room, role: LiveRoleType) {
-        let configuration = EduClassroomConfig(roomName: room.name,
-                                               roomUuid: room.roomId,
-                                               scene: .typeBig)
-        let manager = EduClassroomManager(roomConfig: configuration)
+        let configuration = EduClassroomConfig()
+        configuration.roomUuid = room.roomId
+        configuration.sceneType = .typeBig
+        
+        let manager = Center.shared().centerProvideLiveManager().createClassroom(with: configuration)
         self.type = .chatRoom
         self.roomManager = manager
         self.room = BehaviorRelay(value: room)
@@ -190,15 +191,28 @@ class LiveSession: RxObject {
     func leave() {
         if localRole.value.type == .owner {
             let client = Center.shared().centerProvideRequestHelper()
-            let event = RequestEvent(name: "live-session-leave")
+            let event = RequestEvent(name: "live-session-close")
             let url = URLGroup.leaveLive(roomId: room.value.roomId)
             let task = RequestTask(event: event,
                                    type: .http(.post, url: url),
                                    header: ["token": Keys.UserToken])
             client.request(task: task)
         }
+//        else {
+//            let client = Center.shared().centerProvideRequestHelper()
+//            let event = RequestEvent(name: "live-session-leave")
+//            let url = URLGroup.leaveLive(roomId: room.value.roomId)
+//            let task = RequestTask(event: event,
+//                                   type: .http(.post, url: url),
+//                                   header: ["token": Keys.UserToken])
+//            client.request(task: task)
+//        }
         
         roomManager.leaveClassroom(success: nil, failure: nil)
+    }
+    
+    deinit {
+        print("Livesession deinit")
     }
 }
 

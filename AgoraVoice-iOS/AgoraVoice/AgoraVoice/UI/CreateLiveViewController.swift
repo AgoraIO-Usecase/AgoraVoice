@@ -45,6 +45,8 @@ class CreateLiveViewController: MaskViewController {
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var randomButton: UIButton!
     
+    private let nameLimit = 25
+    
     var liveType: LiveType = .chatRoom
     var selectedImageIndex = 0
     var tempSession: LiveSession?
@@ -214,7 +216,12 @@ extension CreateLiveViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if range.length == 1 && string.count == 0 {
             return true
-        } else if let text = textField.text, text.count >= 25 {
+        } else if let text = textField.text, text.count >= nameLimit {
+            if DeviceAssistant.Language.isChinese {
+                self.showTextToast(text: "房间名称不能超过\(nameLimit)个字符")
+            } else {
+                self.showTextToast(text: "Maximum length of room name is \(nameLimit)")
+            }
             return false
         } else {
             return true

@@ -357,8 +357,8 @@ private extension ChatRoomViewController {
                     let message = self.alertMessageOfSeatCommand(command,
                                                                  with: user.info.name)
                     self.showAlert(message: message,
-                                   action1: NSLocalizedString("Cancel"),
-                                   action2: NSLocalizedString("Confirm"),
+                                   action1: NSLocalizedString("NO"),
+                                   action2: NSLocalizedString("YES"),
                                    handler2: handler)
                 }
             case .forceBroadcasterEnd, .unban, .ban:
@@ -470,7 +470,11 @@ private extension ChatRoomViewController {
                             self.multiHostsVM.reject(invitation: invitation)
             }) { [unowned self] (_) in
                 self.multiHostsVM.accept(invitation: invitation, success: {
-                    
+                    if DeviceAssistant.Language.isChinese {
+                        self.showTextToast(text: "您的上麦申请已发送")
+                    } else {
+                        self.showTextToast(text: "Your application has been sent")
+                    }
                 }) { [unowned self] (_) in
                     self.showErrorToast("accept invitation fail")
                 }
@@ -483,7 +487,7 @@ private extension ChatRoomViewController {
         
         multiHostsVM.applicationByRejected.subscribe(onNext: { [unowned self] (application) in
             if DeviceAssistant.Language.isChinese {
-                self.showTextToast(text: "房间拒绝你的申请")
+                self.showTextToast(text: "您的上麦邀请已被\(application.receiver.info.name)拒绝")
             } else {
                 self.showTextToast(text: "Owner rejected your application")
             }
@@ -551,7 +555,7 @@ private extension ChatRoomViewController {
             }
         case .forceBroadcasterEnd:
             if DeviceAssistant.Language.isChinese {
-                return "确定\"\(userName!)\"下麦?"
+                return "确定将\"\(userName!)\"下麦?"
             } else {
                 return "Stop \(userName!) hosting"
             }

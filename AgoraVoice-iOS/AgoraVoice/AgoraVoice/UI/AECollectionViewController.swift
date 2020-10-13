@@ -264,8 +264,12 @@ private extension AECollectionViewController {
                 self.collectionView.reloadData()
             })
             
-            let threeDimensionSubscribe = audioEffectVM.selectedAudioSpace.subscribe(onNext: { [unowned self] (space) in
-                self.collectionView.reloadData()
+            let threeDimensionSubscribe = audioEffectVM.selectedAudioSpace.subscribe(onNext: { [weak self] (space) in
+                guard let strongSelf = self else {
+                    return
+                }
+                
+                strongSelf.collectionView.reloadData()
             })
             
             lastSubscribes.append(listSubscribe)

@@ -12,6 +12,8 @@ Confirm="Confirm";
 Reject="Reject";
 End="End";
 Accept="Accept";
+YES="是";
+NO="否";
 Music="Music";
 Background="Background";
 

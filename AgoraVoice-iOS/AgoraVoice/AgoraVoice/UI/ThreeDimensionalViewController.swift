@@ -26,14 +26,11 @@ class ThreeDimensionalViewController: RxViewController {
         backButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.navigationController?.popViewController(animated: true)
         }).disposed(by: bag)
-        
-        //
-        audioEffectVM.selectedAudioSpace.accept(.threeDimensionalVoice)
-        
+                
         ableSwitch.isOn = (audioEffectVM.selectedAudioSpace.value == .threeDimensionalVoice)
         
-        ableSwitch.rx.isOn.map { (isOn) -> AudioSpace in
-            return isOn ? .threeDimensionalVoice : .disable
+        ableSwitch.rx.controlEvent(.valueChanged).map { [unowned self] (_) -> AudioSpace in
+            return self.ableSwitch.isOn ? .threeDimensionalVoice : .disable
         }.bind(to: audioEffectVM.selectedAudioSpace).disposed(by: bag)
         
         ableSwitch.rx.isOn.bind(to: slider.rx.isEnabled).disposed(by: bag)
