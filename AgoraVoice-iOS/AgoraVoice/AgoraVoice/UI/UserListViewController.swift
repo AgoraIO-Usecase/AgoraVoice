@@ -185,6 +185,9 @@ class UserListViewController: RxViewController {
             }.disposed(by: bag)
         case .onlyInvitationOfMultiHosts:
             tableViewBindWithUser(userListVM.audienceList).disposed(by: bag)
+            multiHostsVM.invitationByRejected.map { [unowned self] (_) -> [LiveRole] in
+                return self.userListVM.audienceList.value
+            }.bind(to: userListVM.audienceList).disposed(by: bag)
         case .multiHosts:
             tabView.selectedIndex.subscribe(onNext: { [unowned self] (index) in
                 switch index {

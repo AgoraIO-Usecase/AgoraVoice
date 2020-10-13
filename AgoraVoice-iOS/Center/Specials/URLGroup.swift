@@ -45,16 +45,16 @@ struct URLGroup {
         return URLGroup.host + URLGroup.mainPath + "users/\(userId)"
     }
     
-    static func leaveLive(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/close"
-    }
-        
-    static func liveSeatStatus(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/seats"
+    static func liveLeave(userId: String, roomId: String) -> String {
+        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/users/\(userId)/leave"
     }
     
-    static func userCommand(userId: String, roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "room/\(roomId)/user/\(userId)"
+    static func liveClose(roomId: String) -> String {
+        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/close"
+    }
+    
+    static func liveSeatStatus(roomId: String) -> String {
+        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/seats"
     }
     
     static func presentGift(roomId: String) -> String {

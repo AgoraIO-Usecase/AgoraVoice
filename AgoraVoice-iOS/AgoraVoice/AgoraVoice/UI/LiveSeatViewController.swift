@@ -174,7 +174,7 @@ class LiveSeatViewController: MaskViewController {
     lazy var seats: BehaviorRelay<[LiveSeat]> = {
         var temp = [LiveSeat]()
         for i in 0 ..< self.seatCount {
-            let seat = LiveSeat(index: i, state: .close)
+            let seat = LiveSeat(index: i, state: .empty)
             temp.append(seat)
         }
         

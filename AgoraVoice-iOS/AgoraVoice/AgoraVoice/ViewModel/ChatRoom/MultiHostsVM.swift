@@ -157,12 +157,16 @@ extension MultiHostsVM {
 
 // MARK: Audience
 extension MultiHostsVM {
-    func sendApplication(by local: LiveRole, for seatIndex: Int, fail: ErrorCompletion = nil) {
+    func sendApplication(by local: LiveRole, for seatIndex: Int, success: Completion = nil, fail: ErrorCompletion = nil) {
         request(seatIndex: seatIndex,
                 type: 2,
                 userId: "\(room.owner.info.userId)",
                 roomId: room.roomId,
-                fail: fail)
+                success: { (_) in
+                    if let success = success {
+                        success()
+                    }
+                }, fail: fail)
     }
     
     func accept(invitation: Invitation, success: Completion = nil, fail: ErrorCompletion = nil) {
@@ -218,7 +222,27 @@ private extension MultiHostsVM {
                                header: ["token": Keys.UserToken],
                                parameters: ["no": seatIndex, "type": type])
         client.request(task: task, success: ACResponse.json({ [weak self] (json) in
-            guard let _ = self else {
+            guard let strongSelf = self else {
+                return
+            }
+            
+            let code = try json.getIntValue(of: "code")
+            
+            if code == 1301006 {
+                var message: String
+                
+                if DeviceAssistant.Language.isChinese {
+                    message = "麦位上已有观众"
+                } else {
+                    message = "The seat has been taken up"
+                }
+                
+                strongSelf.fail.accept(message)
+                
+                if let fail = fail {
+                    fail(AGEError.fail(message))
+                }
+                
                 return
             }
             

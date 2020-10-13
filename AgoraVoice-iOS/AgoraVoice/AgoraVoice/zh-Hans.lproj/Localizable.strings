@@ -16,6 +16,7 @@ YES="是";
 NO="否";
 Music="音乐";
 Background="背景";
+Invitation="邀请";
 
 Lost_Connection="网络异常";
 Lost_Connection_Description="当前网络连接错误，请稍后再试";
@@ -102,7 +103,6 @@ Confirm_Application_Of_Broadcasting="你确定要\“申请上麦\”吗？";
 Application_Of_Broadcasting="申请上麦";
 Owner_Reject_Broadcasting_Application="房主拒绝你的申请";
 Application_Of_Broadcasting_Fail="申请上麦失败";
-Confirm_Accept_Broadcasting_Invitation="邀请您上麦是否接受？";
 
 // Live Seat
 Seat_Ban="禁麦";

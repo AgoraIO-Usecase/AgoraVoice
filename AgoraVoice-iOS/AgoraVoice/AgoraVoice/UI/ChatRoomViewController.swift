@@ -119,7 +119,9 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
                 return user.type
             }.bind(to: vc.perspective).disposed(by: vc.bag)
             
-            seatsVM.seatList.bind(to: vc.seats).disposed(by: bag)
+            seatsVM.seatList.filter { (list) -> Bool in
+                return (list.count != 0)
+            }.bind(to: vc.seats).disposed(by: bag)
         case "GiftAudienceViewController":
             let vc = segue.destination as! GiftAudienceViewController
             self.giftAudienceVC = vc
@@ -216,7 +218,7 @@ private extension ChatRoomViewController {
             
             var message: String
             if DeviceAssistant.Language.isChinese {
-                message = "你是否要拒绝\"\(application.initiator.info.name)\"的上麦申请?"
+                message = "你是否要拒绝\(application.initiator.info.name)的上麦申请?"
             } else {
                 message = "Do you reject \(application.initiator.info.name)'s application?"
             }
@@ -233,7 +235,7 @@ private extension ChatRoomViewController {
             
             var message: String
             if DeviceAssistant.Language.isChinese {
-                message = "你是否要接受\"\(application.initiator.info.name)\"的上麦申请?"
+                message = "你是否要接受\(application.initiator.info.name)的上麦申请?"
             } else {
                 message = "Do you accept \(application.initiator.info.name)'s application?"
             }
@@ -391,7 +393,13 @@ private extension ChatRoomViewController {
                 
             // Broadcaster
             case .endBroadcasting:
-                self.showAlert(message: NSLocalizedString("Confirm_End_Broadcasting"),
+                var message: String
+                if DeviceAssistant.Language.isChinese {
+                    message = "确定终止连麦？"
+                } else {
+                    message = "End Live Streaming?"
+                }
+                self.showAlert(message: message,
                                action1: NSLocalizedString("Cancel"),
                                action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
                                 guard let user = seatCommands.seat.state.stream?.owner else {
@@ -404,13 +412,21 @@ private extension ChatRoomViewController {
                                     self.liveSession.unpublishStream(stream)
                                 }
                 }
+            
             // Audience
             case .application:
                 self.showAlert(message: NSLocalizedString("Confirm_Application_Of_Broadcasting"),
                                action1: NSLocalizedString("Cancel"),
                                action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
                                 self.multiHostsVM.sendApplication(by: self.liveSession.localRole.value,
-                                                                  for: seatCommands.seat.index)
+                                                                  for: seatCommands.seat.index,
+                                                                  success: { [unowned self] in
+                                                                    if DeviceAssistant.Language.isChinese {
+                                                                        self.showTextToast(text: "您的上麦申请已发送")
+                                                                    } else {
+                                                                        self.showTextToast(text: "Your application has been sent")
+                                                                    }
+                                })
                 }
             }
         }).disposed(by: vc.bag)
@@ -463,21 +479,20 @@ private extension ChatRoomViewController {
         
         // audience
         multiHostsVM.receivedInvitation.subscribe(onNext: { [unowned self] (invitation) in
-            self.showAlert(message: NSLocalizedString("Confirm_Accept_Broadcasting_Invitation"),
+            var message: String
+            if DeviceAssistant.Language.isChinese {
+                message = "\(invitation.initiator.info.name)邀请您上麦，是否接受"
+            } else {
+                message = "Do you agree to become a host?"
+            }
+            
+            self.showAlert(message: message,
                            action1: NSLocalizedString("Reject"),
                            action2: NSLocalizedString("Confirm"),
                            handler1: { [unowned self] (_) in
                             self.multiHostsVM.reject(invitation: invitation)
             }) { [unowned self] (_) in
-                self.multiHostsVM.accept(invitation: invitation, success: {
-                    if DeviceAssistant.Language.isChinese {
-                        self.showTextToast(text: "您的上麦申请已发送")
-                    } else {
-                        self.showTextToast(text: "Your application has been sent")
-                    }
-                }) { [unowned self] (_) in
-                    self.showErrorToast("accept invitation fail")
-                }
+                self.multiHostsVM.accept(invitation: invitation)
             }
         }).disposed(by: bag)
         
@@ -543,19 +558,19 @@ private extension ChatRoomViewController {
         switch command {
         case .ban:
             if DeviceAssistant.Language.isChinese {
-                return "禁止\"\(userName!)\"发言?"
+                return "禁止\(userName!)发言?"
             } else {
                 return "Mute \(userName!)?"
             }
         case .unban:
             if DeviceAssistant.Language.isChinese {
-                return "解除\"\(userName!)\"禁言?"
+                return "解除\(userName!)禁言?"
             } else {
                 return "Unmute \(userName!)?"
             }
         case .forceBroadcasterEnd:
             if DeviceAssistant.Language.isChinese {
-                return "确定将\"\(userName!)\"下麦?"
+                return "确定将\(userName!)下麦?"
             } else {
                 return "Stop \(userName!) hosting"
             }
@@ -569,7 +584,7 @@ private extension ChatRoomViewController {
             return NSLocalizedString("Seat_Release_Description")
         case .invitation:
             if DeviceAssistant.Language.isChinese {
-                return "你是否要邀请\"\(userName!)\"上麦?"
+                return "你是否要邀请\(userName!)上麦?"
             } else {
                 return "Do you send a invitation to \(userName!)?"
             }
@@ -583,6 +598,6 @@ private extension ChatRoomViewController {
 private extension ChatRoomViewController {
     func showErrorToast(_ text: String) {
         erorToast.text = text
-        showToastView(erorToast)
+        showToastView(erorToast, duration: 3)
     }
 }

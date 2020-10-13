@@ -16,6 +16,7 @@ YES="是";
 NO="否";
 Music="Music";
 Background="Background";
+Invitation="Invite";
 
 Lost_Connection="Network error";
 Lost_Connection_Description="We cannot connect to network now. Please retry later";
@@ -103,7 +104,6 @@ Confirm_Application_Of_Broadcasting="Do you send a application?";
 Application_Of_Broadcasting="Become a host";
 Owner_Reject_Broadcasting_Application="Owner reject your application";
 Application_Of_Broadcasting_Fail="Apply to be a host fail";
-Confirm_Accept_Broadcasting_Invitation="Do you agree to become a host？";
 
 // Live Seat
 Seat_Ban="Mute";
