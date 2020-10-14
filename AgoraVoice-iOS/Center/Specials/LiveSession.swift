@@ -110,6 +110,9 @@ class LiveSession: RxObject {
             eduRole = .student
         }
         
+        // sepcail parameters for audio loop
+        RTCManager.share().setParameters("{\"che.audio.morph.earsback\":true}")
+        
         let options = EduClassroomJoinOptions(userName: userName, role: eduRole)
         options.mediaOption.publishType = .remove
         roomManager.joinClassroom(options, success: { [unowned self] (userService) in
