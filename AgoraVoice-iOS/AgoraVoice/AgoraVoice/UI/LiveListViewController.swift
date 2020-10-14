@@ -227,9 +227,15 @@ private extension LiveListViewController {
             session.join(success: { [unowned self] (session) in
                 self.hiddenHUD()
                 self.performSegue(withIdentifier: "ChatRoomViewController", sender: session)
-            }) { [unowned self] (_) in
+            }) { [unowned self] (error) in
                 self.hiddenHUD()
-                self.showAlert(message:"join live fail")
+                
+                if (error as NSError).code == 7 {
+                    self.showTextToast(text: NSLocalizedString("Join_Fail"))
+                } else {
+                    self.showTextToast(text: "join live fail")
+                }
+                
                 self.roomListRefresh()
             }
         }).disposed(by: bag)

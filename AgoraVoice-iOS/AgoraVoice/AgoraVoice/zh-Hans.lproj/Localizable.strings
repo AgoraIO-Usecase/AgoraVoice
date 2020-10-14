@@ -70,12 +70,18 @@ Pig_King="猪八戒";
 Hulk="绿巨人";
 
 Style_Transformation="曲风音效";
-R&B="R&B";
+RNB="R&B";
 Popular="流行";
 Rock="摇滚";
 HipHop="嘻哈";
 
 Pitch_Correction="电音音效";
+Major="大调";
+Minor="小调";
+Japenese_Pentatonic="和风";
+Enable_Pitch_Correction="启用电音";
+Select_Mode="选择调式";
+Select_The_Starting_Key="选择起始音阶";
 
 // LiveType
 Chat_Room="语聊房";
@@ -84,6 +90,7 @@ Start_Chating="开始聊天";
 // LiveList
 Create_A_Room="请创建一个房间";
 No_Data_Please_Try_Again_Later="暂无数据，请稍后再试";
+Join_Fail="此软件为测试产品，房间最大人数为10人";
 
 // LiveRoom
 Live_Text_Input_Placeholder="说点什么...";
@@ -104,7 +111,7 @@ Please_Input_Headset="请插上耳机";
 
 Online_User="在线用户";
 
-Application_Of_Broadcasting="申请上麦";
+Application_List="申请上麦";
 
 // Create Room
 Create_Start="开始直播";

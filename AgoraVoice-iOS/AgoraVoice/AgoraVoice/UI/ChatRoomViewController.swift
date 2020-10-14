@@ -500,14 +500,6 @@ private extension ChatRoomViewController {
             self.hiddenMaskView()
         }).disposed(by: bag)
         
-        multiHostsVM.applicationByRejected.subscribe(onNext: { [unowned self] (application) in
-            if DeviceAssistant.Language.isChinese {
-                self.showTextToast(text: "您的上麦邀请已被\(application.receiver.info.name)拒绝")
-            } else {
-                self.showTextToast(text: "Owner rejected your application")
-            }
-        }).disposed(by: bag)
-        
         // role update
         multiHostsVM.audienceBecameBroadcaster.subscribe(onNext: { [unowned self] (user) in
             if DeviceAssistant.Language.isChinese {

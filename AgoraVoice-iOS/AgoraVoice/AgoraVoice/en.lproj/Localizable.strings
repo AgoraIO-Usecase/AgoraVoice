@@ -57,7 +57,7 @@ Phonograph="Phonograph";
 Virtual_Stereo="Virtual stereo";
 Spacial="Spacial";
 Ethereal="Ethereal";
-Three_Dimensional_Voice="Three Dimensional Voice";
+Three_Dimensional_Voice="3D Voice";
 Three_Dimensional_Voice_Description="The fastest is 60 rpm, the slowest is 1 rpm";
 
 Voice_Changer_Effect="Voice changer effect";
@@ -70,12 +70,18 @@ Pig_King="Pig king";
 Hulk="Hulk";
 
 Style_Transformation="Style transformation";
-R&B="R&B";
+RNB="R&B";
 Popular="Popular";
 Rock="Rock";
 HipHop="HipHop";
 
 Pitch_Correction="Pitch correction";
+Major="Major";
+Minor="Minor";
+Japenese_Pentatonic="Japenese-Pentatonic";
+Enable_Pitch_Correction="Enable pitch correction";
+Select_Mode="Select mode";
+Select_The_Starting_Key="Select the starting key";
 
 // LiveType
 Chat_Room="Chat Room";
@@ -84,6 +90,7 @@ Start_Chating="Start";
 // LiveList
 Create_A_Room="Create a room to start";
 No_Data_Please_Try_Again_Later="No data, please try again later";
+Join_Fail="This is a testing application, and the max number of participants per channel is 10.";
 
 // LiveRoom
 Live_Text_Input_Placeholder="Say something...";
@@ -104,7 +111,7 @@ Please_Input_Headset="Plug in a headphone";
 
 Online_User="Online user";
 
-Application_Of_Broadcasting="ApplicationOfBroadcasting";
+Application_List="ApplicationOfBroadcasting";
 
 // Create Room
 Create_Start="Go Live";

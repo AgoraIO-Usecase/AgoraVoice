@@ -70,7 +70,7 @@ private extension AudioEffectViewController {
         }
         
         tabView.titleTopSpace = 14
-        tabView.alignment = .center
+        tabView.alignment = DeviceAssistant.Language.isChinese ? .center : .left
         
         tabView.selectedTitle = TabSelectView.TitleProperty(color: UIColor(hexString: "#EEEEEE"),
                                                             font: UIFont.systemFont(ofSize: 14, weight: .medium))

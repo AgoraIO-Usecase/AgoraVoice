@@ -167,7 +167,7 @@ class UserListViewController: RxViewController {
             tableViewTop.constant = 0
         case .multiHosts:
             titleLabel.text = NSLocalizedString("Online_User")
-            let titles = [NSLocalizedString("All"), NSLocalizedString("Application_Of_Broadcasting")]
+            let titles = [NSLocalizedString("All"), NSLocalizedString("Application_List")]
             tabView.update(titles)
         case .onlyUser:
             titleLabel.text = NSLocalizedString("Online_User")

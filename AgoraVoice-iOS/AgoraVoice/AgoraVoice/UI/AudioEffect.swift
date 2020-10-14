@@ -230,7 +230,7 @@ extension MusicGenre {
     
     var description: String {
         switch self {
-        case .RNB:     return NSLocalizedString("R&B")
+        case .RNB:     return NSLocalizedString("RNB")
         case .popular: return NSLocalizedString("Popular")
         case .rock:    return NSLocalizedString("Rock")
         case .hipHop:  return NSLocalizedString("HipHop")

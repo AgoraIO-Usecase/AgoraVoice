@@ -44,17 +44,17 @@ class ElectronicMusicViewController: RxViewController {
     var audioEffectVM: AudioEffectVM!
     
     private let scaleList = BehaviorRelay<[String]>(value: ["A", "Bb", "B",
-                                                    "C", "Db", "D",
-                                                    "Eb", "E", "F",
-                                                    "Gb", "G", "Ab"])
+                                                            "C", "Db", "D",
+                                                            "Eb", "E", "F",
+                                                            "Gb", "G", "Ab"])
     
     private let selectedValueIndex = BehaviorRelay<Int>(value: 0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        switchNameLabel.text = "启动电音"
-        selectScaleLabel.text = "选择起始音阶"
+        switchNameLabel.text = NSLocalizedString("Enable_Pitch_Correction")
+        selectScaleLabel.text = NSLocalizedString("Select_The_Starting_Key")
         
         // audioEffectVM
         audioEffectVM.selectedElectronicMusic.map { (music) -> Bool in
