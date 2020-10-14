@@ -147,12 +147,16 @@ private extension CreateLiveViewController {
     func showLimitToast() {
         let mainScreen = UIScreen.main
         let y = mainScreen.bounds.height - mainScreen.heightOfSafeAreaBottom - 38 - 15 - 150
-        let view = TagImageTextToast(frame: CGRect(x: 15, y: y, width: 181, height: 44.0), filletRadius: 8)
+        let view = TagImageTextCloseToast(frame: CGRect(x: 15, y: y, width: 181, height: 44.0), filletRadius: 8)
         
         view.labelSize = CGSize(width: UIScreen.main.bounds.width - 30, height: 0)
         view.text = NSLocalizedString("Limit_Toast")
         view.tagImage = UIImage(named: "icon-yellow-caution")
         self.showToastView(view, duration: 5.0)
+        
+        view.closeButton.rx.tap.subscribe(onNext: { [unowned self] in
+            self.toastView?.removeFromSuperview()
+        }).disposed(by: bag)
     }
     
     func presentBackground() {
@@ -226,5 +230,31 @@ extension CreateLiveViewController: UITextFieldDelegate {
         } else {
             return true
         }
+    }
+}
+
+fileprivate class TagImageTextCloseToast: TagImageTextToast {
+    private(set) var closeButton = UIButton(frame: CGRect.zero)
+    
+    override func initViews() {
+        super.initViews()
+        closeButton.setImage(UIImage(named: "icon-close-gray"), for: .normal)
+        addSubview(closeButton)
+        
+        contentEdgeInsets = UIEdgeInsets(top: 15.0,
+                                         left: 15.0,
+                                         bottom: 15.0,
+                                         right: 24.0)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let width: CGFloat = 23.0
+        let height: CGFloat = width
+        closeButton.frame = CGRect(x: bounds.width - width,
+                                   y: 0,
+                                   width: width,
+                                   height: height)
+        
     }
 }
