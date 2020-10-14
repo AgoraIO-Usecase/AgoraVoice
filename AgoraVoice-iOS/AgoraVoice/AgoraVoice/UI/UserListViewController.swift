@@ -49,7 +49,7 @@ class UserInvitationListCell: UITableViewCell {
             case .availableInvite:
                 inviteButton.isHidden = false
                 inviteButton.isEnabled = true
-                inviteButton.setTitle(NSLocalizedString("Invite"), for: .normal)
+                inviteButton.setTitle(NSLocalizedString("Invitation"), for: .normal)
                 inviteButton.setTitleColor(UIColor(hexString: "#0088EB"), for: .normal)
                 inviteButton.backgroundColor = UIColor(hexString: "#161D27")
                 inviteButton.cornerRadius(16)
