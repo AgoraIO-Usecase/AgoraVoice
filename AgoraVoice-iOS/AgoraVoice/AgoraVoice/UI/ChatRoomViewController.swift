@@ -202,15 +202,9 @@ private extension ChatRoomViewController {
         vc.showType = type
         vc.view.cornerRadius(10)
         
-        if type == .multiHosts {
-            vc.tabView.needRemind(personCountView.needRemind,
-                                  index: 1)
-            
-            vc.tabView.selectedIndex.subscribe(onNext: { [unowned self] (index) in
-                if index == 1 {
-                    self.personCountView.needRemind = false
-                }
-            }).disposed(by: vc.bag)
+        if type == .multiHosts, personCountView.needRemind {
+            vc.tabView.selectedIndex.accept(1)
+            personCountView.needRemind = false
         }
         
         vc.rejectApplicationOfUser.subscribe(onNext: { [unowned self] (application) in
