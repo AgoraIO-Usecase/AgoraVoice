@@ -18,8 +18,8 @@ enum AudioEffectType {
     
     var description: String {
         switch self {
-        case .belCanto:    return "美声"
-        case .soundEffect: return "音效"
+        case .belCanto:    return NSLocalizedString("Voice_Beautifier")
+        case .soundEffect: return NSLocalizedString("Audio_Effects")
         }
     }
 }
@@ -33,9 +33,9 @@ enum BelCantoType {
     
     var description: String {
         switch self {
-        case .chat:   return "语音美声"
-        case .sing:   return "歌唱美声"
-        case .timbre: return "音色变换"
+        case .chat:   return NSLocalizedString("Chat_Beautifier")
+        case .sing:   return NSLocalizedString("Singing_Beautifier")
+        case .timbre: return NSLocalizedString("Timbre_Transformation")
         }
     }
 }
@@ -50,10 +50,10 @@ enum SoundEffectType {
     
     var description: String {
         switch self {
-        case .space:           return "空间塑造"
-        case .role:            return "变声音效"
-        case .musciGenre:      return "曲风音效"
-        case .electronicMusic: return "电音音效"
+        case .space:           return NSLocalizedString("Room_Acoustics")
+        case .role:            return NSLocalizedString("Voice_Changer_Effect")
+        case .musciGenre:      return NSLocalizedString("Style_Transformation")
+        case .electronicMusic: return NSLocalizedString("Pitch_Correction")
         }
     }
 }
@@ -76,9 +76,9 @@ extension ChatOfBelCanto {
     
     var description: String {
         switch self {
-        case .maleMagnetic:   return "maleMagnetic"
-        case .femaleFresh:    return "femaleFresh"
-        case .femaleVitality: return "femaleVitality"
+        case .maleMagnetic:   return NSLocalizedString("Male_Magnetic")
+        case .femaleFresh:    return NSLocalizedString("Female_Fresh")
+        case .femaleVitality: return NSLocalizedString("Female_Vitality")
         case .disable:        fatalError()
         @unknown default:
             fatalError()
@@ -92,8 +92,8 @@ extension SingOfBelCanto {
     
     var description: String {
         switch self {
-        case .male:    return "male"
-        case .female:  return "female"
+        case .male:    return NSLocalizedString("Male")
+        case .female:  return NSLocalizedString("Female")
         case .disable: fatalError()
         @unknown default:
             fatalError()
@@ -113,14 +113,14 @@ extension Timbre {
     
     var description: String {
         switch self {
-        case .vigorous:    return "male"
-        case .deep:        return "female"
-        case .mellow:      return "mellow"
-        case .falsetto:    return "falsetto"
-        case .full:        return "full"
-        case .clear:       return "clear"
-        case .resounding:  return "resounding"
-        case .ringing:     return "ringing"
+        case .vigorous:    return NSLocalizedString("Vigorous")
+        case .deep:        return NSLocalizedString("Deep")
+        case .mellow:      return NSLocalizedString("Mellow")
+        case .falsetto:    return NSLocalizedString("Falsetto")
+        case .full:        return NSLocalizedString("Full")
+        case .clear:       return NSLocalizedString("Clear")
+        case .resounding:  return NSLocalizedString("Resounding")
+        case .ringing:     return NSLocalizedString("Ringing")
         case .disable:     fatalError()
         @unknown default:
             fatalError()
@@ -148,7 +148,7 @@ extension AudioSpace {
         case .spacial:                return UIImage(named: "icon-空旷")!
         case .ethereal:               return UIImage(named: "icon-空灵")!
         case .threeDimensionalVoice:  return UIImage(named: "icon-3D人声")!
-        case .disable:        fatalError()
+        case .disable:                fatalError()
         @unknown default:
             fatalError()
         }
@@ -156,15 +156,15 @@ extension AudioSpace {
     
     var description: String {
         switch self {
-        case .KTV:                    return "KTV"
-        case .vocalConcer:            return "vocalConcer"
-        case .studio:                 return "studio"
-        case .phonograph:             return "phonograph"
-        case .virtualStereo:          return "virtualStereo"
-        case .spacial:                return "spacial"
-        case .ethereal:               return "ethereal"
-        case .threeDimensionalVoice:  return "threedimVoice"
-        case .disable:        fatalError()
+        case .KTV:                    return NSLocalizedString("KTV")
+        case .vocalConcer:            return NSLocalizedString("Vocal_Concert")
+        case .studio:                 return NSLocalizedString("Studio")
+        case .phonograph:             return NSLocalizedString("Phonograph")
+        case .virtualStereo:          return NSLocalizedString("Virtual_Stereo")
+        case .spacial:                return NSLocalizedString("Spacial")
+        case .ethereal:               return NSLocalizedString("Ethereal")
+        case .threeDimensionalVoice:  return NSLocalizedString("Three_Dimensional_Voice")
+        case .disable:                fatalError()
         @unknown default:
             fatalError()
         }
@@ -196,13 +196,13 @@ extension TimbreRole {
     
     var description: String {
         switch self {
-        case .uncle:     return "uncle"
-        case .oldMan:    return "oldMan"
-        case .babyBoy:   return "babyBoy"
-        case .sister:    return "sister"
-        case .babyGirl:  return "babyGirl"
-        case .zhuBaJie:  return "zhuBaJie"
-        case .hulk:      return "hulk"
+        case .uncle:     return NSLocalizedString("Uncle")
+        case .oldMan:    return NSLocalizedString("Old_Man")
+        case .babyBoy:   return NSLocalizedString("Boy")
+        case .sister:    return NSLocalizedString("Sister")
+        case .babyGirl:  return NSLocalizedString("Girl")
+        case .zhuBaJie:  return NSLocalizedString("Pig_King")
+        case .hulk:      return NSLocalizedString("Hulk")
         case .disable:   fatalError()
         @unknown default:
             fatalError()
@@ -230,10 +230,10 @@ extension MusicGenre {
     
     var description: String {
         switch self {
-        case .RNB:     return "R&B"
-        case .popular: return "popular"
-        case .rock:    return "rock"
-        case .hipHop:  return "hipHop"
+        case .RNB:     return NSLocalizedString("R&B")
+        case .popular: return NSLocalizedString("Popular")
+        case .rock:    return NSLocalizedString("Rock")
+        case .hipHop:  return NSLocalizedString("HipHop")
         case .disable: fatalError()
         @unknown default:
             fatalError()

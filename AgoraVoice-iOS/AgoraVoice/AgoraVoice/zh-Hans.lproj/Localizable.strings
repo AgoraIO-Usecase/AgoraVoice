@@ -17,6 +17,9 @@ NO="否";
 Music="音乐";
 Background="背景";
 Invitation="邀请";
+All="全部";
+Male="男";
+Female="女";
 
 Lost_Connection="网络异常";
 Lost_Connection_Description="当前网络连接错误，请稍后再试";
@@ -25,8 +28,54 @@ Lost_Connection_Retry="网络不给力，请稍后再试";
 Use_Cellular_Data="当前网络无WIFI，继续使用可能产生流量费用";
 
 // Audio Effect
+Voice_Beautifier="美声";
+
+Chat_Beautifier="语聊美声";
+Male_Magnetic="磁性";
+Female_Fresh="清新";
+Female_Vitality="活力";
+
+Singing_Beautifier="歌唱美声";
+
+Timbre_Transformation="音色变换";
+Vigorous="浑厚";
+Deep="低沉";
+Mellow="圆润";
+Falsetto="假音";
+Full="饱满";
+Clear="清澈";
+Resounding="高亢";
+Ringing="嘹亮";
+
+Audio_Effects="音效";
+
+Room_Acoustics="空间塑造";
+KTV="KTV";
+Vocal_Concert="演唱会";
+Studio="录音棚";
+Phonograph="留声机";
+Virtual_Stereo="虚拟立体声";
+Spacial="空旷";
+Ethereal="空灵";
 Three_Dimensional_Voice="3D人声";
 Three_Dimensional_Voice_Description="调节速度控制声音旋转速度(最快1s转一圈，最慢60s转一圈)";
+
+Voice_Changer_Effect="变声音效";
+Uncle="大叔";
+Old_Man="老男人";
+Boy="小男孩";
+Sister="小姐姐";
+Girl="小女孩";
+Pig_King="猪八戒";
+Hulk="绿巨人";
+
+Style_Transformation="曲风音效";
+R&B="R&B";
+Popular="流行";
+Rock="摇滚";
+HipHop="嘻哈";
+
+Pitch_Correction="电音音效";
 
 // LiveType
 Chat_Room="语聊房";
@@ -54,6 +103,8 @@ Confirm_End_Live="是否结束直播？";
 Please_Input_Headset="请插上耳机";
 
 Online_User="在线用户";
+
+Application_Of_Broadcasting="申请上麦";
 
 // Create Room
 Create_Start="开始直播";

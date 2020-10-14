@@ -17,6 +17,9 @@ NO="否";
 Music="Music";
 Background="Background";
 Invitation="Invite";
+All="All";
+Male="Male";
+Female="Female";
 
 Lost_Connection="Network error";
 Lost_Connection_Description="We cannot connect to network now. Please retry later";
@@ -25,8 +28,54 @@ Lost_Connection_Retry="Connection lost. Please retry later.";
 Use_Cellular_Data="Use cellular data instead of WIFI. May incur data charges.";
 
 // Audio Effect
+Voice_Beautifier="Voice beautifier";
+
+Chat_Beautifier="Chat beautifier";
+Male_Magnetic="Magnetic";
+Female_Fresh="Fresh";
+Female_Vitality="Vitality";
+
+Singing_Beautifier="Singing beautifier";
+
+Timbre_Transformation="Timbre transformation";
+Vigorous="Vigorous";
+Deep="Deep";
+Mellow="Mellow";
+Falsetto="Falsetto";
+Full="Full";
+Clear="Clear";
+Resounding="Resounding";
+Ringing="Ringing";
+
+Audio_Effects="Audio effects";
+
+Room_Acoustics="Room acoustics";
+KTV="KTV";
+Vocal_Concert="Vocal concert";
+Studio="Studio";
+Phonograph="Phonograph";
+Virtual_Stereo="Virtual stereo";
+Spacial="Spacial";
+Ethereal="Ethereal";
 Three_Dimensional_Voice="Three Dimensional Voice";
-Three_Dimensional_Voice_Description="";
+Three_Dimensional_Voice_Description="The fastest is 60 rpm, the slowest is 1 rpm";
+
+Voice_Changer_Effect="Voice changer effect";
+Uncle="Uncle";
+Old_Man="Old man";
+Boy="Boy";
+Sister="Sister";
+Girl="Girl";
+Pig_King="Pig king";
+Hulk="Hulk";
+
+Style_Transformation="Style transformation";
+R&B="R&B";
+Popular="Popular";
+Rock="Rock";
+HipHop="HipHop";
+
+Pitch_Correction="Pitch correction";
 
 // LiveType
 Chat_Room="Chat Room";
@@ -54,6 +103,8 @@ Confirm_End_Live="Do you want to end this live streaming?";
 Please_Input_Headset="Plug in a headphone";
 
 Online_User="Online user";
+
+Application_Of_Broadcasting="ApplicationOfBroadcasting";
 
 // Create Room
 Create_Start="Go Live";
