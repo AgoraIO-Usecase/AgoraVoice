@@ -22,7 +22,7 @@ struct BasicUserInfo {
         self.name = try dic.getStringValue(of: "userName")
         
         self.headURL = (try? dic.getStringValue(of: "avatar")) ?? ""
-        let index = Int(Int64(self.userId)! % 12)
+        let index = Int(Int64(self.userId)! % 9)
         self.image = Center.shared().centerProvideImagesHelper().heads[index]
         self.originImage = Center.shared().centerProvideImagesHelper().originalHeads[index]
     }
@@ -31,7 +31,7 @@ struct BasicUserInfo {
         self.userId = userId
         self.name = name
         self.headURL = headURL
-        let index = Int(Int64(self.userId)! % 12)
+        let index = Int(Int64(self.userId)! % 9)
         self.image = Center.shared().centerProvideImagesHelper().heads[index]
         self.originImage = Center.shared().centerProvideImagesHelper().originalHeads[index]
     }
