@@ -321,12 +321,8 @@ private extension ChatRoomViewController {
                         update()
                     } else { // close
                         if let stream = seatCommands.seat.state.stream {
-                            self.multiHostsVM.forceEndWith(user: stream.owner,
-                                                           on: seatCommands.seat.index,
-                                                           success: { [unowned self] in
-                                                            self.liveSession.unpublishStream(stream)
-                                                            update()
-                            })
+                            self.liveSession.unpublishStream(stream)
+                            update()
                         } else {
                             update()
                         }

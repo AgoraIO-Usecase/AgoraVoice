@@ -254,18 +254,22 @@ private extension MultiHostsVM {
                 return .resign
             }
             
-            switch type {
-            case 1: strongSelf.fail.accept("send invitation fail")
-            case 2: strongSelf.fail.accept("send application fail")
-            case 3: strongSelf.fail.accept("owner rejects application fail")
-            case 4: strongSelf.fail.accept("audience rejects invitation fail")
-            case 5: strongSelf.fail.accept("owner accepts application fail")
-            case 6: strongSelf.fail.accept("audience accepts invitation fail")
-            case 7: strongSelf.fail.accept("owner force broadcaster to end fail")
-            case 8: strongSelf.fail.accept("broadcaster end fail")
-            default:
-                assert(false)
-                break
+            if let cError = error as? ACError, cError.code == nil {
+                strongSelf.fail.accept(NSLocalizedString("Lost_Connection_Retry"))
+            } else {
+                switch type {
+                case 1: strongSelf.fail.accept("send invitation fail")
+                case 2: strongSelf.fail.accept("send application fail")
+                case 3: strongSelf.fail.accept("owner rejects application fail")
+                case 4: strongSelf.fail.accept("audience rejects invitation fail")
+                case 5: strongSelf.fail.accept("owner accepts application fail")
+                case 6: strongSelf.fail.accept("audience accepts invitation fail")
+                case 7: strongSelf.fail.accept("owner force broadcaster to end fail")
+                case 8: strongSelf.fail.accept("broadcaster end fail")
+                default:
+                    assert(false)
+                    break
+                }
             }
             
             if let fail = fail {
