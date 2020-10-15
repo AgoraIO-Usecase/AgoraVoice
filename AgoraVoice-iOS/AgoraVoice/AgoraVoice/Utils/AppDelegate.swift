@@ -14,8 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let center = Center.shared()
-        let appAssistant = center.centerProvideAppAssistant()
-        appAssistant.checkMinVersion()
         center.registerAndLogin()
         return true
     }

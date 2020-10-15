@@ -114,7 +114,16 @@ extension MultiHostsVM {
                     if let success = success {
                         success()
                     }
-                }, fail: fail)
+                }) { [unowned self] (error) in
+                    if let cError = error as? AGEError,
+                        cError.code == 1301006 {
+                        self.applicationQueue.remove(application)
+                    }
+                    
+                    if let fail = fail {
+                        fail(error)
+                    }
+                }
     }
     
     func reject(application: Application, fail: ErrorCompletion = nil) {
@@ -240,7 +249,7 @@ private extension MultiHostsVM {
                 strongSelf.fail.accept(message)
                 
                 if let fail = fail {
-                    fail(AGEError.fail(message))
+                    fail(AGEError.fail(message, code: code))
                 }
                 
                 return

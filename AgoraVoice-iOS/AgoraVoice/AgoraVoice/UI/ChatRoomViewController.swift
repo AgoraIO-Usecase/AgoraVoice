@@ -321,8 +321,11 @@ private extension ChatRoomViewController {
                         update()
                     } else { // close
                         if let stream = seatCommands.seat.state.stream {
-                            self.liveSession.unpublishStream(stream)
-                            update()
+                            self.liveSession.unpublishStream(stream, success: {
+                                update()
+                            }) { [unowned self] (_) in
+                                self.showTextToast(text: "Unpublish stream fail")
+                            }
                         } else {
                             update()
                         }

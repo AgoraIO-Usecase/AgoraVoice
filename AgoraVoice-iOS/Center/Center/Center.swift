@@ -13,13 +13,13 @@ import AlamoClient
 
 typealias ActionMessage = EduActionMessage
 
-class Center: NSObject {
+class Center: RxObject {
     static let instance = Center()
     static func shared() -> Center {
         return instance
     }
     
-    let isWorkNormally = BehaviorRelay(value: false)
+    let isWorkNormally = PublishRelay<Bool>()
     let customMessage = PublishRelay<[String: Any]>()
     let actionMessage = PublishRelay<ActionMessage>()
     
@@ -62,20 +62,34 @@ class Center: NSObject {
 
 extension Center {
     func registerAndLogin() {
-        if let current = CurrentUser.local() {
-            self.current = current
-            self.login(userId: current.info.value.userId) {
-                self.isWorkNormally.accept(true)
+        appAssistant.checkMinVersion()
+        appAssistant.update.subscribe(onNext: { [unowned self] (update) in
+            func privateRegisterAndLogin() {
+                if let current = CurrentUser.local() {
+                    self.current = current
+                    self.login(userId: current.info.value.userId) { [unowned self] in
+                        self.isWorkNormally.accept(true)
+                    }
+                    return
+                }
+                
+                self.register { [unowned self] (info: BasicUserInfo) in
+                    self.login(userId: info.userId) { [unowned self] in
+                        self.current = CurrentUser(info: info)
+                        self.isWorkNormally.accept(true)
+                    }
+                }
             }
-            return
-        }
-        
-        register { [unowned self] (info: BasicUserInfo) in
-            self.login(userId: info.userId) { [unowned self] in
-                self.current = CurrentUser(info: info)
-                self.isWorkNormally.accept(true)
+            
+            switch update {
+            case .noNeed:
+                privateRegisterAndLogin()
+            case .advise:
+                privateRegisterAndLogin()
+            case .need:
+                self.isWorkNormally.accept(false)
             }
-        }
+        }).disposed(by: bag)
     }
 }
 

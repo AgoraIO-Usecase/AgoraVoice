@@ -9,10 +9,18 @@
 import UIKit
 #endif
 import Foundation
+import RxSwift
+import RxRelay
 import AlamoClient
 
+enum AppUpdate: Int {
+    case noNeed, advise, need
+}
+
 class AppAssistant: NSObject {
-    func checkMinVersion(success: Completion = nil) {
+    let update = PublishRelay<AppUpdate>()
+    
+    func checkMinVersion() {
         let client = Center.shared().centerProvideRequestHelper()
         let url = URLGroup.appVersion
         let event = RequestEvent(name: "app-version")
@@ -26,16 +34,12 @@ class AppAssistant: NSObject {
                                timeout: .low,
                                parameters: parameters)
         
-        let successCallback: ACDicEXCompletion = { (json: ([String: Any])) throws in
+        let successCallback: ACDicEXCompletion = { [unowned self] (json: ([String: Any])) throws in
             let data = try json.getDataObject()
-//            let config = try data.getDictionaryValue(of: "config")
-//            let appId = try config.getStringValue(of: "appId")
-//            Keys.AgoraAppId = appId
-            
-            if let success = success {
-                success()
-            }
+            let update = try data.getEnum(of: "forcedUpgrade", type: AppUpdate.self)
+            self.update.accept(update)
         }
+        
         let response = ACResponse.json(successCallback)
         
         let retry: ACErrorRetryCompletion = { (error: Error) -> RetryOptions in
@@ -74,5 +78,9 @@ extension AppAssistant {
             return ""
         }
         return id
+    }
+    
+    static var idOfAppStore: Int {
+        return 1116886856
     }
 }

@@ -29,6 +29,9 @@ Lost_Connection_Description="We cannot connect to network now. Please retry late
 Lost_Connection_Retry="Connection lost. Please retry later.";
 Use_Cellular_Data="Use cellular data instead of WIFI. May incur data charges.";
 
+Suggest_Upgrade_App="You can upgrade application";
+Must_Upgrate_App="You must upgrade application";
+
 // Audio Effect
 Voice_Beautifier="Voice beautifier";
 

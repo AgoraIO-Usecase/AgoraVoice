@@ -51,7 +51,7 @@ class LiveTypeCell: RxCollectionViewCell {
     }
 }
 
-class LiveTypeViewController: RxViewController {
+class LiveTypeViewController: MaskViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -64,9 +64,9 @@ class LiveTypeViewController: RxViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         titleLabel.text = AppAssistant.name
         
+        ifNeedUpdateApp()
         updateCollectionViewLayout()
     }
     
@@ -146,6 +146,36 @@ private extension LiveTypeViewController {
         }
         
         navigation.setupTitleFontColor(color: UIColor(hexString: "#EEEEEE"))
+    }
+    
+    func ifNeedUpdateApp() {
+        let app = Center.shared().centerProvideAppAssistant()
+        app.update.subscribe(onNext: { [unowned self] (update) in
+            guard update != .noNeed else {
+                return
+            }
+            
+            func openURL() {
+                let urlString = "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=\(AppAssistant.idOfAppStore)"
+                let url = URL(string: urlString)
+                UIApplication.shared.privateOpenURL(url!)
+            }
+            
+            switch update {
+            case .noNeed:
+                break
+            case .advise:
+                self.showAlert(NSLocalizedString("Suggest_Upgrade_App"),
+                               action1: NSLocalizedString("Cancel"),
+                               action2: NSLocalizedString("Accept")) { (_) in
+                                openURL()
+                }
+            case .need:
+                self.showAlert(NSLocalizedString("Must_Upgrate_App")) { (_) in
+                    openURL()
+                }
+            }
+        }).disposed(by: bag)
     }
 }
 
