@@ -21,6 +21,7 @@ Inviting="邀请中";
 All="全部";
 Male="男";
 Female="女";
+LogId_Copy="LogId 已经复制到粘贴板";
 
 Lost_Connection="网络异常";
 Lost_Connection_Description="当前网络连接错误，请稍后再试";

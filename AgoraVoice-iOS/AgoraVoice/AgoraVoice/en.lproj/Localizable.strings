@@ -21,6 +21,7 @@ Inviting="Inviting";
 All="All";
 Male="Male";
 Female="Female";
+LogId_Copy="LogId has been copied to the pasteboard";
 
 Lost_Connection="Network error";
 Lost_Connection_Description="We cannot connect to network now. Please retry later";

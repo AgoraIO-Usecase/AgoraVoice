@@ -138,10 +138,13 @@ class AboutViewController: MaskTableViewController {
                 pasteboard.string = logId
 
                 let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
-                view.text = "LogId 已经复制"
-                self?.showToastView(view, duration: 1)
+                view.text = NSLocalizedString("LogId_Copy")
+                self?.showToastView(view, duration: 2)
             }) { [weak self] (_) in
                 self?.hiddenHUD()
+                let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
+                view.text = "Log upload fail"
+                self?.showToastView(view, duration: 2)
             }
         default:
             break
