@@ -84,7 +84,7 @@ class AboutViewController: MaskTableViewController {
         }
         
         let w: CGFloat = 100
-        let h: CGFloat = 15
+        let h: CGFloat = 20
         let x: CGFloat = (UIScreen.main.bounds.width - w) * 0.5
         let y: CGFloat = UIScreen.main.bounds.height -
             UIScreen.main.heightOfSafeAreaBottom -
