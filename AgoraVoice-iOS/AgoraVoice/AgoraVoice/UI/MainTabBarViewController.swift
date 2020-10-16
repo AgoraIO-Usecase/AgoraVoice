@@ -24,7 +24,7 @@ class MainTabBarViewController: MaskTabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        UITabBar.appearance().barTintColor = .black
+        UITabBar.appearance().barTintColor = UIColor(hexString: "#161D27")
         tabBar.isUserInteractionEnabled = false
         showHUD()
 

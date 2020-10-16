@@ -16,7 +16,13 @@ enum LiveType {
     
     var image: UIImage {
         switch self {
-        case .chatRoom: return UIImage(named: "pic-语聊房")!
+        case .chatRoom: return UIImage(named: "pic-voice")!
+        }
+    }
+    
+    var background: UIImage {
+        switch self {
+        case .chatRoom: return UIImage(named: "BG-首页")!
         }
     }
     
@@ -32,6 +38,7 @@ protocol LiveTypeCellDelegate: NSObjectProtocol {
 }
 
 class LiveTypeCell: RxCollectionViewCell {
+    @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var typeImageView: UIImageView!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var typeLabel: UILabel!
@@ -111,6 +118,7 @@ private extension LiveTypeViewController {
         
         list.bind(to: collectionView.rx.items(cellIdentifier: "LiveTypeCell",
                                                 cellType: LiveTypeCell.self)) { [unowned self] (index, type, cell) in
+                                                    cell.backgroundImageView.image = type.background
                                                     cell.typeImageView.image = type.image
                                                     cell.typeLabel.text = type.name
                                                     cell.index = index
