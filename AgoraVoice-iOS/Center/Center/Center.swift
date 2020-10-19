@@ -38,14 +38,7 @@ class Center: RxObject {
         
     private lazy var userDataHelper = UserDataHelper()
     
-    private lazy var liveManager: EduManager = {
-        let configuration = EduConfiguration(appId: Keys.AgoraAppId,
-                                             customerId: Keys.customerId,
-                                             customerCertificate: Keys.customerCertificate)
-        let manager = EduManager(config: configuration)
-        manager.delegate = self
-        return manager
-    }()
+    private var liveManager: EduManager!
     
     private lazy var liveManagerLoginRetry = AfterWorker()
     private lazy var rtc = RTCManager.share()
@@ -166,17 +159,22 @@ private extension Center {
     }
     
     func liveManagerLogin(userId: String, success: Completion) {
-        let options = EduLoginOptions(userUuid: userId)
-        options.userUuid = userId
-        liveManager.login(with: options, success: {
+        let configuration = EduConfiguration(appId: Keys.AgoraAppId,
+                                             customerId: Keys.customerId,
+                                             customerCertificate: Keys.customerCertificate,
+                                             userUuid: userId,
+                                             userName: "")
+        let manager = EduManager(config: configuration, success: {
             if let success = success {
                 success()
             }
-        }) { [unowned self] (_) in
+        }) { [unowned self]  (error) in
             self.liveManagerLoginRetry.perform(after: 0.5, on: .main) { [unowned self] in
                 self.liveManagerLogin(userId: userId, success: success)
             }
         }
+        
+        self.liveManager = manager
     }
 }
 

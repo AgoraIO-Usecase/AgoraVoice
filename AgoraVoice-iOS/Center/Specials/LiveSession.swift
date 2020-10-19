@@ -114,7 +114,7 @@ class LiveSession: RxObject {
         RTCManager.share().setParameters("{\"che.audio.morph.earsback\":true}")
         
         let options = EduClassroomJoinOptions(userName: userName, role: eduRole)
-        options.mediaOption.publishType = .remove
+        options.mediaOption.autoPublish = false
         roomManager.joinClassroom(options, success: { [unowned self] (userService) in
             if let service = userService as? EduTeacherService {
                 service.delegate = self
@@ -137,7 +137,7 @@ class LiveSession: RxObject {
                                     personCount: Int(eduRoom.roomState.onlineUserCount),
                                     owner: owner)
                     self.room.accept(room)
-                    
+                    print("\(eduRoom.roomProperties)")
                     if let json = eduRoom.roomProperties as? [String: Any] {
                         self.customMessage.accept(json)
                     }
@@ -428,7 +428,7 @@ extension LiveSession: EduClassroomDelegate {
         userJoined.accept([LiveRole](list: users))
     }
     
-    func classroom(_ classroom: EduClassroom, remoteUserStatesUpdated events: [EduUserEvent]) {
+    func classroom(_ classroom: EduClassroom, remoteUserStateUpdated event: EduUserEvent, changeType: EduUserStateChangeType) {
         
     }
     
@@ -474,10 +474,8 @@ extension LiveSession: EduClassroomDelegate {
         }
     }
     
-    func classroom(_ classroom: EduClassroom, remoteStreamsUpdated events: [EduStreamEvent]) {
-        for item in events {
-            updateStream(eduStream: item.modifiedStream)
-        }
+    func classroom(_ classroom: EduClassroom, remoteStreamUpdated event: EduStreamEvent, changeType: EduStreamStateChangeType) {
+        updateStream(eduStream: event.modifiedStream)
     }
     
     func classroom(_ classroom: EduClassroom, remoteStreamsRemoved events: [EduStreamEvent]) {
@@ -487,26 +485,23 @@ extension LiveSession: EduClassroomDelegate {
     }
     
     // Room
-    func classroom(_ classroom: EduClassroom, stateUpdated reason: EduClassroomChangeReason, operatorUser user: EduBaseUser) {
+    func classroom(_ classroom: EduClassroom, stateUpdated changeType: EduClassroomChangeType, operatorUser user: EduBaseUser) {
         if classroom.roomState.courseState == .stop {
             leave()
             end.accept(())
         }
     }
-    
+
     func classroomPropertyUpdated(_ classroom: EduClassroom, cause: [AnyHashable : Any]?) {
         // Mutit hosts && Live Seats
         if var json = classroom.roomProperties as? [String: Any] {
+            
             if let cause = cause as? [String: Any] {
                 json["cause"] = cause
             }
             
             customMessage.accept(json)
         }
-    }
-    
-    func classroom(_ classroom: EduClassroom, remoteUserPropertiesUpdated users: [EduUser]) {
-        
     }
 }
 
