@@ -32,7 +32,7 @@ struct Chat {
         
         attrContent.addAttributes([.foregroundColor: UIColor.white,
                                    .font: UIFont.systemFont(ofSize: 14)],
-                                  range: NSRange(location: tName.count, length: text.count))
+                                  range: NSRange(location: tName.count, length: text.utf16.count))
         
         var adjustSize = textRect.size
         adjustSize.width = adjustSize.width + 2
@@ -43,14 +43,8 @@ struct Chat {
 }
 
 class ChatVM: CustomObserver {
-//    var sendMessage: PublishRelay
     var chatWidthLimit: CGFloat = UIScreen.main.bounds.width - 60
     var list = BehaviorRelay(value: [Chat]())
-    
-    override init() {
-        super.init()
-        observe()
-    }
     
     deinit {
         #if !RELEASE
@@ -63,45 +57,9 @@ class ChatVM: CustomObserver {
         new.insert(contentsOf: chats, at: 0)
         self.list.accept(new)
     }
-    
-    func sendMessage(_ text: String, local: BasicUserInfo, needSparate: Bool = true, fail: ErrorCompletion = nil) {
-//        let rtm = Center.shared().centerProvideRTMHelper()
-//
-        let chat = ALChannelMessage.AType.chat.rawValue
-        let subJson: [String: Any] = ["fromUserId": local.userId, "fromUserName": local.name, "message": text]
-        let json: [String: Any] = ["cmd": chat, "data": subJson]
-        let jsonString = try! json.jsonString()
-//
-//        try? rtm.writeChannel(message: jsonString, of: RequestEvent(name: "chat-message"), success: { [weak self] in
-//            guard let strongSelf = self else {
-//                return
-//            }
-//            let new = Chat(name: local.name + ": ", text: text)
-//            strongSelf.newMessages([new])
-//        }, fail: fail)
-    }
 }
 
-private extension ChatVM {
-    func observe() {
-//        let rtm = Center.shared().centerProvideRTMHelper()
-//        rtm.addReceivedChannelMessage(observer: self.address) { [weak self] (json) in
-//            guard let cmd = try? json.getEnum(of: "cmd", type: ALChannelMessage.AType.self) else {
-//                return
-//            }
-//
-//            guard cmd == .chat, let strongSelf = self else {
-//                return
-//            }
-//
-//            let data = try json.getDictionaryValue(of: "data")
-//            let name = try data.getStringValue(of: "fromUserName")
-//            let text = try data.getStringValue(of: "message")
-//            let chat = Chat(name: name + ": ", text: text)
-//            strongSelf.newMessages([chat])
-//        }
-    }
-    
+private extension ChatVM {    
     func fake() {
         var list = [Chat]()
         for i in 0 ..< 40 {
