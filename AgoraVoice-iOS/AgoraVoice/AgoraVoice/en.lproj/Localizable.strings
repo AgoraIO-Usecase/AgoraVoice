@@ -156,6 +156,7 @@ Invite_Broadcasting_Fail="Invite a host fail";
 Invitation_Rejected="Invitation Rejected";
 Invite_Broadcasting="Invite";
 Invitation_Rejected_Description="Your Invitation has been rejected by";
+User_Invitation_Timeout="Invitation timeout";
 
 // Broadcaster
 Confirm_Apply_For_Broadcasting="Do you send a application?";

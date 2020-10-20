@@ -15,57 +15,58 @@ struct URLGroup {
     #else
     private static let host = "http://api-solutions-dev.sh.agoralab.co/"
     #endif
-    private static let mainPath = "ent/voice/v1/"
+    private static let version = "v1/"
+    private static let mainPath = "ent/voice/"
     
     static var userRegister: String {
         return URLGroup.host + URLGroup.mainPath + "users"
     }
     
     static var appVersion: String {
-        return URLGroup.host + "ent/v1/" + "app/version"
+        return URLGroup.host + "ent/" + version + "app/version"
     }
     
     static var userLogin: String {
-        return URLGroup.host + URLGroup.mainPath + "users/login"
+        return URLGroup.host + URLGroup.mainPath + version + "users/login"
     }
     
     static var musicList: String {
-        return URLGroup.host + "ent/v1/" + "musics"
+        return URLGroup.host + "ent/" + version + "musics"
     }
     
     static var roomPage: String {
-        return URLGroup.host + URLGroup.mainPath + "rooms/page"
+        return URLGroup.host + URLGroup.mainPath + version + "rooms/page"
     }
     
     static var liveCreate: String {
-        return URLGroup.host + URLGroup.mainPath + "rooms"
+        return URLGroup.host + URLGroup.mainPath + version + "rooms"
     }
     
     static func userUpdateInfo(userId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "users/\(userId)"
+        return URLGroup.host + URLGroup.mainPath + version + "users/\(userId)"
     }
     
     static func liveLeave(userId: String, roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/users/\(userId)/leave"
+        return URLGroup.host + URLGroup.mainPath + version + "rooms/\(roomId)/users/\(userId)/leave"
     }
     
     static func liveClose(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/close"
+        return URLGroup.host + URLGroup.mainPath + version + "rooms/\(roomId)/close"
     }
     
     static func liveSeatStatus(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/seats"
+        return URLGroup.host + URLGroup.mainPath + version + "rooms/\(roomId)/seats"
     }
     
     static func presentGift(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/gifts"
+        return URLGroup.host + URLGroup.mainPath + version + "rooms/\(roomId)/gifts"
     }
     
     static func multiHosts(userId: String, roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)/users/\(userId)/seats"
+        return URLGroup.host + URLGroup.mainPath + version + "rooms/\(roomId)/users/\(userId)/seats"
     }
     
     static func roomBackground(roomId: String) -> String {
-        return URLGroup.host + URLGroup.mainPath + "rooms/\(roomId)"
+        return URLGroup.host + URLGroup.mainPath + version + "rooms/\(roomId)"
     }
 }

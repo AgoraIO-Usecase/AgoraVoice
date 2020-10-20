@@ -156,6 +156,7 @@ Invite_Broadcasting_Fail="邀请上麦失败";
 Invitation_Rejected="拒接邀请";
 Invite_Broadcasting="邀请上麦";
 Invitation_Rejected_Description="拒绝您的邀请";
+User_Invitation_Timeout="用户邀请超时";
 
 // Broadcaster
 Confirm_End_Broadcasting="确定终止连麦？";

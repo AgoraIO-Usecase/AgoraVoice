@@ -173,7 +173,7 @@ private extension Center {
                 self.liveManagerLogin(userId: userId, success: success)
             }
         }
-        
+        manager.delegate = self
         self.liveManager = manager
     }
 }
