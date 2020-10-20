@@ -19,7 +19,7 @@ struct URLGroup {
     private static let mainPath = "ent/voice/"
     
     static var userRegister: String {
-        return URLGroup.host + URLGroup.mainPath + "users"
+        return URLGroup.host + URLGroup.mainPath + version + "users"
     }
     
     static var appVersion: String {
