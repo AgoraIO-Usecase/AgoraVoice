@@ -188,6 +188,9 @@ class UserListViewController: RxViewController {
             multiHostsVM.invitationByRejected.map { [unowned self] (_) -> [LiveRole] in
                 return self.userListVM.audienceList.value
             }.bind(to: userListVM.audienceList).disposed(by: bag)
+            multiHostsVM.invitationTimeout.map { [unowned self] (_) -> [LiveRole] in
+                return self.userListVM.audienceList.value
+            }.bind(to: userListVM.audienceList).disposed(by: bag)
         case .multiHosts:
             tabView.selectedIndex.subscribe(onNext: { [unowned self] (index) in
                 switch index {
