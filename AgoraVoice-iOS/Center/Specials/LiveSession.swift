@@ -528,7 +528,7 @@ extension LiveSession: EduTeacherDelegate, EduStudentDelegate {
         }
     }
     
-    func localStreamUpdated(_ event: EduStreamEvent) {
+    func localStreamUpdated(_ event: EduStreamEvent, changeType: EduStreamStateChangeType) {
         let role = localRole.value
         let stream = LiveStream(streamId: event.modifiedStream.streamUuid,
                                 hasAudio: event.modifiedStream.hasAudio,
