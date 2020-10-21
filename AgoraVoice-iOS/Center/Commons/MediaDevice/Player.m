@@ -19,7 +19,7 @@
 - (instancetype)initWithRtcEngine:(RTCManager *)engine {
     if (self = [super initWithRtcEngine:engine]) {
         self.status = PlayerStatusStop;
-        self.timer = [[SubThreadTimer alloc] initWithThreadName:@"MediaDevice-Player-Playing" timeInterval:1.0];
+        self.timer = [[SubThreadTimer alloc] initWithThreadName:@"com.mediaDevice.player.playing" timeInterval:1.0];
         self.timer.delegate = self;
         engine.audioMixingDelegate = self;
     }

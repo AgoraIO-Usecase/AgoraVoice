@@ -114,7 +114,8 @@ class LiveSession: RxObject {
         RTCManager.share().setParameters("{\"che.audio.morph.earsback\":true}")
         
         let options = EduClassroomJoinOptions(userName: userName, role: eduRole)
-        options.mediaOption.autoPublish = false
+        options.mediaOption.publishType = .remove
+        
         roomManager.joinClassroom(options, success: { [unowned self] (userService) in
             if let service = userService as? EduTeacherService {
                 service.delegate = self
