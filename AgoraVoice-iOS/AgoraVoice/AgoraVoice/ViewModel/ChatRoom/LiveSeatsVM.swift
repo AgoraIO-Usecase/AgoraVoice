@@ -76,13 +76,18 @@ class LiveSeatsVM: CustomObserver {
                 return .resign
             }
             
-            switch state {
-            case .empty: strongSelf.fail.accept("un-lock seat fail")
-            case .close: strongSelf.fail.accept("lock seat fail")
-            default:
-                assert(false)
-                break
+            if let cError = error as? ACError, cError.code == nil {
+                strongSelf.fail.accept(NSLocalizedString("Lost_Connection_Retry"))
+            } else {
+                switch state {
+                case .empty: strongSelf.fail.accept("un-lock seat fail")
+                case .close: strongSelf.fail.accept("lock seat fail")
+                default:
+                    assert(false)
+                    break
+                }
             }
+            
             return .resign
         }
     }
