@@ -312,6 +312,7 @@ class CommandViewController: RxCollectionViewController {
         collectionView.register(CommandCell.self, forCellWithReuseIdentifier: "CommandCell")
         collectionView.delegate = nil
         collectionView.dataSource = nil
+        collectionView.backgroundColor = UIColor(hexString: "#161D27")
         
         commands.bind(to: collectionView.rx.items(cellIdentifier: "CommandCell",
                                                   cellType: CommandCell.self)) { (index, command, cell) in

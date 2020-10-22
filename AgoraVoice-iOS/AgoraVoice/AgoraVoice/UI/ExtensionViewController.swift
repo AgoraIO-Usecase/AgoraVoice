@@ -75,12 +75,14 @@ class ExtensionViewController: RxViewController {
             audioLoopButton.setTitle(NSLocalizedString("Audio_Loop"), for: .selected)
             view.addSubview(audioLoopButton)
         case .broadcaster:
+            audioLoopButton.isHidden = false
             audioLoopButton.setImage(UIImage(named: "icon-耳返-off"), for: .normal)
             audioLoopButton.setImage(UIImage(named: "icon-耳返-on"), for: .selected)
             audioLoopButton.setTitle(NSLocalizedString("Audio_Loop"), for: .normal)
             audioLoopButton.setTitle(NSLocalizedString("Audio_Loop"), for: .selected)
             view.addSubview(audioLoopButton)
         case .audience:
+            audioLoopButton.isHidden = true
             break
         }
     }

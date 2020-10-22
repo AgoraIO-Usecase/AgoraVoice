@@ -299,7 +299,7 @@ private extension ChatRoomViewController {
         vc.view.layer.masksToBounds = true
         
         let height: CGFloat = CGFloat(seatCommands.commands.count * 48 + 50) + UIScreen.main.heightOfSafeAreaBottom
-        let y: CGFloat = UIScreen.main.bounds.height - height
+        let y: CGFloat = UIScreen.main.bounds.height - height + 25
         let frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: height)
         
         presentChild(vc, animated: true, presentedFrame: frame)
