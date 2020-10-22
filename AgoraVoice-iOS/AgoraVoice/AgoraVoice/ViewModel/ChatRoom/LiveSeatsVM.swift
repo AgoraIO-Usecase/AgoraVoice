@@ -100,7 +100,6 @@ private extension LiveSeatsVM {
         }).disposed(by: bag)
         
         message.subscribe(onNext: { [unowned self] (json) in
-            print("LiveSeatsVM json: \(json.description)")
             guard let seatsJson = try? json.getListValue(of: "seats") else {
                 return
             }
