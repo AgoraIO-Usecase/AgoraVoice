@@ -32,6 +32,8 @@ Use_Cellular_Data="Use cellular data instead of WIFI. May incur data charges.";
 Suggest_Upgrade_App="You can upgrade application";
 Must_Upgrate_App="You must upgrade application";
 
+Audio_Loop="Loop";
+
 // Audio Effect
 Voice_Beautifier="Voice beautifier";
 

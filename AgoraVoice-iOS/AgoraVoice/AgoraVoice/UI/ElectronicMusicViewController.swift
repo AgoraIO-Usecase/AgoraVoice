@@ -70,7 +70,8 @@ class ElectronicMusicViewController: RxViewController {
         }.bind(to: collectionView.rx.isUserInteractionEnabled).disposed(by: bag)
        
         // ableSwitch
-        ableSwitch.rx.isOn.subscribe(onNext: { [unowned self] (isOn) in
+        ableSwitch.rx.controlEvent(.valueChanged).subscribe(onNext: { [unowned self] in
+            let isOn = self.ableSwitch.isOn
             let type = (self.segmentControl.selectedSegmentIndex + 1)
             let value = (self.selectedValueIndex.value + 1)
             let music = ElectronicMusic(isAvailable: isOn, type: type, value: value)
@@ -78,11 +79,12 @@ class ElectronicMusicViewController: RxViewController {
         }).disposed(by: bag)
         
         // segmentControl
-        segmentControl.rx.selectedSegmentIndex.map { [unowned self] (index) -> ElectronicMusic in
+        segmentControl.rx.controlEvent(.valueChanged).subscribe(onNext: { [unowned self] in
+            let index = self.segmentControl.selectedSegmentIndex
             var music = self.audioEffectVM.selectedElectronicMusic.value
             music.type = index + 1
-            return music
-        }.bind(to: audioEffectVM.selectedElectronicMusic).disposed(by: bag)
+            self.audioEffectVM.selectedElectronicMusic.accept(music)
+        }).disposed(by: bag)
 
         audioEffectVM.selectedElectronicMusic.map { (music) -> Int in
             return music.type - 1
@@ -90,16 +92,14 @@ class ElectronicMusicViewController: RxViewController {
         
         // collectionView
         selectedValueIndex.accept(audioEffectVM.selectedElectronicMusic.value.value - 1)
-        
-        selectedValueIndex.map { [unowned self] (index) -> ElectronicMusic in
-            var music = self.audioEffectVM.selectedElectronicMusic.value
-            music.value = index + 1
-            return music
-        }.bind(to: audioEffectVM.selectedElectronicMusic).disposed(by: bag)
 
         collectionView.rx.itemSelected.subscribe(onNext: { [unowned self] (index) in
             self.selectedValueIndex.accept(index.item)
             self.collectionView.reloadData()
+            
+            var music = self.audioEffectVM.selectedElectronicMusic.value
+            music.value = index.item + 1
+            self.audioEffectVM.selectedElectronicMusic.accept(music)
         }).disposed(by: bag)
         
         modeSegment()

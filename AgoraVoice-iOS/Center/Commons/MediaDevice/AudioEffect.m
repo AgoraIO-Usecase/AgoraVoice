@@ -23,8 +23,7 @@
             [self.agoraKit setLocalVoiceChanger:AgoraAudioGeneralBeautyVoiceFemaleVitality];
             break;
         case ChatOfBelCantoDisable:
-            [self.agoraKit setLocalVoiceReverbPreset:AgoraAudioReverbPresetOff];
-            [self.agoraKit setLocalVoiceChanger:AgoraAudioVoiceChangerOff];
+            [self cancelAudioEffect];
             break;
     }
 }
@@ -39,8 +38,7 @@
             [self.agoraKit setLocalVoiceChanger:AgoraAudioGeneralBeautySingFemale];
             break;
         case SingOfBelCantoDisable:
-            [self.agoraKit setLocalVoiceReverbPreset:AgoraAudioReverbPresetOff];
-            [self.agoraKit setLocalVoiceChanger:AgoraAudioVoiceChangerOff];
+            [self cancelAudioEffect];
             break;
     }
 }
@@ -73,8 +71,7 @@
             [self.agoraKit setLocalVoiceChanger:AgoraAudioVoiceBeautyResounding];
             break;
         case TimbreDisable:
-            [self.agoraKit setLocalVoiceReverbPreset:AgoraAudioReverbPresetOff];
-            [self.agoraKit setLocalVoiceChanger:AgoraAudioVoiceChangerOff];
+            [self cancelAudioEffect];
             break;
     }
 }
@@ -108,8 +105,7 @@
             [self.agoraKit setLocalVoiceReverbPreset:AgoraAudioReverbPresetThreeDimVoice];
             break;
         case AudioSpaceDisable:
-            [self.agoraKit setLocalVoiceReverbPreset:AgoraAudioReverbPresetOff];
-            [self.agoraKit setLocalVoiceChanger:AgoraAudioVoiceChangerOff];
+            [self cancelAudioEffect];
             break;
     }
 }
@@ -144,8 +140,7 @@
             [self.agoraKit setLocalVoiceChanger:AgoraAudioVoiceChangerHulk];
             break;
         case TimbreRoleDisable:
-            [self.agoraKit setLocalVoiceReverbPreset:AgoraAudioReverbPresetOff];
-            [self.agoraKit setLocalVoiceChanger:AgoraAudioVoiceChangerOff];
+            [self cancelAudioEffect];
             break;
     }
 }
@@ -166,8 +161,7 @@
             [self.agoraKit setLocalVoiceReverbPreset:AgoraAudioReverbPresetHipHop];
             break;
         case MusicGenreDisable:
-            [self.agoraKit setLocalVoiceReverbPreset:AgoraAudioReverbPresetOff];
-            [self.agoraKit setLocalVoiceChanger:AgoraAudioVoiceChangerOff];
+            [self cancelAudioEffect];
             break;
     }
 }
@@ -179,7 +173,12 @@
 }
 
 - (void)cancelElectronicMusic {
+    [self cancelAudioEffect];
+}
+
+- (void)cancelAudioEffect {
     [self.agoraKit setLocalVoiceReverbPreset:AgoraAudioReverbPresetOff];
     [self.agoraKit setLocalVoiceChanger:AgoraAudioVoiceChangerOff];
 }
+
 @end

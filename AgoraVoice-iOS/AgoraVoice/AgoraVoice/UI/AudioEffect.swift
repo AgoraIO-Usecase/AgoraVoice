@@ -175,6 +175,7 @@ extension TimbreRole {
     static var list = BehaviorRelay<[TimbreRole]>(value: [.uncle,
                                                           .oldMan,
                                                           .babyBoy,
+                                                          .babyGirl,
                                                           .sister,
                                                           .zhuBaJie,
                                                           .hulk])

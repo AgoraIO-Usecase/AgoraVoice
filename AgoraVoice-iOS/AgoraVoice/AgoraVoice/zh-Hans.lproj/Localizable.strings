@@ -32,6 +32,8 @@ Use_Cellular_Data="当前网络无WIFI，继续使用可能产生流量费用";
 Suggest_Upgrade_App="你可以升级一下应用";
 Must_Upgrate_App="必须要升级应用才能继续使用";
 
+Audio_Loop="耳返";
+
 // Audio Effect
 Voice_Beautifier="美声";
 
