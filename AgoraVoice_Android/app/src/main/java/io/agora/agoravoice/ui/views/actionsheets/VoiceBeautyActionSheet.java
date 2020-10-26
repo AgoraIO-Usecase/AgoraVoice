@@ -14,20 +14,27 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import io.agora.agoravoice.Config;
 import io.agora.agoravoice.R;
+import io.agora.agoravoice.manager.AudioManager;
 import io.agora.agoravoice.utils.VoiceUtil;
 
 public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.OnClickListener {
+    public interface VoiceBeautyActionListener {
+        void onVoiceBeautySelected(int type);
+        void onVoiceBeautyUnselected();
+    }
+
     private static final int TITLE_TEXT_DEFAULT = Color.parseColor("#FFababab");
 
-    private static final int TYPE_CHAT = 1;
-    private static final int TYPE_SING = 2;
-    private static final int TYPE_TIMBRE = 3;
+    private static final int TYPE_CHAT = 0;
+    private static final int TYPE_SING = 1;
+    private static final int TYPE_TIMBRE = 2;
 
     private static final int GRID_COUNT_THREE = 3;
     private static final int GRID_COUNT_FOUR = 4;
 
-    private int mCurrentType;
+    private int mCurrentType = -1;
 
     private AppCompatTextView[] mTypeTexts;
     private View[] mIndicators;
@@ -43,6 +50,10 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
     private String[] mVoiceBeautyChatNames;
     private String[] mVoiceBeautySingNames;
     private String[] mVoiceBeautyTimbreNames;
+
+    private VoiceBeautyActionListener mListener;
+
+    private Config mConfig;
 
     public VoiceBeautyActionSheet(Context context) {
         super(context);
@@ -74,6 +85,14 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
         changeType(TYPE_CHAT);
     }
 
+    public void setVoiceBeautyActionListener(VoiceBeautyActionListener listener) {
+        mListener = listener;
+    }
+
+    public void setConfig(Config config) {
+        mConfig = config;
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -96,26 +115,34 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
         mRecyclerView.setLayoutManager(layoutManager(mCurrentType));
         highlight();
 
+        mSelected1 = -1;
+        mSelected2 = -1;
+        mSelected3 = -1;
+
         switch (mCurrentType) {
             case TYPE_CHAT:
+                mSelected1 = getSelectedItem();
                 mCurrentAdapter = new ChatBeautyAdapter();
                 mRecyclerView.removeItemDecoration(mTimbreItemDecoration);
                 break;
             case TYPE_SING:
+                mSelected2 = getSelectedItem();
                 mCurrentAdapter = new SingBeautyAdapter();
                 mRecyclerView.removeItemDecoration(mTimbreItemDecoration);
                 break;
             case TYPE_TIMBRE:
+                mSelected3 = getSelectedItem();
                 mCurrentAdapter = new VoiceTimbreAdapter();
                 mRecyclerView.addItemDecoration(mTimbreItemDecoration);
                 break;
         }
 
+
         mRecyclerView.setAdapter(mCurrentAdapter);
     }
 
     private void highlight() {
-        int index = mCurrentType - 1;
+        int index = mCurrentType;
         for (int i = 0; i < mTypeTexts.length; i++) {
             if (i == index) {
                 mTypeTexts[i].setTextColor(Color.WHITE);
@@ -140,6 +167,48 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
         return new GridLayoutManager(getContext(), gridCount);
     }
 
+    private int getSelectedType(int position) {
+        switch (mCurrentType) {
+            case TYPE_CHAT:
+                return AudioManager.EFFECT_MALE_MAGNETIC + position;
+            case TYPE_SING:
+                return AudioManager.EFFECT_MALE_HALL + position;
+            case TYPE_TIMBRE:
+                return AudioManager.EFFECT_TIMBRE_VIGOROUS + position;
+            default: return -1;
+        }
+    }
+
+    private int getSelectedItem() {
+        int type = mConfig == null ? -1 : mConfig.getCurAudioEffect();
+        if (type == -1) return -1;
+
+        switch (mCurrentType) {
+            case TYPE_CHAT:
+                if (AudioManager.EFFECT_MALE_MAGNETIC <= type &&
+                    type <= AudioManager.EFFECT_FEMALE_VITALITY) {
+                    return type - AudioManager.EFFECT_MALE_MAGNETIC;
+                } else {
+                    return -1;
+                }
+            case TYPE_SING:
+                if (AudioManager.EFFECT_MALE_HALL <= type &&
+                        type <= AudioManager.EFFECT_FEMALE_SMALL_ROOM) {
+                    return type - AudioManager.EFFECT_MALE_HALL;
+                } else {
+                    return -1;
+                }
+            case TYPE_TIMBRE:
+                if (AudioManager.EFFECT_TIMBRE_VIGOROUS <= type &&
+                        type <= AudioManager.EFFECT_TIMBRE_RINGING) {
+                    return type - AudioManager.EFFECT_TIMBRE_VIGOROUS;
+                } else {
+                    return -1;
+                }
+            default: return -1;
+        }
+    }
+
     private class ChatBeautyAdapter extends RecyclerView.Adapter<ChatBeautyViewHolder> {
         @NonNull
         @Override
@@ -159,8 +228,15 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
             holder.itemView.setOnClickListener(view -> {
                 if (pos == mSelected1) {
                     mSelected1 = -1;
+                    if (mListener != null) {
+                        mListener.onVoiceBeautyUnselected();
+                    }
                 } else {
                     mSelected1 = pos;
+                    if (mListener != null) {
+                        mListener.onVoiceBeautySelected(
+                                getSelectedType(pos));
+                    }
                 }
                 mCurrentAdapter.notifyDataSetChanged();
             });
@@ -203,8 +279,15 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
             holder.itemView.setOnClickListener(view -> {
                 if (pos == mSelected2) {
                     mSelected2 = -1;
+                    if (mListener != null) {
+                        mListener.onVoiceBeautyUnselected();
+                    }
                 } else {
                     mSelected2 = pos;
+                    if (mListener != null) {
+                        mListener.onVoiceBeautySelected(
+                                getSelectedType(pos));
+                    }
                 }
                 mCurrentAdapter.notifyDataSetChanged();
             });
@@ -246,8 +329,15 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
             holder.itemView.setOnClickListener(view -> {
                 if (pos == mSelected3) {
                     mSelected3 = -1;
+                    if (mListener != null) {
+                        mListener.onVoiceBeautyUnselected();
+                    }
                 } else {
                     mSelected3 = pos;
+                    if (mListener != null) {
+                        mListener.onVoiceBeautySelected(
+                                getSelectedType(pos));
+                    }
                 }
                 mCurrentAdapter.notifyDataSetChanged();
             });
@@ -259,7 +349,7 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
         }
     }
 
-    private class VoiceTimbreViewHolder extends RecyclerView.ViewHolder {
+    private static class VoiceTimbreViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout layout;
         AppCompatTextView name;
 

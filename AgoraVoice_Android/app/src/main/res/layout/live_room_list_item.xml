@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<io.agora.agoravoice.ui.views.SquareRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/live_room_list_item_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/margin_2"
+        android:layout_marginEnd="@dimen/margin_2"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/margin_2"
+        android:paddingTop="@dimen/margin_1"
+        android:paddingEnd="@dimen/margin_2"
+        android:paddingBottom="@dimen/margin_1"
+        android:background="@drawable/round_scalable_gray_bg">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/scene_room_list_count_height"
+            android:layout_height="@dimen/scene_room_list_count_height"
+            android:layout_marginEnd="@dimen/margin_1"
+            android:src="@drawable/icon_people"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/live_room_list_item_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textAlignment="gravity"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_1_1" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/live_room_list_item_room_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/room_list_item_name_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:lines="1"
+        android:textAlignment="gravity"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:background="@drawable/mask_background"/>
+</io.agora.agoravoice.ui.views.SquareRelativeLayout>

@@ -16,6 +16,7 @@ public class BottomBarConfig {
         public int index;
         public int icon;
         public boolean show;
+        public boolean activated = true;
 
         public BottomBarButtonConfig(int index, int icon, boolean show) {
             this.index = index;

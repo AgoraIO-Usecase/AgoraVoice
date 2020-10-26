@@ -17,22 +17,22 @@
             android:paddingEnd="@dimen/room_user_action_view_padding"
             android:orientation="horizontal">
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/participant_icon"
                 android:layout_width="@dimen/room_user_action_view_text_height"
                 android:layout_height="@dimen/room_user_action_view_text_height"
                 android:layout_marginStart="@dimen/room_user_action_view_padding"
                 android:layout_marginEnd="@dimen/room_user_action_view_padding"
                 android:src="@drawable/icon_people"
                 android:scaleType="fitCenter"/>
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/live_participant_count_text"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/room_user_action_view_text_height"
                 android:layout_marginEnd="@dimen/room_user_action_view_padding"
-                android:textAlignment="gravity"
                 android:gravity="center_vertical"
+                android:textAlignment="gravity"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/text_size_2"/>
+                android:textSize="@dimen/text_size_1" />
         </LinearLayout>
     </RelativeLayout>
     <View

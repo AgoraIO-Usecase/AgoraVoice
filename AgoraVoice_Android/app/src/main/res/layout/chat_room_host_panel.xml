@@ -2,21 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/chat_room_host_panel_owner_image"
+    <RelativeLayout
+        android:id="@+id/chat_room_host_panel_owner_image_layout"
         android:layout_width="@dimen/chat_room_host_panel_owner_image_size"
         android:layout_height="@dimen/chat_room_host_panel_owner_image_size"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/chat_room_host_panel_owner_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/chat_room_host_panel_owner_mute"
+            android:layout_width="@dimen/chat_room_host_panel_seat_mute_icon_size"
+            android:layout_height="@dimen/chat_room_host_panel_seat_mute_icon_size"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/icon_mic_off"/>
+    </RelativeLayout>
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/chat_room_host_panel_owner_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/chat_room_host_panel_owner_image"
+        android:layout_below="@id/chat_room_host_panel_owner_image_layout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/margin_4"
-        android:paddingStart="@dimen/margin_3"
-        android:paddingEnd="@dimen/margin_3"
+        android:layout_marginTop="@dimen/margin_6"
+        android:paddingStart="@dimen/margin_4"
+        android:paddingEnd="@dimen/margin_4"
         android:paddingTop="@dimen/margin_1"
         android:paddingBottom="@dimen/margin_1"
         android:textColor="@android:color/white"
@@ -29,5 +41,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/chat_room_host_panel_owner_name"
-        android:layout_marginTop="@dimen/margin_5"/>
+        android:layout_marginTop="@dimen/margin_5"
+        android:overScrollMode="never"/>
 </RelativeLayout>

@@ -1,11 +1,17 @@
 <resources>
     <string name="app_name" translatable="false">Agora Voice</string>
 
+    <string name="app_id" translatable="false"></string>
+    <string name="customer_id" translatable="false"></string>
+    <string name="customer_certificate" translatable="false"></string>
+
     <!-- Main Activity -->
     <string name="main_navigation_home">Home</string>
     <string name="main_navigation_profile">My Profile</string>
 
     <string name="main_start_chat">Begin Chat</string>
+
+    <string name="scene_type_chat_room">Chat Room</string>
 
     <!-- Profile -->
     <string name="profile_setting_title_avatar">Avatar Setting</string>
@@ -16,30 +22,53 @@
 
     <string name="text_cancel">Cancel</string>
     <string name="text_done">Done</string>
+    <string name="text_confirm">Confirm</string>
+    <string name="text_accept">Accept</string>
+    <string name="text_reject">Reject</string>
+    <string name="text_upgrade">Upgrade</string>
+    <string name="text_yes">Yes</string>
+    <string name="text_no">No</string>
 
     <string name="about_title">About</string>
     <string name="privacy_policy_title">Privacy Policy</string>
     <string name="privacy_website_link">https://www.agora.io/en/privacy-policy/</string>
 
     <string name="disclaimer_title">Test Product Disclaimer</string>
-    <string name="disclaimer_content">&#160;&#160;&#160;&#160;Agora Live ("this product") is a test product provided by Agora. Agora enjoys the copyright and ownership of this product. It is hereby granted free of charge to anyone who obtains a copy of this product and related documentation (hereinafter referred to as "software") to try the software without limitation, including but not limited to trial, copy, modify, merge, publish, distribute, but this product shall not be used For any commercial use, you may not sublicense and/or sell copies of the software.\n\n &#160;&#160;&#160;&#160;This product is provided "as is" without any express warranty, including but not limited to guarantees of suitability, suitability for specific purposes, and non-infringement. Whether it is due to any contract, infringement or other forms of conduct related to this product or the trial of this product or other methods, Agora will not be responsible for any claims, damages or other liabilities.\n\n &#160;&#160;&#160;&#160;You are free to choose whether to try the services provided by this product. If you download, install, or try the services provided in this product, it means that you trust the owner of the product, and Agora shall not be responsible for any form of loss or injury caused by yourself or others when you try the services provided in this product for any reason.</string>
+    <string name="disclaimer_content">&#160;&#160;&#160;&#160;Agora Voice ("this product") is a test product provided by Agora.
+        Agora enjoys the copyright and ownership of this product. It is hereby granted free of charge to anyone who obtains
+        a copy of this product and related documentation (hereinafter referred to as "software") to try the software without limitation,
+        including but not limited to trial, copy, modify, merge, publish, distribute, but this product shall not be used
+        For any commercial use, you may not sublicense and/or sell copies of the software.\n\n &#160;&#160;&#160;&#160;
+        This product is provided "as is" without any express warranty, including but not limited to guarantees of suitability,
+        suitability for specific purposes, and non-infringement. Whether it is due to any contract, infringement or other forms
+        of conduct related to this product or the trial of this product or other methods, Agora will not be responsible for any claims,
+        damages or other liabilities.\n\n &#160;&#160;&#160;&#160;You are free to choose whether to try the services provided by this product.
+        If you download, install, or try the services provided in this product, it means that you trust the owner of the product,
+        and Agora shall not be responsible for any form of loss or injury caused by yourself or others when you try the services
+        provided in this product for any reason.</string>
 
     <string name="sign_up_agora_title">Sign Up Agora.io</string>
     <string name="sign_up_website_link">https://sso.agora.io/en/signup</string>
 
-    <string name="version_title">Versions</string>
-    <string name="agoralive_version_title">AgoraLive Version</string>
+    <string name="agoralive_version_title">AgoraVoice Version</string>
     <string name="agoralive_release_time_title">Release</string>
     <string name="agoralive_release_time" translatable="false">2020.07.06</string>
     <string name="agoralive_media_sdk_version_title">Media SDK Version</string>
-    <string name="agoralive_media_sdk_version" translatable="false">Ver 3.0.1.1</string>
+    <string name="agoralive_media_sdk_version" translatable="false">Ver 3.0.0.62</string>
 
-    <string name="official_website">www.agora.io</string>
+    <string name="official_website" translatable="false">www.agora.io</string>
 
     <!-- Policies -->
     <string name="room_restriction_policy">This is a testing product. Please refrain from using it commercially. The max duration per session is 10 minutes, and the max number of participants per channel is 10. </string>
 
     <string name="permission_not_granted">Necessary permissions not granted</string>
+
+    <!-- Nickname Edit -->
+    <string name="profile_name_edit_hint">Input your nickname&#8230;</string>
+    <string name="profile_name_edit_message_empty">You have input an empty name</string>
+    <string name="profile_name_edit_message_success">Your nickname has changed</string>
+    <string name="profile_name_edit_message_fail">Nickname change failed</string>
+    <string name="profile_name_edit_message_same">Same nickname</string>
 
     <!-- Prepare Activity -->
     <string name="live_prepare_hint">Room Name</string>
@@ -99,7 +128,7 @@
 
     <string name="live_message_gift_send">has sent out</string>
 
-    <string name="rtc_stats_format">Downstream Bitrate: %.2f kbps%nDownstream Loss Rate: %.2f%% %nUpstream Bitrate: %.2f kbps%nUpstream Loss Rate: %.2f%%</string>
+    <string name="rtc_stats_format">Audio Received Bitrate: %.2f kbps%nAudio Received Loss Rate: %.2f%% %nAudio Sent Bitrate: %.2f kbps%nAudio Sent Loss Rate: %.2f%% %nDelay: %d ms</string>
 
     <!-- Action Sheets -->
     <string name="action_sheet_background_title">Background</string>
@@ -162,7 +191,7 @@
         <item>Sister</item>
         <item>Girl</item>
         <item>Bajie</item>
-        <item>Hawk</item>
+        <item>Hulk</item>
     </string-array>
 
     <string-array name="action_sheet_sound_effect_flavour_names">
@@ -195,6 +224,11 @@
         <item>G</item>
         <item>Ab</item>
     </string-array>
+
+    <string name="action_sheet_3d_voice_title">3D Voice</string>
+    <string name="action_sheet_3d_voice_description">Speed adjustment controls the speed of sound rotation (The fastest is 60 rpm, the slowest is 1 rpm) </string>
+    <string name="action_sheet_3d_voice_text_min">Min</string>
+    <string name="action_sheet_3d_voice_text_max">Max</string>
 
     <string name="action_sheet_sound_effect_magic_notes_coming_soon">Coming Soon</string>
 
@@ -235,8 +269,83 @@
     <string name="action_sheet_music_credit_hint">Music:&#160;&#160;</string>
     <string name="action_sheet_music_credit_link">https://www.bensound.com</string>
 
+    <string name="action_sheet_user_list_title">Online Users</string>
+    <string name="action_sheet_user_list_type_all">All Users</string>
+    <string name="action_sheet_user_list_type_apply">Apply</string>
+    <string name="action_sheet_user_list_inviting">Inviting</string>
+    <string name="action_sheet_user_list_invite">Invite</string>
+
+    <string-array name="action_sheet_seat_operations">
+        <item>Open</item>
+        <item>Block</item>
+        <item>Invite</item>
+        <item>Apply</item>
+        <item>Mute</item>
+        <item>Unmute</item>
+        <item>ForceLeave</item>
+        <item>Leave</item>
+    </string-array>
+
+    <string name="action_sheet_seat_operate_mute">Mute</string>
+    <string name="action_sheet_seat_operate_unmute">Unmute</string>
+
     <!-- Network status detection -->
     <string name="network_unavailable">Network is unavailable, please try later</string>
     <string name="network_switch_to_wifi">You are in WIFI network</string>
     <string name="network_switch_to_mobile">You are in the mobile network, you may pay for the mobile data usage if you continue.</string>
+
+    <string name="scene_empty_list_hint">Please create a room</string>
+    <string name="scene_server_error">No data, please try later</string>
+    <string name="scene_no_connection_title">Network error</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_leave_room_title">Leave Room</string>
+    <string name="dialog_leave_room_message">Do you want to leave this room?</string>
+    <string name="dialog_owner_end_live_title">Live End</string>
+    <string name="dialog_owner_end_live_message">Do you want to end this live room?</string>
+    <string name="dialog_invite_user_title">Invitation</string>
+    <string name="dialog_apply_seat_title">Application</string>
+    <string name="dialog_invite_user_message">Do you want to invite %s? </string>
+    <string name="dialog_receive_invite_message">%s has invited you, do you accept？</string>
+    <string name="dialog_leave_seat_title">Leave</string>
+    <string name="dialog_leave_seat_message_owner">Do you want %s to leave the seat?</string>
+    <string name="dialog_leave_seat_message_host">Do you want to leave the seat?</string>
+    <string name="dialog_lock_seat_title">Lock Seat</string>
+    <string name="dialog_lock_seat_message">Do you want to lock the seat? Any host that has taken the seat will be forced to leave.</string>
+    <string name="dialog_unlock_seat_title">Unlock</string>
+    <string name="dialog_unlock_seat_message">Do you want to unlock this seat?</string>
+    <string name="dialog_apply_seat_message">Do you want to apply this seat?</string>
+    <string name="dialog_application_accepted_message">Do you accept the application from %s?</string>
+    <string name="dialog_application_rejected_message">Do you reject the application from %s?</string>
+    <string name="dialog_mute_title">Mute</string>
+    <string name="dialog_mute_message">Do you want to mute %s\'s mic?</string>
+    <string name="dialog_unmute_title">Unmute</string>
+    <string name="dialog_unmute_message">Do you want %s to speak again?</string>
+    <string name="dialog_upgrade_title">New Version Found</string>
+    <string name="dialog_upgrade_force_message">AgoraVoice you are using is too old, do you want to close and download new apk file?</string>
+    <string name="dialog_upgrade_recommend_message">New AgoraVoice version found, you are recommended to upgrade for new features.</string>
+
+    <!-- Toasts -->
+    <string name="toast_invite_success">You have sent your invitation to %s</string>
+    <string name="toast_repeat_invite">%s has been invited recently</string>
+    <string name="toast_request_fail_message">%s, error code: %d</string>
+    <string name="toast_invite_fail">Invitation failed, error code %d</string>
+    <string name="toast_invite_accepted">Your invitation has been accepted by %s</string>
+    <string name="toast_invite_rejected">Your invitation has been rejected by %s</string>
+    <string name="toast_apply_accepted">Your application has been accepted by the owner</string>
+    <string name="toast_apply_rejected">Your application has been rejected by the owner</string>
+    <string name="toast_user_has_taken_seat">The user you invited is a host.</string>
+    <string name="toast_application_sent">Your application has been sent to the owner</string>
+    <string name="toast_application_sent_fail">Your application failed to be sent</string>
+    <string name="toast_no_wired_mic_plugged">Please use a wired headset with a mic</string>
+    <string name="toast_join_class_success">Join room successfully</string>
+    <string name="toast_join_class_fail">Join room failed</string>
+    <string name="toast_room_ends">Room Ends</string>
+    <string name="toast_app_version_fail">Acquire app version fail</string>
+    <string name="toast_link_empty">The link address is empty</string>
+
+    <!-- Error Messages -->
+    <string name="error_no">OK</string>
+    <string name="error_seat_taken">The seat has been taken by other host</string>
+    <string name="error_room_max_user">This product is for test purpose only, each room can only have 10 users at most</string>
 </resources>

@@ -31,10 +31,11 @@ public class RtcStatsView extends RelativeLayout {
         LayoutInflater.from(getContext()).inflate(R.layout.rtc_stats_layout, this);
         mTextView = findViewById(R.id.stats_text);
         mCloseBtn = findViewById(R.id.stats_close_btn);
+        setLocalStats(0.0f, 0.0f, 0.0f, 0.0f, 0);
     }
 
-    public void setLocalStats(float rxRate, float rxLoss, float txRate, float txLoss) {
-        String stats = String.format(mStatsFormat, rxRate, rxLoss, txRate, txLoss);
+    public void setLocalStats(float rxRate, float rxLoss, float txRate, float txLoss, int latency) {
+        String stats = String.format(mStatsFormat, rxRate, rxLoss, txRate, txLoss, latency);
         mTextView.setText(stats);
     }
 

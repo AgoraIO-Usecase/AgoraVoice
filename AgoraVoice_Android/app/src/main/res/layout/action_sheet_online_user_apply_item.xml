@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/action_sheet_list_item_height">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/action_sheet_online_user_item_icon"
+        android:layout_width="@dimen/action_sheet_list_item_icon_size"
+        android:layout_height="@dimen/action_sheet_list_item_icon_size"
+        android:scaleType="fitXY"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/action_sheet_online_user_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/action_sheet_online_user_item_icon"
+        android:layout_marginStart="@dimen/common_margin_vertical"
+        android:layout_centerVertical="true"
+        android:textSize="@dimen/text_size_1_1"
+        android:textColor="@color/theme_gray_2"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/action_sheet_online_user_item_accept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:paddingTop="@dimen/margin_2"
+        android:paddingBottom="@dimen/margin_2"
+        android:paddingLeft="@dimen/margin_4"
+        android:paddingRight="@dimen/margin_4"
+        android:text="@string/text_accept"
+        android:textSize="@dimen/text_size_2"
+        android:textColor="@android:color/white"
+        android:background="@drawable/action_sheet_online_user_apply_accept_btn_bg"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/action_sheet_online_user_item_reject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/action_sheet_online_user_item_accept"
+        android:layout_marginEnd="@dimen/margin_3"
+        android:layout_centerVertical="true"
+        android:paddingTop="@dimen/margin_2"
+        android:paddingBottom="@dimen/margin_2"
+        android:paddingLeft="@dimen/margin_4"
+        android:paddingRight="@dimen/margin_4"
+        android:text="@string/text_reject"
+        android:textSize="@dimen/text_size_2"
+        android:textColor="@color/theme_blue_1"
+        android:background="@drawable/action_sheet_online_user_apply_reject_btn_bg"/>
+</RelativeLayout>

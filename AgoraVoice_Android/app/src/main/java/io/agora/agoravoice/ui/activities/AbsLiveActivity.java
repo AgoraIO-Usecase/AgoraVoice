@@ -1,6 +1,7 @@
 package io.agora.agoravoice.ui.activities;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
@@ -33,6 +35,14 @@ public abstract class AbsLiveActivity extends BaseActivity {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
+    protected String roomId;
+    protected String roomName;
+    protected String ownerId;
+    protected String ownerName;
+    protected int ownerUid;
+
+    protected Dialog curDialog;
+
     protected InputMethodManager mInputMethodManager;
     private Rect mDecorViewRect;
     private int mInputMethodHeight;
@@ -53,6 +63,10 @@ public abstract class AbsLiveActivity extends BaseActivity {
         }
     };
 
+    protected boolean headSetWithMicPlugged() {
+        return mHeadsetWithMicPlugged;
+    }
+
     private NetworkReceiver mNetworkReceiver;
 
     private static class NetworkReceiver extends BroadcastReceiver {
@@ -68,7 +82,7 @@ public abstract class AbsLiveActivity extends BaseActivity {
             } else {
                 int type = info.getType();
                 if (ConnectivityManager.TYPE_WIFI == type) {
-                    // Toast.makeText(context, R.string.network_switch_to_wifi, Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast(context, R.string.network_switch_to_wifi);
                 } else if (ConnectivityManager.TYPE_MOBILE == type) {
                     ToastUtil.showShortToast(context, R.string.network_switch_to_mobile);
                 }
@@ -187,7 +201,7 @@ public abstract class AbsLiveActivity extends BaseActivity {
         }
     }
 
-    private void onAllPermissionsGranted() {
+    protected void onAllPermissionsGranted() {
 
     }
 
@@ -203,9 +217,32 @@ public abstract class AbsLiveActivity extends BaseActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         stopDetectKeyboard();
         unregisterReceiver(mHeadPhoneReceiver);
+    }
+
+    protected boolean dialogShowing() {
+        return curDialog != null && curDialog.isShowing();
+    }
+
+    protected void dismissDialog() {
+        if (curDialog != null) curDialog.dismiss();
     }
 }

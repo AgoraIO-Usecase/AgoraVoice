@@ -14,4 +14,20 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+
+    <style name="dialog_center" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:windowBackground">@color/black_90_percent_transparent</item>
+    </style>
+
+    <style name="action_sheet_seek_bar">
+        <item name="android:minHeight">@dimen/action_sheet_music_volume_progress_bar_height</item>
+        <item name="android:maxHeight">@dimen/action_sheet_music_volume_progress_bar_height</item>
+        <item name="android:progressDrawable">@drawable/setting_progress</item>
+        <item name="android:thumb">@drawable/seekbar_thumb</item>
+    </style>
+
+    <style name="action_sheet_music_seek_bar" parent="action_sheet_seek_bar">
+        <item name="android:max">100</item>
+    </style>
 </resources>

@@ -18,7 +18,10 @@ public class ActionSheetManager {
         voice_beauty,
         tool,
         gift,
-        music
+        music,
+        user,
+        seat_op,
+        three_dimen_voice
     }
 
     private BottomSheetDialog mCurrentActionSheet;
@@ -88,6 +91,9 @@ public class ActionSheetManager {
             case tool: return new ToolActionSheet(context);
             case gift: return new GiftActionSheet(context);
             case music: return new MusicActionSheet(context);
+            case user: return new UserListActionSheet(context);
+            case seat_op: return new HostPanelOperateActionSheet(context);
+            case three_dimen_voice: return new ThreeDimenVoiceActionSheet(context);
             default: return null;
         }
     }

@@ -16,6 +16,7 @@
         android:paddingTop="@dimen/margin_2"
         android:paddingBottom="@dimen/margin_2"
         android:lines="1"
+        android:imeOptions="actionDone"
         android:textSize="@dimen/text_size_1_1"
         android:textColor="@android:color/white"
         android:background="@drawable/message_edit_bg"/>

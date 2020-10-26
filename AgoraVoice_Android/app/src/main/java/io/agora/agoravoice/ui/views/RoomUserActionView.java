@@ -6,11 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 
+import java.util.List;
 import java.util.Locale;
 
 import io.agora.agoravoice.R;
+import io.agora.agoravoice.utils.UserUtil;
 
 public class RoomUserActionView extends RelativeLayout {
     private static final int MAX_ICON_COUNT = 4;
@@ -22,6 +26,9 @@ public class RoomUserActionView extends RelativeLayout {
     private AppCompatTextView mCountText;
     private RelativeLayout mIconLayout;
     private View mNotification;
+
+    private int mUserIconSize;
+    private int mUserIconMargin;
 
     private RoomUserActionViewListener mListener;
 
@@ -36,6 +43,9 @@ public class RoomUserActionView extends RelativeLayout {
     }
 
     private void initView() {
+        mUserIconSize = getResources().getDimensionPixelSize(R.dimen.room_user_action_view_height);
+        mUserIconMargin = getResources().getDimensionPixelOffset(R.dimen.margin_1);
+
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View layout = inflater.inflate(R.layout.room_user_action_view_layout, this);
         mIconLayout = layout.findViewById(R.id.icon_layout);
@@ -53,7 +63,7 @@ public class RoomUserActionView extends RelativeLayout {
         mListener = listener;
     }
 
-    public void reset(int total) {
+    public void resetCount(int total) {
         String value = countToString(total);
         mCountText.setText(value);
     }
@@ -73,40 +83,35 @@ public class RoomUserActionView extends RelativeLayout {
         }
     }
 
-//    private void setUserIcons(List<EnterRoomResponse.RankInfo> rankUsers) {
-//        if (mIconLayout.getChildCount() > 0) {
-//            mIconLayout.removeAllViews();
-//        }
-//
-//        if (rankUsers == null) return;
-//
-//        int id = 0;
-//        for (int i = 0; i < rankUsers.size(); i++) {
-//            if (i >= MAX_ICON_COUNT) break;
-//            EnterRoomResponse.RankInfo info = rankUsers.get(i);
-//            setIconResource(info.userId, id++);
-//        }
-//    }
+    public void setUserIcons(List<String> rankUsers) {
+        if (mIconLayout.getChildCount() > 0) {
+            mIconLayout.removeAllViews();
+        }
+
+        if (rankUsers == null) return;
+
+        int id = 0;
+        for (int i = 0; i < rankUsers.size(); i++) {
+            if (i >= MAX_ICON_COUNT) break;
+            setIconResource(rankUsers.get(i), id++);
+        }
+    }
 
     private void setIconResource(String userId, int referenceId) {
-//        int resId = UserUtil.getUserProfileIcon(userId);
-//        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(),
-//                BitmapFactory.decodeResource(getResources(), resId));
-//        drawable.setCircular(true);
-//
-//        LayoutParams params = new
-//                LayoutParams(mIconSize, mIconSize);
-//        params.rightMargin = mIconMargin;
-//        if (referenceId > 0) {
-//            params.addRule(RelativeLayout.LEFT_OF, referenceId);
-//        } else {
-//            params.addRule(RelativeLayout.ALIGN_PARENT_END, RelativeLayout.TRUE);
-//        }
-//
-//        AppCompatImageView imageView = new AppCompatImageView(getContext());
-//        imageView.setId(referenceId + 1);
-//        imageView.setImageDrawable(drawable);
-//        mIconLayout.addView(imageView, params);
+        RoundedBitmapDrawable drawable = UserUtil.getUserRoundIcon(getResources(), userId);
+        LayoutParams params = new LayoutParams(mUserIconSize, mUserIconSize);
+        params.rightMargin = mUserIconMargin;
+
+        if (referenceId > 0) {
+            params.addRule(RelativeLayout.LEFT_OF, referenceId);
+        } else {
+            params.addRule(RelativeLayout.ALIGN_PARENT_END, RelativeLayout.TRUE);
+        }
+
+        AppCompatImageView imageView = new AppCompatImageView(getContext());
+        imageView.setId(referenceId + 1);
+        imageView.setImageDrawable(drawable);
+        mIconLayout.addView(imageView, params);
     }
 
     public void showNotification(boolean show) {

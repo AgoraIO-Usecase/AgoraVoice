@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.agora.agoravoice.Config;
 import io.agora.agoravoice.R;
 import io.agora.agoravoice.utils.Const;
 
@@ -21,9 +22,10 @@ public class ToolActionSheet extends AbstractActionSheet {
     private static final int GRID_COUNT = 4;
 
     private Const.Role mCurrentRole = Const.Role.audience;
-    private Map<Const.Role, ToolAdapterConfig> mConfig;
+    private Map<Const.Role, ToolAdapterConfig> mUIConfig;
     private ToolActionAdapter mAdapter;
     private ToolActionListener mListener;
+    private Config mAppConfig;
 
     public interface ToolActionListener {
         void onToolItemClicked(Const.Role role, View view, int index);
@@ -35,7 +37,7 @@ public class ToolActionSheet extends AbstractActionSheet {
     }
 
     private void init() {
-        mConfig = initConfig();
+        mUIConfig = initConfig();
 
         LayoutInflater.from(getContext()).inflate(R.layout.action_sheet_tool, this);
         RecyclerView recyclerView = findViewById(R.id.action_sheet_tool_recycler);
@@ -48,6 +50,10 @@ public class ToolActionSheet extends AbstractActionSheet {
         if (role == mCurrentRole) return;
         mCurrentRole = role;
         mAdapter.notifyDataSetChanged();
+    }
+
+    public void setAppConfig(Config config) {
+        mAppConfig = config;
     }
 
     private class ToolActionAdapter extends RecyclerView.Adapter<ToolActionViewHolder> {
@@ -70,6 +76,14 @@ public class ToolActionSheet extends AbstractActionSheet {
             holder.itemView.setOnClickListener(view -> {
                 if (mListener != null) mListener.onToolItemClicked(mCurrentRole, holder.itemView, pos);
             });
+
+            // Initialize in-ear monitoring button state
+            if (mCurrentRole == Const.Role.owner ||
+                mCurrentRole == Const.Role.host) {
+                if (config.iconRes[pos] == R.drawable.action_sheet_tool_monitor) {
+                    holder.icon.setActivated(mAppConfig != null && mAppConfig.getInEarMonitoring());
+                }
+            }
         }
 
         @Override
@@ -80,7 +94,7 @@ public class ToolActionSheet extends AbstractActionSheet {
     }
 
     private ToolAdapterConfig getCurrentConfigOfRole() {
-        return mConfig == null ? null : mConfig.get(mCurrentRole);
+        return mUIConfig == null ? null : mUIConfig.get(mCurrentRole);
     }
 
     private static class ToolActionViewHolder extends RecyclerView.ViewHolder {

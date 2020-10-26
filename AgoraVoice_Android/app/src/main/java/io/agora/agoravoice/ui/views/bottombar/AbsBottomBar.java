@@ -16,7 +16,7 @@ public abstract class AbsBottomBar extends RelativeLayout implements View.OnClic
     private static final int BUTTON_COUNT = 4;
 
     // The bottom buttons are arranged from right to left
-    private AppCompatImageView[] mButtons;
+    protected AppCompatImageView[] buttons;
     private AppCompatTextView mInputHint;
 
     private Const.Role mRole = Const.Role.audience;
@@ -26,7 +26,7 @@ public abstract class AbsBottomBar extends RelativeLayout implements View.OnClic
 
     public interface BottomBarListener {
         void onTextEditClicked();
-        void onButtonClicked(Const.Role role, View view, int index);
+        void onButtonClicked(Const.Role role, View view, int index, boolean activated);
     }
 
     public AbsBottomBar(Context context) {
@@ -44,17 +44,17 @@ public abstract class AbsBottomBar extends RelativeLayout implements View.OnClic
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.room_bottom_bar_layout, this, true);
 
-        mButtons = new AppCompatImageView[BUTTON_COUNT];
-        mButtons[0] = findViewById(R.id.room_bottom_btn_1);
-        mButtons[1] = findViewById(R.id.room_bottom_btn_2);
-        mButtons[2] = findViewById(R.id.room_bottom_btn_3);
-        mButtons[3] = findViewById(R.id.room_bottom_btn_4);
+        buttons = new AppCompatImageView[BUTTON_COUNT];
+        buttons[0] = findViewById(R.id.room_bottom_btn_1);
+        buttons[1] = findViewById(R.id.room_bottom_btn_2);
+        buttons[2] = findViewById(R.id.room_bottom_btn_3);
+        buttons[3] = findViewById(R.id.room_bottom_btn_4);
         mInputHint = findViewById(R.id.room_bottom_bar_input_hint);
 
-        mButtons[0].setOnClickListener(this);
-        mButtons[1].setOnClickListener(this);
-        mButtons[2].setOnClickListener(this);
-        mButtons[3].setOnClickListener(this);
+        buttons[0].setOnClickListener(this);
+        buttons[1].setOnClickListener(this);
+        buttons[2].setOnClickListener(this);
+        buttons[3].setOnClickListener(this);
         mInputHint.setOnClickListener(this);
 
         mConfig = onGetConfig();
@@ -66,7 +66,7 @@ public abstract class AbsBottomBar extends RelativeLayout implements View.OnClic
             return;
         }
 
-        for (AppCompatImageView image : mButtons) {
+        for (AppCompatImageView image : buttons) {
             image.setVisibility(GONE);
         }
 
@@ -77,17 +77,23 @@ public abstract class AbsBottomBar extends RelativeLayout implements View.OnClic
             BottomBarConfig.BottomBarButtonConfig config = configWithRole.configs.get(mRole);
             if (config == null) break;
             if (config.show) {
-                mButtons[i].setVisibility(VISIBLE);
-                mButtons[i].setImageResource(config.icon);
+                buttons[i].setVisibility(VISIBLE);
+                buttons[i].setImageResource(config.icon);
             } else {
-                mButtons[i].setVisibility(GONE);
+                buttons[i].setVisibility(GONE);
             }
+
+            buttons[i].setActivated(config.activated);
         }
     }
 
     public void setRole(Const.Role role) {
         mRole = role;
         reset();
+    }
+
+    public Const.Role getRole() {
+        return mRole;
     }
 
     @Override
@@ -98,19 +104,24 @@ public abstract class AbsBottomBar extends RelativeLayout implements View.OnClic
                     mListener.onTextEditClicked();
                     break;
                 case R.id.room_bottom_btn_1:
-                    mListener.onButtonClicked(mRole, view, 0);
+                    onButtonClicked(view, 0);
                     break;
                 case R.id.room_bottom_btn_2:
-                    mListener.onButtonClicked(mRole, view, 1);
+                    onButtonClicked(view, 1);
                     break;
                 case R.id.room_bottom_btn_3:
-                    mListener.onButtonClicked(mRole, view, 2);
+                    onButtonClicked(view, 2);
                     break;
                 case R.id.room_bottom_btn_4:
-                    mListener.onButtonClicked(mRole, view, 3);
+                    onButtonClicked(view, 3);
                     break;
             }
         }
+    }
+
+    private void onButtonClicked(View view, int position) {
+        view.setActivated(!view.isActivated());
+        mListener.onButtonClicked(mRole, view, position, view.isActivated());
     }
 
     public void setBottomBarListener(BottomBarListener listener) {

@@ -3,17 +3,18 @@
     package="io.agora.agoravoice">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".ui.AgoraVoiceApplication"
+        android:name=".AgoraVoiceApplication"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
 
         <activity
@@ -43,15 +44,19 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"/>
 
-        <activity android:name=".ui.activities.AvatarSelectActivity"
+        <activity android:name=".ui.activities.main.profile.AvatarSelectActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"/>
 
-        <activity android:name=".ui.activities.NicknameEditActivity"
+        <activity android:name=".ui.activities.main.profile.NicknameActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"/>
 
-        <activity android:name=".ui.activities.AboutActivity"
+        <activity android:name=".ui.activities.main.about.AboutActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity android:name=".ui.activities.main.about.DisclaimerActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"/>
     </application>

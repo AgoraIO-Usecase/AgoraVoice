@@ -3,7 +3,7 @@ package io.agora.agoravoice.ui.views.actionsheets;
 import android.content.Context;
 import android.widget.RelativeLayout;
 
-import io.agora.agoravoice.ui.AgoraVoiceApplication;
+import io.agora.agoravoice.AgoraVoiceApplication;
 
 public abstract class AbstractActionSheet extends RelativeLayout {
     public AbstractActionSheet(Context context) {

@@ -1,0 +1,43 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/action_sheet_music_list_item_height"
+    android:background="@drawable/action_sheet_music_item_bg"
+    android:paddingStart="@dimen/common_margin_vertical"
+    android:paddingEnd="@dimen/common_margin_vertical">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/live_room_action_sheet_bg_music_icon"
+        android:layout_width="@dimen/action_sheet_list_item_icon_size"
+        android:layout_height="@dimen/action_sheet_list_item_icon_size"
+        android:layout_centerVertical="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/action_sheet_music_icon" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/live_room_action_sheet_bg_music_icon"
+        android:layout_centerVertical="true">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/live_room_action_sheet_bg_music_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_3"
+            android:textAlignment="gravity"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/text_size_1_1"
+            android:textColor="@android:color/white"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/live_room_action_sheet_bg_music_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_3"
+            android:layout_below="@id/live_room_action_sheet_bg_music_title"
+            android:layout_marginTop="@dimen/margin_1"
+            android:textAlignment="gravity"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/text_size_1"
+            android:textColor="@color/music_list_item_text_color_gray"/>
+    </RelativeLayout>
+</RelativeLayout>

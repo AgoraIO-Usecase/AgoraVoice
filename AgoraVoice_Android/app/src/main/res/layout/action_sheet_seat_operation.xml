@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/action_sheet_seat_operation_height"
+    android:background="@drawable/action_sheet_layout">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/action_sheet_seat_operation_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_3"
+        android:layout_marginStart="@dimen/common_margin_vertical"
+        android:layout_marginEnd="@dimen/common_margin_vertical"
+        android:layout_marginBottom="@dimen/common_margin_vertical"
+        android:overScrollMode="never"/>
+</RelativeLayout>

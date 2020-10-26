@@ -17,8 +17,8 @@
             android:textSize="@dimen/text_size_2"/>
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/action_sheet_background_back"
-            android:layout_width="@dimen/action_sheet_back_icon_size"
-            android:layout_height="@dimen/action_sheet_back_icon_size"
+            android:layout_width="@dimen/action_sheet_title_height"
+            android:layout_height="@dimen/action_sheet_title_height"
             android:layout_marginStart="@dimen/common_margin_horizontal"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<io.agora.agoravoice.ui.views.CropBackgroundRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/chat_room_background_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <RelativeLayout
         android:id="@+id/chat_room_top_bar"
         android:layout_width="match_parent"
@@ -19,6 +21,7 @@
             android:src="@drawable/icon_exit"
             android:background="@drawable/icon_round_bg_black_70"/>
         <io.agora.agoravoice.ui.views.RoomUserActionView
+            android:id="@+id/chat_room_user_action"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/room_user_action_view_height"
             android:layout_alignParentEnd="true"/>
@@ -29,9 +32,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/chat_room_top_bar"
-        android:layout_marginTop="@dimen/margin_6"
+        android:layout_marginTop="@dimen/margin_8"
         android:layout_marginStart="@dimen/common_margin_horizontal"
         android:layout_marginEnd="@dimen/common_margin_horizontal"/>
+
+    <io.agora.agoravoice.ui.views.RtcStatsView
+        android:id="@+id/rtc_stats_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_margin_horizontal"
+        android:layout_marginEnd="@dimen/common_margin_horizontal"
+        android:layout_marginTop="@dimen/common_margin_vertical"
+        android:layout_below="@id/chat_room_top_bar"
+        android:visibility="gone"/>
+
 
     <io.agora.agoravoice.ui.views.bottombar.ChatRoomBottomBar
         android:id="@+id/chat_room_bottom_bar"
@@ -46,18 +60,10 @@
         android:id="@+id/chat_room_message_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/chat_room_host_panel"
         android:layout_above="@id/chat_room_bottom_bar"
-        android:layout_marginBottom="@dimen/common_margin_vertical"
-        android:layout_marginStart="@dimen/common_margin_horizontal"
-        android:layout_marginEnd="@dimen/common_margin_horizontal"/>
-
-    <io.agora.agoravoice.ui.views.RtcStatsView
-        android:id="@+id/rtc_stats_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/common_margin_horizontal"
-        android:layout_marginEnd="@dimen/common_margin_horizontal"
-        android:visibility="gone"/>
+        android:layout_margin="@dimen/margin_4"
+        android:overScrollMode="never"/>
 
     <io.agora.agoravoice.ui.views.MessageEditLayout
         android:id="@+id/message_edit_text"
@@ -65,4 +71,4 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:visibility="gone"/>
-</RelativeLayout>
+</io.agora.agoravoice.ui.views.CropBackgroundRelativeLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<io.agora.agoravoice.ui.views.CropBackgroundRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_prepare_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -30,7 +31,6 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/prepare_name_edit_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/prepare_edit_layout_height"
         android:layout_below="@id/prepare_top_btn_layout"
@@ -125,7 +125,6 @@
             android:src="@drawable/icon_caution"
             android:scaleType="fitXY"/>
         <TextView
-            android:id="@+id/live_prepare_policy_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@id/prepare_policy_close"
@@ -137,4 +136,4 @@
             android:text="@string/room_restriction_policy"
             android:textColor="@android:color/white"/>
     </RelativeLayout>
-</RelativeLayout>
+</io.agora.agoravoice.ui.views.CropBackgroundRelativeLayout>

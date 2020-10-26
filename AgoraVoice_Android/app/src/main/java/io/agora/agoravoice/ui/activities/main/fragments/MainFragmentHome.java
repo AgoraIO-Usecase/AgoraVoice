@@ -17,15 +17,19 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import io.agora.agoravoice.R;
-import io.agora.agoravoice.ui.activities.PrepareActivity;
+import io.agora.agoravoice.ui.activities.SceneActivity;
+import io.agora.agoravoice.utils.Const;
 import io.agora.agoravoice.utils.WindowUtil;
 
 public class MainFragmentHome extends AbsMainFragment implements View.OnClickListener {
     private static final int MARGIN_RATIO = 12;
 
+    private int mCardMargin;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mCardMargin = getResources().getDimensionPixelOffset(R.dimen.main_entry_card_margin);
     }
 
     @Nullable
@@ -36,7 +40,7 @@ public class MainFragmentHome extends AbsMainFragment implements View.OnClickLis
                 .inflate(R.layout.fragment_home, container, false);
         adjustScreen(layout);
 
-        LinearLayout introLayout = layout.findViewById(R.id.entry_chat_room_layout);
+        RelativeLayout introLayout = layout.findViewById(R.id.entry_chat_room_layout);
         introLayout.setClipToOutline(true);
         introLayout.setOutlineProvider(new ContentViewOutline());
 
@@ -54,15 +58,13 @@ public class MainFragmentHome extends AbsMainFragment implements View.OnClickLis
             titleText.setLayoutParams(params);
         }
 
-        LinearLayout introLayout = layout.findViewById(R.id.entry_chat_room_layout);
+        RelativeLayout introLayout = layout.findViewById(R.id.entry_chat_room_layout);
         if (introLayout != null) {
-            DisplayMetrics metric = new DisplayMetrics();
-            getActivity().getWindowManager().getDefaultDisplay().getMetrics(metric);
-            int margin = metric.widthPixels / MARGIN_RATIO;
             RelativeLayout.LayoutParams params =
                     (RelativeLayout.LayoutParams) introLayout.getLayoutParams();
-            params.leftMargin = margin;
-            params.rightMargin = margin;
+            params.leftMargin = mCardMargin;
+            params.rightMargin = mCardMargin;
+            params.bottomMargin = mCardMargin;
             introLayout.setLayoutParams(params);
         }
     }
@@ -77,7 +79,8 @@ public class MainFragmentHome extends AbsMainFragment implements View.OnClickLis
     }
 
     private void gotoActivity() {
-        Intent intent = new Intent(getContext(), PrepareActivity.class);
+        Intent intent = new Intent(getContext(), SceneActivity.class);
+        intent.putExtra(Const.KEY_SCENE_TYPE_NAME, getString(R.string.scene_type_chat_room));
         startActivity(intent);
     }
 
@@ -86,7 +89,7 @@ public class MainFragmentHome extends AbsMainFragment implements View.OnClickLis
         public void getOutline(View view, Outline outline) {
             Rect rect = new Rect();
             view.getDrawingRect(rect);
-            int radius = getResources().getDimensionPixelOffset(R.dimen.corner_6);
+            int radius = getResources().getDimensionPixelOffset(R.dimen.corner_5);
             outline.setRoundRect(rect, radius);
         }
     }

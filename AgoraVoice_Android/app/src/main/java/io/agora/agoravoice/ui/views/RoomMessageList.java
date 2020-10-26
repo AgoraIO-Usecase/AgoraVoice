@@ -27,19 +27,12 @@ import io.agora.agoravoice.R;
 import io.agora.agoravoice.utils.GiftUtil;
 
 public class RoomMessageList extends RecyclerView {
-    public static final int MSG_TYPE_SYSTEM = 0;
-    public static final int MSG_TYPE_CHAT = 1;
-    public static final int MSG_TYPE_GIFT = 2;
-
-    public static final int MSG_SYSTEM_STATE_JOIN = 1;
-    public static final int MSG_SYSTEM_STATE_LEAVE = 0;
-
-    public static final int MSG_SYSTEM_ROLE_OWNER = 1;
-    public static final int MSG_SYSTEM_ROLE_HOST = 2;
-    public static final int MSG_SYSTEM_ROLE_AUDIENCE = 3;
+    public static final int MSG_TYPE_JOIN = 0;
+    public static final int MSG_TYPE_LEAVE = 1;
+    public static final int MSG_TYPE_CHAT = 2;
+    public static final int MSG_TYPE_GIFT = 3;
 
     private static final int MESSAGE_TEXT_COLOR = Color.rgb(196, 196, 196);
-    private static final int MESSAGE_TEXT_COLOR_LIGHT = Color.argb(101, 35, 35, 35);
     private static final int MAX_SAVED_MESSAGE = 50;
     private static final int MESSAGE_ITEM_MARGIN = 16;
 
@@ -47,10 +40,9 @@ public class RoomMessageList extends RecyclerView {
     private LayoutInflater mInflater;
     private LinearLayoutManager mLayoutManager;
 
-    private String mJoinNotificationText;
-    private String mLeaveNotificationText;
-
-    private boolean mNarrow = false;
+    private String mJoinHintText;
+    private String mLeaveHintText;
+    private String mGiftSendHintText;
 
     public RoomMessageList(@NonNull Context context) {
         super(context);
@@ -76,24 +68,33 @@ public class RoomMessageList extends RecyclerView {
         setAdapter(mAdapter);
         addItemDecoration(new MessageItemDecorator());
 
-        mJoinNotificationText = getResources().getString(R.string.live_system_notification_member_joined);
-        mLeaveNotificationText = getResources().getString(R.string.live_system_notification_member_left);
+        mJoinHintText = getResources().getString(R.string.live_system_notification_member_joined);
+        mLeaveHintText = getResources().getString(R.string.live_system_notification_member_left);
+        mGiftSendHintText = getResources().getString(R.string.live_message_gift_send);
     }
 
-    public void addMessage(int type, String user, String message, int... index) {
-        LiveMessageItem item = new LiveMessageItem(type, user, message);
-        if (type == MSG_TYPE_GIFT && index != null) {
-            item.giftIndex = index[0];
-            item.message = getResources().getString(R.string.live_message_gift_send);
-        } else if (type == MSG_TYPE_SYSTEM) {
-            if (index != null) {
-                if (index[0] == 1) {
-                    item.message = mJoinNotificationText;
-                } else if (index[0] == 0) {
-                    item.message = mLeaveNotificationText;
-                }
-            }
-        }
+    public void addJoinMessage(String user) {
+        LiveMessageItem item = new LiveMessageItem(MSG_TYPE_JOIN, user, mJoinHintText);
+        addMessage(item);
+    }
+
+    public void addLeaveMessage(String user) {
+        LiveMessageItem item = new LiveMessageItem(MSG_TYPE_LEAVE, user, mLeaveHintText);
+        addMessage(item);
+    }
+
+    public void addGiftSendMessage(String user, int giftIndex) {
+        LiveMessageItem item = new LiveMessageItem(MSG_TYPE_GIFT, user, mGiftSendHintText);
+        item.giftIndex = giftIndex;
+        addMessage(item);
+    }
+
+    public void addChatMessage(String user, String message) {
+        LiveMessageItem item = new LiveMessageItem(MSG_TYPE_CHAT, user, message);
+        addMessage(item);
+    }
+
+    private void addMessage(LiveMessageItem item) {
         mAdapter.addMessage(item);
         mLayoutManager.scrollToPosition(mAdapter.getItemCount() - 1);
         mAdapter.notifyDataSetChanged();
@@ -141,7 +142,7 @@ public class RoomMessageList extends RecyclerView {
         }
     }
 
-    private class MessageListViewHolder extends ViewHolder {
+    private static class MessageListViewHolder extends ViewHolder {
         private AppCompatTextView messageText;
         private AppCompatImageView giftIcon;
         private RelativeLayout layout;
@@ -156,24 +157,25 @@ public class RoomMessageList extends RecyclerView {
         }
 
         void setMessage(String user, String message) {
-            int background = R.drawable.round_scalable_gray_bg;
+            int background = R.drawable.message_list_item_background;
             int nameColor = Color.WHITE;
-            int messageColor = MESSAGE_TEXT_COLOR;
-
             layout.setBackgroundResource(background);
 
-            String text = mNarrow ? user + ": " : user + ":  " + message;
+            String text;
+            if (type == MSG_TYPE_CHAT) {
+                text = user + ":  " + message;
+            } else {
+                text = user + "  " + message;
+            }
+
             SpannableString messageSpan = new SpannableString(text);
             messageSpan.setSpan(new StyleSpan(Typeface.BOLD),
                     0, user.length() + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             messageSpan.setSpan(new ForegroundColorSpan(nameColor),
                     0, user.length() + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-
-            if (!mNarrow || this.type != MSG_TYPE_GIFT) {
-                messageSpan.setSpan(new ForegroundColorSpan(messageColor),
-                        user.length() + 2, messageSpan.length(),
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            }
+            messageSpan.setSpan(new ForegroundColorSpan(MESSAGE_TEXT_COLOR),
+                    user.length() + 2, messageSpan.length(),
+                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 
             messageText.setText(messageSpan);
         }

@@ -18,7 +18,7 @@
             android:textAlignment="gravity"
             android:gravity="center_vertical"/>
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/action_sheet_sound_effect_enable_electronic_switch"
+            android:id="@+id/action_sheet_electronic_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/action_sheet_electronic_switch_text"

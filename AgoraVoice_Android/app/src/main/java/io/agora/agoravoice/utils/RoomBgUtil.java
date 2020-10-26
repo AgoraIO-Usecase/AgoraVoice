@@ -38,4 +38,17 @@ public class RoomBgUtil {
     public static int totalCount() {
         return PREVIEW_ICON_RES.length;
     }
+
+    public static String indexToString(int index) {
+        return (0 <= index && index < BG_PIC_RES.length) ? String.valueOf(index) : "0";
+    }
+
+    public static int idToIndex(String id) {
+        try {
+            int index = Integer.parseInt(id);
+            return 0 <= index && index < PREVIEW_ICON_RES.length ? index : -1;
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
 }

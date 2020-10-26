@@ -76,4 +76,12 @@ public class ChatRoomBottomBar extends AbsBottomBar {
         return config;
     }
 
+    public void setEnableAudio(boolean enableAudio) {
+        Const.Role role = getRole();
+        if (role == Const.Role.owner || role == Const.Role.host) {
+           if (buttons[3].isShown()) {
+               buttons[3].setActivated(enableAudio);
+           }
+        }
+    }
 }

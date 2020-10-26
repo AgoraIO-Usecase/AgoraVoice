@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import io.agora.agoravoice.ui.AgoraVoiceApplication;
+import io.agora.agoravoice.AgoraVoiceApplication;
 import io.agora.agoravoice.utils.WindowUtil;
 
 public abstract class AbsMainFragment extends Fragment {

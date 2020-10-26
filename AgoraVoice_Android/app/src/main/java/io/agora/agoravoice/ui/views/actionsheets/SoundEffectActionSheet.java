@@ -16,10 +16,19 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import io.agora.agoravoice.Config;
 import io.agora.agoravoice.R;
+import io.agora.agoravoice.manager.AudioManager;
 import io.agora.agoravoice.utils.VoiceUtil;
 
 public class SoundEffectActionSheet extends AbstractActionSheet {
+    public interface SoundEffectActionListener {
+        void onVoiceBeautySelected(int type);
+        void on3DHumanVoiceSelected();
+        void onElectronicVoiceParamChanged(int key, int value);
+        void onVoiceBeautyUnselected();
+    }
+
     private static final int TITLE_TEXT_DEFAULT = Color.parseColor("#FFababab");
     private static final int GRID_COUNT = 4;
 
@@ -40,11 +49,20 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
     private int mSelected1 = -1;
     private int mSelected2 = -1;
     private int mSelected3 = -1;
-    private int mSelected4 = -1;
+
+    private AppCompatImageView mElectronicSwitch;
+    private ElectronicKeyAdapter mKeyAdapter;
+    private ElectronicToneAdapter mValueAdapter;
+    private int mSelectedKey = 0;
+    private int mSelectedValue = 0;
 
     private RelativeLayout mContentLayout;
 
     private SoundEffectTypeAdapter mTypeAdapter;
+
+    private Config mConfig;
+
+    private SoundEffectActionListener mListener;
 
     public SoundEffectActionSheet(Context context) {
         super(context);
@@ -72,20 +90,35 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         changeType(TYPE_SPACE);
     }
 
+    public void setSoundEffectActionListener(SoundEffectActionListener listener) {
+        mListener = listener;
+    }
+
+    public void setConfig(Config config) {
+        mConfig = config;
+    }
+
     private void changeType(int type) {
         if (mSelectedType == type) return;
         mSelectedType = type;
         mTypeAdapter.notifyDataSetChanged();
         mContentLayout.removeAllViews();
 
+        mSelected1 = -1;
+        mSelected2 = -1;
+        mSelected3 = -1;
+
         switch (mSelectedType) {
             case TYPE_SPACE:
+                mSelected1 = getSelectedItem();
                 initSpaceSoundEffect();
                 break;
             case TYPE_CHANGE:
+                mSelected2 = getSelectedItem();
                 initChangeSoundEffect();
                 break;
             case TYPE_FLAVOUR:
+                mSelected3 = getSelectedItem();
                 initFlavourSoundEffect();
                 break;
             case TYPE_ELECTRONIC:
@@ -94,6 +127,48 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             case TYPE_MAGIC_NOTES:
                 initMagicNotesSoundEffect();
                 break;
+        }
+    }
+
+    private int getSelectedItem() {
+        int type = mConfig == null ? -1 : mConfig.getCurAudioEffect();
+        if (type == -1) return -1;
+
+        switch (mSelectedType) {
+            case TYPE_SPACE:
+                if (AudioManager.EFFECT_SPACING_KTV <= type &&
+                        type <= AudioManager.EFFECT_SPACING_ETHEREAL) {
+                    return type - AudioManager.EFFECT_SPACING_KTV;
+                } else {
+                    return -1;
+                }
+            case TYPE_CHANGE:
+                if (AudioManager.EFFECT_VOICE_CHANGE_UNCLE <= type &&
+                        type <= AudioManager.EFFECT_VOICE_CHANGE_HULK) {
+                    return type - AudioManager.EFFECT_VOICE_CHANGE_UNCLE;
+                } else {
+                    return -1;
+                }
+            case TYPE_FLAVOUR:
+                if (AudioManager.EFFECT_FLAVOR_RNB <= type &&
+                        type <= AudioManager.EFFECT_FLAVOR_ROCK_N_ROLL) {
+                    return type - AudioManager.EFFECT_FLAVOR_RNB;
+                } else {
+                    return -1;
+                }
+            default: return -1;
+        }
+    }
+
+    private int getSelectedType(int position) {
+        switch (mSelectedType) {
+            case TYPE_SPACE:
+                return AudioManager.EFFECT_SPACING_KTV + position;
+            case TYPE_CHANGE:
+                return AudioManager.EFFECT_VOICE_CHANGE_UNCLE + position;
+            case TYPE_FLAVOUR:
+                return AudioManager.EFFECT_FLAVOR_RNB + position;
+            default: return -1;
         }
     }
 
@@ -118,19 +193,56 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         mContentLayout.addView(recyclerView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     }
 
+    private boolean electronicEnabled() {
+        return mConfig != null && AudioManager.EFFECT_ELECTRONIC == mConfig.getCurAudioEffect();
+    }
+
     private void initElectronicSoundEffect() {
         View layout = LayoutInflater.from(getContext()).inflate(
                 R.layout.action_sheet_sound_effect_electronic_layout, this, false);
         RecyclerView recyclerView = layout.findViewById(R.id.action_sheet_sound_effect_electronic_key_recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), GRID_COUNT));
-        recyclerView.setAdapter(new ElectronicKeyAdapter());
+        mKeyAdapter = new ElectronicKeyAdapter();
+        recyclerView.setAdapter(mKeyAdapter);
         recyclerView.addItemDecoration(new TextGridItemDecoration());
 
         recyclerView = layout.findViewById(R.id.action_sheet_sound_effect_electronic_tone_recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), GRID_COUNT));
-        recyclerView.setAdapter(new ElectronicToneAdapter());
+        mValueAdapter = new ElectronicToneAdapter();
+        recyclerView.setAdapter(mValueAdapter);
         recyclerView.addItemDecoration(new TextGridItemDecoration());
         mContentLayout.addView(layout, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+
+        mElectronicSwitch = layout.findViewById(R.id.action_sheet_electronic_switch);
+        boolean enabled = electronicEnabled();
+        mElectronicSwitch.setActivated(enabled);
+        mElectronicSwitch.setOnClickListener(view -> {
+            if (view.isActivated()) {
+                view.setActivated(false);
+                mSelectedKey = 0;
+                mSelectedValue = 0;
+                if (mListener != null) {
+                    mListener.onVoiceBeautyUnselected();
+                }
+            } else {
+                view.setActivated(true);
+                // Choose the first electronic parameters
+                // when switch on
+                mSelectedKey = 1;
+                mSelectedValue = 1;
+                if (mListener != null) {
+                    mListener.onVoiceBeautySelected(AudioManager.EFFECT_ELECTRONIC);
+                    mListener.onElectronicVoiceParamChanged(mSelectedKey, mSelectedValue);
+                }
+            }
+
+            if (mConfig != null) {
+                mConfig.setElectronicVoiceParam(mSelectedKey, mSelectedValue);
+            }
+
+            mKeyAdapter.notifyDataSetChanged();
+            mValueAdapter.notifyDataSetChanged();
+        });
     }
 
     private void initMagicNotesSoundEffect() {
@@ -203,15 +315,32 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             holder.image.setImageResource(VoiceUtil.SPACE_EFFECT_IMAGE_RES[pos]);
             holder.name.setText(mSpaceEffectNames[pos]);
             holder.name.setTextColor(selected ? Color.WHITE : TITLE_TEXT_DEFAULT);
-            holder.itemView.setActivated(selected);
-            holder.itemView.setOnClickListener(view -> {
-                if (pos == mSelected1) {
-                    mSelected1 = -1;
-                } else {
-                    mSelected1 = pos;
-                }
-                notifyDataSetChanged();
-            });
+
+            if (pos == mSpaceEffectNames.length - 1) {
+                // Special click handler for 3D voice
+                holder.itemView.setActivated(false);
+                holder.itemView.setOnClickListener(view -> {
+                    if (mListener != null) {
+                        mListener.on3DHumanVoiceSelected();
+                    }
+                });
+            } else {
+                holder.itemView.setActivated(selected);
+                holder.itemView.setOnClickListener(view -> {
+                    if (pos == mSelected1) {
+                        mSelected1 = -1;
+                        if (mListener != null) {
+                            mListener.onVoiceBeautyUnselected();
+                        }
+                    } else {
+                        if (mListener != null) {
+                            mListener.onVoiceBeautySelected(getSelectedType(pos));
+                        }
+                        mSelected1 = pos;
+                    }
+                    notifyDataSetChanged();
+                });
+            }
         }
 
         @Override
@@ -250,8 +379,14 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             holder.itemView.setOnClickListener(view -> {
                 if (pos == mSelected2) {
                     mSelected2 = -1;
+                    if (mListener != null) {
+                        mListener.onVoiceBeautyUnselected();
+                    }
                 } else {
                     mSelected2 = pos;
+                    if (mListener != null) {
+                        mListener.onVoiceBeautySelected(getSelectedType(pos));
+                    }
                 }
                 notifyDataSetChanged();
             });
@@ -282,8 +417,14 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             holder.itemView.setOnClickListener(view -> {
                 if (pos == mSelected3) {
                     mSelected3 = -1;
+                    if (mListener != null) {
+                        mListener.onVoiceBeautyUnselected();
+                    }
                 } else {
                     mSelected3 = pos;
+                    if (mListener != null) {
+                        mListener.onVoiceBeautySelected(getSelectedType(pos));
+                    }
                 }
                 notifyDataSetChanged();
             });
@@ -306,15 +447,18 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         @Override
         public void onBindViewHolder(@NonNull ElectronicKeyViewHolder holder, int position) {
             int pos = holder.getAdapterPosition();
-            boolean selected = pos == mSelected3;
+            boolean selected = pos == (mSelectedKey - 1);
             holder.name.setText(mElectronicKeyNames[pos]);
             holder.name.setTextColor(selected ? Color.WHITE : TITLE_TEXT_DEFAULT);
             holder.layout.setActivated(selected);
             holder.itemView.setOnClickListener(view -> {
-                if (pos == mSelected3) {
-                    mSelected3 = -1;
+                if (pos == mSelectedKey - 1) {
+                    mSelectedKey = 0;
                 } else {
-                    mSelected3 = pos;
+                    mSelectedKey = pos + 1;
+                    if (mListener != null) {
+                        mListener.onElectronicVoiceParamChanged(mSelectedKey, mSelectedValue);
+                    }
                 }
                 notifyDataSetChanged();
             });
@@ -348,15 +492,18 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         @Override
         public void onBindViewHolder(@NonNull ElectronicToneViewHolder holder, int position) {
             int pos = holder.getAdapterPosition();
-            boolean selected = pos == mSelected3;
+            boolean selected = pos == (mSelectedValue - 1);
             holder.name.setText(mElectronicToneNames[pos]);
             holder.name.setTextColor(selected ? Color.WHITE : TITLE_TEXT_DEFAULT);
             holder.layout.setActivated(selected);
             holder.itemView.setOnClickListener(view -> {
-                if (pos == mSelected3) {
-                    mSelected3 = -1;
+                if (pos == mSelectedValue - 1) {
+                    mSelectedValue = 0;
                 } else {
-                    mSelected3 = pos;
+                    mSelectedValue = pos + 1;
+                    if (mListener != null && electronicEnabled()) {
+                        mListener.onElectronicVoiceParamChanged(mSelectedKey, mSelectedValue);
+                    }
                 }
                 notifyDataSetChanged();
             });
