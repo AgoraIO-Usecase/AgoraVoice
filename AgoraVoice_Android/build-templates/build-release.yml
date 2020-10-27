@@ -41,7 +41,6 @@ jobs:
           appName: 'agoravoice_android_release'
           ver: '1.0.0'
 
-
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(Build.ArtifactStagingDirectory)'

@@ -6,8 +6,6 @@
 trigger:
 - master
 
-jobs:
-
 - template: AgoraVoice_Android/build-templates/build-release.yml
   parameters:
     project: 'AgoraVoice_Android'

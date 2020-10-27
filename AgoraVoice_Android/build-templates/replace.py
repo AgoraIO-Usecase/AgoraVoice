@@ -25,7 +25,7 @@ def main():
 
     if "customerId" in os.environ:
         customerId = os.environ["customerId"]
-
+        
     if "customerCert" in os.environ:
         customerCer = os.environ["customerCert"]
 
