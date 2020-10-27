@@ -25,9 +25,9 @@ def main():
 
     if "customerId" in os.environ:
         customerId = os.environ["customerId"]
-
-    if "customerCer" in os.environ:
-        customerCer = os.environ["customerCer"]
+        
+    if "customerCert" in os.environ:
+        customerCer = os.environ["customerCert"]
 
     f1 = open("./app/build.gradle", 'r+')
     content = f1.read()
@@ -42,10 +42,10 @@ def main():
     f2 = open("./app/src/main/res/values/strings.xml", 'r+')
     content = f2.read();
     contentNew = re.sub(r'<##APP_ID##>', appId, content)
-    content = re.sub(r'<##CUSTOMER_ID##>', customerId, content)
-    content = re.sub(r'<##CUSTOMER_CER##>', customerCer, content)
+    contentNew = re.sub(r'<##CUSTOMER_ID##>', customerId, contentNew)
+    contentNew = re.sub(r'<##CUSTOMER_CER##>', customerCer, contentNew)
     f2.seek(0)
-    f2.write(content)
+    f2.write(contentNew)
     f2.truncate()
     f2.close()
 
