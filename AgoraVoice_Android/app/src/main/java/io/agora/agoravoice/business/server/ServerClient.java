@@ -45,7 +45,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.internal.EverythingIsNonNull;
 
 public class ServerClient {
-    private static final String SERVER_HOST = "https://api-solutions-dev.sh.agoralab.co";
+    private static final String SERVER_HOST = "https://api-solutions.sh.agoralab.co";
     private static final String ERROR_UNKNOWN_MSG = "";
 
     private static final int MAX_RESPONSE_THREAD = 10;

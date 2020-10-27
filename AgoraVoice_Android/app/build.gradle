@@ -3,6 +3,15 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
 
+    signingConfigs {
+        release {
+            storeFile file('azure_keystore_file')
+            storePassword 'azureKeystorePassword'
+            keyAlias = 'azure_keystore_alias'
+            keyPassword 'azureKeystorePassword'
+        }
+    }
+
     defaultConfig {
         applicationId "io.agora.agoravoice"
         minSdkVersion 21
@@ -13,7 +22,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86'
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
     }
 

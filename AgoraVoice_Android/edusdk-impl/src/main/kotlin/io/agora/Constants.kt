@@ -5,7 +5,7 @@ import io.agora.log.LogManager
 internal class Constants {
     companion object {
         lateinit var APPID: String
-        const val API_BASE_URL: String = "https://api-solutions-dev.sh.agoralab.co"
+        const val API_BASE_URL: String = "https://api-solutions.sh.agoralab.co"
         lateinit var AgoraLog: LogManager
         const val LOGS_DIR_NAME = "logs"
         const val LOG_APPSECRET = "7AIsPeMJgQAppO0Z";
