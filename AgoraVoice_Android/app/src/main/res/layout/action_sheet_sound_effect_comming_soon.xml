@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/magic_notes_coming"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/pic_coming_soon"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/magic_notes_coming"
+            android:layout_marginTop="@dimen/margin_3"
+            android:textColor="@color/theme_gray_2"
+            android:textSize="@dimen/text_size_2"
+            android:text="@string/action_sheet_sound_effect_magic_notes_coming_soon"/>
+    </RelativeLayout>
+</RelativeLayout>

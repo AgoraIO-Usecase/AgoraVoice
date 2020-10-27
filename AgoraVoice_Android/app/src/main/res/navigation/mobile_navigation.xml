@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="io.agora.agoravoice.ui.activities.main.fragments.MainFragmentHome"
+        android:label="@string/main_navigation_home"/>
+
+    <fragment
+        android:id="@+id/navigation_me"
+        android:name="io.agora.agoravoice.ui.activities.main.fragments.MainFragmentProfile"
+        android:label="@string/main_navigation_profile"/>
+</navigation>

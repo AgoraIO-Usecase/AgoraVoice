@@ -1,0 +1,322 @@
+<resources>
+    <!-- Policies -->
+    <string name="room_restriction_policy">本应用为测试产品，请勿商用。单次直播最长10分钟，每个频道最多10人。</string>
+
+    <string name="permission_not_granted">应用未给予必要权限</string>
+
+    <!-- Main Activity -->
+    <string name="main_navigation_home">主页</string>
+    <string name="main_navigation_profile">个人资料</string>
+
+    <string name="main_start_chat">开始聊天</string>
+
+    <string name="scene_type_chat_room">语聊房</string>
+
+    <!-- Profile -->
+    <string name="profile_setting_title_avatar">设置头像</string>
+    <string name="profile_setting_title_nickname">设置昵称</string>
+    <string name="profile_setting_title_about">关于</string>
+
+    <string name="profile_edit_avatar_title">请选择头像</string>
+    <string name="profile_edit_nickname_title">输入名字</string>
+
+    <string name="text_cancel">取消</string>
+    <string name="text_done">完成</string>
+    <string name="text_confirm">确定</string>
+    <string name="text_accept">接受</string>
+    <string name="text_reject">拒绝</string>
+    <string name="text_upgrade">升级</string>
+    <string name="text_yes">是</string>
+    <string name="text_no">否</string>
+
+    <string name="about_title">关于</string>
+    <string name="privacy_policy_title">隐私条例</string>
+    <string name="privacy_website_link">https://www.agora.io/cn/privacy-policy/</string>
+
+
+    <string name="disclaimer_title">测试产品免责声明</string>
+    <string name="disclaimer_content">&#160;&#160;&#160;&#160;Agora Voice（“本产品”）是由Agora提供的一款测试产品，Agora享有本产品的著作权和所有权。特此免费授予获得本产品和相关文档文件（以下简称“软件”）副本的任何人无限制地试用软件的权利，包括但不限于试用，复制，修改，合并，发布，分发，但本产品不得用于任何商业用途，不得再许可和/或出售该软件的副本。\n\n
+
+&#160;&#160;&#160;&#160;本产品按“现状”提供，没有任何形式的明示担保，包括但不限于对适配性、特定目的的适用性和非侵权性的担保。无论是由于与本产品或本产品的试用或其他方式有关的任何合同、侵权或其他形式的行为，Agora均不对任何索赔、损害或其他责任负责。\n\n
+
+&#160;&#160;&#160;&#160;您可以自由选择是否试用本产品提供的服务，如果您下载、安装、试用本产品中所提供的服务，即表明您信任该产品所有人，Agora对任何原因在试用本产品中提供的服务时可能对您自身或他人造成的任何形式的损失和伤害不承担任何责任。</string>
+
+    <string name="sign_up_agora_title">注册声网账号</string>
+    <string name="sign_up_website_link">https://sso.agora.io/cn/signup</string>
+
+    <string name="agoralive_version_title">AgoraVoice 版本</string>
+    <string name="agoralive_release_time_title">发布时间</string>
+    <string name="agoralive_media_sdk_version_title">媒体SDK版本</string>
+
+    <!-- Nickname Edit -->
+    <string name="profile_name_edit_hint">输入昵称&#8230;</string>
+    <string name="profile_name_edit_message_empty">您输入了一个空的昵称</string>
+    <string name="profile_name_edit_message_success">您的昵称已更改成功</string>
+    <string name="profile_name_edit_message_fail">昵称修改失败</string>
+    <string name="profile_name_edit_message_same">昵称相同</string>
+
+    <!-- Prepare Activity -->
+    <string name="live_prepare_hint">直播间名字</string>
+    <string name="go_live">开始直播</string>
+    <string name="room_name_too_long_toast_format">房间名称不能超过%d个字符</string>
+    <string name="no_room_name_toast">请输入您的房间名称</string>
+
+    <string name="send_empty_message">您不能发空的消息</string>
+
+    <string-array name="random_channel_names">
+        <item>陌上花开等你来</item>
+        <item>天天爱你</item>
+        <item>我爱你们</item>
+        <item>有人可以</item>
+        <item>风情万种</item>
+        <item>强势归来</item>
+        <item>哈哈哈</item>
+        <item>聊聊</item>
+        <item>美人舞江山</item>
+        <item>最美的回忆</item>
+        <item>遇见你</item>
+        <item>最长情的告白</item>
+        <item>全力以赴</item>
+        <item>简单点</item>
+        <item>早上好</item>
+        <item>春风十里不如你</item>
+    </string-array>
+
+    <string-array name="random_surnames">
+        <item>赵</item>
+        <item>钱</item>
+        <item>孙</item>
+        <item>李</item>
+        <item>周</item>
+        <item>吴</item>
+        <item>郑</item>
+        <item>王</item>
+    </string-array>
+
+    <string-array name="random_names">
+        <item>富贵</item>
+        <item>国强</item>
+        <item>建国</item>
+        <item>林</item>
+        <item>麒麟</item>
+        <item>宝强</item>
+        <item>强</item>
+        <item>相如</item>
+        <item>欢喜</item>
+    </string-array>
+
+    <!-- Components -->
+    <string name="room_bottom_bar_input_hint">说点什么 &#8230;</string>
+
+    <string name="live_system_notification_member_joined">加入房间</string>
+    <string name="live_system_notification_member_left">离开房间</string>
+
+    <string name="live_message_gift_send">赠送了一个</string>
+
+    <string name="rtc_stats_format">音频接收码率: %.2f kbps%n音频接收丢包率: %.2f%% %n音频发送码率: %.2f kbps%n音频发送丢包率: %.2f%% %n延迟: %d ms </string>
+
+    <!-- Action Sheets -->
+    <string name="action_sheet_background_title">背景</string>
+
+    <string name="action_sheet_voice_beauty_title">美声</string>
+    <string name="action_sheet_voice_beauty_type_title_1">语聊美声</string>
+    <string name="action_sheet_voice_beauty_type_title_2">歌唱美声</string>
+    <string name="action_sheet_voice_beauty_type_title_3">音色变换</string>
+
+    <string-array name="voice_beauty_chat_names">
+        <item>磁性 (男)</item>
+        <item>清新 (女)</item>
+        <item>活力 (女)</item>
+    </string-array>
+
+    <string-array name="voice_beauty_sing_names">
+        <item>大厅(男)</item>
+        <item>大房间(男)</item>
+        <item>小房间(男)</item>
+        <item>大厅(女)</item>
+        <item>大房间(女)</item>
+        <item>小房间(女)</item>
+    </string-array>
+
+    <string-array name="voice_beauty_timbre">
+        <item>浑厚</item>
+        <item>低沉</item>
+        <item>圆润</item>
+        <item>假音</item>
+        <item>饱满</item>
+        <item>清澈</item>
+        <item>高亢</item>
+        <item>嘹亮</item>
+    </string-array>
+
+    <string name="action_sheet_sound_effect_title">音效</string>
+
+    <string-array name="action_sheet_sound_effect_types">
+        <item>空间塑造</item>
+        <item>变声音效</item>
+        <item>曲风音效</item>
+        <item>电音音效</item>
+        <item>魔力音阶</item>
+    </string-array>
+
+    <string-array name="action_sheet_sound_effect_space_names">
+        <item>KTV</item>
+        <item>演唱会</item>
+        <item>录音棚</item>
+        <item>留声机</item>
+        <item>虚拟立体声</item>
+        <item>空旷</item>
+        <item>空灵</item>
+        <item>3D人声</item>
+    </string-array>
+
+    <string-array name="action_sheet_sound_effect_change_names">
+        <item>大叔</item>
+        <item>老男人</item>
+        <item>小男孩</item>
+        <item>小姐姐</item>
+        <item>小女孩</item>
+        <item>猪八戒</item>
+        <item>绿巨人</item>
+    </string-array>
+
+    <string-array name="action_sheet_sound_effect_flavour_names">
+        <item>R&#38;B</item>
+        <item>流行</item>
+        <item>嘻哈</item>
+        <item>摇滚</item>
+    </string-array>
+
+    <string name="action_sheet_3d_voice_title">3D人声</string>
+    <string name="action_sheet_3d_voice_description">速度调节控制声音旋转速度 (最快1s转一圈，最慢60s转一圈) </string>
+    <string name="action_sheet_3d_voice_text_min">最小</string>
+    <string name="action_sheet_3d_voice_text_max">最大</string>
+
+    <string name="action_sheet_sound_effect_enable_electronic_voice">开启电音</string>
+    <string name="action_sheet_sound_effect_electronic_tones_hint">选择起始音阶</string>
+    <string name="action_sheet_sound_effect_magic_notes_coming_soon">即将发布</string>
+
+    <string-array name="action_sheet_sound_effect_electronic_keys">
+        <item>大调</item>
+        <item>小调</item>
+        <item>和风</item>
+    </string-array>
+
+    <string name="action_sheet_tool_title">工具</string>
+
+    <string-array name="action_sheet_tool_audience">
+        <item>实时数据</item>
+    </string-array>
+
+    <string-array name="action_sheet_tool_host">
+        <item>耳返</item>
+        <item>实时数据</item>
+    </string-array>
+
+    <string-array name="action_sheet_tool_owner">
+        <item>耳返</item>
+        <item>音乐</item>
+        <item>背景</item>
+        <item>实时数据</item>
+    </string-array>
+
+    <string-array name="action_sheet_gift_names">
+        <item>铃铛</item>
+        <item>冰激凌</item>
+        <item>红酒</item>
+        <item>蛋糕</item>
+        <item>戒指</item>
+        <item>手表</item>
+        <item>钻石</item>
+        <item>火箭</item>
+    </string-array>
+
+    <string name="action_sheet_gift_title">礼物</string>
+    <string name="action_sheet_gift_send">发送</string>
+    <string name="gift_action_sheet_value_format">(%d金币)</string>
+
+    <string name="action_sheet_music_title">音乐</string>
+    <string name="action_sheet_music_credit_hint">音乐:&#160;&#160;</string>
+    <string name="action_sheet_music_credit_link" translatable="false">https://www.bensound.com</string>
+
+    <string name="action_sheet_user_list_title">在线用户</string>
+    <string name="action_sheet_user_list_type_all">全部</string>
+    <string name="action_sheet_user_list_type_apply">申请上麦</string>
+    <string name="action_sheet_user_list_inviting">邀请中</string>
+
+    <string name="action_sheet_user_list_invite">邀请</string>
+
+    <string-array name="action_sheet_seat_operations">
+        <item>解封</item>
+        <item>封麦</item>
+        <item>邀请</item>
+        <item>申请</item>
+        <item>禁麦</item>
+        <item>解禁</item>
+        <item>下麦</item>
+        <item>下麦</item>
+    </string-array>
+
+    <string name="action_sheet_seat_operate_mute">静音</string>
+    <string name="action_sheet_seat_operate_unmute">取消静音</string>
+
+    <!-- Network status detection -->
+    <string name="network_unavailable">网络不给力，请稍候再试</string>
+    <string name="network_switch_to_wifi">当前处于 WIFI 网络</string>
+    <string name="network_switch_to_mobile">当前处于非 WIFI 网络, 您可能需要支付移动网络数据费用</string>
+
+    <string name="scene_empty_list_hint">请创建一个房间</string>
+    <string name="scene_server_error">暂无数据请稍候再试</string>
+    <string name="scene_no_connection_title">网络异常</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_leave_room_title">离开房间</string>
+    <string name="dialog_leave_room_message">您要离开直播房间吗?</string>
+    <string name="dialog_owner_end_live_title">结束直播</string>
+    <string name="dialog_owner_end_live_message">是否结束直播?</string>
+    <string name="dialog_invite_user_title">邀请上麦</string>
+    <string name="dialog_apply_seat_title">申请上麦</string>
+    <string name="dialog_invite_user_message">您是否要邀请%s上麦?</string>
+    <string name="dialog_receive_invite_message">%s邀请您上麦, 是否接受?</string>
+    <string name="dialog_leave_seat_title">下麦</string>
+    <string name="dialog_leave_seat_message_owner">您要让%s离开麦位吗?</string>
+    <string name="dialog_leave_seat_message_host">确定下麦?</string>
+    <string name="dialog_lock_seat_title">封麦</string>
+    <string name="dialog_lock_seat_message">您要封掉此麦位吗? 已上麦的主播会被下麦</string>
+    <string name="dialog_unlock_seat_title">解封</string>
+    <string name="dialog_unlock_seat_message">您是否要解封此麦位?</string>
+    <string name="dialog_apply_seat_message">您确定要申请上麦吗?</string>
+    <string name="dialog_application_accepted_message">是否接受%s的上麦申请?</string>
+    <string name="dialog_application_rejected_message">是否拒绝%s的上麦申请?</string>
+    <string name="dialog_mute_title">禁麦</string>
+    <string name="dialog_mute_message">禁止%s发言?</string>
+    <string name="dialog_unmute_title">解禁</string>
+    <string name="dialog_unmute_message">解除%s禁言?</string>
+    <string name="dialog_upgrade_title">发现新版本</string>
+    <string name="dialog_upgrade_force_message">您使用的AgoraLive版本太旧了，软件将关闭并跳转到最新版本的下载链接</string>
+    <string name="dialog_upgrade_recommend_message">有新的AgoraLive版本，建议您升级到最新版本体验最新功能</string>
+
+    <!-- Toasts -->
+    <string name="toast_invite_success">您已成功将邀请发送给%s</string>
+    <string name="toast_repeat_invite">%s近期已经被邀请过</string>
+    <string name="toast_request_fail_message">%s, 错误码: %d</string>
+    <string name="toast_invite_fail">邀请发送失败，错误码 %d</string>
+    <string name="toast_invite_accepted">您的上麦邀请已经被%s接受</string>
+    <string name="toast_invite_rejected">您的上麦邀请已经被%s拒绝</string>
+    <string name="toast_apply_accepted">您的上麦申请已经被房主接受</string>
+    <string name="toast_apply_rejected">您的上麦申请已经被房主拒绝</string>
+    <string name="toast_user_has_taken_seat">您邀请的用户已经是主播了</string>
+    <string name="toast_application_sent">您的申请已发送给房主</string>
+    <string name="toast_application_sent_fail">申请发送失败</string>
+    <string name="toast_no_wired_mic_plugged">请插入有线带麦耳机</string>
+    <string name="toast_join_class_success">加入房间成功</string>
+    <string name="toast_join_class_fail">加入房间失败</string>
+    <string name="toast_room_ends">直播房间已结束</string>
+    <string name="toast_app_version_fail">获取应用版本失败</string>
+    <string name="toast_link_empty">链接地址为空</string>
+
+    <!-- Error Messages -->
+    <string name="error_no">正常</string>
+    <string name="error_seat_taken">此麦位已经被其他主播占用</string>
+    <string name="error_room_max_user">此软件为测试产品，房间最大人数为10人</string>
+</resources>

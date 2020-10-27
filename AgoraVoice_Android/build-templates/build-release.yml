@@ -1,0 +1,40 @@
+parameters:
+  project: ''
+  name: ''
+
+jobs:
+
+  - job: ${{ parameters.name }}_Build
+    displayName: ${{ parameters.name }}
+    pool:
+      vmImage: 'macos-latest'
+    variables:
+      - group: AgoraLive
+      - group: AgoraVoice
+
+    steps:
+      - task: DownloadSecureFile@1
+        name: downloadReleaseKeystore
+        displayName: 'Download release keystore'
+        inputs:
+          secureFile: 'beckon-release.keystore'
+
+      - script: |
+          cd ${{ parameters.project }} && chmod +x ./build-templates/build-release.sh && ./build-templates/build-release.sh
+        env:
+          keystore: $(downloadReleaseKeystore.secureFilePath)
+          password: $(keystore.pass)
+          alias: $(keystore.alias)
+          appId: $(appId.release)
+          customerId: $(customer.id)
+          customerCert: $(customer.cer)
+
+      - task: CopyFiles@2
+        inputs:
+          Contents: '**/*.apk'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: ./AgoraLive-Android/app/build/outputs/apk/release/app-release.apk
+          ArtifactName: ${{ parameters.name }}

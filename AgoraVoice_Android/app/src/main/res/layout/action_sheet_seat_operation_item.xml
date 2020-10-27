@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/action_sheet_seat_operation_item_height">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/action_sheet_seat_operation_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAlignment="gravity"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_2"
+        android:textColor="@android:color/white"/>
+</RelativeLayout>

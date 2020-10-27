@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/main_navigation_layout_height"
+    android:gravity="center"
+    android:background="@color/theme_background_1">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/main_navigation_btn1"
+        android:layout_width="@dimen/main_navigation_btn_size"
+        android:layout_height="@dimen/main_navigation_btn_size"
+        android:src="@drawable/icon_main_navi_home"/>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/main_navigation_btn2"
+        android:layout_width="@dimen/main_navigation_btn_size"
+        android:layout_height="@dimen/main_navigation_btn_size"
+        android:layout_toEndOf="@id/main_navigation_btn1"
+        android:layout_marginStart="@dimen/main_navigation_btn_margin"
+        android:src="@drawable/icon_main_navi_mine"/>
+</RelativeLayout>

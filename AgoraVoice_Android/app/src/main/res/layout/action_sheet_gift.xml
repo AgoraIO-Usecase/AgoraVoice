@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/action_sheet_layout"
+    android:paddingStart="@dimen/common_margin_vertical"
+    android:paddingEnd="@dimen/common_margin_vertical"
+    android:paddingBottom="@dimen/common_margin_vertical">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_sheet_title_height"
+        android:textAlignment="gravity"
+        android:gravity="center"
+        android:text="@string/action_sheet_gift_title"
+        android:textSize="@dimen/text_size_2"
+        android:textColor="@android:color/white"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/action_sheet_gift_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/action_sheet_gift_send_btn"
+        android:layout_width="@dimen/action_sheet_gift_item_width"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_2"
+        android:layout_marginTop="@dimen/margin_2"
+        android:layout_gravity="center"
+        android:textAlignment="gravity"
+        android:gravity="center"
+        android:text="@string/action_sheet_gift_send"
+        android:textSize="@dimen/text_size_2"
+        android:textColor="@android:color/white"
+        android:background="@drawable/gift_send_btn"/>
+</LinearLayout>

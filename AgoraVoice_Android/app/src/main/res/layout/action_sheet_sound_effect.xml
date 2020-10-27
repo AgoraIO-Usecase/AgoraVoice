@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/action_sheet_layout">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/action_sheet_sound_effect_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_sheet_title_height"
+        android:textAlignment="gravity"
+        android:gravity="center"
+        android:text="@string/action_sheet_sound_effect_title"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_2"/>
+
+    <RelativeLayout
+        android:id="@+id/action_sheet_sound_effect_type_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_sheet_title_height"
+        android:layout_below="@id/action_sheet_sound_effect_title"
+        android:background="@color/theme_background_3">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/action_sheet_sound_effect_type_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/common_margin_horizontal"
+            android:layout_marginEnd="@dimen/common_margin_horizontal"
+            android:overScrollMode="never"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/action_sheet_sound_effect_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_sheet_voice_beauty_recycler_height"
+        android:layout_below="@id/action_sheet_sound_effect_type_layout"
+        android:layout_margin="@dimen/common_margin_vertical"/>
+</RelativeLayout>
