@@ -106,7 +106,8 @@ public class UserListActionSheet extends AbstractActionSheet implements View.OnC
         else hideTab();
     }
 
-    // Called only before this action sheet is shown
+    // Note: must be called before the user list is updated
+    // and the action sheet is shown
     public void showInviteStatus(boolean show) {
         mShowInvite = show;
     }
@@ -130,17 +131,25 @@ public class UserListActionSheet extends AbstractActionSheet implements View.OnC
         if (getVisibility() == VISIBLE && mInviteManager != null) {
             List<RoomUserInfo> allList = new ArrayList<>(mInviteManager.getFullUserList());
 
-            List<Integer> deleteList = new ArrayList<>();
-            for (int i = allList.size() - 1; i >= 0; i--) {
-                RoomUserInfo info = allList.get(i);
-                if (excludedIds.contains(info.userId) ||
-                    info.userId.equals(mOwnerId)) {
-                    deleteList.add(i);
-                }
-            }
+            if (mShowInvite) {
+                // If this is for seat invitation, exclude room
+                // owner himself and any user that has taken
+                // a seat
+                List<Integer> deleteList = new ArrayList<>();
+                if (excludedIds != null) {
+                    for (int i = allList.size() - 1; i >= 0; i--) {
+                        RoomUserInfo info = allList.get(i);
+                        if (excludedIds.contains(info.userId) ||
+                                info.userId.equals(mOwnerId)) {
+                            deleteList.add(i);
+                        }
+                    }
 
-            for (int index : deleteList) {
-                allList.remove(index);
+                }
+
+                for (int index : deleteList) {
+                    allList.remove(index);
+                }
             }
 
             mAllUserAdapter.reset(allList);

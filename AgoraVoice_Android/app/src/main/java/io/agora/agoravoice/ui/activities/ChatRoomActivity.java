@@ -405,8 +405,8 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
         mUserListActionSheet.setOwner(mIsOwner, ownerId);
         mUserListActionSheet.setInvitationManager(proxy().getRoomInvitationManager(roomId));
         mUserListActionSheet.setUserActionSheetListener(mUserListActionSheetListener);
-        mUserListActionSheet.updateUserList(mHostPanel.getAllUsers());
         mUserListActionSheet.showInviteStatus(invite);
+        mUserListActionSheet.updateUserList(mHostPanel.getAllUsers());
         mUserListActionSheet.setSeatNo(seatNo);
         mUserListActionSheet.showApplication(showApplication);
         showActionSheet(mUserListActionSheet, true);
