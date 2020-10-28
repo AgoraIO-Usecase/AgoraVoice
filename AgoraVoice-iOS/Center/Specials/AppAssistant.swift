@@ -81,6 +81,6 @@ extension AppAssistant {
     }
     
     static var idOfAppStore: Int {
-        return 1116886856
+        return 1537528920
     }
 }
