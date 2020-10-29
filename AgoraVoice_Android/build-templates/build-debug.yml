@@ -4,8 +4,8 @@ parameters:
 
 jobs:
 
-  - job: ${{ parameters.name }}_release_Build
-    displayName: ${{ parameters.name }}_release
+  - job: ${{ parameters.name }}_debug_Build
+    displayName: ${{ parameters.name }}_debug
     pool:
       vmImage: 'macos-latest'
     variables:
@@ -13,19 +13,9 @@ jobs:
       - group: AgoraVoice
 
     steps:
-      - task: DownloadSecureFile@1
-        name: downloadReleaseKeystore
-        displayName: 'Download release keystore'
-        inputs:
-          secureFile: 'beckon-release.keystore'
-
-      - script: |
-          cd ${{ parameters.project }} && chmod +x ./build-templates/build-release.sh && ./build-templates/build-release.sh
+      - script: cd ${{ parameters.project }} && chmod +x ./build-templates/build-debug.sh && ./build-templates/build-debug.sh
         env:
-          keystore: $(downloadReleaseKeystore.secureFilePath)
-          password: $(keystore.pass)
-          alias: $(keystore.alias)
-          appId: $(appId.release)
+          appId: $(appId.debug)
           customerId: $(customer.id)
           customerCert: $(customer.cer)
 
@@ -38,7 +28,7 @@ jobs:
       - script: cd ${{ parameters.project }} && chmod +x ./build-templates/build-rename.sh && ./build-templates/build-rename.sh
         env:
           path: '$(Build.ArtifactStagingDirectory)'
-          appName: $(appName.release)
+          appName: $(appName.debug)
           ver: $(appVer)
 
       - task: PublishBuildArtifacts@1

@@ -45,7 +45,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.internal.EverythingIsNonNull;
 
 public class ServerClient {
-    private static final String SERVER_HOST = "https://api-solutions.sh.agoralab.co";
+    private static final String SERVER_HOST_DEV = "https://api-solutions-dev.sh.agoralab.co";
+    private static final String SERVER_HOST_PRODUCT = "https://api-solutions.sh.agoralab.co";
     private static final String ERROR_UNKNOWN_MSG = "";
 
     private static final int MAX_RESPONSE_THREAD = 10;
@@ -67,8 +68,9 @@ public class ServerClient {
                 .writeTimeout(DEFAULT_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
                 .build();
 
+        String baseUrl = BuildConfig.DEBUG ? SERVER_HOST_DEV : SERVER_HOST_PRODUCT;
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(SERVER_HOST)
+                .baseUrl(baseUrl)
                 .client(okHttpClient)
                 .callbackExecutor(Executors.newFixedThreadPool(MAX_RESPONSE_THREAD))
                 .addConverterFactory(GsonConverterFactory.create());

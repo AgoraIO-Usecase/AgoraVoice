@@ -34,8 +34,8 @@ echo "remove downloaded agora sdk folder"
 rm -rf ./$agoraSdkDir
 
 # Replace product permission and id configuration
-python ./build-templates/replace-release.py
+python ./build-templates/replace-debug.py
 
-# Build release
+# Build debug
 chmod +x ./gradlew
-./gradlew assembleRelease
+./gradlew assembleDebug

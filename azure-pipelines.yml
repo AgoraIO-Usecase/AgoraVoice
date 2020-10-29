@@ -3,12 +3,21 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- master
+schedules:
+- cron: "0 2 * * *"
+  displayName: AgoraVoice daily build on 2 am
+  branches:
+    include:
+    - master
 
 jobs:
 
 - template: AgoraVoice_Android/build-templates/build-release.yml
+  parameters:
+    project: 'AgoraVoice_Android'
+    name: 'AgoraVoice_Android'
+
+- template: AgoraVoice_Android/build-templates/build-debug.yml
   parameters:
     project: 'AgoraVoice_Android'
     name: 'AgoraVoice_Android'

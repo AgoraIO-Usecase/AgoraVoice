@@ -77,6 +77,10 @@ internal class EduManagerImpl(
         /**为RteEngine设置eventListener*/
         RteEngineImpl.eventListener = this
         APPID = options.appId
+
+        // Special care here
+        API_BASE_URL = if (BuildConfig.DEBUG) "https://api-solutions-dev.sh.agoralab.co" else "https://api-solutions.sh.agoralab.co"
+
         val auth = Base64.encodeToString("${options.customerId}:${options.customerCertificate}"
                 .toByteArray(Charsets.UTF_8), Base64.DEFAULT).replace("\n", "").trim()
         RetrofitManager.instance()!!.addHeader("Authorization", CryptoUtil.getAuth(auth))
