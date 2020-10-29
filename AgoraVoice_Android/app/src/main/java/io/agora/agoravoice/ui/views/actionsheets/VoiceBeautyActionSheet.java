@@ -282,6 +282,7 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
             // selected as a workaround, should be fixed for later versions of sdk
             if (pos == 0 || pos == 1 || pos == 3 || pos == 4) {
                 holder.image.setEnabled(false);
+                holder.itemView.setOnClickListener(null);
             } else {
                 holder.image.setEnabled(true);
                 holder.itemView.setOnClickListener(view -> {
