@@ -221,6 +221,7 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
         public void onBindViewHolder(@NonNull ChatBeautyViewHolder holder, int position) {
             int pos = holder.getAdapterPosition();
             boolean selected = pos == mSelected1;
+
             holder.image.setImageResource(VoiceUtil.VOICE_BEAUTY_CHAT_RES[pos]);
             holder.name.setText(mVoiceBeautyChatNames[pos]);
             holder.name.setTextColor(selected ? Color.WHITE : TITLE_TEXT_DEFAULT);
@@ -272,25 +273,36 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
         public void onBindViewHolder(@NonNull SingBeautyViewHolder holder, int position) {
             int pos = holder.getAdapterPosition();
             boolean selected = pos == mSelected2;
+
             holder.image.setImageResource(VoiceUtil.VOICE_BEAUTY_SING_RES[pos]);
+            holder.itemView.setActivated(selected);
+
+            // TODO current version of sdk has not support all the sing voice beauty
+            // Here we make those that are not supported disabled and cannot be
+            // selected as a workaround, should be fixed for later versions of sdk
+            if (pos == 0 || pos == 1 || pos == 3 || pos == 4) {
+                holder.image.setEnabled(false);
+            } else {
+                holder.image.setEnabled(true);
+                holder.itemView.setOnClickListener(view -> {
+                    if (pos == mSelected2) {
+                        mSelected2 = -1;
+                        if (mListener != null) {
+                            mListener.onVoiceBeautyUnselected();
+                        }
+                    } else {
+                        mSelected2 = pos;
+                        if (mListener != null) {
+                            mListener.onVoiceBeautySelected(
+                                    getSelectedType(pos));
+                        }
+                    }
+                    mCurrentAdapter.notifyDataSetChanged();
+                });
+            }
+
             holder.name.setText(mVoiceBeautySingNames[pos]);
             holder.name.setTextColor(selected ? Color.WHITE : TITLE_TEXT_DEFAULT);
-            holder.itemView.setActivated(selected);
-            holder.itemView.setOnClickListener(view -> {
-                if (pos == mSelected2) {
-                    mSelected2 = -1;
-                    if (mListener != null) {
-                        mListener.onVoiceBeautyUnselected();
-                    }
-                } else {
-                    mSelected2 = pos;
-                    if (mListener != null) {
-                        mListener.onVoiceBeautySelected(
-                                getSelectedType(pos));
-                    }
-                }
-                mCurrentAdapter.notifyDataSetChanged();
-            });
         }
 
         @Override

@@ -19,11 +19,16 @@ echo "copy agora sdk to project folder..."
 
 sdkRoot=$agoraSdkDir/Agora_Native_SDK_for_Android_VOICE/libs
 
-cp --path $sdkRoot/agora-rtc-sdk.jar rte/libs
-cp --path $sdkRoot/arm64-v8a/libagora-rtc-sdk-jni.so rte/src/main/jniLibs/arm64-v8a
-cp --path $sdkRoot/armeabi-v7a/libagora-rtc-sdk-jni.so rte/src/main/jniLibs/armeabi-v7a
-cp --path $sdkRoot/x86/libagora-rtc-sdk-jni.so rte/src/main/jniLibs/x86
-cp --path $sdkRoot/x86_64/libagora-rtc-sdk-jni.so rte/src/main/jniLibs/x86_64
+mkdir -p rte/src/main/jniLibs/arm64-v8a/
+mkdir -p rte/src/main/jniLibs/armeabi-v7a/
+mkdir -p rte/src/main/jniLibs/x86/
+mkdir -p rte/src/main/jniLibs/x86_64/
+
+cp -p $sdkRoot/agora-rtc-sdk.jar rte/libs
+cp -p $sdkRoot/arm64-v8a/libagora-rtc-sdk-jni.so rte/src/main/jniLibs/arm64-v8a/
+cp -p $sdkRoot/armeabi-v7a/libagora-rtc-sdk-jni.so rte/src/main/jniLibs/armeabi-v7a/
+cp -p $sdkRoot/x86/libagora-rtc-sdk-jni.so rte/src/main/jniLibs/x86/
+cp -p $sdkRoot/x86_64/libagora-rtc-sdk-jni.so rte/src/main/jniLibs/x86_64/
 
 echo "remove downloaded agora sdk folder"
 rm -rf ./$agoraSdkDir
