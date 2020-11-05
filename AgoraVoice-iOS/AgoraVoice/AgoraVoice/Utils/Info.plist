@@ -25,10 +25,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>App needs your permission to access microphone for audio interaction</string>
 	<key>NSCameraUsageDescription</key>
 	<string>App needs your permission to access camera for video interaction</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>App needs your permission to access microphone for audio interaction</string>
 	<key>Privacy - Local Network Usage Description</key>
 	<string></string>
 	<key>UIBackgroundModes</key>
