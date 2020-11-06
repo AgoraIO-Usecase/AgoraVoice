@@ -109,9 +109,9 @@ class ElectronicMusicViewController: RxViewController {
 
 private extension ElectronicMusicViewController {
     func modeSegment() {
-        segmentControl.setTitle("大调", forSegmentAt: 0)
-        segmentControl.setTitle("小调", forSegmentAt: 1)
-        segmentControl.setTitle("和风", forSegmentAt: 2)
+        segmentControl.setTitle(NSLocalizedString("Major"), forSegmentAt: 0)
+        segmentControl.setTitle(NSLocalizedString("Minor"), forSegmentAt: 1)
+        segmentControl.setTitle(NSLocalizedString("Japenese_Pentatonic"), forSegmentAt: 2)
                 
         if #available(iOS 13.0, *) {
             segmentControl.selectedSegmentTintColor = UIColor(hexString: "#0088EB")
