@@ -4,6 +4,7 @@ import android.os.Build
 import android.util.Base64
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import io.agora.Constants
 import io.agora.Constants.Companion.API_BASE_URL
 import io.agora.Constants.Companion.APPID
 import io.agora.Constants.Companion.AgoraLog
@@ -79,7 +80,7 @@ internal class EduManagerImpl(
         APPID = options.appId
 
         // Special care here
-        API_BASE_URL = if (BuildConfig.DEBUG) "https://api-solutions-dev.sh.agoralab.co" else "https://api-solutions.sh.agoralab.co"
+        API_BASE_URL = if (BuildConfig.DEBUG) Constants.API_BASE_URL_DEV else Constants.API_BASE_URL_PRODUCT
 
         val auth = Base64.encodeToString("${options.customerId}:${options.customerCertificate}"
                 .toByteArray(Charsets.UTF_8), Base64.DEFAULT).replace("\n", "").trim()
