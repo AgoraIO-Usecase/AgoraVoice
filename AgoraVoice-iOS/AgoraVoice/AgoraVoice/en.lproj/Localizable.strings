@@ -123,7 +123,7 @@ Application_List="ApplicationOfBroadcasting";
 // Create Room
 Create_Start="Go Live";
 Create_NameLabel="Channel name: ";
-Limit_Toast="This is a testing product. Please refrain from using it commercially. The max duration per session is 10 minutes, and the max number of participants per channel is 10.";
+Limit_Toast="This is for experiencing Agora quality. Please refrain from using it commercially. The max duration per session is 10 minutes, and the max number of participants per channel is 10. ";
 
 // Mine
 Mine_Head="Profile";
@@ -140,7 +140,7 @@ Upload_Log="Upload Log";
 
 Test_Product_Disclaimer="Test product disclaimer ";
 
-Disclaimer_Detail="Agora Voice (\"this product\") is a test product provided by Agora . Agora enjoys the copyright and ownership of this product. It is hereby granted free of charge to anyone who obtains a copy of this product and related documentation (hereinafter referred to as \"software\") to try the software without limitation, including but not limited to trial, copy, modify, merge, publish, distribute, but this product shall not be used For any commercial use, you may not sublicense and / or sell copies of the software.
+Disclaimer_Detail="Agora Voice (\"this product\") is a product provided by Agora. Agora enjoys the copyright and ownership of this product. It is hereby granted free of charge to anyone who obtains a copy of this product and related documentation (hereinafter referred to as \"software\") to try the software without limitation, including but not limited to trial, copy, modify, merge, publish, distribute, but this product shall not be used For any commercial use, you may not sublicense and / or sell copies of the software.
 
 This product is provided \"as is\" without any express warranty, including but not limited to guarantees of suitability, suitability for specific purposes, and non-infringement. Whether it is due to any contract, infringement or other forms of conduct related to this product or the trial of this product or other methods, Agora will not be responsible for any claims, damages or other liabilities.
 
