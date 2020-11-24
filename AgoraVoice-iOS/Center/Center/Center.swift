@@ -103,7 +103,7 @@ private extension Center {
     func register(success: ((BasicUserInfo) -> Void)?) {
         let url = URLGroup.userRegister
         let event = RequestEvent(name: "user-register")
-        let random = (Int(arc4random()) % Array.names.count) - 1
+        let random = (Int(arc4random()) % Array.names.count)
         let name = Array.names[random]
         let parameters = ["userName": name]
         let task = RequestTask(event: event,
