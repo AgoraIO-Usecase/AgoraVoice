@@ -394,21 +394,21 @@ extension LiveViewController {
         }).disposed(by: extensionVC.bag)
         
         extensionVC.audioLoopButton.rx.tap.subscribe(onNext: { [unowned extensionVC, unowned self] in
-            guard self.deviceVM.audioOutput.value.isSupportLoop else {
-                self.showTextToast(text: NSLocalizedString("Please_Input_Headset"))
-                return
-            }
-            extensionVC.audioLoopButton.isSelected.toggle()
-            self.deviceVM.localAudioLoop.accept(extensionVC.audioLoopButton.isSelected ? .on : .off)
+//            guard self.deviceVM.audioOutput.value.isSupportLoop else {
+//                self.showTextToast(text: NSLocalizedString("Please_Input_Headset"))
+//                return
+//            }
+//            extensionVC.audioLoopButton.isSelected.toggle()
+//            self.deviceVM.localAudioLoop.accept(extensionVC.audioLoopButton.isSelected ? .on : .off)
         }).disposed(by: extensionVC.bag)
         
-        deviceVM.audioOutput.subscribe(onNext: { [unowned extensionVC, unowned self] (routing) in
-            if routing.isSupportLoop {
-                extensionVC.audioLoopButton.isSelected = self.deviceVM.localAudioLoop.value.boolValue
-            } else {
-                extensionVC.audioLoopButton.isSelected = false
-            }
-        }).disposed(by: extensionVC.bag)
+//        deviceVM.audioOutput.subscribe(onNext: { [unowned extensionVC, unowned self] (routing) in
+//            if routing.isSupportLoop {
+//                extensionVC.audioLoopButton.isSelected = self.deviceVM.localAudioLoop.value.boolValue
+//            } else {
+//                extensionVC.audioLoopButton.isSelected = false
+//            }
+//        }).disposed(by: extensionVC.bag)
         
         extensionVC.backgroudButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.hiddenMaskView()
@@ -431,9 +431,9 @@ extension LiveViewController {
         
         dataVC.view.cornerRadius(10)
         
-        liveSession.sessionReport.subscribe(onNext: { [unowned dataVC] (statistics) in
-            dataVC.infoLabel.text = statistics.description(onlyAudio: true)
-        }).disposed(by: dataVC.bag)
+//        liveSession.sessionReport.subscribe(onNext: { [unowned dataVC] (statistics) in
+//            dataVC.infoLabel.text = statistics.description(onlyAudio: true)
+//        }).disposed(by: dataVC.bag)
         
         let leftSpace: CGFloat = 15.0
         let y: CGFloat = UIScreen.main.heightOfSafeAreaTop + 157.0

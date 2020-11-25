@@ -13,12 +13,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef AgoraAudioOutputRouting AudioOutputRouting;
+//typedef AgoraAudioOutputRouting AudioOutputRouting;
 
 @class MediaDevice;
 @protocol MediaDeviceDelegate <NSObject>
 @optional
-- (void)mediaDevice:(MediaDevice *)mediaDevice didChangeAudoOutputRouting:(AudioOutputRouting)routing;
+//- (void)mediaDevice:(MediaDevice *)mediaDevice didChangeAudoOutputRouting:(AudioOutputRouting)routing;
 - (void)mediaDevice:(MediaDevice *)mediaDevice didOccurError:(NSError *)error;
 @end
 

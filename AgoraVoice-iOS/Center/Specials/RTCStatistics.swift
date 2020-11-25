@@ -9,6 +9,7 @@
 import Foundation
 
 struct RTCStatistics {
+    /*
     struct Local {
         var stats = AgoraChannelStats()
     }
@@ -118,21 +119,23 @@ struct RTCStatistics {
         
         return dimensionFpsBit + join + quality + join + audioNet + join + audioLoss
     }
+     */
 }
 
-extension AgoraNetworkQuality {
-    func description() -> String {
-        switch self {
-        case .excellent:   return "excellent"
-        case .good:        return "good"
-        case .poor:        return "poor"
-        case .bad:         return "bad"
-        case .vBad:        return "very bad"
-        case .down:        return "down"
-        case .unknown:     return "unknown"
-        case .unsupported: return "unsupported"
-        case .detecting:   return "detecting"
-        default:           return "unknown"
-        }
-    }
-}
+//extension AgoraNetworkQuality {
+//    func description() -> String {
+//        switch self {
+//        case .excellent:   return "excellent"
+//        case .good:        return "good"
+//        case .poor:        return "poor"
+//        case .bad:         return "bad"
+//        case .vBad:        return "very bad"
+//        case .down:        return "down"
+//        case .unknown:     return "unknown"
+//        case .unsupported: return "unsupported"
+//        case .detecting:   return "detecting"
+//        default:           return "unknown"
+//        }
+//    }
+//}
+

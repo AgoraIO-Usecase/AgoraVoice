@@ -7,15 +7,15 @@
 //
 
 import UIKit
-import AlamoClient
+import Armin
 import RxSwift
 import RxRelay
 
 class LiveSession: RxObject {
-    private var userService: EduUserService?
+//    private var userService: EduUserService?
     
     var type: LiveType
-    var roomManager: EduClassroomManager
+//    var roomManager: EduClassroomManager
     var room: BehaviorRelay<Room>
     
     let fail = PublishRelay<String>()
@@ -30,7 +30,7 @@ class LiveSession: RxObject {
     let localStreamByRemoved = PublishRelay<()>()
     
     // Statistic
-    let sessionReport = BehaviorRelay(value: RTCStatistics(type: .local(RTCStatistics.Local(stats: AgoraChannelStats()))))
+//    let sessionReport = BehaviorRelay(value: RTCStatistics(type: .local(RTCStatistics.Local(stats: AgoraChannelStats()))))
     
     // User
     let userList = BehaviorRelay(value: [LiveRole]())
@@ -46,43 +46,49 @@ class LiveSession: RxObject {
     // Message
     let chatMessage = PublishRelay<(user: LiveRole, message: String)>()
     let customMessage = BehaviorRelay(value: [String: Any]())
-    let actionMessage = PublishRelay<ActionMessage>()
+//    let actionMessage = PublishRelay<ActionMessage>()
     
     init(room: Room, role: LiveRoleType) {
-        let configuration = EduClassroomConfig()
-        configuration.roomUuid = room.roomId
-        configuration.sceneType = .typeBig
-        
-        let manager = Center.shared().centerProvideLiveManager().createClassroom(with: configuration)
-        self.type = .chatRoom
-        self.roomManager = manager
         self.room = BehaviorRelay(value: room)
         let userInfo = Center.shared().centerProvideLocalUser().info.value
-        let localRole = LiveRoleItem(type: role, info: userInfo, agUId: "0")
-        self.localRole = BehaviorRelay(value: localRole)
+               let localRole = LiveRoleItem(type: role, info: userInfo, agUId: "0")
+               self.localRole = BehaviorRelay(value: localRole)
+        self.type = .chatRoom
         super.init()
+//        let configuration = EduClassroomConfig()
+//        configuration.roomUuid = room.roomId
+//        configuration.sceneType = .typeBig
+//
+//        let manager = Center.shared().centerProvideLiveManager().createClassroom(with: configuration)
+//        self.type = .chatRoom
+//        self.roomManager = manager
+//        self.room = BehaviorRelay(value: room)
+//        let userInfo = Center.shared().centerProvideLocalUser().info.value
+//        let localRole = LiveRoleItem(type: role, info: userInfo, agUId: "0")
+//        self.localRole = BehaviorRelay(value: localRole)
+//        super.init()
+//
+//        manager.delegate = self
+//        let channelDelegateConfiguration = RTCChannelDelegateConfig()
+//        channelDelegateConfiguration.statisticsReportDelegate = self
+//        RTCManager.share().setChannelDelegateWith(channelDelegateConfiguration,
+//                                                  channelId: room.roomId)
         
-        manager.delegate = self
-        let channelDelegateConfiguration = RTCChannelDelegateConfig()
-        channelDelegateConfiguration.statisticsReportDelegate = self
-        RTCManager.share().setChannelDelegateWith(channelDelegateConfiguration,
-                                                  channelId: room.roomId)
-        
-        observer()
+//        observer()
     }
     
     static func create(roomName: String, backgroundIndex:Int, success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
         let client = Center.shared().centerProvideRequestHelper()
-        let event = RequestEvent(name: "live-create")
+        let event = ArRequestEvent(name: "live-create")
         let url = URLGroup.liveCreate
-        let task = RequestTask(event: event,
+        let task = ArRequestTask(event: event,
                                type: .http(.post, url: url),
                                timeout: .medium,
                                header: ["token": Keys.UserToken],
                                parameters: ["roomName": roomName,
                                             "backgroundImage": "\(backgroundIndex)"])
         
-        client.request(task: task, success: ACResponse.json({ (json) in
+        client.request(task: task, success: ArResponse.json({ (json) in
             let roomId = try json.getStringValue(of: "data")
             let local = Center.shared().centerProvideLocalUser().info.value
             let owner = LiveRoleItem(type: .owner, info: local, agUId: "0")
@@ -92,7 +98,7 @@ class LiveSession: RxObject {
             if let success = success {
                 success(session)
             }
-        })) { (error) -> RetryOptions in
+        })) { (error) -> ArRetryOptions in
             if let fail = fail {
                 fail(error)
             }
@@ -101,78 +107,78 @@ class LiveSession: RxObject {
     }
     
     func join(success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
-        let userName = Center.shared().centerProvideLocalUser().info.value.name
-        var eduRole: EduRoleType
-        switch localRole.value.type {
-        case .owner:
-            eduRole = .teacher
-        case .broadcaster, .audience:
-            eduRole = .student
-        }
-        
-        // sepcail parameters for audio loop
-        RTCManager.share().setParameters("{\"che.audio.morph.earsback\":true}")
-        
-        let options = EduClassroomJoinOptions(userName: userName, role: eduRole)
-        options.mediaOption.publishType = .default
-        
-        roomManager.joinClassroom(options, success: { [unowned self] (userService) in
-            if let service = userService as? EduTeacherService {
-                service.delegate = self
-            } else if let service = userService as? EduStudentService {
-                service.delegate = self
-            }
-            
-            self.userService = userService
-            
-            // room info
-            self.initRoomInfoDurationJoin(fail: fail)
-            
-            // all users
-            self.roomManager.getFullUserList(success: { [unowned self] (list) in
-                self.userList.accept([LiveRole](list: list))
-            }, failure: nil)
-            
-            // local user
-            let role = self.localRole.value
-            if role.type == .owner {
-                self.chatRoomOwnerJoin(success: success, fail: fail)
-            } else {
-                // broadcaster and audience join process
-                self.chatRoomJoin(success: success, fail: fail)
-            }
-        }) { (error) in
-            if let fail = fail {
-                fail(error)
-            }
-        }
+//        let userName = Center.shared().centerProvideLocalUser().info.value.name
+//        var eduRole: EduRoleType
+//        switch localRole.value.type {
+//        case .owner:
+//            eduRole = .teacher
+//        case .broadcaster, .audience:
+//            eduRole = .student
+//        }
+//
+//        // sepcail parameters for audio loop
+//        RTCManager.share().setParameters("{\"che.audio.morph.earsback\":true}")
+//
+//        let options = EduClassroomJoinOptions(userName: userName, role: eduRole)
+//        options.mediaOption.publishType = .default
+//
+//        roomManager.joinClassroom(options, success: { [unowned self] (userService) in
+//            if let service = userService as? EduTeacherService {
+//                service.delegate = self
+//            } else if let service = userService as? EduStudentService {
+//                service.delegate = self
+//            }
+//
+//            self.userService = userService
+//
+//            // room info
+//            self.initRoomInfoDurationJoin(fail: fail)
+//
+//            // all users
+//            self.roomManager.getFullUserList(success: { [unowned self] (list) in
+//                self.userList.accept([LiveRole](list: list))
+//            }, failure: nil)
+//
+//            // local user
+//            let role = self.localRole.value
+//            if role.type == .owner {
+//                self.chatRoomOwnerJoin(success: success, fail: fail)
+//            } else {
+//                // broadcaster and audience join process
+//                self.chatRoomJoin(success: success, fail: fail)
+//            }
+//        }) { (error) in
+//            if let fail = fail {
+//                fail(error)
+//            }
+//        }
     }
     
     func leave() {
         if localRole.value.type == .owner {
             let client = Center.shared().centerProvideRequestHelper()
-            let event = RequestEvent(name: "live-session-close")
+            let event = ArRequestEvent(name: "live-session-close")
             let url = URLGroup.liveClose(roomId: room.value.roomId)
-            let task = RequestTask(event: event,
+            let task = ArRequestTask(event: event,
                                    type: .http(.post, url: url),
                                    header: ["token": Keys.UserToken])
             client.request(task: task)
         } else {
             if localRole.value.type == .broadcaster {
-                self.unpublishLocalStream()
+//                self.unpublishLocalStream()
             }
             
             let client = Center.shared().centerProvideRequestHelper()
-            let event = RequestEvent(name: "live-session-leave")
+            let event = ArRequestEvent(name: "live-session-leave")
             let url = URLGroup.liveLeave(userId: localRole.value.info.userId,
                                          roomId: room.value.roomId)
-            let task = RequestTask(event: event,
+            let task = ArRequestTask(event: event,
                                    type: .http(.post, url: url),
                                    header: ["token": Keys.UserToken])
             client.request(task: task)
         }
         
-        roomManager.leaveClassroom(success: nil, failure: nil)
+//        roomManager.leaveClassroom(success: nil, failure: nil)
     }
     
     deinit {
@@ -183,53 +189,53 @@ class LiveSession: RxObject {
 // MARK: - Stream
 extension LiveSession {
     func updateLocalAudioStream(isOn: Bool, success: Completion = nil, fail: ErrorCompletion = nil) {
-        guard let _ = userService else {
-            if let fail = fail {
-                fail(AGEError.valueNil("userService"))
-            }
-            return
-        }
-        
-        guard let stream = localStream.value else {
-            if let fail = fail {
-                fail(AGEError.valueNil("localStream"))
-            }
-            return
-        }
-        
-        let configuration = EduStreamConfig(streamUuid: stream.streamId)
-        configuration.enableMicrophone = isOn
-        configuration.enableCamera = false
-        
-        self.userService?.startOrUpdateLocalStream(configuration,
-                                                   success: { [unowned self] (stream) in
-                                                    self.userService?.publishStream(stream, success: {
-                                                        if let success = success {
-                                                            success()
-                                                        }
-                                                    }, failure: { (error) in
-                                                        if let fail = fail {
-                                                            fail(error)
-                                                        }
-                                                    })
-        }, failure: { (error) in
-                if let fail = fail {
-                    fail(error)
-                }
-        })
+//        guard let _ = userService else {
+//            if let fail = fail {
+//                fail(AGEError.valueNil("userService"))
+//            }
+//            return
+//        }
+//
+//        guard let stream = localStream.value else {
+//            if let fail = fail {
+//                fail(AGEError.valueNil("localStream"))
+//            }
+//            return
+//        }
+//
+//        let configuration = EduStreamConfig(streamUuid: stream.streamId)
+//        configuration.enableMicrophone = isOn
+//        configuration.enableCamera = false
+//
+//        self.userService?.startOrUpdateLocalStream(configuration,
+//                                                   success: { [unowned self] (stream) in
+//                                                    self.userService?.publishStream(stream, success: {
+//                                                        if let success = success {
+//                                                            success()
+//                                                        }
+//                                                    }, failure: { (error) in
+//                                                        if let fail = fail {
+//                                                            fail(error)
+//                                                        }
+//                                                    })
+//        }, failure: { (error) in
+//                if let fail = fail {
+//                    fail(error)
+//                }
+//        })
     }
     
     func muteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
-        userService?.muteOther(stream: stream, fail: fail)
+//        userService?.muteOther(stream: stream, fail: fail)
     }
     
     func unmuteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
-        userService?.ummuteOther(stream: stream, fail: fail)
+//        userService?.ummuteOther(stream: stream, fail: fail)
     }
     
     func publishNewStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
-        let eduStream = EduStream(liveStream: stream)
-        userService?.publishNewStream(eduStream, success: success, fail: fail)
+//        let eduStream = EduStream(liveStream: stream)
+//        userService?.publishNewStream(eduStream, success: success, fail: fail)
     }
     
     func publishNewStream(for user: LiveRole, success: Completion = nil, fail: ErrorCompletion = nil) {
@@ -244,297 +250,298 @@ extension LiveSession {
             return
         }
         
-        let liveStream = LiveStream(streamId: tUser.agUId, hasAudio: true, owner: tUser)
-        let eduStream = EduStream(liveStream: liveStream)
-        
-        userService?.publishNewStream(eduStream, success: success, fail: fail)
+//        let liveStream = LiveStream(streamId: tUser.agUId, hasAudio: true, owner: tUser)
+//        let eduStream = EduStream(liveStream: liveStream)
+//
+//        userService?.publishNewStream(eduStream, success: success, fail: fail)
     }
     
     func unpublishStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
-        let eduStream = EduStream(liveStream: stream)
-        userService?.unpublishStream(eduStream, success: success, fail: fail)
+//        let eduStream = EduStream(liveStream: stream)
+//        userService?.unpublishStream(eduStream, success: success, fail: fail)
     }
 }
 
 // MARK: - Chat Message
 extension LiveSession {
     func sendChat(_ text: String, success: Completion = nil, fail: ErrorCompletion = nil) {
-        userService?.sendRoomChatMessage(withText: text, success: {
-            if let success = success {
-                success()
-            }
-        }, failure: { (error) in
-            if let fail = fail {
-                fail(error)
-            }
-        })
+//        userService?.sendRoomChatMessage(withText: text, success: {
+//            if let success = success {
+//                success()
+//            }
+//        }, failure: { (error) in
+//            if let fail = fail {
+//                fail(error)
+//            }
+//        })
     }
 }
 
 // MARK: - Join process
 fileprivate extension LiveSession {
     func initRoomInfoDurationJoin(fail: ErrorCompletion = nil) {
-        self.roomManager.getUserList(with: .teacher, from: 0, to: 1, success: { [unowned self] (list) in
-            guard let owner = [LiveRole](list: list).first else {
-                if let fail = fail {
-                    let error = AGEError.fail("owner nil")
-                    fail(error)
-                }
-                return
-            }
-            
-            self.roomManager.getClassroomInfo(success: { [unowned self] (eduRoom) in
-                let room = Room(name: eduRoom.roomInfo.roomName,
-                                roomId: eduRoom.roomInfo.roomUuid,
-                                personCount: Int(eduRoom.roomState.onlineUserCount),
-                                owner: owner)
-                self.room.accept(room)
-                if let json = eduRoom.roomProperties as? [String: Any] {
-                    self.customMessage.accept(json)
-                }
-            }, failure: nil)
-        }, failure: nil)
+//        self.roomManager.getUserList(with: .teacher, from: 0, to: 1, success: { [unowned self] (list) in
+//            guard let owner = [LiveRole](list: list).first else {
+//                if let fail = fail {
+//                    let error = AGEError.fail("owner nil")
+//                    fail(error)
+//                }
+//                return
+//            }
+//
+//            self.roomManager.getClassroomInfo(success: { [unowned self] (eduRoom) in
+//                let room = Room(name: eduRoom.roomInfo.roomName,
+//                                roomId: eduRoom.roomInfo.roomUuid,
+//                                personCount: Int(eduRoom.roomState.onlineUserCount),
+//                                owner: owner)
+//                self.room.accept(room)
+//                if let json = eduRoom.roomProperties as? [String: Any] {
+//                    self.customMessage.accept(json)
+//                }
+//            }, failure: nil)
+//        }, failure: nil)
     }
     
     func chatRoomOwnerJoin(success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
         let role = self.localRole.value
-        self.roomManager.getLocalUser(success: { [unowned self] (local) in
-            if let _ = local.streams.first {
-                if let success = success {
-                    success(self)
-                }
-            } else {
-                // if local is owner, auto publish a stream when first time join room
-                let stream = LiveStream(streamId: role.agUId,
-                                        hasAudio: true,
-                                        owner: role)
-                
-                self.publishNewStream(stream, success: { [unowned self] in
-                    if let success = success {
-                        success(self)
-                    }
-                }, fail: fail)
-            }
-        }) { [unowned self] (error) in
-            self.leave()
-            
-            if let fail = fail {
-                fail(error)
-            }
-        }
+//        self.roomManager.getLocalUser(success: { [unowned self] (local) in
+//            if let _ = local.streams.first {
+//                if let success = success {
+//                    success(self)
+//                }
+//            } else {
+//                // if local is owner, auto publish a stream when first time join room
+//                let stream = LiveStream(streamId: role.agUId,
+//                                        hasAudio: true,
+//                                        owner: role)
+//
+//                self.publishNewStream(stream, success: { [unowned self] in
+//                    if let success = success {
+//                        success(self)
+//                    }
+//                }, fail: fail)
+//            }
+//        }) { [unowned self] (error) in
+//            self.leave()
+//
+//            if let fail = fail {
+//                fail(error)
+//            }
+//        }
     }
     
     func chatRoomJoin(success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
-        self.roomManager.getClassroomInfo(success: { [unowned self] (eduRoom) in
-            guard let json = eduRoom.roomProperties as? [String: Any],
-                let seatsJson = try? json.getListValue(of: "seats") else {
-                    
-                    if let fail = fail {
-                        fail(AGEError.fail("room properties error",
-                                           extra: "\(eduRoom.roomProperties)"))
-                    }
-                    return
-            }
-            
-            var currentUserOnSeat: Bool = false
-            
-            do {
-                for item in seatsJson {
-                    let intState = try item.getIntValue(of: "state")
-                    
-                    // user taken up this seat
-                    guard intState == 1 else {
-                        continue
-                    }
-                    
-                    let userId = try item.getStringValue(of: "userId")
-                    let userName = try item.getStringValue(of: "userName")
-                    let info = BasicUserInfo(userId: userId, name: userName)
-                    
-                    if info == self.localRole.value.info {
-                        currentUserOnSeat = true
-                        break
-                    }
-                }
-                
-                self.roomManager.getLocalUser(success: { [unowned self] (local) in
-                    if let stream = local.streams.first, !currentUserOnSeat {
-                        guard let service = self.userService else {
-                            fatalError("userService nil")
-                        }
-                        
-                        service.unpublishStream(stream, success: { [unowned self] in
-                            if let success = success {
-                                success(self)
-                            }
-                        }) { (error) in
-                            if let fail = fail {
-                                fail(error)
-                            }
-                        }
-                    // broadcaster rejoin room after unconventionallly exit
-                    } else if let _ = local.streams.first, currentUserOnSeat {
-                        if let success = success {
-                            success(self)
-                        }
-                    // audience join
-                    } else if local.streams.count == 0, !currentUserOnSeat {
-                        if let success = success {
-                            success(self)
-                        }
-                    } else {
-                        if let fail = fail {
-                            fail(AGEError.fail("join fail"))
-                        }
-                    }
-                }) { [unowned self] (error) in
-                    self.leave()
-                    
-                    if let fail = fail {
-                        fail(error)
-                    }
-                }
-            } catch {
-                if let fail = fail {
-                    fail(AGEError.fail("room properties error",
-                                       extra: "\(eduRoom.roomProperties)"))
-                }
-            }
-            
-        }) { (error) in
-            if let fail = fail {
-                fail(error)
-            }
-        }
+//        self.roomManager.getClassroomInfo(success: { [unowned self] (eduRoom) in
+//            guard let json = eduRoom.roomProperties as? [String: Any],
+//                let seatsJson = try? json.getListValue(of: "seats") else {
+//
+//                    if let fail = fail {
+//                        fail(AGEError.fail("room properties error",
+//                                           extra: "\(eduRoom.roomProperties)"))
+//                    }
+//                    return
+//            }
+//
+//            var currentUserOnSeat: Bool = false
+//
+//            do {
+//                for item in seatsJson {
+//                    let intState = try item.getIntValue(of: "state")
+//
+//                    // user taken up this seat
+//                    guard intState == 1 else {
+//                        continue
+//                    }
+//
+//                    let userId = try item.getStringValue(of: "userId")
+//                    let userName = try item.getStringValue(of: "userName")
+//                    let info = BasicUserInfo(userId: userId, name: userName)
+//
+//                    if info == self.localRole.value.info {
+//                        currentUserOnSeat = true
+//                        break
+//                    }
+//                }
+//
+//                self.roomManager.getLocalUser(success: { [unowned self] (local) in
+//                    if let stream = local.streams.first, !currentUserOnSeat {
+//                        guard let service = self.userService else {
+//                            fatalError("userService nil")
+//                        }
+//
+//                        service.unpublishStream(stream, success: { [unowned self] in
+//                            if let success = success {
+//                                success(self)
+//                            }
+//                        }) { (error) in
+//                            if let fail = fail {
+//                                fail(error)
+//                            }
+//                        }
+//                    // broadcaster rejoin room after unconventionallly exit
+//                    } else if let _ = local.streams.first, currentUserOnSeat {
+//                        if let success = success {
+//                            success(self)
+//                        }
+//                    // audience join
+//                    } else if local.streams.count == 0, !currentUserOnSeat {
+//                        if let success = success {
+//                            success(self)
+//                        }
+//                    } else {
+//                        if let fail = fail {
+//                            fail(AGEError.fail("join fail"))
+//                        }
+//                    }
+//                }) { [unowned self] (error) in
+//                    self.leave()
+//
+//                    if let fail = fail {
+//                        fail(error)
+//                    }
+//                }
+//            } catch {
+//                if let fail = fail {
+//                    fail(AGEError.fail("room properties error",
+//                                       extra: "\(eduRoom.roomProperties)"))
+//                }
+//            }
+//
+//        }) { (error) in
+//            if let fail = fail {
+//                fail(error)
+//            }
+//        }
     }
 }
 
 fileprivate extension LiveSession {
-    func addNewStream(eduStream: EduStream) {
-        let stream = LiveStream(eduStream: eduStream)
-        var new = streamList.value
-        new.append(stream)
-        streamList.accept(new)
-        streamJoined.accept(stream)
-    }
-    
-    func removeStream(eduStream: EduStream) {
-        let index = streamList.value.firstIndex { (stream) -> Bool in
-            return eduStream.streamUuid == stream.streamId
-        }
-        
-        guard let tIndex = index else {
-            return
-        }
-        
-        var new = streamList.value
-        let left = new[tIndex]
-        new.remove(at: tIndex)
-        streamList.accept(new)
-        
-        streamLeft.accept(left)
-    }
-    
-    func updateStream(eduStream: EduStream) {
-        let index = streamList.value.firstIndex { (stream) -> Bool in
-            return eduStream.streamUuid == stream.streamId
-        }
-        
-        guard let tIndex = index else {
-            return
-        }
-        
-        var new = streamList.value
-        let stream = LiveStream(eduStream: eduStream)
-        new[tIndex] = stream
-        streamList.accept(new)
-    }
-    
-    func unpublishLocalStream(noStream: Completion = nil, success: Completion = nil, fail: ErrorCompletion = nil) {
-        roomManager.getLocalUser(success: { (local) in
-            if let stream = local.streams.first {
-                guard let service = self.userService else {
-                    fatalError("userService nil")
-                }
-                
-                service.unpublishStream(stream, success: {
-                    if let success = success {
-                        success()
-                    }
-                }) { (error) in
-                    if let fail = fail {
-                        fail(error)
-                    }
-                }
-            } else {
-                if let noStream = noStream {
-                    noStream()
-                }
-            }
-        })
-    }
-    
-    func endLocalStreamCapture() {
-        let configuration = EduStreamConfig(streamUuid: "0")
-        configuration.enableMicrophone = false
-        configuration.enableCamera = false
-        
-        self.userService?.startOrUpdateLocalStream(configuration, success: { (_) in
-            
-        }, failure: nil)
-    }
-    
-    func observer() {
-        // Determine whether local user is a broadcaster or an audience
-        // If local user is owner, no need this judgment
-        localStream.subscribe(onNext: { [unowned self] (stream) in
-            var role = self.localRole.value
-            
-            guard role.type != .owner else {
-                return
-            }
-            
-            // update role
-            if let stream = stream, role.type == .audience {
-                role.type = .broadcaster
-                self.localRole.accept(role)
-                self.updateLocalAudioStream(isOn: stream.hasAudio)
-            } else if stream == nil, role.type == .broadcaster {
-                role.type = .audience
-                self.localRole.accept(role)
-                self.endLocalStreamCapture()
-            }
-        }).disposed(by: bag)
-        
-        // Check the audience list after the stream list is updated
-        streamList.subscribe(onNext: { [unowned self] (_) in
-            self.userList.accept(self.userList.value)
-        }).disposed(by: bag)
-        
-        userList.subscribe(onNext: { [unowned self] (all) in
-            var temp = [LiveRole]()
-            
-            for item in all {
-                var isAudience = true
-                for stream in self.streamList.value where stream.owner.info == item.info {
-                    isAudience = false
-                    break
-                }
-                
-                if isAudience {
-                    temp.append(item)
-                }
-            }
-            
-            self.audienceList.accept(temp)
-        }).disposed(by: bag)
-        
-        Center.shared().customMessage.bind(to: customMessage).disposed(by: bag)
-        Center.shared().actionMessage.bind(to: actionMessage).disposed(by: bag)
-    }
+//    func addNewStream(eduStream: EduStream) {
+//        let stream = LiveStream(eduStream: eduStream)
+//        var new = streamList.value
+//        new.append(stream)
+//        streamList.accept(new)
+//        streamJoined.accept(stream)
+//    }
+//
+//    func removeStream(eduStream: EduStream) {
+//        let index = streamList.value.firstIndex { (stream) -> Bool in
+//            return eduStream.streamUuid == stream.streamId
+//        }
+//
+//        guard let tIndex = index else {
+//            return
+//        }
+//
+//        var new = streamList.value
+//        let left = new[tIndex]
+//        new.remove(at: tIndex)
+//        streamList.accept(new)
+//
+//        streamLeft.accept(left)
+//    }
+//
+//    func updateStream(eduStream: EduStream) {
+//        let index = streamList.value.firstIndex { (stream) -> Bool in
+//            return eduStream.streamUuid == stream.streamId
+//        }
+//
+//        guard let tIndex = index else {
+//            return
+//        }
+//
+//        var new = streamList.value
+//        let stream = LiveStream(eduStream: eduStream)
+//        new[tIndex] = stream
+//        streamList.accept(new)
+//    }
+//
+//    func unpublishLocalStream(noStream: Completion = nil, success: Completion = nil, fail: ErrorCompletion = nil) {
+//        roomManager.getLocalUser(success: { (local) in
+//            if let stream = local.streams.first {
+//                guard let service = self.userService else {
+//                    fatalError("userService nil")
+//                }
+//
+//                service.unpublishStream(stream, success: {
+//                    if let success = success {
+//                        success()
+//                    }
+//                }) { (error) in
+//                    if let fail = fail {
+//                        fail(error)
+//                    }
+//                }
+//            } else {
+//                if let noStream = noStream {
+//                    noStream()
+//                }
+//            }
+//        })
+//    }
+//
+//    func endLocalStreamCapture() {
+//        let configuration = EduStreamConfig(streamUuid: "0")
+//        configuration.enableMicrophone = false
+//        configuration.enableCamera = false
+//
+//        self.userService?.startOrUpdateLocalStream(configuration, success: { (_) in
+//
+//        }, failure: nil)
+//    }
+//
+//    func observer() {
+//        // Determine whether local user is a broadcaster or an audience
+//        // If local user is owner, no need this judgment
+//        localStream.subscribe(onNext: { [unowned self] (stream) in
+//            var role = self.localRole.value
+//
+//            guard role.type != .owner else {
+//                return
+//            }
+//
+//            // update role
+//            if let stream = stream, role.type == .audience {
+//                role.type = .broadcaster
+//                self.localRole.accept(role)
+//                self.updateLocalAudioStream(isOn: stream.hasAudio)
+//            } else if stream == nil, role.type == .broadcaster {
+//                role.type = .audience
+//                self.localRole.accept(role)
+//                self.endLocalStreamCapture()
+//            }
+//        }).disposed(by: bag)
+//
+//        // Check the audience list after the stream list is updated
+//        streamList.subscribe(onNext: { [unowned self] (_) in
+//            self.userList.accept(self.userList.value)
+//        }).disposed(by: bag)
+//
+//        userList.subscribe(onNext: { [unowned self] (all) in
+//            var temp = [LiveRole]()
+//
+//            for item in all {
+//                var isAudience = true
+//                for stream in self.streamList.value where stream.owner.info == item.info {
+//                    isAudience = false
+//                    break
+//                }
+//
+//                if isAudience {
+//                    temp.append(item)
+//                }
+//            }
+//
+//            self.audienceList.accept(temp)
+//        }).disposed(by: bag)
+//
+//        Center.shared().customMessage.bind(to: customMessage).disposed(by: bag)
+//        Center.shared().actionMessage.bind(to: actionMessage).disposed(by: bag)
+//    }
 }
 
 // MARK: - EduClassroomDelegate
+/*
 extension LiveSession: EduClassroomDelegate {
     // User
     func classroom(_ classroom: EduClassroom, remoteUsersInit users: [EduUser]) {
@@ -627,8 +634,9 @@ extension LiveSession: EduClassroomDelegate {
         }
     }
 }
-
+*/
 // MARK: - EduTeacherDelegate, EduStudentDelegate
+/*
 extension LiveSession: EduTeacherDelegate, EduStudentDelegate {
     func localStreamAdded(_ event: EduStreamEvent) {
         var new = localRole.value
@@ -805,3 +813,4 @@ fileprivate extension EduStream {
                   user: eduUser)
     }
 }
+*/

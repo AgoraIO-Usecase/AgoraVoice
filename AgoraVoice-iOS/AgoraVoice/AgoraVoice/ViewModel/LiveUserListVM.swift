@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 import RxRelay
-import AlamoClient
+import Armin
 
 fileprivate enum UserJoinOrLeft: Int {
     case left, join

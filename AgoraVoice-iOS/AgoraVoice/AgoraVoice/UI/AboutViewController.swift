@@ -67,7 +67,7 @@ class AboutViewController: MaskTableViewController {
         alLabel.text = NSLocalizedString("AV_Version")
         
         alValueLabel.text = "Ver \(AppAssistant.version)"
-        sdkValueLabel.text = "Ver \(RTCManager.sdkVersion())"
+//        sdkValueLabel.text = "Ver \(RTCManager.sdkVersion())"
         
         releaseDateValueLabel.text = "2020.6.18"
         

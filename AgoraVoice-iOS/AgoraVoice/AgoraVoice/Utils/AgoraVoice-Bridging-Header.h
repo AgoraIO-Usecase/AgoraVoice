@@ -12,5 +12,3 @@
 #import "AGOSSClient.h"
 #import "SubThreadTimer.h"
 #import "MediaDevice.h"
-#import "EduSDK.h"
-#import "AgoraLog.h"

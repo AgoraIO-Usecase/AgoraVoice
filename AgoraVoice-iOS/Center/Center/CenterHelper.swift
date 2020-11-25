@@ -6,13 +6,12 @@
 //
 
 import Foundation
-import AlamoClient
+import Armin
 
 protocol CenterHelper where Self: Center {
-    func centerProvideLiveManager() -> EduManager
     func centerProvideLocalUser() -> CurrentUser
     func centerProvideMediaDevice() -> MediaDevice
-    func centerProvideRequestHelper() -> AlamoClient
+    func centerProvideRequestHelper() -> Armin
     func centerProvideImagesHelper() -> ImageFiles
     func centerProvideAppAssistant() -> AppAssistant
     
@@ -20,5 +19,4 @@ protocol CenterHelper where Self: Center {
     
     func centerProvideLogTubeHelper() -> LogTube
     func centerProvideUserDataHelper() -> UserDataHelper
-    func centerProvideOSSClient() -> AGOSSClient
 }

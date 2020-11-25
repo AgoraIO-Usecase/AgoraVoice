@@ -9,10 +9,10 @@
 #import "MediaDeviceBase.h"
 
 @implementation MediaDeviceBase
-- (instancetype)initWithRtcEngine:(RTCManager *)engine {
-    if (self = [super init]) {
-        self.agoraKit = engine;
-    }
-    return self;
-}
+//- (instancetype)initWithRtcEngine:(RTCManager *)engine {
+//    if (self = [super init]) {
+//        self.agoraKit = engine;
+//    }
+//    return self;
+//}
 @end

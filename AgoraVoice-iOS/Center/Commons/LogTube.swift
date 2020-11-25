@@ -7,9 +7,14 @@
 //
 
 import Foundation
+import AgoraLog
 
 class LogTube: NSObject {
+    private lazy var logger = AgoraLogger(folderPath: FilesGroup.cacheDirectory + folderName,
+                                          filePrefix: AppAssistant.name,
+                                          maximumNumberOfFiles: 5)
     private lazy var lock: NSObject = NSObject()
+    let folderName = "Log"
     
     override init() {
         super.init()
@@ -50,52 +55,52 @@ private extension LogTube {
     }
     
     func writeToFile(log: String, type: LogType) {
-        var level: AgoraLogLevel
-        
+        var level: AgoraLogType
+
         switch type {
         case .info:
             level = .info
         case .warning:
-            level = .warn
+            level = .warning
         case .error:
             level = .error
         }
-        
-        AgoraLogManager.logMessage(log, level: level)
+
+        self.logger.log(log, type: level)
     }
         
     func debugPrint(_ log: String, type: LogType) {
         writeToFile(log: log, type: type)
     }
-    
-    func consolePrint(_ log: String) {
-        var remainder = log.count
-        let perCount = 800
-        var text = ""
-
-        if remainder < perCount {
-            NSLog("%@", log)
-        } else {
-            for i in stride(from: 0, to: log.count, by: perCount) {
-                let start = log.index(log.startIndex, offsetBy: i)
-                let end = log.index(log.startIndex, offsetBy: i + perCount)
-                let range = start..<end
-
-                text = String(log[range])
-                remainder -= perCount
-
-                NSLog("%@", text)
-
-                if remainder < perCount {
-                    break
-                }
-            }
-
-            if remainder > 0 {
-                let index = log.index(log.endIndex, offsetBy: -remainder)
-                let text = String(log[index...])
-                NSLog("%@", text)
-            }
-        }
-    }
+//
+//    func consolePrint(_ log: String) {
+//        var remainder = log.count
+//        let perCount = 800
+//        var text = ""
+//
+//        if remainder < perCount {
+//            NSLog("%@", log)
+//        } else {
+//            for i in stride(from: 0, to: log.count, by: perCount) {
+//                let start = log.index(log.startIndex, offsetBy: i)
+//                let end = log.index(log.startIndex, offsetBy: i + perCount)
+//                let range = start..<end
+//
+//                text = String(log[range])
+//                remainder -= perCount
+//
+//                NSLog("%@", text)
+//
+//                if remainder < perCount {
+//                    break
+//                }
+//            }
+//
+//            if remainder > 0 {
+//                let index = log.index(log.endIndex, offsetBy: -remainder)
+//                let text = String(log[index...])
+//                NSLog("%@", text)
+//            }
+//        }
+//    }
 }

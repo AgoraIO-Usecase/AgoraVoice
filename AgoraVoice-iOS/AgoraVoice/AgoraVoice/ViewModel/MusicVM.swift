@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 import RxRelay
-import AlamoClient
+import Armin
 
 fileprivate extension Array where Element == Music {
     init(list: [StringAnyDic]) throws {
@@ -66,9 +66,9 @@ class MusicVM: RxObject {
     
     func refetch() {
         let client = Center.shared().centerProvideRequestHelper()
-        let event = RequestEvent(name: "music-list")
+        let event = ArRequestEvent(name: "music-list")
         let url = URLGroup.musicList
-        let task = RequestTask(event: event,
+        let task = ArRequestTask(event: event,
                                type: .http(.get, url: url),
                                timeout: .medium)
         
@@ -82,11 +82,11 @@ class MusicVM: RxObject {
             strongSelf.list.accept(list)
         }
         
-        let fail: ACErrorRetryCompletion = { (error) in
+        let fail: ArErrorRetryCompletion = { (error) in
             return .resign
         }
         
-        let response = ACResponse.json(success)
+        let response = ArResponse.json(success)
         client.request(task: task, success: response, failRetry: fail)
     }
     

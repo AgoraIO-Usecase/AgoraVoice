@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 import RxRelay
-import AlamoClient
+import Armin
 
 struct BasicUserInfo {
     var userId: String
@@ -91,8 +91,8 @@ class CurrentUser: NSObject {
         let client = Center.shared().centerProvideRequestHelper()
         
         let url = URLGroup.userUpdateInfo(userId: self.info.value.userId)
-        let event = RequestEvent(name: "user-updateInfo")
-        let task = RequestTask(event: event,
+        let event = ArRequestEvent(name: "user-updateInfo")
+        let task = ArRequestTask(event: event,
                                type: .http(.post, url: url),
                                timeout: .low,
                                header: ["token": Keys.UserToken],
@@ -114,9 +114,9 @@ class CurrentUser: NSObject {
                 success()
             }
         }
-        let response = ACResponse.blank(successCallback)
+        let response = ArResponse.blank(successCallback)
         
-        let retry: ACErrorRetryCompletion = { (error: Error) -> RetryOptions in
+        let retry: ArErrorRetryCompletion = { (error: Error) -> ArRetryOptions in
             if let fail = fail {
                 fail()
             }

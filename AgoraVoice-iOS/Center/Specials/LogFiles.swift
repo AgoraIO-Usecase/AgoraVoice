@@ -11,8 +11,7 @@ import UIKit
 #else
 import Cocoa
 #endif
-import AlamoClient
-import AliyunOSSiOS
+import Armin
 
 class LogFiles: NSObject {
     private let fileName: String = {
@@ -30,9 +29,9 @@ class LogFiles: NSObject {
     
     override init() {
         super.init()
-        let configuration = AgoraLogConfiguration()
-        configuration.logDirectoryPath = folderPath
-        AgoraLogManager.setupLog(configuration)
+//        let configuration = AgoraLogConfiguration()
+//        configuration.logDirectoryPath = folderPath
+//        AgoraLogManager.setupLog(configuration)
         FilesGroup.check(folderPath: folderPath)
         checkEarliestFile()
     }
@@ -50,17 +49,17 @@ class LogFiles: NSObject {
 
 private extension LogFiles {
     func privateUpload(success: StringCompletion, fail: ErrorCompletion) throws {
-        let options = AgoraLogUploadOptions()
-        options.appId = Keys.AgoraAppId
-        AgoraLogManager.uploadLog(with: options, progress: nil, success: { (logId) in
-            if let success = success {
-                success(logId)
-            }
-        }) { (error) in
-            if let fail = fail {
-                fail(error)
-            }
-        }
+//        let options = AgoraLogUploadOptions()
+//        options.appId = Keys.AgoraAppId
+//        AgoraLogManager.uploadLog(with: options, progress: nil, success: { (logId) in
+//            if let success = success {
+//                success(logId)
+//            }
+//        }) { (error) in
+//            if let fail = fail {
+//                fail(error)
+//            }
+//        }
     }
     
     func checkEarliestFile() {

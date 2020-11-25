@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 import RxRelay
-import AlamoClient
+import Armin
 
 // state: 0空位 1正常 2封麦
 enum SeatState {
@@ -66,27 +66,27 @@ class LiveSeatsVM: CustomObserver {
     
     func update(state: SeatState, index: Int) {
         let client = Center.shared().centerProvideRequestHelper()
-        let task = RequestTask(event: RequestEvent(name: "multi-seat-state \(state)"),
+        let task = ArRequestTask(event: ArRequestEvent(name: "multi-seat-state \(state)"),
                                type: .http(.post, url: URLGroup.liveSeatStatus(roomId: room.roomId)),
                                timeout: .medium,
                                header: ["token": Keys.UserToken],
                                parameters: ["no": index, "state": state.rawValue])
-        client.request(task: task) { [weak self] (error) -> RetryOptions in
+        client.request(task: task) { [weak self] (error) -> ArRetryOptions in
             guard let strongSelf = self else {
                 return .resign
             }
             
-            if let cError = error as? ACError, cError.code == nil {
-                strongSelf.fail.accept(NSLocalizedString("Lost_Connection_Retry"))
-            } else {
-                switch state {
-                case .empty: strongSelf.fail.accept("un-lock seat fail")
-                case .close: strongSelf.fail.accept("lock seat fail")
-                default:
-                    assert(false)
-                    break
-                }
-            }
+//            if let cError = error as? ACError, cError.code == nil {
+//                strongSelf.fail.accept(NSLocalizedString("Lost_Connection_Retry"))
+//            } else {
+//                switch state {
+//                case .empty: strongSelf.fail.accept("un-lock seat fail")
+//                case .close: strongSelf.fail.accept("lock seat fail")
+//                default:
+//                    assert(false)
+//                    break
+//                }
+//            }
             
             return .resign
         }

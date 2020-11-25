@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 import RxRelay
-import AlamoClient
+import Armin
 
 enum LiveRoleType: Int {
     case owner = 1, broadcaster, audience

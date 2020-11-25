@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 import RxRelay
-import AlamoClient
+import Armin
 
 enum Gift: Int {
     case smallBell = 0, iceCream, wine, cake, ring, watch, crystal, rocket
@@ -102,15 +102,15 @@ class GiftVM: CustomObserver {
     
     func present(gift: Gift, fail: Completion) {
         let client = Center.shared().centerProvideRequestHelper()
-        let event = RequestEvent(name: "present-gift")
+        let event = ArRequestEvent(name: "present-gift")
         let url = URLGroup.presentGift(roomId: room.roomId)
-        let task = RequestTask(event: event,
+        let task = ArRequestTask(event: event,
                                type: .http(.post, url: url),
                                timeout: .medium,
                                header: ["token": Keys.UserToken],
                                parameters: ["giftId": gift.rawValue, "count": 1])
         
-        client.request(task: task) { [unowned self] (_) -> RetryOptions in
+        client.request(task: task) { [unowned self] (_) -> ArRetryOptions in
             self.fail.accept("give a gift fail")
             return .resign
         }

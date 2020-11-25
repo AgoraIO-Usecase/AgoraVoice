@@ -429,7 +429,7 @@ private extension ChatRoomViewController {
 private extension ChatRoomViewController {
     func multiHosts() {
         liveSession.customMessage.bind(to: multiHostsVM.message).disposed(by: bag)
-        liveSession.actionMessage.bind(to: multiHostsVM.actionMessage).disposed(by: bag)
+//        liveSession.actionMessage.bind(to: multiHostsVM.actionMessage).disposed(by: bag)
         liveSession.localRole.bind(to: multiHostsVM.localRole).disposed(by: bag)
         
         multiHostsVM.fail.subscribe(onNext: { [unowned self] (text) in

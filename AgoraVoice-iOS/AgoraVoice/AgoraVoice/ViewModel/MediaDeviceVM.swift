@@ -15,7 +15,7 @@ class MediaDeviceVM: RxObject {
     
     let mic = BehaviorRelay<AGESwitch>(value: .off)
     let localAudioLoop = BehaviorRelay<AGESwitch>(value: .off)
-    let audioOutput: BehaviorRelay<AudioOutputRouting> = BehaviorRelay(value: AudioOutputRouting.default)
+//    let audioOutput: BehaviorRelay<AudioOutputRouting> = BehaviorRelay(value: AudioOutputRouting.default)
     
     override init() {
         let operatorObj = Center.shared().centerProvideMediaDevice()
@@ -35,16 +35,16 @@ private extension MediaDeviceVM {
 }
 
 extension MediaDeviceVM: MediaDeviceDelegate {
-    func mediaDevice(_ mediaDevice: MediaDevice, didChangeAudoOutputRouting routing: AudioOutputRouting) {
-        audioOutput.accept(routing)
-    }
+//    func mediaDevice(_ mediaDevice: MediaDevice, didChangeAudoOutputRouting routing: AudioOutputRouting) {
+//        audioOutput.accept(routing)
+//    }
 }
 
-extension AudioOutputRouting {
-    var isSupportLoop: Bool {
-        switch self {
-        case .default, .headsetNoMic, .loudspeaker, .speakerphone: return false
-        default:                                                   return true
-        }
-    }
-}
+//extension AudioOutputRouting {
+//    var isSupportLoop: Bool {
+//        switch self {
+//        case .default, .headsetNoMic, .loudspeaker, .speakerphone: return false
+//        default:                                                   return true
+//        }
+//    }
+//}
