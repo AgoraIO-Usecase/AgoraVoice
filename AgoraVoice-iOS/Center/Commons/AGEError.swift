@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AgoraRte
 
 public enum AGEErrorType: Error {
     case fail(String)
@@ -74,6 +75,12 @@ struct AGEError: AGEDescription, Error {
     var type: AGEErrorType
     var code: Int?
     var extra: String?
+    
+    init(rteError: AgoraRteError) {
+        self.type = .fail("rte error")
+        self.code = rteError.code
+        self.extra = rteError.message
+    }
     
     init(type: AGEErrorType, code: Int? = nil, extra: String? = nil) {
         self.type = type

@@ -10,9 +10,31 @@ import UIKit
 import RxSwift
 import RxRelay
 import Armin
+import AgoraRte
 
 enum LiveRoleType: Int {
     case owner = 1, broadcaster, audience
+    
+    static func initWithDescription(_ description: String) throws -> LiveRoleType {
+        switch description {
+        case LiveRoleType.owner.description:
+            return .owner
+        case LiveRoleType.broadcaster.description:
+            return .broadcaster
+        case LiveRoleType.audience.description:
+            return .audience
+        default:
+            throw AGEError(type: .fail("unsupport this rte role"), extra: "\(description)")
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .owner:       return "Owner"
+        case .broadcaster: return "Broadcaster"
+        case .audience:    return "Audience"
+        }
+    }
 }
 
 protocol LiveRole {
@@ -60,5 +82,13 @@ struct LiveRoleItem: LiveRole {
         } else {
             self.giftRank = 0
         }
+    }
+    
+    init(rteUser: AgoraRteUserInfo) throws {
+        self.info = BasicUserInfo(userId: rteUser.userId,
+                                  name: rteUser.userName)
+        self.agUId = rteUser.streamId
+        self.type = try LiveRoleType.initWithDescription(rteUser.userRole)
+        self.giftRank = 0
     }
 }

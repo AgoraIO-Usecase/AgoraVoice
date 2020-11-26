@@ -7,8 +7,10 @@
 
 import Foundation
 import Armin
+import AgoraRte
 
 protocol CenterHelper where Self: Center {
+    func centerProviderteEngine() -> AgoraRteEngine
     func centerProvideLocalUser() -> CurrentUser
     func centerProvideMediaDevice() -> MediaDevice
     func centerProvideRequestHelper() -> Armin

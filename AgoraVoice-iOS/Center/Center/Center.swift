@@ -12,8 +12,6 @@ import RxRelay
 import Armin
 import AgoraRte
 
-//typealias ActionMessage = EduActionMessage
-
 class Center: RxObject {
     static let instance = Center()
     static func shared() -> Center {
@@ -33,13 +31,14 @@ class Center: RxObject {
     
     // Commons
     private lazy var http = Armin(delegate: nil,
-                                  logTube: nil)
-        
+                                  logTube: self)
+    
     private lazy var userDataHelper = UserDataHelper()
+    
+    private lazy var rteLoginRetry = AfterWorker()
     
     private var rteKit: AgoraRteEngine!
     
-    private lazy var rteLoginRetry = AfterWorker()
 //    private lazy var rtc = RTCManager.share()
 //    private lazy var mediaDevice = MediaDevice(rtcEngine: rtc)
     
@@ -47,7 +46,6 @@ class Center: RxObject {
     
     override init() {
         super.init()
-//        _ = liveManager
         appInfo()
     }
 }
@@ -191,6 +189,10 @@ extension Center: AgoraRteEngineDelegate {
 }
 
 extension Center: CenterHelper {
+    func centerProviderteEngine() -> AgoraRteEngine {
+        return rteKit
+    }
+    
     func centerProvideLocalUser() -> CurrentUser {
         return current
     }
@@ -242,7 +244,7 @@ extension Center: ArLogTube {
     }
     
     func log(error: Error, extra: String?) {
-        let fromatter = AGELogFormatter(type: .error(description),
+        let fromatter = AGELogFormatter(type: .error(error.localizedDescription),
                                         className: NSStringFromClass(Armin.self),
                                         funcName: "",
                                         extra: extra)
