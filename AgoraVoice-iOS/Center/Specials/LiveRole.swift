@@ -30,9 +30,9 @@ enum LiveRoleType: Int {
     
     var description: String {
         switch self {
-        case .owner:       return "Owner"
-        case .broadcaster: return "Broadcaster"
-        case .audience:    return "Audience"
+        case .owner:       return "owner"
+        case .broadcaster: return "broadcaster"
+        case .audience:    return "audience"
         }
     }
 }

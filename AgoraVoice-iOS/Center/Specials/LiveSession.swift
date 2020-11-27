@@ -108,10 +108,9 @@ class LiveSession: RxObject {
         //        // sepcail parameters for audio loop
         //        RTCManager.share().setParameters("{\"che.audio.morph.earsback\":true}")
         
-        sceneService.join(with: options) { [unowned self] (localUser) in
+        sceneService.join(with: options, success: { [unowned self] (localUser) in
             localUser.localUserDelegate = self
             self.userService = localUser
-            
             
             do {
                 // room info
@@ -129,7 +128,7 @@ class LiveSession: RxObject {
                     fail(error)
                 }
             }
-        } fail: { (error) in
+        }) { (error) in
             if let fail = fail {
                 fail(AGEError(rteError: error))
             }

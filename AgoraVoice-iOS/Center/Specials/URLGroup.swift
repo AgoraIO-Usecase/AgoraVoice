@@ -13,7 +13,7 @@ struct URLGroup {
     #elseif PRODUCT
     private static let host = "http://api-solutions.sh2.agoralab.co/"
     #else
-    private static let host = "http://api-solutions-dev.sh.agoralab.co/"
+    private static let host = "https://api-solutions-dev.bj2.agoralab.co/"
     #endif
     private static let version = "v1/"
     private static let mainPath = "ent/voice/"

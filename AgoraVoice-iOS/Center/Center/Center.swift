@@ -156,21 +156,21 @@ private extension Center {
     }
     
     func rteLogin(userId: String, success: Completion) {
-        let cofiguration = AgoraRteEngineConfig(appId: Keys.AgoraAppId,
+        let configuration = AgoraRteEngineConfig(appId: Keys.AgoraAppId,
                                                 customerId: Keys.customerId,
                                                 customerCertificate: Keys.customerCertificate,
                                                 userId: userId)
-        cofiguration.logConsolePrintType = .all
-        cofiguration.logFilePath = FilesGroup.cacheDirectory + log.folderName
+        configuration.logConsolePrintType = .all
+        configuration.logFilePath = FilesGroup.cacheDirectory + log.folderName
         
-        AgoraRteEngine.create(with: cofiguration) { [unowned self] (engine) in
+        AgoraRteEngine.create(with: configuration, success: { [unowned self] (engine) in
             self.rteKit = engine
             self.rteKit.delegate = self
             
             if let success = success {
                 success()
             }
-        } fail: { (error) in
+        }) { (error) in
             self.rteLoginRetry.perform(after: 0.5, on: .main) { [unowned self] in
                 self.rteLogin(userId: userId, success: success)
             }
@@ -244,7 +244,15 @@ extension Center: ArLogTube {
     }
     
     func log(error: Error, extra: String?) {
-        let fromatter = AGELogFormatter(type: .error(error.localizedDescription),
+        var localizedDescription: String
+        
+        if let arError = error as? ArError {
+            localizedDescription = arError.localizedDescription
+        } else {
+            localizedDescription = error.localizedDescription
+        }
+
+        let fromatter = AGELogFormatter(type: .error(localizedDescription),
                                         className: NSStringFromClass(Armin.self),
                                         funcName: "",
                                         extra: extra)

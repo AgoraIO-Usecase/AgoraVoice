@@ -18,7 +18,7 @@ class LogTube: NSObject {
     
     override init() {
         super.init()
-        LCLLogFile.setEscapesLineFeeds(false)
+        logger.setPrintOnConsoleType(.all)
     }
     
     func logFromClass(formatter: AGELogFormatter) {
