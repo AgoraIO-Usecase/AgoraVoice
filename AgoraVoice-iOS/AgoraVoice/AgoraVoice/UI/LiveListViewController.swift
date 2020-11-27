@@ -233,7 +233,7 @@ private extension LiveListViewController {
                 if (error as NSError).code == 7 {
                     self.showTextToast(text: NSLocalizedString("Join_Fail"))
                 } else {
-                    self.showTextToast(text: "join live fail")
+                    self.showTextToast(text: "join live fail: " + error.localizedDescription)
                 }
                 
                 self.roomListRefresh()

@@ -209,9 +209,9 @@ private extension CreateLiveViewController {
             case .chatRoom:
                 self.performSegue(withIdentifier: "ChatRoomViewController", sender: session)
             }
-        }) { [unowned self] (_) in
+        }) { [unowned self] (error) in
             self.hiddenHUD()
-            self.showAlert(message:"join live fail")
+            self.showAlert(message:"join live fail: \(error.localizedDescription)")
         }
     }
 }
