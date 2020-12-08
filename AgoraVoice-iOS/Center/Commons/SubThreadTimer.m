@@ -17,7 +17,8 @@
 
 @implementation SubThreadTimer
 
-- (instancetype)initWithThreadName:(NSString *)name timeInterval:(NSTimeInterval)interval; {
+- (instancetype)initWithThreadName:(NSString *)name
+                      timeInterval:(NSTimeInterval)interval; {
     if (self = [super init]) {
         self.threadName = name;
         self.interval = interval;

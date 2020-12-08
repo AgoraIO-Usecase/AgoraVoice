@@ -15,7 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SubThreadTimer : NSObject
 @property (nonatomic, weak, nullable) id<SubThreadTimerDelegate> delegate;
-- (instancetype)initWithThreadName:(NSString *)name timeInterval:(NSTimeInterval)interval;
+- (instancetype)initWithThreadName:(NSString *)name
+                      timeInterval:(NSTimeInterval)interval;
 - (void)start;
 - (void)stop;
 @end

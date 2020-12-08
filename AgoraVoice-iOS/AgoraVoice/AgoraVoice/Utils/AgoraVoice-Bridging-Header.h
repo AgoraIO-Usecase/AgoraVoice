@@ -6,9 +6,7 @@
 //  Copyright © 2020 Agora. All rights reserved.
 //
 
-#import "LCLLogFile.h"
 #import "UIColor+Hex.h"
 #import "UIImage+CSClipToCycle.h"
-#import "AGOSSClient.h"
 #import "SubThreadTimer.h"
 #import "MediaDevice.h"

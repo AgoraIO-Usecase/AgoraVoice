@@ -34,13 +34,9 @@ class Center: RxObject {
                                   logTube: self)
     
     private lazy var userDataHelper = UserDataHelper()
-    
     private lazy var rteLoginRetry = AfterWorker()
     
     private var rteKit: AgoraRteEngine!
-    
-//    private lazy var rtc = RTCManager.share()
-//    private lazy var mediaDevice = MediaDevice(rtcEngine: rtc)
     
     private let log = LogTube()
     

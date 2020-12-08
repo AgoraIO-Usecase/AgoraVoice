@@ -69,7 +69,6 @@
 		A75C6FF224FCE41E003E5AD9 /* AGEError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FD424FCE41E003E5AD9 /* AGEError.swift */; };
 		A75C6FF324FCE41E003E5AD9 /* LogTube.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FD524FCE41E003E5AD9 /* LogTube.swift */; };
 		A75C6FF424FCE41E003E5AD9 /* Convert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FD724FCE41E003E5AD9 /* Convert.swift */; };
-		A75C6FF524FCE41F003E5AD9 /* LCLLogFile.m in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FDA24FCE41E003E5AD9 /* LCLLogFile.m */; };
 		A75C6FF624FCE41F003E5AD9 /* TypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FDC24FCE41E003E5AD9 /* TypeAlias.swift */; };
 		A75C6FF724FCE41F003E5AD9 /* ZipTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FDD24FCE41E003E5AD9 /* ZipTool.swift */; };
 		A75C6FF824FCE41F003E5AD9 /* DictionaryGetable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FDE24FCE41E003E5AD9 /* DictionaryGetable.swift */; };
@@ -77,7 +76,6 @@
 		A75C6FFA24FCE41F003E5AD9 /* AGELock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FE024FCE41E003E5AD9 /* AGELock.swift */; };
 		A75C6FFB24FCE41F003E5AD9 /* AGELog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FE124FCE41E003E5AD9 /* AGELog.swift */; };
 		A75C6FFC24FCE41F003E5AD9 /* AfterWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FE224FCE41E003E5AD9 /* AfterWorker.swift */; };
-		A75C6FFD24FCE41F003E5AD9 /* AGOSSClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FE324FCE41E003E5AD9 /* AGOSSClient.m */; };
 		A75C6FFE24FCE41F003E5AD9 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FE424FCE41E003E5AD9 /* NetworkMonitor.swift */; };
 		A75C6FFF24FCE41F003E5AD9 /* CenterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FE624FCE41E003E5AD9 /* CenterHelper.swift */; };
 		A75C700024FCE41F003E5AD9 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C6FE724FCE41E003E5AD9 /* Keys.swift */; };
@@ -186,11 +184,7 @@
 		A75C6FCF24FCE205003E5AD9 /* RxObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxObject.swift; sourceTree = "<group>"; };
 		A75C6FD424FCE41E003E5AD9 /* AGEError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AGEError.swift; sourceTree = "<group>"; };
 		A75C6FD524FCE41E003E5AD9 /* LogTube.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogTube.swift; sourceTree = "<group>"; };
-		A75C6FD624FCE41E003E5AD9 /* AGOSSClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGOSSClient.h; sourceTree = "<group>"; };
 		A75C6FD724FCE41E003E5AD9 /* Convert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Convert.swift; sourceTree = "<group>"; };
-		A75C6FD924FCE41E003E5AD9 /* LCLLogFileConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCLLogFileConfig.h; sourceTree = "<group>"; };
-		A75C6FDA24FCE41E003E5AD9 /* LCLLogFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCLLogFile.m; sourceTree = "<group>"; };
-		A75C6FDB24FCE41E003E5AD9 /* LCLLogFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCLLogFile.h; sourceTree = "<group>"; };
 		A75C6FDC24FCE41E003E5AD9 /* TypeAlias.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeAlias.swift; sourceTree = "<group>"; };
 		A75C6FDD24FCE41E003E5AD9 /* ZipTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZipTool.swift; sourceTree = "<group>"; };
 		A75C6FDE24FCE41E003E5AD9 /* DictionaryGetable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryGetable.swift; sourceTree = "<group>"; };
@@ -198,7 +192,6 @@
 		A75C6FE024FCE41E003E5AD9 /* AGELock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AGELock.swift; sourceTree = "<group>"; };
 		A75C6FE124FCE41E003E5AD9 /* AGELog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AGELog.swift; sourceTree = "<group>"; };
 		A75C6FE224FCE41E003E5AD9 /* AfterWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AfterWorker.swift; sourceTree = "<group>"; };
-		A75C6FE324FCE41E003E5AD9 /* AGOSSClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGOSSClient.m; sourceTree = "<group>"; };
 		A75C6FE424FCE41E003E5AD9 /* NetworkMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		A75C6FE624FCE41E003E5AD9 /* CenterHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CenterHelper.swift; sourceTree = "<group>"; };
 		A75C6FE724FCE41E003E5AD9 /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
@@ -470,7 +463,6 @@
 			isa = PBXGroup;
 			children = (
 				A750EC702505E4DC006E50E3 /* MediaDevice */,
-				A75C6FD824FCE41E003E5AD9 /* LCLLogFile */,
 				A75C6FD424FCE41E003E5AD9 /* AGEError.swift */,
 				A75C6FE124FCE41E003E5AD9 /* AGELog.swift */,
 				A75C6FE024FCE41E003E5AD9 /* AGELock.swift */,
@@ -483,22 +475,10 @@
 				A75C6FDF24FCE41E003E5AD9 /* DataExtension.swift */,
 				A75C6FE224FCE41E003E5AD9 /* AfterWorker.swift */,
 				A75C6FE424FCE41E003E5AD9 /* NetworkMonitor.swift */,
-				A75C6FD624FCE41E003E5AD9 /* AGOSSClient.h */,
-				A75C6FE324FCE41E003E5AD9 /* AGOSSClient.m */,
 				A750EC512500B353006E50E3 /* SubThreadTimer.h */,
 				A750EC502500B353006E50E3 /* SubThreadTimer.m */,
 			);
 			path = Commons;
-			sourceTree = "<group>";
-		};
-		A75C6FD824FCE41E003E5AD9 /* LCLLogFile */ = {
-			isa = PBXGroup;
-			children = (
-				A75C6FD924FCE41E003E5AD9 /* LCLLogFileConfig.h */,
-				A75C6FDA24FCE41E003E5AD9 /* LCLLogFile.m */,
-				A75C6FDB24FCE41E003E5AD9 /* LCLLogFile.h */,
-			);
-			path = LCLLogFile;
 			sourceTree = "<group>";
 		};
 		A75C6FE524FCE41E003E5AD9 /* Center */ = {
@@ -765,7 +745,6 @@
 				A75C700024FCE41F003E5AD9 /* Keys.swift in Sources */,
 				A750EC5A2500B455006E50E3 /* TabSelectView.swift in Sources */,
 				A750EC422500A33F006E50E3 /* GIFView.swift in Sources */,
-				A75C6FFD24FCE41F003E5AD9 /* AGOSSClient.m in Sources */,
 				A750EC412500A33F006E50E3 /* ExtensionViewController.swift in Sources */,
 				A75C70E824FDF2DE003E5AD9 /* Player.m in Sources */,
 				A75C6FBE24FCD709003E5AD9 /* CSNavigationController.swift in Sources */,
@@ -775,7 +754,6 @@
 				A750EC7E25073295006E50E3 /* ThreeDimensionalViewController.swift in Sources */,
 				A750EC6D2500DCCB006E50E3 /* LiveRole.swift in Sources */,
 				A75C6FFB24FCE41F003E5AD9 /* AGELog.swift in Sources */,
-				A75C6FF524FCE41F003E5AD9 /* LCLLogFile.m in Sources */,
 				A750EC3F2500A33F006E50E3 /* RealDataViewController.swift in Sources */,
 				A75C6FC024FCD709003E5AD9 /* AppleExtension.swift in Sources */,
 				A750EC4D2500B1E6006E50E3 /* MultiHostsVM.swift in Sources */,

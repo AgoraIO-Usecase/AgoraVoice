@@ -70,7 +70,10 @@ class LiveSession: RxObject {
         observer()
     }
     
-    static func create(roomName: String, backgroundIndex:Int, success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
+    static func create(roomName: String,
+                       backgroundIndex:Int,
+                       success: ((LiveSession) -> Void)? = nil,
+                       fail: ErrorCompletion = nil) {
         let client = Center.shared().centerProvideRequestHelper()
         let event = ArRequestEvent(name: "live-create")
         let url = URLGroup.liveCreate
@@ -122,7 +125,28 @@ class LiveSession: RxObject {
                 self.userList.accept(list)
                 
                 // local user
+                let oldUser = self.localRole.value
+                for user in list where oldUser.info == user.info {
+                    self.localRole.accept(user)
+                    break
+                }
                 
+                // media stream
+                switch self.localRole.value.type {
+                case .owner: fallthrough
+                case .broadcaster:
+                    let rteKit = Center.shared().centerProviderteEngine()
+                    let mediaControl = rteKit.getAgoraMediaControl()
+                    let mic = mediaControl.createMicphoneAudioTrack()
+                    mic.start()
+                    localUser.publishLocalMediaTrack(mic, success: nil, fail: nil)
+                default:
+                    break
+                }
+                
+                if let success = success {
+                    success(self)
+                }
             } catch  {
                 if let fail = fail {
                     fail(error)
@@ -482,12 +506,16 @@ extension LiveSession: AgoraRteSceneDelegate {
     // stream
     func scene(_ scene: AgoraRteScene, didAddRemoteStreams streamEvents: [AgoraRteMediaStreamEvent]) {
         for item in streamEvents {
+            self.userService?.subscribeRemoteStream(item.modifiedStream.streamId,
+                                                    type: .audio)
             addNewStream(rteStream: item.modifiedStream)
         }
     }
     
     func scene(_ scene: AgoraRteScene, didRemoveRemoteStreams streamEvents: [AgoraRteMediaStreamEvent]) {
         for item in streamEvents {
+            self.userService?.unsubscribeRemoteStream(item.modifiedStream.streamId,
+                                                      type: .audio)
             removeStream(rteStream: item.modifiedStream)
         }
     }
