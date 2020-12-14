@@ -91,7 +91,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         gift()
         chatList()
         background()
-        musicList()
+        music()
         netMonitor()
         bottomTools()
         chatInput()

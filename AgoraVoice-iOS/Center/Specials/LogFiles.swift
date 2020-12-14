@@ -28,11 +28,11 @@ class LogFiles: NSObject {
     func upload(success: StringCompletion, fail: ErrorCompletion) {
         let rteKit = Center.shared().centerProviderteEngine()
         
-        rteKit.uploadSDKLogToAgoraService { (logId) in
+        rteKit.uploadSDKLogToAgoraService(success: { (logId) in
             if let success = success {
                 success(logId)
             }
-        } fail: { (error) in
+        }) { (error) in
             if let fail = fail {
                 fail(AGEError(rteError: error))
             }

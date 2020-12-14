@@ -58,6 +58,30 @@ enum SoundEffectType {
     }
 }
 
+enum ChatOfBelCanto {
+    case disable, maleMagnetic, femaleFresh, femaleVitality
+}
+
+enum SingOfBelCanto {
+    case disable, male, female
+}
+
+enum Timbre {
+    case disable, vigorous, deep, mellow, falsetto, full, clear, resounding, ringing
+}
+
+enum AudioSpace {
+    case disable, ktv, vocalConcer, studio, phonograph, virtualStereo, spacial, ethereal, threeDimensionalVoice
+}
+
+enum TimbreRole {
+    case disable, uncle, oldMan, babyBoy, babyGirl, sister, zhuBaJie, hulk
+}
+
+enum MusicGenre {
+    case disable, rnb, popular, rock, hiphop
+}
+
 extension ChatOfBelCanto {
     static var list = BehaviorRelay<[ChatOfBelCanto]>(value: [.maleMagnetic,
                                                               .femaleFresh,
@@ -69,8 +93,6 @@ extension ChatOfBelCanto {
         case .femaleFresh:    return UIImage(named: "icon-清新女")!
         case .femaleVitality: return UIImage(named: "icon-活力女")!
         case .disable:        fatalError()
-        @unknown default:
-            fatalError()
         }
     }
     
@@ -80,8 +102,6 @@ extension ChatOfBelCanto {
         case .femaleFresh:    return NSLocalizedString("Female_Fresh")
         case .femaleVitality: return NSLocalizedString("Female_Vitality")
         case .disable:        fatalError()
-        @unknown default:
-            fatalError()
         }
     }
 }
@@ -95,8 +115,6 @@ extension SingOfBelCanto {
         case .male:    return NSLocalizedString("Male")
         case .female:  return NSLocalizedString("Female")
         case .disable: fatalError()
-        @unknown default:
-            fatalError()
         }
     }
 }
@@ -122,14 +140,12 @@ extension Timbre {
         case .resounding:  return NSLocalizedString("Resounding")
         case .ringing:     return NSLocalizedString("Ringing")
         case .disable:     fatalError()
-        @unknown default:
-            fatalError()
         }
     }
 }
 
 extension AudioSpace {
-    static var list = BehaviorRelay<[AudioSpace]>(value: [.KTV,
+    static var list = BehaviorRelay<[AudioSpace]>(value: [.ktv,
                                                           .vocalConcer,
                                                           .studio,
                                                           .phonograph,
@@ -140,7 +156,7 @@ extension AudioSpace {
     
     var image: UIImage {
         switch self {
-        case .KTV:                    return UIImage(named: "icon-KTV")!
+        case .ktv:                    return UIImage(named: "icon-KTV")!
         case .vocalConcer:            return UIImage(named: "icon-演唱会")!
         case .studio:                 return UIImage(named: "icon-录音棚")!
         case .phonograph:             return UIImage(named: "icon-留声机")!
@@ -149,14 +165,12 @@ extension AudioSpace {
         case .ethereal:               return UIImage(named: "icon-空灵")!
         case .threeDimensionalVoice:  return UIImage(named: "icon-3D人声")!
         case .disable:                fatalError()
-        @unknown default:
-            fatalError()
         }
     }
     
     var description: String {
         switch self {
-        case .KTV:                    return NSLocalizedString("KTV")
+        case .ktv:                    return NSLocalizedString("KTV")
         case .vocalConcer:            return NSLocalizedString("Vocal_Concert")
         case .studio:                 return NSLocalizedString("Studio")
         case .phonograph:             return NSLocalizedString("Phonograph")
@@ -165,8 +179,6 @@ extension AudioSpace {
         case .ethereal:               return NSLocalizedString("Ethereal")
         case .threeDimensionalVoice:  return NSLocalizedString("Three_Dimensional_Voice")
         case .disable:                fatalError()
-        @unknown default:
-            fatalError()
         }
     }
 }
@@ -190,8 +202,6 @@ extension TimbreRole {
         case .zhuBaJie:  return UIImage(named: "icon-猪八戒")!
         case .hulk:      return UIImage(named: "icon-绿巨人")!
         case .disable:   fatalError()
-        @unknown default:
-            fatalError()
         }
     }
     
@@ -205,39 +215,33 @@ extension TimbreRole {
         case .zhuBaJie:  return NSLocalizedString("Pig_King")
         case .hulk:      return NSLocalizedString("Hulk")
         case .disable:   fatalError()
-        @unknown default:
-            fatalError()
         }
     }
 }
 
 extension MusicGenre {
-    static var list = BehaviorRelay<[MusicGenre]>(value: [.RNB,
+    static var list = BehaviorRelay<[MusicGenre]>(value: [.rnb,
                                                           .popular,
                                                           .rock,
-                                                          .hipHop])
+                                                          .hiphop])
     
     var image: UIImage {
         switch self {
-        case .RNB:     return UIImage(named: "icon-R&B")!
+        case .rnb:     return UIImage(named: "icon-R&B")!
         case .popular: return UIImage(named: "icon-流行")!
         case .rock:    return UIImage(named: "icon-摇滚")!
-        case .hipHop:  return UIImage(named: "icon-嘻哈")!
+        case .hiphop:  return UIImage(named: "icon-嘻哈")!
         case .disable: fatalError()
-        @unknown default:
-            fatalError()
         }
     }
     
     var description: String {
         switch self {
-        case .RNB:     return NSLocalizedString("RNB")
+        case .rnb:     return NSLocalizedString("RNB")
         case .popular: return NSLocalizedString("Popular")
         case .rock:    return NSLocalizedString("Rock")
-        case .hipHop:  return NSLocalizedString("HipHop")
+        case .hiphop:  return NSLocalizedString("HipHop")
         case .disable: fatalError()
-        @unknown default:
-            fatalError()
         }
     }
 }

@@ -42,27 +42,6 @@ protocol LiveViewController where Self: MaskViewController {
 // MARK: VM
 extension LiveViewController {
     func syncLiveSessionInfo() {
-        liveSession.chatMessage.subscribe(onNext: { [unowned self] (userMessage) in
-            let chat = Chat(name: userMessage.user.info.name + ": ",
-                            text: userMessage.message,
-                            widthLimit: self.chatWidthLimit)
-            self.chatVM.newMessages([chat])
-        }).disposed(by: bag)
-
-        // user list
-        liveSession.userList.bind(to: userListVM.list).disposed(by: bag)
-        liveSession.userLeft.bind(to: userListVM.left).disposed(by: bag)
-        liveSession.userJoined.bind(to: userListVM.joined).disposed(by: bag)
-        liveSession.audienceList.bind(to: userListVM.audienceList).disposed(by: bag)
-        
-        liveSession.customMessage.bind(to: userListVM.message).disposed(by: bag)
-        
-        // gift
-        liveSession.customMessage.bind(to: giftVM.message).disposed(by: bag)
-        
-        // background
-        liveSession.customMessage.bind(to: backgroundVM.message).disposed(by: bag)
-        
         // local role & stream
         liveSession.localRole.filter { (local) -> Bool in
             return local.type == .owner
@@ -84,12 +63,6 @@ extension LiveViewController {
             }
         }).disposed(by: bag)
         
-        if let vc = bottomToolsVC {
-            liveSession.localRole.map({ (role) -> LiveRoleType in
-                return role.type
-            }).bind(to: vc.perspective).disposed(by: bag)
-        }
-        
         // end
         liveSession.end.subscribe(onNext: { [unowned self] in
             if let vc = self.presentedViewController {
@@ -102,8 +75,16 @@ extension LiveViewController {
         }).disposed(by: bag)
     }
     
-    // MARK: - users
+    // MARK: - Users
     func users() {
+        // user list
+        liveSession.userList.bind(to: userListVM.list).disposed(by: bag)
+        liveSession.userLeft.bind(to: userListVM.left).disposed(by: bag)
+        liveSession.userJoined.bind(to: userListVM.joined).disposed(by: bag)
+        liveSession.audienceList.bind(to: userListVM.audienceList).disposed(by: bag)
+        
+        liveSession.customMessage.bind(to: userListVM.message).disposed(by: bag)
+        
         personCountView.backgroundColor = tintColor
         personCountView.offsetLeftX = -4.0
         personCountView.offsetRightX = 4.0
@@ -144,6 +125,13 @@ extension LiveViewController {
     
     // MARK: - Chat List
     func chatList() {
+        liveSession.chatMessage.subscribe(onNext: { [unowned self] (userMessage) in
+            let chat = Chat(name: userMessage.user.info.name + ": ",
+                            text: userMessage.message,
+                            widthLimit: self.chatWidthLimit)
+            self.chatVM.newMessages([chat])
+        }).disposed(by: bag)
+        
         if let chatVC = self.chatVC {
             chatVM.list.bind(to: chatVC.list).disposed(by: bag)
         }
@@ -151,6 +139,8 @@ extension LiveViewController {
     
     // MARK: - Background
     func background() {
+        liveSession.customMessage.bind(to: backgroundVM.message).disposed(by: bag)
+        
         backgroundVM.selectedImage.bind(to: backgroundImageView.rx.image).disposed(by: bag)
         backgroundVM.fail.subscribe(onNext: { [unowned self] (text) in
             self.showTextToast(text: text)
@@ -159,6 +149,9 @@ extension LiveViewController {
     
     // MARK: - Gift
     func gift() {
+        // gift
+        liveSession.customMessage.bind(to: giftVM.message).disposed(by: bag)
+        
         giftVM?.received.subscribe(onNext: { [unowned self] (userGift) in
             let chat = Chat(name: userGift.userName,
                             text: " " + NSLocalizedString("Give_Owner_A_Gift"),
@@ -173,9 +166,16 @@ extension LiveViewController {
         }).disposed(by: bag)
     }
     
-    // MARK: - Music List
-    func musicList() {
+    // MARK: - Music
+    func music() {
         musicVM.refetch()
+        
+        musicVM.playAction.bind(to: liveSession.playMusic).disposed(by: bag)
+        musicVM.pauseAction.bind(to: liveSession.pauseMusic).disposed(by: bag)
+        musicVM.resumeAction.bind(to: liveSession.resumeMusic).disposed(by: bag)
+        musicVM.stopAction.bind(to: liveSession.stopMusic).disposed(by: bag)
+        
+        liveSession.musicState.bind(to: musicVM.playerStatus).disposed(by: bag)
     }
     
     // MARK: - Net Monitor
@@ -215,6 +215,10 @@ extension LiveViewController {
             assert(false)
             return
         }
+        
+        liveSession.localRole.map({ (role) -> LiveRoleType in
+            return role.type
+        }).bind(to: bottomToolsVC.perspective).disposed(by: bag)
         
         bottomToolsVC.liveType = liveSession.type
         bottomToolsVC.liveType = .chatRoom
@@ -394,21 +398,21 @@ extension LiveViewController {
         }).disposed(by: extensionVC.bag)
         
         extensionVC.audioLoopButton.rx.tap.subscribe(onNext: { [unowned extensionVC, unowned self] in
-//            guard self.deviceVM.audioOutput.value.isSupportLoop else {
-//                self.showTextToast(text: NSLocalizedString("Please_Input_Headset"))
-//                return
-//            }
-//            extensionVC.audioLoopButton.isSelected.toggle()
-//            self.deviceVM.localAudioLoop.accept(extensionVC.audioLoopButton.isSelected ? .on : .off)
+            guard self.deviceVM.audioOutput.value.isSupportLoop else {
+                self.showTextToast(text: NSLocalizedString("Please_Input_Headset"))
+                return
+            }
+            extensionVC.audioLoopButton.isSelected.toggle()
+            self.deviceVM.localAudioLoop.accept(extensionVC.audioLoopButton.isSelected ? .on : .off)
         }).disposed(by: extensionVC.bag)
         
-//        deviceVM.audioOutput.subscribe(onNext: { [unowned extensionVC, unowned self] (routing) in
-//            if routing.isSupportLoop {
-//                extensionVC.audioLoopButton.isSelected = self.deviceVM.localAudioLoop.value.boolValue
-//            } else {
-//                extensionVC.audioLoopButton.isSelected = false
-//            }
-//        }).disposed(by: extensionVC.bag)
+        deviceVM.audioOutput.subscribe(onNext: { [unowned extensionVC, unowned self] (routing) in
+            if routing.isSupportLoop {
+                extensionVC.audioLoopButton.isSelected = self.deviceVM.localAudioLoop.value.boolValue
+            } else {
+                extensionVC.audioLoopButton.isSelected = false
+            }
+        }).disposed(by: extensionVC.bag)
         
         extensionVC.backgroudButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.hiddenMaskView()

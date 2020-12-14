@@ -35,10 +35,10 @@ class ThreeDimensionalViewController: RxViewController {
         
         ableSwitch.rx.isOn.bind(to: slider.rx.isEnabled).disposed(by: bag)
         
-        slider.value = Float(audioEffectVM.threeDimensionalVoice.value)
+        slider.value = Float(audioEffectVM.selectedThreeDimensionalVoice.value)
         
         slider.rx.value.subscribe(onNext: { [unowned self] (value) in
-            self.audioEffectVM.threeDimensionalVoice.accept(Int(value))
+            self.audioEffectVM.selectedThreeDimensionalVoice.accept(Int(value))
         }).disposed(by: bag)
     }
 }

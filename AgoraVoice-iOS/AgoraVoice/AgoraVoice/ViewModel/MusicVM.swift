@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 import RxRelay
 import Armin
+import AgoraRte
 
 fileprivate extension Array where Element == Music {
     init(list: [StringAnyDic]) throws {
@@ -50,19 +51,16 @@ struct Music {
 }
 
 class MusicVM: RxObject {
-    private var operatorObj: Player
     private(set) var lastMusic: Music? = nil
     
-    let playerStatus = BehaviorRelay(value: PlayerStatus.stop)
+    let playerStatus = BehaviorRelay(value: AgoraRteMediaPlayerState.stopped)
     let list = BehaviorRelay(value: [Music]())
-    let volume = BehaviorRelay<Int>(value: 100)
+    let volume = BehaviorRelay<UInt>(value: 100)
     
-    override init() {
-        operatorObj = Center.shared().centerProvideMediaDevice().player
-        super.init()
-        operatorObj.delegate = self
-        observe()
-    }
+    let playAction = PublishRelay<Music>()
+    let pauseAction = PublishRelay<Music>()
+    let resumeAction = PublishRelay<Music>()
+    let stopAction = PublishRelay<Music>()
     
     func refetch() {
         let client = Center.shared().centerProvideRequestHelper()
@@ -91,10 +89,7 @@ class MusicVM: RxObject {
     }
     
     func play(music: Music) {
-        guard operatorObj.start(withURL: music.url) else {
-            assert(false)
-            return
-        }
+        playAction.accept(music)
         
         if let item = lastMusic {
             updateMusicStatusOfList(music: item, isPlaying: false)
@@ -106,30 +101,20 @@ class MusicVM: RxObject {
     }
     
     func pause(music: Music) {
-        guard operatorObj.pause() else {
-            assert(false)
-            return
-        }
+        pauseAction.accept(music)
         
         updateMusicStatusOfList(music: music, isPlaying: false)
     }
     
     func resume(music: Music) {
-        guard operatorObj.resume() else {
-            assert(false)
-            return
-        }
+        resumeAction.accept(music)
         
         updateMusicStatusOfList(music: music, isPlaying: true)
     }
     
     func stop() {
-        guard operatorObj.stop() else {
-            assert(false)
-            return
-        }
-        
         if let music = lastMusic {
+            stopAction.accept(music)
             updateMusicStatusOfList(music: music, isPlaying: false)
         }
         
@@ -184,46 +169,15 @@ private extension MusicVM {
             play(music: next)
         }
     }
-    
-    func observe() {
-        volume.subscribe(onNext: { [unowned self] (volume) in
-            self.operatorObj.adjustAudioMixingVolume(volume)
-        }).disposed(by: bag)
-    }
 }
 
-extension MusicVM: PlayerDelegate {
-    func player(_ player: Player, didPlayFileFinish url: String) {
-        nextSong(previousURL: url)
-    }
-    
-    func player(_ player: Player, didStartPlayFile url: String, duration seconds: Int) {
-        
-    }
-    
-    func player(_ player: Player, didPausePlayFile url: String) {
-        
-    }
-    
-    func player(_ player: Player, didResumePlayFile url: String) {
-        
-    }
-    
-    func player(_ player: Player, didStopPlayFile url: String) {
-        nextSong(previousURL: url)
-    }
-    
-    func player(_ player: Player, didChangePlayerStatusFrom previous: PlayerStatus, to current: PlayerStatus) {
-        playerStatus.accept(current)
-    }
-}
-
-extension PlayerStatus {
+extension AgoraRteMediaPlayerState {
     var description: String {
         switch self {
         case .pause:      return "pause"
         case .playing:    return "playing"
-        case .stop:       return "stop"
+        case .stopped:    return "stop"
+        case .finish:     return "finish"
         @unknown default: fatalError()
         }
     }

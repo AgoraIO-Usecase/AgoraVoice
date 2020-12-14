@@ -17,5 +17,6 @@ target 'AgoraVoice' do
   pod 'Bugly'
   pod 'SSZipArchive'
   pod 'AgoraLog'
-  pod 'AgoraRte', :path => '../../../../AgoraRte/AgoraRte.podspec'
+  pod 'AgoraRte', :path => '../../../../AgoraRte/iOS/AgoraRte.podspec'
+  pod 'Armin', :path => '/Users/cavan/Documents/Github/Armin/'
 end

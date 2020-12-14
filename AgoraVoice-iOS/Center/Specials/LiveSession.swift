@@ -44,6 +44,26 @@ class LiveSession: RxObject {
     let streamJoined = PublishRelay<LiveStream>()
     let streamLeft = PublishRelay<LiveStream>()
     
+    // Music
+    let playMusic = PublishRelay<Music>()
+    let pauseMusic = PublishRelay<Music>()
+    let resumeMusic = PublishRelay<Music>()
+    let stopMusic = PublishRelay<Music>()
+    let musicState = BehaviorRelay(value: AgoraRteMediaPlayerState.stopped)
+    let musicError = PublishRelay<AGEError>()
+    
+    // AudioEffect
+    let chatOfBelcanto = PublishRelay<ChatOfBelCanto>()
+    let singOfBelcanto = PublishRelay<SingOfBelCanto>()
+    let timbre = PublishRelay<Timbre>()
+    
+    let audioSpace = PublishRelay<AudioSpace>()
+    let timbreRole = PublishRelay<TimbreRole>()
+    let musicGenre = PublishRelay<MusicGenre>()
+    
+    let electronicMusic = PublishRelay<ElectronicMusic>()
+    let threeDimensionalVoice = PublishRelay<Int>()
+    
     // Message
     let chatMessage = PublishRelay<(user: LiveRole, message: String)>()
     let customMessage = BehaviorRelay(value: [String: Any]())
@@ -67,7 +87,7 @@ class LiveSession: RxObject {
         scene.sceneDelegate = self
         scene.statsDelegate = self
         
-        observer()
+        
     }
     
     static func create(roomName: String,
@@ -107,7 +127,6 @@ class LiveSession: RxObject {
         let options = AgoraRteSceneJoinOptions(userName: role.info.name,
                                                userRole: role.type.description)
         
-        
         //        // sepcail parameters for audio loop
         //        RTCManager.share().setParameters("{\"che.audio.morph.earsback\":true}")
         
@@ -125,11 +144,8 @@ class LiveSession: RxObject {
                 self.userList.accept(list)
                 
                 // local user
-                let oldUser = self.localRole.value
-                for user in list where oldUser.info == user.info {
-                    self.localRole.accept(user)
-                    break
-                }
+                let localUserInfo = try LiveRoleItem(rteUser: localUser.info)
+                self.localRole.accept(localUserInfo)
                 
                 // media stream
                 switch self.localRole.value.type {
@@ -139,10 +155,22 @@ class LiveSession: RxObject {
                     let mediaControl = rteKit.getAgoraMediaControl()
                     let mic = mediaControl.createMicphoneAudioTrack()
                     mic.start()
-                    localUser.publishLocalMediaTrack(mic, success: nil, fail: nil)
+                    localUser.publishLocalMediaTrack(mic,
+                                                     withStreamId: "0",
+                                                     success: nil,
+                                                     fail: nil)
                 default:
                     break
                 }
+                
+                // subscribe remote streams
+                for item in self.sceneService.streams {
+                    self.userService?.subscribeRemoteStream(item.streamId, type: .audio)
+                }
+                
+                // event observe
+                self.streamObserve()
+                self.musicObserve()
                 
                 if let success = success {
                     success(self)
@@ -208,10 +236,22 @@ extension LiveSession {
             return
         }
         
+        let failCallback = { (error: AgoraRteError) in
+            if let fail = fail {
+                fail(AGEError(rteError: error))
+            }
+        }
+        
         if isOn {
-            service.unmuteLocalMediaStream(stream.streamId, type: .audio)
+            service.unmuteLocalMediaStream(stream.streamId,
+                                           type: .audio,
+                                           success: success,
+                                           fail: failCallback)
         } else {
-            service.muteLocalMediaStream(stream.streamId, type: .audio)
+            service.muteLocalMediaStream(stream.streamId,
+                                         type: .audio,
+                                         success: success,
+                                         fail: failCallback)
         }
     }
     
@@ -253,6 +293,7 @@ extension LiveSession {
         let mic = mediaControl.createMicphoneAudioTrack()
         
         userService?.publishLocalMediaTrack(mic,
+                                            withStreamId: "0",
                                             success: nil,
                                             fail: { (error) in
                                                 if let fail = fail {
@@ -278,8 +319,19 @@ extension LiveSession {
     }
     
     func unpublishStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
-//        let eduStream = EduStream(liveStream: stream)
-//        userService?.unpublishStream(eduStream, success: success, fail: fail)
+        let info = AgoraRteRemoteStreamInfo(streamId: stream.streamId,
+                                            userId: stream.owner.info.userId,
+                                            mediaStreamType: .none,
+                                            videoSourceType: .none,
+                                            audioSourceType: .none)
+
+        userService?.deleteRemoteStream(info,
+                                        success: success,
+                                        fail: { (error) in
+                                            if let fail = fail {
+                                                fail(AGEError(rteError: error))
+                                            }
+                                        })
     }
 }
 
@@ -368,7 +420,13 @@ fileprivate extension LiveSession {
     }
     
     func unpublishLocalStream(noStream: Completion = nil, success: Completion = nil, fail: ErrorCompletion = nil) {
-        userService?.unpublishLocalMediaTrack(success: success,
+        let rteKit = Center.shared().centerProviderteEngine()
+        let mediaControl = rteKit.getAgoraMediaControl()
+        let mic = mediaControl.createMicphoneAudioTrack()
+        
+        userService?.unpublishLocalMediaTrack(mic,
+                                              withStreamId: "0",
+                                              success: success,
                                               fail: { (error) in
                                                 if let fail = fail {
                                                     fail(AGEError(rteError: error))
@@ -383,7 +441,7 @@ fileprivate extension LiveSession {
         mic.stop()
     }
 
-    func observer() {
+    func streamObserve() {
         // Determine whether local user is a broadcaster or an audience
         // If local user is owner, no need this judgment
         localStream.subscribe(onNext: { [unowned self] (stream) in
@@ -430,6 +488,231 @@ fileprivate extension LiveSession {
 
         Center.shared().customMessage.bind(to: customMessage).disposed(by: bag)
 //        Center.shared().actionMessage.bind(to: actionMessage).disposed(by: bag)
+    }
+}
+
+// MARK: - Music
+fileprivate extension LiveSession {
+    func musicObserve() {
+        playMusic.subscribe(onNext: { (music) in
+            let mediaControl = Center.shared().centerProviderteEngine().getAgoraMediaControl()
+            let track = mediaControl.createMediaPlayerTrack()
+            track.open(withURL: music.url)
+            track.play()
+        }).disposed(by: bag)
+
+        pauseMusic.asObservable().subscribe { (music) in
+            let mediaControl = Center.shared().centerProviderteEngine().getAgoraMediaControl()
+            let track = mediaControl.createMediaPlayerTrack()
+            track.pause()
+        }.disposed(by: bag)
+        
+        resumeMusic.asObservable().subscribe { (music) in
+            let mediaControl = Center.shared().centerProviderteEngine().getAgoraMediaControl()
+            let track = mediaControl.createMediaPlayerTrack()
+            track.resume()
+        }.disposed(by: bag)
+        
+        stopMusic.asObservable().subscribe { (music) in
+            let mediaControl = Center.shared().centerProviderteEngine().getAgoraMediaControl()
+            let track = mediaControl.createMediaPlayerTrack()
+            track.stop()
+        }.disposed(by: bag)
+    }
+}
+
+// MARK: - AudioEffect
+fileprivate extension LiveSession {
+    func audioEffectObserve() {
+        chatOfBelcanto.subscribe(onNext: { [unowned self] (chat) in
+            var value: Int
+            
+            switch chat {
+            case .maleMagnetic:
+                value = 1
+            case .femaleFresh:
+                value = 2
+            case .femaleVitality:
+                value = 3
+            case .disable:
+                self.audioEffectDisable()
+                return
+            }
+            
+            let parameters = "{\"che.audio.morph.beauty_voice\":\(value)}"
+            self.sceneService.setParameters(parameters)
+        }).disposed(by: bag)
+        
+        singOfBelcanto.subscribe(onNext: { [unowned self] (sing) in
+            var value: Int
+            
+            switch sing {
+            case .male:
+                value = 1
+            case .female:
+                value = 2
+            case .disable:
+                self.audioEffectDisable()
+                return
+            }
+            
+            let parameters = "{\"che.audio.morph.beauty_sing\":\(value)}"
+            self.sceneService.setParameters(parameters)
+        }).disposed(by: bag)
+        
+        timbre.subscribe(onNext: { [unowned self] (timbre) in
+            var value: Int
+            
+            switch timbre {
+            case .vigorous:
+                value = 7
+            case .deep:
+                value = 8
+            case .mellow:
+                value = 9
+            case .falsetto:
+                value = 10
+            case .full:
+                value = 11
+            case .clear:
+                value = 12
+            case .resounding:
+                value = 13
+            case .ringing:
+                value = 14
+            case .disable:
+                self.audioEffectDisable()
+                return
+            }
+            
+            let parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+            self.sceneService.setParameters(parameters)
+        }).disposed(by: bag)
+        
+        audioSpace.subscribe(onNext: { [unowned self] (space) in
+            var value: Int
+            var parameters: String
+            
+            switch space {
+            case .ktv:
+                value = 1
+                parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+                self.sceneService.setParameters(parameters)
+            case .vocalConcer:
+                value = 2
+                parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+                self.sceneService.setParameters(parameters)
+            case .studio:
+                value = 5
+                parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+                self.sceneService.setParameters(parameters)
+            case .phonograph:
+                value = 8
+                parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+                self.sceneService.setParameters(parameters)
+            case .spacial:
+                value = 15
+                parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+                self.sceneService.setParameters(parameters)
+            case .ethereal:
+                value = 5
+                parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+                self.sceneService.setParameters(parameters)
+            default:
+                break
+            }
+            
+            switch space {
+            case .virtualStereo:
+                parameters = "{\"che.audio.morph.virtual_stereo\":1}"
+                self.sceneService.setParameters(parameters)
+            case .threeDimensionalVoice:
+                parameters = "{\"che.audio.morph.threedim_voice\":\(0)}"
+                self.sceneService.setParameters(parameters)
+            case .disable:
+                self.audioEffectDisable()
+            default:
+                break
+            }
+        }).disposed(by: bag)
+        
+        timbreRole.subscribe(onNext: { [unowned self] (role) in
+            var value: Int
+            var parameters: String
+            
+            switch role {
+            case .uncle:
+                value = 3
+                parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+                self.sceneService.setParameters(parameters)
+            case .oldMan:
+                value = 1
+                parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+                self.sceneService.setParameters(parameters)
+            case .babyBoy:
+                value = 2
+                parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+                self.sceneService.setParameters(parameters)
+            case .sister:
+                value = 4
+                parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+                self.sceneService.setParameters(parameters)
+            case .babyGirl:
+                value = 3
+                parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+                self.sceneService.setParameters(parameters)
+            case .zhuBaJie:
+                value = 4
+                parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+                self.sceneService.setParameters(parameters)
+            case .hulk:
+                value = 6
+                parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+                self.sceneService.setParameters(parameters)
+            case .disable:
+                self.audioEffectDisable()
+            }
+        }).disposed(by: bag)
+        
+        musicGenre.subscribe(onNext: { [unowned self] (music) in
+            var value: Int
+            var parameters: String
+            
+            switch music {
+            case .rnb:
+                value = 7
+                parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+            case .popular:
+                value = 6
+                parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+            case .rock:
+                value = 11
+                parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+            case .hiphop:
+                value = 12
+                parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+            case .disable:
+                self.audioEffectDisable()
+                return
+            }
+            
+            self.sceneService.setParameters(parameters)
+        }).disposed(by: bag)
+        
+        electronicMusic.subscribe(onNext: { [unowned self] (music) in
+            let parameters = "{\"che.audio.morph.electronic_voice\":{\"key\":\(music.type),\"value\":\(music.value)}}"
+            self.sceneService.setParameters(parameters)
+        }).disposed(by: bag)
+        
+        threeDimensionalVoice.subscribe(onNext: { [unowned self] (value) in
+            let parameters = "{\"che.audio.morph.threedim_voice\":\(value)}"
+            self.sceneService.setParameters(parameters)
+        }).disposed(by: bag)
+    }
+    
+    func audioEffectDisable() {
+        let parameters = "{\"che.audio.morph.reverb_preset\":0}"
+        sceneService.setParameters(parameters)
     }
 }
 
@@ -579,10 +862,10 @@ fileprivate extension Array where Element == LiveRole {
 fileprivate extension LiveStream {
     init(rteStream: AgoraRteMediaStreamInfo) throws {
         let user = try LiveRoleItem(rteUser: rteStream.owner)
-        let hasAudio = !(rteStream.audioSourceType == .none)
+        let hasAudio = (rteStream.streamType.rawValue & AgoraRteMediaStreamType.audio.rawValue)
         
         self.init(streamId: rteStream.streamId,
-                  hasAudio: hasAudio,
+                  hasAudio: hasAudio == 1 ? true : false,
                   owner: user)
     }
 }

@@ -201,10 +201,6 @@ extension Center: CenterHelper {
         return files.images
     }
     
-    func centerProvideMediaDevice() -> MediaDevice {
-        return MediaDevice()
-    }
-    
     func centerProvideFilesGroup() -> FilesGroup {
         return files
     }

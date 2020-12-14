@@ -9,4 +9,3 @@
 #import "UIColor+Hex.h"
 #import "UIImage+CSClipToCycle.h"
 #import "SubThreadTimer.h"
-#import "MediaDevice.h"
