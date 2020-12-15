@@ -1,0 +1,62 @@
+parameters:
+  displayName: ''
+  mode: ''
+  bundleId: ''
+  upload: 0
+  bugly: 0
+
+jobs:
+  - job: ${{ parameters.displayName }}Build
+    displayName: ${{ parameters.displayName }}
+    timeoutInMinutes: 40
+
+    pool:
+      vmImage: 'macOS-10.14'
+
+    variables:
+      - group: AgoraVoice
+      - group: AgoraKeys
+
+    steps:
+      - task: InstallAppleCertificate@2
+        inputs:
+          certSecureFile: 'AgoraLab.p12'
+          certPwd: $(agora.password)
+
+      - task: InstallAppleProvisioningProfile@1
+        inputs:
+          provProfileSecureFile: 'AgoraLab2020.mobileprovision'
+          
+      - task: InstallAppleCertificate@2
+        inputs:
+          certSecureFile: 'new_agora_sign.p12'
+          certPwd: $(agora.password)
+
+      - task: InstallAppleProvisioningProfile@1
+        inputs:
+          provProfileSecureFile: 'AgoraIOTest2019.mobileprovision'
+          
+      - task: DownloadSecureFile@1
+        name: downloadAuthpack
+        displayName: 'Download face unity authpack'
+        inputs:
+            secureFile: 'authpack.h'
+   
+      - script: cd 'AgoraVoice-iOS/Build/shell' && python bugly.py
+        env:
+          Bugly_Id: $(bugly_appId_ios)
+          
+      - script: cd 'AgoraVoice-iOS/Build/shell' && chmod +x download_zip.sh && ./download_zip.sh $(fubundle) ../../Resource
+      
+      - script: cp $(downloadAuthpack.secureFilePath) AgoraVoice-iOS/Resource/Faceunity/
+
+      - script: cd 'AgoraVoice-iOS/Build/shell' && chmod +x build.sh && ./build.sh AgoraVoice ${{ parameters.mode }}
+      
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: AgoraVoice-iOS/Build/product/app
+          ArtifactName: ${{ parameters.displayName }}
+      
+      - script: cd 'AgoraVoice-iOS/Build/shell' && ./bugly.sh ${{ parameters.bugly }} ../../AgoraVoice ../product/app ${{ parameters.bundleId }} $(bugly_appId_ios) $(bugly_appkey_ios)
+      
+      - script: cd 'AgoraVoice-iOS/Build/shell' && gem install fir-cli && chmod +x upload_fir.sh && ./upload_fir.sh ${{ parameters.upload }} $(firtoken) ../product/app/AgoraVoice.ipa
