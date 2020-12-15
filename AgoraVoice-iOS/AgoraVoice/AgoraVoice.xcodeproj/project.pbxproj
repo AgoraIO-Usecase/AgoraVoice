@@ -928,7 +928,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D PRODUCT";
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraVoice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1071,7 +1071,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraVoice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = App;
@@ -1101,7 +1101,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D PRODUCT";
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraVoice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1189,7 +1189,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraVoiceLab2020;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraLab2020;
@@ -1280,7 +1280,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D PREPRODUCT";
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraVoiceLab2020;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1368,7 +1368,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraVoiceTest2020;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraTest2020;
@@ -1459,7 +1459,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D PREPRODUCT";
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraVoiceTest2020;
 				PRODUCT_NAME = "$(TARGET_NAME)";
