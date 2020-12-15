@@ -10,12 +10,6 @@ import UIKit
 import RxSwift
 import RxRelay
 
-struct ElectronicMusic {
-    var isAvailable: Bool = false
-    var type: Int = 1
-    var value: Int = 1
-}
-
 class AudioEffectVM: RxObject {
     private var lastAduioEffectType = AudioEffectType.belCanto
     

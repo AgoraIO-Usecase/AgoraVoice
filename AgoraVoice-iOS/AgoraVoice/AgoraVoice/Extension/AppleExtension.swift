@@ -93,7 +93,7 @@ extension String {
 
 extension UIScreen {
     var isNotch: Bool {
-        if bounds.height == 896.0 || bounds.height == 812.0 {
+        if UIApplication.shared.statusBarFrame.height != 20 {
             return true
         } else {
             return false
@@ -101,7 +101,7 @@ extension UIScreen {
     }
     
     var heightOfSafeAreaTop: CGFloat {
-        return (self.isNotch ? 44 : 20)
+        return UIApplication.shared.statusBarFrame.height
     }
     
     var heightOfSafeAreaBottom: CGFloat {

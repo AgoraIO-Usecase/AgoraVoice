@@ -16,7 +16,8 @@ struct URLGroup {
     private static let host = "http://api-solutions-dev.bj2.agoralab.co/"
     #endif
     private static let version = "v1/"
-    private static let mainPath = "ent/voice/"
+    private static let rootPath = "ent/voice/"
+    private static let mainPath = rootPath + "apps/\(Keys.AgoraAppId)/"
     
     static var userRegister: String {
         return URLGroup.host + URLGroup.mainPath + version + "users"

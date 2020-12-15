@@ -579,7 +579,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1150;
-				LastUpgradeCheck = 1150;
+				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = Agora;
 				TargetAttributes = {
 					A75C6F4724FCC386003E5AD9 = {

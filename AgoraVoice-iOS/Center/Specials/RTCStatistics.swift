@@ -9,8 +9,27 @@
 import Foundation
 import AgoraRte
 
-struct RTCStatistics {
+struct RTEStatistics {
     var localAudioStats: AgoraRteLocalAudioStats?
+    var sceneStats: AgoraRteSceneStats?
+    
+    var description: String? {
+        var text = ""
+        
+        if let audio = localAudioStats {
+            text += (audio.description + "\n")
+        }
+        
+        if let scene = sceneStats {
+            text += scene.description
+        }
+        
+        if text.count > 0 {
+            return text
+        } else {
+            return nil
+        }
+    }
 }
 
 extension AgoraRteLocalAudioStats {
@@ -21,5 +40,17 @@ extension AgoraRteLocalAudioStats {
         let sentBitrate = "sentBitrate: \(self.sentBitrate)"
         
         return numChannels + join + sentSampleRate + join + sentBitrate
+    }
+}
+
+extension AgoraRteSceneStats {
+    open override var description: String {
+        let join = "\n"
+        let lastmileDelay = "Lastmile Delay: \(self.lastmileDelay)"
+        let audioSendRecv = "Audio Send/Recv: \(self.txAudioKBitrate)kbps/\(self.rxAudioKBitrate)kbps"
+        let cpu = "CPU: App/Total \(self.cpuAppUsage)%/\(self.cpuTotalUsage)%"
+        let sendRecvLoss = "Send/Recv Loss: \(self.txPacketLossRate)%/\(self.rxPacketLossRate)%"
+
+        return lastmileDelay + join + audioSendRecv + join + cpu + join + sendRecvLoss
     }
 }

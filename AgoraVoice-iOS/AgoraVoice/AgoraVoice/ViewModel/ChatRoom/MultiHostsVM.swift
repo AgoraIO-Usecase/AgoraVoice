@@ -293,22 +293,22 @@ private extension MultiHostsVM {
 //            guard let payload = message.payload as? [String: Any] else {
 //                return
 //            }
-//            
+//
 //            do {
 //                let fromUserName = message.fromUser.userName
 //                let fromUserId = message.fromUser.userUuid
 //                let info = BasicUserInfo(userId: fromUserId, name: fromUserName)
 //                let fromUser = LiveRoleItem(type:(message.fromUser.role == .teacher ? .owner : .audience),
 //                                            info: info, agUId: "0")
-//                
+//
 //                let processId = message.processUuid
 //                let event = try payload.getIntValue(of: "type")
 //                let seatIndex = try payload.getIntValue(of: "no")
-//                
+//
 //                guard let local = self.localRole.value else {
 //                    throw AGEError.valueNil("local role")
 //                }
-//                
+//
 //                switch event {
 //                // Owner
 //                case 2: // received application:
@@ -327,7 +327,7 @@ private extension MultiHostsVM {
 //                    let receiver = fromUser
 //                    let invitation = Invitation(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
 //                    self.invitationByAccepted.accept(invitation)
-//                    
+//
 //                // Audience
 //                case  1: // receivedInvitation
 //                    let initiator = fromUser

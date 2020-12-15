@@ -7,7 +7,7 @@
 //
 
 import Foundation
-//import SSZipArchive
+import SSZipArchive
 
 class ZipTool: NSObject {
     static var fileName: String {
@@ -15,21 +15,21 @@ class ZipTool: NSObject {
         return "Log" + date + ".zip"
     }
     
-//    static func work(destination path: String, to: String) throws -> String {
-//        let manager = FileManager.default
-//        let isExist = manager.fileExists(atPath: path)
-//
-//        guard isExist == true else {
-//            throw AGEError.fail("zip path nil")
-//        }
-//
-//        let zipFilePath = to + "/" + fileName
-//        let success = SSZipArchive.createZipFile(atPath: zipFilePath, withContentsOfDirectory: path)
-//
-//        if success == false {
-//            throw AGEError.fail("zip fail")
-//        }
-//
-//        return zipFilePath
-//    }
+    static func work(destination path: String, to: String) throws -> String {
+        let manager = FileManager.default
+        let isExist = manager.fileExists(atPath: path)
+
+        guard isExist == true else {
+            throw AGEError.fail("zip path nil")
+        }
+
+        let zipFilePath = to + "/" + fileName
+        let success = SSZipArchive.createZipFile(atPath: zipFilePath, withContentsOfDirectory: path)
+
+        if success == false {
+            throw AGEError.fail("zip fail")
+        }
+        
+        return zipFilePath
+    }
 }

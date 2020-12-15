@@ -104,9 +104,11 @@ private extension LiveTypeViewController {
     func updateCollectionViewLayout() {
         let layout = UICollectionViewFlowLayout()
         let collectionTop: CGFloat = 57
+        let collectionBottom: CGFloat = 35
+        
         let height = UIScreen.main.bounds.height - UITabBar.height
             - UIScreen.main.heightOfSafeAreaTop
-            - collectionTop - UINavigationBar.height
+            - collectionTop - collectionBottom
         
         let space: CGFloat = 33
         let width = UIScreen.main.bounds.width - (space * 2)

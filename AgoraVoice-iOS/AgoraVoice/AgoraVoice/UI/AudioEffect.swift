@@ -82,6 +82,12 @@ enum MusicGenre {
     case disable, rnb, popular, rock, hiphop
 }
 
+struct ElectronicMusic {
+    var isAvailable: Bool = false
+    var type: Int = 1
+    var value: Int = 1
+}
+
 extension ChatOfBelCanto {
     static var list = BehaviorRelay<[ChatOfBelCanto]>(value: [.maleMagnetic,
                                                               .femaleFresh,
@@ -104,6 +110,24 @@ extension ChatOfBelCanto {
         case .disable:        fatalError()
         }
     }
+    
+    var parameters: String {
+        var value: Int
+        
+        switch self {
+        case .maleMagnetic:
+            value = 1
+        case .femaleFresh:
+            value = 2
+        case .femaleVitality:
+            value = 3
+        case .disable:
+            return "{\"che.audio.morph.reverb_preset\":0}"
+        }
+        
+        let parameters = "{\"che.audio.morph.beauty_voice\":\(value)}"
+        return parameters
+    }
 }
 
 extension SingOfBelCanto {
@@ -116,6 +140,22 @@ extension SingOfBelCanto {
         case .female:  return NSLocalizedString("Female")
         case .disable: fatalError()
         }
+    }
+    
+    var parameters: String {
+        var value: Int
+        
+        switch self {
+        case .male:
+            value = 1
+        case .female:
+            value = 2
+        case .disable:
+            return "{\"che.audio.morph.reverb_preset\":0}"
+        }
+        
+        let parameters = "{\"che.audio.morph.beauty_sing\":\(value)}"
+        return parameters
     }
 }
 
@@ -141,6 +181,34 @@ extension Timbre {
         case .ringing:     return NSLocalizedString("Ringing")
         case .disable:     fatalError()
         }
+    }
+    
+    var parameters: String {
+        var value: Int
+        
+        switch self {
+        case .vigorous:
+            value = 7
+        case .deep:
+            value = 8
+        case .mellow:
+            value = 9
+        case .falsetto:
+            value = 10
+        case .full:
+            value = 11
+        case .clear:
+            value = 12
+        case .resounding:
+            value = 13
+        case .ringing:
+            value = 14
+        case .disable:
+            return "{\"che.audio.morph.reverb_preset\":0}"
+        }
+        
+        let parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        return parameters
     }
 }
 
@@ -181,6 +249,40 @@ extension AudioSpace {
         case .disable:                fatalError()
         }
     }
+    
+    var parameters: String {
+        var value: Int
+        var parameters: String
+        
+        switch self {
+        case .ktv:
+            value = 1
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .vocalConcer:
+            value = 2
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .studio:
+            value = 5
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .phonograph:
+            value = 8
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .spacial:
+            value = 15
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .ethereal:
+            value = 5
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .virtualStereo:
+            parameters = "{\"che.audio.morph.virtual_stereo\":1}"
+        case .threeDimensionalVoice:
+            parameters = "{\"che.audio.morph.threedim_voice\":\(0)}"
+        case .disable:
+            parameters = "{\"che.audio.morph.reverb_preset\":0}"
+        }
+        
+        return parameters
+    }
 }
 
 extension TimbreRole {
@@ -217,6 +319,39 @@ extension TimbreRole {
         case .disable:   fatalError()
         }
     }
+    
+    var parameters: String {
+        var value: Int
+        var parameters: String
+        
+        switch self {
+        case .uncle:
+            value = 3
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .oldMan:
+            value = 1
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .babyBoy:
+            value = 2
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .sister:
+            value = 4
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .babyGirl:
+            value = 3
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .zhuBaJie:
+            value = 4
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .hulk:
+            value = 6
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .disable:
+            parameters = "{\"che.audio.morph.reverb_preset\":0}"
+        }
+        
+        return parameters
+    }
 }
 
 extension MusicGenre {
@@ -243,5 +378,36 @@ extension MusicGenre {
         case .hiphop:  return NSLocalizedString("HipHop")
         case .disable: fatalError()
         }
+    }
+    
+    var parameters: String {
+        var value: Int
+        var parameters: String
+        
+        switch self {
+        case .rnb:
+            value = 7
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .popular:
+            value = 6
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .rock:
+            value = 11
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .hiphop:
+            value = 12
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .disable:
+            parameters = "{\"che.audio.morph.reverb_preset\":0}"
+        }
+        
+        return parameters
+    }
+}
+
+extension ElectronicMusic {
+    var parameters: String {
+        let parameters = "{\"che.audio.morph.electronic_voice\":{\"key\":\(self.type),\"value\":\(self.value)}}"
+        return parameters
     }
 }

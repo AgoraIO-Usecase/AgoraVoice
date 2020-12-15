@@ -178,6 +178,20 @@ extension LiveViewController {
         liveSession.musicState.bind(to: musicVM.playerStatus).disposed(by: bag)
     }
     
+    // MARK: - AudioEffect
+    func audioEffect() {
+        audioEffectVM.outputChatOfBelcanto.bind(to: liveSession.chatOfBelcanto).disposed(by: bag)
+        audioEffectVM.outputSingOfBelcanto.bind(to: liveSession.singOfBelcanto).disposed(by: bag)
+        audioEffectVM.outputTimbre.bind(to: liveSession.timbre).disposed(by: bag)
+        
+        audioEffectVM.outputAudioSpace.bind(to: liveSession.audioSpace).disposed(by: bag)
+        audioEffectVM.outputTimbreRole.bind(to: liveSession.timbreRole).disposed(by: bag)
+        audioEffectVM.outputMusicGenre.bind(to: liveSession.musicGenre).disposed(by: bag)
+        
+        audioEffectVM.outputElectronicMusic.bind(to: liveSession.electronicMusic).disposed(by: bag)
+        audioEffectVM.outputThreeDimensionalVoice.bind(to: liveSession.threeDimensionalVoice).disposed(by: bag)
+    }
+    
     // MARK: - Net Monitor
     func netMonitor() {
         monitor.action(.on)
@@ -204,6 +218,8 @@ extension LiveViewController {
         deviceVM.mic.subscribe(onNext: { [unowned self] (isOn) in
             self.liveSession.updateLocalAudioStream(isOn: isOn.boolValue)
         }).disposed(by: bag)
+        
+        liveSession.audioOuputRouting.bind(to: deviceVM.audioOutput).disposed(by: bag)
     }
 }
 
@@ -435,9 +451,9 @@ extension LiveViewController {
         
         dataVC.view.cornerRadius(10)
         
-//        liveSession.sessionReport.subscribe(onNext: { [unowned dataVC] (statistics) in
-//            dataVC.infoLabel.text = statistics.description(onlyAudio: true)
-//        }).disposed(by: dataVC.bag)
+        liveSession.sessionReport.subscribe(onNext: { [unowned dataVC] (statistics) in
+            dataVC.infoLabel.text = statistics.description
+        }).disposed(by: dataVC.bag)
         
         let leftSpace: CGFloat = 15.0
         let y: CGFloat = UIScreen.main.heightOfSafeAreaTop + 157.0

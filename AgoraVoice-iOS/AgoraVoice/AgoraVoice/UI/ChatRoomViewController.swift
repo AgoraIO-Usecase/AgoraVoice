@@ -92,6 +92,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         chatList()
         background()
         music()
+        audioEffect()
         netMonitor()
         bottomTools()
         chatInput()
@@ -238,7 +239,7 @@ private extension ChatRoomViewController {
                            action1: NSLocalizedString("Cancel"),
                            action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
                             self.multiHostsVM.accept(application: application, success: { [unowned self] in
-                                self.liveSession.publishNewStream(for: application.initiator)
+                                self.liveSession.publishNewRemoteStream(for: application.initiator)
                             })
             }
         }).disposed(by: vc.bag)
@@ -321,7 +322,7 @@ private extension ChatRoomViewController {
                         update()
                     } else { // close
                         if let stream = seatCommands.seat.state.stream {
-                            self.liveSession.unpublishStream(stream, success: {
+                            self.liveSession.unpublishRemoteStream(stream, success: {
                                 update()
                             }) { [unowned self] (_) in
                                 self.showTextToast(text: "Unpublish stream fail")
@@ -367,7 +368,7 @@ private extension ChatRoomViewController {
                         self.multiHostsVM.forceEndWith(user: stream.owner,
                                                        on: seatCommands.seat.index,
                                                        success: { [unowned self] in
-                                                        self.liveSession.unpublishStream(stream)
+                                                        self.liveSession.unpublishRemoteStream(stream)
                                                        })
                     } else if command == .unban, let stream = seatCommands.seat.state.stream {
                         self.liveSession.unmuteOther(stream: stream)
@@ -402,7 +403,7 @@ private extension ChatRoomViewController {
                                 
                                 self.multiHostsVM.endBroadcasting(seatIndex: seatCommands.seat.index, user: user)
                                 if let stream = seatCommands.seat.state.stream {
-                                    self.liveSession.unpublishStream(stream)
+                                    self.liveSession.unpublishRemoteStream(stream)
                                 }
                 }
             
@@ -450,7 +451,7 @@ private extension ChatRoomViewController {
         }).disposed(by: bag)
         
         multiHostsVM.invitationByAccepted.subscribe(onNext: { [unowned self] (invitation) in
-            self.liveSession.publishNewStream(for: invitation.receiver)
+            self.liveSession.publishNewRemoteStream(for: invitation.receiver)
         }).disposed(by: bag)
         
         multiHostsVM.invitationByRejected.subscribe(onNext: { [unowned self] (invitation) in
