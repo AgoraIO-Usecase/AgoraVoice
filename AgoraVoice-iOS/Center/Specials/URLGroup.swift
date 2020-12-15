@@ -11,7 +11,7 @@ struct URLGroup {
     #if PREPRODUCT
     private static let host = "http://api-solutions-pre.sh.agoralab.co/"
     #elseif PRODUCT
-    private static let host = "http://api-solutions.sh2.agoralab.co/"
+    private static let host = "http://api.agora.io/"
     #else
     private static let host = "http://api-solutions-dev.sh.agoralab.co/"
     #endif

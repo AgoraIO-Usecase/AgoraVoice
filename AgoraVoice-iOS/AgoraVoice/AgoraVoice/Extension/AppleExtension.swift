@@ -93,7 +93,7 @@ extension String {
 
 extension UIScreen {
     var isNotch: Bool {
-        if bounds.height == 896.0 || bounds.height == 812.0 {
+        if bounds.height == 896.0 || bounds.height == 812.0 || bounds.height == 844.0 {
             return true
         } else {
             return false
