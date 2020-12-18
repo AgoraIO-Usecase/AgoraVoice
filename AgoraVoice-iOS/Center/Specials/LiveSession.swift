@@ -306,38 +306,6 @@ extension LiveSession {
 
 // MARK: - Remote Stream
 extension LiveSession {
-    func publishNewRemoteStream(for user: LiveRole, success: Completion = nil, fail: ErrorCompletion = nil) {
-        let info = AgoraRteRemoteStreamInfo(streamId: user.agUId,
-                                            userId: user.info.userId,
-                                            mediaStreamType: .audio,
-                                            videoSourceType: .none,
-                                            audioSourceType: .mic)
-        
-        userService?.createOrUpdateRemoteStream(info,
-                                                success: nil,
-                                                fail: { (error) in
-                                                    if let fail = fail {
-                                                        fail(AGEError(rteError: error))
-                                                    }
-                                                })
-    }
-    
-    func unpublishRemoteStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
-        let info = AgoraRteRemoteStreamInfo(streamId: stream.streamId,
-                                            userId: stream.owner.info.userId,
-                                            mediaStreamType: .none,
-                                            videoSourceType: .none,
-                                            audioSourceType: .none)
-
-        userService?.deleteRemoteStream(info,
-                                        success: success,
-                                        fail: { (error) in
-                                            if let fail = fail {
-                                                fail(AGEError(rteError: error))
-                                            }
-                                        })
-    }
-    
     func muteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
         let info = AgoraRteRemoteStreamInfo(streamId: stream.streamId,
                                             userId: stream.owner.info.userId,
@@ -419,31 +387,10 @@ fileprivate extension LiveSession {
     }
     
     func streamObserve() {
-        // Determine whether local user is a broadcaster or an audience
-        // If local user is owner, no need this judgment
-//        localStream.subscribe(onNext: { [unowned self] (stream) in
-//            var role = self.localRole.value
-//
-//            guard role.type != .owner else {
-//                return
-//            }
-//
-//            // update role
-//            if let stream = stream, role.type == .audience {
-//                role.type = .broadcaster
-//                self.localRole.accept(role)
-//                self.updateLocalAudioStream(isOn: stream.hasAudio)
-//            } else if stream == nil, role.type == .broadcaster {
-//                role.type = .audience
-//                self.localRole.accept(role)
-//                self.unpublishLocalStream()
-//            }
-//        }).disposed(by: bag)
-
         // Check the audience list after the stream list is updated
-//        streamList.subscribe(onNext: { [unowned self] (_) in
-//            self.userList.accept(self.userList.value)
-//        }).disposed(by: bag)
+        streamList.subscribe(onNext: { [unowned self] (_) in
+            self.userList.accept(self.userList.value)
+        }).disposed(by: bag)
 
         userList.subscribe(onNext: { [unowned self] (all) in
             var temp = [LiveRole]()
@@ -564,6 +511,12 @@ extension LiveSession: AgoraRteSceneDelegate {
             properties["cause"] = changedCause
         }
         
+        if let basic = try? properties.getDictionaryValue(of: "basic"),
+           let roomState = try? basic.getIntValue(of: "state"),
+           roomState == 0 {
+            end.accept(())
+        }
+        
         customMessage.accept(properties)
     }
     
@@ -669,6 +622,17 @@ extension LiveSession: AgoraRteLocalUserDelegate {
             assert(false)
             break
         }
+    }
+    
+    func localUser(_ user: AgoraRteLocalUser, didUpdateLocalUserInfo userEvent: AgoraRteUserEvent) {
+        var old = localRole.value
+        let newRoleString = userEvent.modifiedUser.userRole
+        guard let newRole = try? LiveRoleType.initWithDescription(newRoleString) else {
+            return
+        }
+        
+        old.type = newRole
+        localRole.accept(old)
     }
 }
 
