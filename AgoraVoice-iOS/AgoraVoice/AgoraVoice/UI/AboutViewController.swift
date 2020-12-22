@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AgoraRte
 
 class DisclaimerViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
@@ -67,7 +68,7 @@ class AboutViewController: MaskTableViewController {
         alLabel.text = NSLocalizedString("AV_Version")
         
         alValueLabel.text = "Ver \(AppAssistant.version)"
-//        sdkValueLabel.text = "Ver \(RTCManager.sdkVersion())"
+        sdkValueLabel.text = "Ver \(AgoraRteEngine.getVersion())"
         
         releaseDateValueLabel.text = "2020.6.18"
         

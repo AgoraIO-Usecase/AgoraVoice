@@ -100,7 +100,8 @@ extension TabSelectView {
         }).disposed(by: bag)
     }
     
-    func needRemind(_ remind: Bool, index: Int) {
+    func needRemind(_ remind: Bool,
+                    index: Int) {
         guard let buttons = titleButtons,
             index <= buttons.count - 1
             else {
@@ -176,10 +177,12 @@ private extension TabSelectView {
         for (i, item) in buttons.enumerated() {
             if i == index {
                 item.titleLabel?.font = selectedTitle.font
-                item.setTitleColor(selectedTitle.color, for: .normal)
+                item.setTitleColor(selectedTitle.color,
+                                   for: .normal)
             } else {
                 item.titleLabel?.font = unselectedTitle.font
-                item.setTitleColor(unselectedTitle.color, for: .normal)
+                item.setTitleColor(unselectedTitle.color,
+                                   for: .normal)
             }
         }
     }

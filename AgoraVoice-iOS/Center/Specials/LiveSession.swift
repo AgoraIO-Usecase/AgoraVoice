@@ -13,6 +13,10 @@ import RxRelay
 import AgoraRte
 
 class LiveSession: RxObject {
+    private var logTube: LogTube {
+        return Center.shared().centerProvideLogTubeHelper()
+    }
+    
     private var sceneService: AgoraRteScene
     private var userService: AgoraRteLocalUser?
     
@@ -125,74 +129,35 @@ class LiveSession: RxObject {
     }
     
     func join(success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
-        let role = localRole.value
-        let options = AgoraRteSceneJoinOptions(userName: role.info.name,
-                                               userRole: role.type.description)
+        var role = localRole.value
         
-        // audio encoder configuration
-        let rteKit = Center.shared().centerProviderteEngine()
-        let mediaControl = rteKit.getAgoraMediaControl()
-        let mic = mediaControl.createMicphoneAudioTrack()
-        let config = AgoraRteAudioEncoderConfig(profile: .musicHighQualityStereo,
-                                                scenario: .gameStreaming)
-        mic.setAudioEncoderConfig(config)
-        
-        // sepcail parameters for audio loop
-        sceneService.setParameters("{\"che.audio.morph.earsback\":true}")
-        
-        sceneService.join(with: options, success: { [unowned self] (localUser) in
-            localUser.localUserDelegate = self
-            self.userService = localUser
+        let failHandle: ErrorCompletion = { [unowned self] (error) in
+            self.sceneService.leave()
+            self.log(error: error,
+                     extra: "live session join fail")
             
-            do {
-                // room info
-                try self.initRoomInfoDurationJoin()
-                
-                // all users
-                let users = self.sceneService.users
-                let list = try [LiveRole](list: users)
-                self.userList.accept(list)
-                
-                // local user
-                let localUserInfo = try LiveRoleItem(rteUser: localUser.info)
-                self.localRole.accept(localUserInfo)
-                
-                // media stream
-                switch self.localRole.value.type {
-                case .owner: fallthrough
-                case .broadcaster:
-                    localUser.publishLocalMediaTrack(mic,
-                                                     withStreamId: "0",
-                                                     success: nil,
-                                                     fail: nil)
-                default:
-                    break
-                }
-                
-                // subscribe remote streams
-                for item in self.sceneService.streams {
-                    localUser.subscribeRemoteStream(item.streamId, type: .audio)
-                }
-                
-                // event observe
-                self.streamObserve()
-                self.musicObserve()
-                self.audioEffectObserve()
-                self.messageObserver()
-                
-                if let success = success {
-                    success(self)
-                }
-            } catch  {
-                if let fail = fail {
-                    fail(error)
-                }
-            }
-        }) { (error) in
             if let fail = fail {
-                fail(AGEError(rteError: error))
+                fail(error)
             }
         }
+        
+        httpJoinProcess(liveRole: role, success: { [unowned self] (json) in
+            let roleDescription = try json.getStringValue(of: "role")
+            let streamId = try json.getStringValue(of: "streamId")
+            let newRole = try LiveRoleType.initWithDescription(roleDescription)
+            
+            role.type = newRole
+            role.agUId = streamId
+            
+            self.localRole.accept(role)
+            
+            self.rteJoinProcess(liveRole: role,
+                                success: { (session) in
+                if let success = success {
+                    success(session)
+                }
+            }, fail: failHandle)
+        }, fail: failHandle)
     }
     
     func leave() {
@@ -228,6 +193,100 @@ class LiveSession: RxObject {
 }
 
 // MARK: - Join process
+fileprivate extension LiveSession {
+    func httpJoinProcess(liveRole: LiveRole,
+                         success: DicEXCompletion = nil,
+                         fail: ErrorCompletion = nil) {
+        let client = Center.shared().centerProvideRequestHelper()
+        let url = URLGroup.liveJoin(roomId: room.value.roomId,
+                                    userId: liveRole.info.userId)
+        
+        client.request(method: .post,
+                       url: url,
+                       event: "live-session-join",
+                       success: { (json) in
+            if let success = success {
+                try success(json)
+            }
+        }, fail: fail)
+    }
+    
+    func rteJoinProcess(liveRole: LiveRole,
+                        success: ((LiveSession) -> Void)? = nil,
+                        fail: ErrorCompletion = nil) {
+        let options = AgoraRteSceneJoinOptions(userName: liveRole.info.name,
+                                               userRole: liveRole.type.description)
+        let streamId = liveRole.agUId
+        options.streamId = streamId
+        
+        // audio encoder configuration
+        let rteKit = Center.shared().centerProviderteEngine()
+        let mediaControl = rteKit.getAgoraMediaControl()
+        let mic = mediaControl.createMicphoneAudioTrack()
+        let config = AgoraRteAudioEncoderConfig(profile: .musicHighQualityStereo,
+                                                scenario: .gameStreaming)
+        mic.setAudioEncoderConfig(config)
+        
+        // sepcail parameters for audio loop
+        sceneService.setParameters("{\"che.audio.morph.earsback\":true}")
+        
+        sceneService.join(with: options,
+                          success: { [unowned self] (localUser) in
+            localUser.localUserDelegate = self
+            self.userService = localUser
+            
+            do {
+                // room info
+                try self.initRoomInfoDurationJoin()
+                
+                // all users
+                let users = self.sceneService.users
+                let list = try [LiveRole](list: users)
+                self.userList.accept(list)
+                
+                // local user
+                let localUserInfo = try LiveRoleItem(rteUser: localUser.info)
+                self.localRole.accept(localUserInfo)
+                
+                // media stream
+                switch self.localRole.value.type {
+                case .owner: fallthrough
+                case .broadcaster:
+                    localUser.publishLocalMediaTrack(mic,
+                                                     withStreamId: streamId,
+                                                     success: nil,
+                                                     fail: nil)
+                default:
+                    break
+                }
+                
+                // subscribe remote streams
+                for item in self.sceneService.streams {
+                    localUser.subscribeRemoteStream(item.streamId, type: .audio)
+                }
+                
+                // event observe
+                self.streamObserve()
+                self.musicObserve()
+                self.audioEffectObserve()
+                self.messageObserver()
+                
+                if let success = success {
+                    success(self)
+                }
+            } catch  {
+                if let fail = fail {
+                    fail(error)
+                }
+            }
+        }) { (error) in
+            if let fail = fail {
+                fail(AGEError(rteError: error))
+            }
+        }
+    }
+}
+
 fileprivate extension LiveSession {
     func initRoomInfoDurationJoin() throws {
         var owner: LiveRoleItem?
@@ -292,9 +351,10 @@ extension LiveSession {
         let rteKit = Center.shared().centerProviderteEngine()
         let mediaControl = rteKit.getAgoraMediaControl()
         let mic = mediaControl.createMicphoneAudioTrack()
+        let streamId = localRole.value.agUId
         
         userService?.unpublishLocalMediaTrack(mic,
-                                              withStreamId: "0",
+                                              withStreamId: streamId,
                                               success: success,
                                               fail: { (error) in
                                                 if let fail = fail {
@@ -514,6 +574,7 @@ extension LiveSession: AgoraRteSceneDelegate {
         if let basic = try? properties.getDictionaryValue(of: "basic"),
            let roomState = try? basic.getIntValue(of: "state"),
            roomState == 0 {
+            leave()
             end.accept(())
         }
         
@@ -679,5 +740,39 @@ fileprivate extension LiveStream {
         self.init(streamId: rteStream.streamId,
                   hasAudio: hasAudio == 1 ? true : false,
                   owner: user)
+    }
+}
+
+private extension LiveSession {
+    func log(info: String, extra: String?) {
+        let fromatter = AGELogFormatter(type: .info(info),
+                                        className: NSStringFromClass(LiveSession.self),
+                                        funcName: "",
+                                        extra: extra)
+        logTube.logFromClass(formatter: fromatter)
+    }
+    
+    func log(warning: String, extra: String?) {
+        let fromatter = AGELogFormatter(type: .warning(warning),
+                                        className: NSStringFromClass(LiveSession.self),
+                                        funcName: "",
+                                        extra: extra)
+        logTube.logFromClass(formatter: fromatter)
+    }
+    
+    func log(error: Error, extra: String?) {
+        var localizedDescription: String
+        
+        if let tError = error as? AGEError {
+            localizedDescription = tError.localizedDescription
+        } else {
+            localizedDescription = error.localizedDescription
+        }
+        
+        let fromatter = AGELogFormatter(type: .error(localizedDescription),
+                                        className: NSStringFromClass(LiveSession.self),
+                                        funcName: "",
+                                        extra: extra)
+        logTube.logFromClass(formatter: fromatter)
     }
 }

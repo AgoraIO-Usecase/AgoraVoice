@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		25FE87BC8A59A85C79FC19B9 /* Pods_AgoraVoice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFA6A288AD8BCBB08EA5C83D /* Pods_AgoraVoice.framework */; };
+		8632EA54259046A00041A12F /* Http.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8632EA53259046A00041A12F /* Http.swift */; };
 		A70638362519EC170078A5EE /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = A706382B2519EC170078A5EE /* .gitkeep */; };
 		A70638372519EC170078A5EE /* SuperBell.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706382D2519EC170078A5EE /* SuperBell.gif */; };
 		A70638382519EC170078A5EE /* SuperCake.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706382E2519EC170078A5EE /* SuperCake.gif */; };
@@ -112,6 +113,7 @@
 
 /* Begin PBXFileReference section */
 		80206A59AF0409FF6B450865 /* Pods-AgoraVoice.test2020-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraVoice.test2020-dev.xcconfig"; path = "Target Support Files/Pods-AgoraVoice/Pods-AgoraVoice.test2020-dev.xcconfig"; sourceTree = "<group>"; };
+		8632EA53259046A00041A12F /* Http.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Http.swift; sourceTree = "<group>"; };
 		9C38CB3F6F572BDD5D054517 /* Pods-AgoraVoice.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraVoice.release-test.xcconfig"; path = "Target Support Files/Pods-AgoraVoice/Pods-AgoraVoice.release-test.xcconfig"; sourceTree = "<group>"; };
 		9FC5D8282F94142407E449F3 /* Pods-AgoraVoice.lab2020-pre.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraVoice.lab2020-pre.xcconfig"; path = "Target Support Files/Pods-AgoraVoice/Pods-AgoraVoice.lab2020-pre.xcconfig"; sourceTree = "<group>"; };
 		A706382B2519EC170078A5EE /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
@@ -479,6 +481,7 @@
 				A7C7385A250A1BA70092B948 /* LiveSession.swift */,
 				A735C214250F88D800707F23 /* LiveStream.swift */,
 				A75FA9122514608C001B3AFC /* RTCStatistics.swift */,
+				8632EA53259046A00041A12F /* Http.swift */,
 			);
 			path = Specials;
 			sourceTree = "<group>";
@@ -723,6 +726,7 @@
 				A750EC6D2500DCCB006E50E3 /* LiveRole.swift in Sources */,
 				A75C6FFB24FCE41F003E5AD9 /* AGELog.swift in Sources */,
 				A750EC3F2500A33F006E50E3 /* RealDataViewController.swift in Sources */,
+				8632EA54259046A00041A12F /* Http.swift in Sources */,
 				A75C6FC024FCD709003E5AD9 /* AppleExtension.swift in Sources */,
 				A750EC4D2500B1E6006E50E3 /* MultiHostsVM.swift in Sources */,
 				A75C6FF824FCE41F003E5AD9 /* DictionaryGetable.swift in Sources */,

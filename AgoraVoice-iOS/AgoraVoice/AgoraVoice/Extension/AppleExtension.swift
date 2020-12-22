@@ -17,6 +17,7 @@ typealias StringCompletion = ((String) -> Void)?
 typealias IntCompletion = ((Int) -> Void)?
 typealias Completion = (() -> Void)?
 
+typealias ExCompletion = (() throws -> Void)?
 typealias DicEXCompletion = (([String: Any]) throws -> Void)?
 typealias StringExCompletion = ((String) throws -> Void)?
 typealias DataExCompletion = ((Data) throws -> Void)?
@@ -49,7 +50,10 @@ extension UIView {
         }
     }
     
-    @discardableResult func containUnderline(_ color: UIColor, x: CGFloat? = nil, width: CGFloat? = nil, height: CGFloat? = nil) -> CALayer {
+    @discardableResult func containUnderline(_ color: UIColor,
+                                             x: CGFloat? = nil,
+                                             width: CGFloat? = nil,
+                                             height: CGFloat? = nil) -> CALayer {
         let underline = CALayer()
         underline.backgroundColor = color.cgColor
         
@@ -114,7 +118,9 @@ extension TimeInterval {
 }
 
 extension UIStoryboard {
-    static func initViewController<T: Any>(of id: String, class: T.Type, on stroyName: String = "Main") -> T {
+    static func initViewController<T: Any>(of id: String,
+                                           class: T.Type,
+                                           on stroyName: String = "Main") -> T {
         let storyboard = UIStoryboard(name: stroyName, bundle: Bundle.main)
         let identifier = id
         let vc = storyboard.instantiateViewController(withIdentifier: identifier) as! T
@@ -124,7 +130,9 @@ extension UIStoryboard {
 
 extension NotificationCenter {
     func observerKeyboard(listening: (((endFrame: CGRect, duration: Double)) -> Void)? = nil) {
-        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillChangeFrameNotification, object: nil, queue: nil) { (notify) in
+        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillChangeFrameNotification,
+                                               object: nil,
+                                               queue: nil) { (notify) in
             guard let userInfo = notify.userInfo else {
                 return
             }
@@ -147,12 +155,17 @@ protocol PresentChildProtocol where Self: UIViewController {
     var presentedChild: PublishRelay<UIViewController> {get set}
     var dimissChild: PublishRelay<UIViewController> {get set}
     
-    func presentChild(_ viewController: UIViewController, animated flag: Bool, presentedFrame: CGRect)
-    func dismissChild(_ viewController: UIViewController, animated flag: Bool)
+    func presentChild(_ viewController: UIViewController,
+                      animated flag: Bool,
+                      presentedFrame: CGRect)
+    func dismissChild(_ viewController: UIViewController,
+                      animated flag: Bool)
 }
 
 extension PresentChildProtocol {
-    func presentChild(_ viewController: UIViewController, animated flag: Bool, presentedFrame: CGRect) {
+    func presentChild(_ viewController: UIViewController,
+                      animated flag: Bool,
+                      presentedFrame: CGRect) {
         if let child = presentingChild {
             dismissChild(child, animated: false)
         }
@@ -180,7 +193,8 @@ extension PresentChildProtocol {
         presentedChild.accept(viewController)
     }
     
-    func dismissChild(_ viewController: UIViewController, animated flag: Bool) {
+    func dismissChild(_ viewController: UIViewController,
+                      animated flag: Bool) {
         var endRect = viewController.view.frame
         endRect.origin.y = UIScreen.main.bounds.height
         
@@ -205,24 +219,52 @@ extension PresentChildProtocol {
 }
 
 protocol ShowAlertProtocol where Self: UIViewController {
-    func showAlert(_ title: String?, message: String?, handler: ((UIAlertAction) -> Void)?)
-    func showAlert(_ title: String?, message: String?, preferredStyle: UIAlertController.Style, action1: String, action2: String, handler1: ((UIAlertAction) -> Void)?, handler2: ((UIAlertAction) -> Void)?)
-    func showAlert(_ title: String?, message: String?, preferredStyle: UIAlertController.Style, actions: [UIAlertAction]?, completion: Completion)
+    func showAlert(_ title: String?,
+                   message: String?,
+                   handler: ((UIAlertAction) -> Void)?)
+    func showAlert(_ title: String?,
+                   message: String?,
+                   preferredStyle: UIAlertController.Style,
+                   action1: String,
+                   action2: String,
+                   handler1: ((UIAlertAction) -> Void)?,
+                   handler2: ((UIAlertAction) -> Void)?)
+    func showAlert(_ title: String?,
+                   message: String?,
+                   preferredStyle: UIAlertController.Style,
+                   actions: [UIAlertAction]?,
+                   completion: Completion)
 }
 
 extension ShowAlertProtocol {
-    func showAlert(_ title: String? = nil, message: String? = nil, handler: ((UIAlertAction) -> Void)? = nil) {
+    func showAlert(_ title: String? = nil,
+                   message: String? = nil,
+                   handler: ((UIAlertAction) -> Void)? = nil) {
         let action = UIAlertAction(title: "OK", style: .default, handler: handler)
-        showAlert(title, message: message, preferredStyle: .alert, actions: [action], completion: nil)
+        showAlert(title,
+                  message: message,
+                  preferredStyle: .alert,
+                  actions: [action],
+                  completion: nil)
     }
     
-    func showAlert(_ title: String? = nil, message: String? = nil, preferredStyle: UIAlertController.Style = .alert, action1: String, action2: String, handler1: ((UIAlertAction) -> Void)? = nil, handler2: ((UIAlertAction) -> Void)? = nil) {
+    func showAlert(_ title: String? = nil,
+                   message: String? = nil,
+                   preferredStyle: UIAlertController.Style = .alert,
+                   action1: String,
+                   action2: String,
+                   handler1: ((UIAlertAction) -> Void)? = nil,
+                   handler2: ((UIAlertAction) -> Void)? = nil) {
         let act1 = UIAlertAction(title: action1, style: .default, handler: handler1)
         let act2 = UIAlertAction(title: action2, style: .default, handler: handler2)
         showAlert(title, message: message, preferredStyle: preferredStyle, actions: [act1, act2], completion: nil)
     }
     
-    func showAlert(_ title: String? = nil, message: String? = nil, preferredStyle: UIAlertController.Style = .alert, actions: [UIAlertAction]? = nil, completion: Completion) {
+    func showAlert(_ title: String? = nil,
+                   message: String? = nil,
+                   preferredStyle: UIAlertController.Style = .alert,
+                   actions: [UIAlertAction]? = nil,
+                   completion: Completion) {
         view.endEditing(true)
         
         if let vc = self.presentedViewController,
@@ -230,21 +272,27 @@ extension ShowAlertProtocol {
             alert.dismiss(animated: false, completion: nil)
         }
         
-        let alert = UIAlertController(title: title, message: message, preferredStyle: preferredStyle)
+        let alert = UIAlertController(title: title,
+                                      message: message,
+                                      preferredStyle: preferredStyle)
         
         var tActions: [UIAlertAction]
         
         if let actions = actions {
             tActions = actions
         } else {
-            tActions = [UIAlertAction(title: "OK", style: .default, handler: nil)]
+            tActions = [UIAlertAction(title: "OK",
+                                      style: .default,
+                                      handler: nil)]
         }
         
         for item in tActions {
             alert.addAction(item)
         }
         
-        present(alert, animated: true, completion: completion)
+        present(alert,
+                animated: true,
+                completion: completion)
     }
 }
 
@@ -269,7 +317,8 @@ extension ShowHudProtocol {
             return
         }
         
-        self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        self.hud = MBProgressHUD.showAdded(to: self.view,
+                                           animated: true)
         self.hud?.show(animated: true)
     }
     
@@ -283,11 +332,15 @@ protocol ShowToastProtocol where Self: UIViewController {
     var toastView: ToastView? {get set}
     var toastWork: AfterWorker? {get set}
     
-    func showToastView(_ view: ToastView, duration: TimeInterval, completion: Completion )
+    func showToastView(_ view: ToastView,
+                       duration: TimeInterval,
+                       completion: Completion )
 }
 
 extension ShowToastProtocol {
-    func showToastView(_ view: ToastView, duration: TimeInterval = TimeInterval.animation, completion: Completion = nil) {
+    func showToastView(_ view: ToastView,
+                       duration: TimeInterval = TimeInterval.animation,
+                       completion: Completion = nil) {
         guard let window = UIApplication.shared.keyWindow else {
             return
         }
@@ -303,7 +356,8 @@ extension ShowToastProtocol {
         
         window.addSubview(view)
         
-        toastWork?.perform(after: duration, on: DispatchQueue.main, { [weak self] in
+        toastWork?.perform(after: duration,
+                           on: DispatchQueue.main, { [weak self] in
             self?.toastView?.removeFromSuperview()
             if let completion = completion {
                 completion()
@@ -311,10 +365,18 @@ extension ShowToastProtocol {
         })
     }
     
-    func showTextToast(text: String, duration: TimeInterval = 3, completion: Completion = nil) {
-        let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
+    func showTextToast(text: String,
+                       duration: TimeInterval = 3,
+                       completion: Completion = nil) {
+        let frame = CGRect(x: 0,
+                           y: 200,
+                           width: 0,
+                           height: 44)
+        let view = TextToast(frame: frame, filletRadius: 8)
         view.text = text
-        self.showToastView(view, duration: duration, completion: completion)
+        self.showToastView(view,
+                           duration: duration,
+                           completion: completion)
     }
 }
 
@@ -344,7 +406,9 @@ class MaskViewController: RxViewController, ShowAlertProtocol, PresentChildProto
                             y: 0,
                             width: w,
                             height: h)
-        view.addTarget(self, action: #selector(tapMaskView(_:)), for: .touchUpInside)
+        view.addTarget(self,
+                       action: #selector(tapMaskView(_:)),
+                       for: .touchUpInside)
         view.isHidden = true
         return view
     }()

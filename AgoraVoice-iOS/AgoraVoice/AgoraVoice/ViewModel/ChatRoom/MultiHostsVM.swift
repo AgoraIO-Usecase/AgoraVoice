@@ -71,7 +71,6 @@ class MultiHostsVM: CustomObserver {
     var audienceBecameBroadcaster = PublishRelay<LiveRole>()
     var broadcasterBecameAudience = PublishRelay<LiveRole>()
     
-//    let actionMessage = PublishRelay<ActionMessage>()
     let localRole = BehaviorRelay<LiveRole?>(value: nil)
     
     init(room: Room) {
@@ -225,8 +224,9 @@ private extension MultiHostsVM {
     // type: 1.房主邀请 2.观众申请 3.房主拒绝 4.观众拒绝 5.房主同意观众申请 6.观众接受房主邀请 7.房主让主播下麦 8.主播下麦
     func request(seatIndex: Int, type: Int, userId: String, roomId: String, success: DicEXCompletion = nil, fail: ErrorCompletion) {
         let client = Center.shared().centerProvideRequestHelper()
+        let url = URLGroup.multiHosts(userId: userId, roomId: roomId)
         let task = ArRequestTask(event: ArRequestEvent(name: "multi-action: \(type)"),
-                               type: .http(.post, url: URLGroup.multiHosts(userId: userId, roomId: roomId)),
+                               type: .http(.post, url: url),
                                timeout: .medium,
                                header: ["token": Keys.UserToken],
                                parameters: ["no": seatIndex, "type": type])
@@ -289,69 +289,95 @@ private extension MultiHostsVM {
     }
     
     func observe() {
-//        actionMessage.subscribe(onNext: { [unowned self] (message) in
-//            guard let payload = message.payload as? [String: Any] else {
-//                return
-//            }
-//
-//            do {
-//                let fromUserName = message.fromUser.userName
-//                let fromUserId = message.fromUser.userUuid
-//                let info = BasicUserInfo(userId: fromUserId, name: fromUserName)
-//                let fromUser = LiveRoleItem(type:(message.fromUser.role == .teacher ? .owner : .audience),
-//                                            info: info, agUId: "0")
-//
-//                let processId = message.processUuid
-//                let event = try payload.getIntValue(of: "type")
-//                let seatIndex = try payload.getIntValue(of: "no")
-//
-//                guard let local = self.localRole.value else {
-//                    throw AGEError.valueNil("local role")
-//                }
-//
-//                switch event {
-//                // Owner
-//                case 2: // received application:
-//                    let initiator = fromUser
-//                    let receiver = local
-//                    let application = Application(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
-//                    self.applicationQueue.append(application)
-//                    self.receivedApplication.accept(application)
-//                case  4: // audience rejected invitation
-//                    let initiator = local
-//                    let receiver = fromUser
-//                    let invitation = Invitation(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
-//                    self.invitationByRejected.accept(invitation)
-//                case  6: // audience accepted invitation:
-//                    let initiator = local
-//                    let receiver = fromUser
-//                    let invitation = Invitation(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
-//                    self.invitationByAccepted.accept(invitation)
-//
-//                // Audience
-//                case  1: // receivedInvitation
-//                    let initiator = fromUser
-//                    let receiver = local
-//                    let invitation = Invitation(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
-//                    self.invitationQueue.append(invitation)
-//                    self.receivedInvitation.accept(invitation)
-//                case  3: // application by rejected
-//                    let initiator = local
-//                    let receiver = fromUser
-//                    let application = Application(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
-//                    self.applicationByRejected.accept(application)
-//                case  5: // application by accepted:
-//                    let initiator = local
-//                    let receiver = fromUser
-//                    let application = Application(id: processId, seatIndex: 0, initiator: initiator, receiver: receiver)
-//                    self.applicationByAccepted.accept(application)
-//                default:
-//                    break
-//                }
-//            } catch {
-//                self.log(error: error)
-//            }
-//        }).disposed(by: bag)
+        message.subscribe(onNext: { [unowned self] (json) in
+            do {
+                guard let data = try? json.getDictionaryValue(of: "data"),
+                      let processId = try? data.getStringValue(of: "processUuid"),
+                      let payload = try? data.getDictionaryValue(of: "payload"),
+                      let fromUserDic = try? data.getDictionaryValue(of: "fromUser") else {
+                    return
+                }
+                
+                let fromUserId = try fromUserDic.getStringValue(of: "userUuid")
+                let fromUserName = try fromUserDic.getStringValue(of: "userName")
+                let roleString = try fromUserDic.getStringValue(of: "role")
+                let role = try LiveRoleType.initWithDescription(roleString)
+                
+                let seatIndex = try payload.getIntValue(of: "no")
+                let event = try payload.getIntValue(of: "type")
+                
+                let info = BasicUserInfo(userId: fromUserId,
+                                         name: fromUserName)
+                
+                let fromUser = LiveRoleItem(type: role,
+                                            info: info,
+                                            agUId: "0")
+                
+                guard let local = self.localRole.value else {
+                    throw AGEError.valueNil("local role")
+                }
+
+                switch event {
+                // Owner
+                case 2: // received application:
+                    let initiator = fromUser
+                    let receiver = local
+                    let application = Application(id: processId,
+                                                  seatIndex: seatIndex,
+                                                  initiator: initiator,
+                                                  receiver: receiver)
+                    self.applicationQueue.append(application)
+                    self.receivedApplication.accept(application)
+                case  4: // audience rejected invitation
+                    let initiator = local
+                    let receiver = fromUser
+                    let invitation = Invitation(id: processId,
+                                                seatIndex: seatIndex,
+                                                initiator: initiator,
+                                                receiver: receiver)
+                    self.invitationByRejected.accept(invitation)
+                case  6: // audience accepted invitation:
+                    let initiator = local
+                    let receiver = fromUser
+                    let invitation = Invitation(id: processId,
+                                                seatIndex: seatIndex,
+                                                initiator: initiator,
+                                                receiver: receiver)
+                    self.invitationByAccepted.accept(invitation)
+
+                // Audience
+                case  1: // receivedInvitation
+                    let initiator = fromUser
+                    let receiver = local
+                    let invitation = Invitation(id: processId,
+                                                seatIndex: seatIndex,
+                                                initiator: initiator,
+                                                receiver: receiver)
+                    self.invitationQueue.append(invitation)
+                    self.receivedInvitation.accept(invitation)
+                case  3: // application by rejected
+                    let initiator = local
+                    let receiver = fromUser
+                    let application = Application(id: processId,
+                                                  seatIndex: seatIndex,
+                                                  initiator: initiator,
+                                                  receiver: receiver)
+                    self.applicationByRejected.accept(application)
+                case  5: // application by accepted:
+                    let initiator = local
+                    let receiver = fromUser
+                    let application = Application(id: processId,
+                                                  seatIndex: 0,
+                                                  initiator: initiator,
+                                                  receiver: receiver)
+                    self.applicationByAccepted.accept(application)
+                default:
+                    break
+                }
+            } catch {
+                self.log(error: error)
+            }
+        }).disposed(by: bag)
         
         // Owner
         invitationByRejected.subscribe(onNext: { [unowned self] (invitaion) in

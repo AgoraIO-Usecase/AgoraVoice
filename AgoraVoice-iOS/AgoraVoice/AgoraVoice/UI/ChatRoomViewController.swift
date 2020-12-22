@@ -150,10 +150,11 @@ private extension ChatRoomViewController {
             self.showAlert(NSLocalizedString("Live_End"),
                            message: NSLocalizedString("Confirm_End_Live"),
                            action1: NSLocalizedString("Cancel"),
-                           action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
+                           action2: NSLocalizedString("Confirm"),
+                           handler2: { [unowned self] (_) in
                             self.liveSession.leave()
                             self.dimissSelf()
-            }
+                           })
         }).disposed(by: bag)
         
         liveSession.room.subscribe(onNext: { [unowned self] (room) in
@@ -220,9 +221,10 @@ private extension ChatRoomViewController {
             
             self.showAlert(message: message,
                            action1: NSLocalizedString("Cancel"),
-                           action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
+                           action2: NSLocalizedString("Confirm"),
+                           handler2: { [unowned self] (_) in
                             self.multiHostsVM.reject(application: application)
-            }
+                           })
         }).disposed(by: vc.bag)
         
         vc.acceptApplicationOfUser.subscribe(onNext: { [unowned self] (application) in
@@ -237,9 +239,10 @@ private extension ChatRoomViewController {
             
             self.showAlert(message: message,
                            action1: NSLocalizedString("Cancel"),
-                           action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
+                           action2: NSLocalizedString("Confirm"),
+                           handler2: { [unowned self] (_) in
                             self.multiHostsVM.accept(application: application)
-            }
+                           })
         }).disposed(by: vc.bag)
         
         let presenetedHeight: CGFloat = 526.0
@@ -378,20 +381,20 @@ private extension ChatRoomViewController {
                 }
                 self.showAlert(message: message,
                                action1: NSLocalizedString("Cancel"),
-                               action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
+                               action2: NSLocalizedString("Confirm"), handler2:  { [unowned self] (_) in
                                 guard let user = seatCommands.seat.state.stream?.owner else {
                                     assert(false)
                                     return
                                 }
                                 
                                 self.multiHostsVM.endBroadcasting(seatIndex: seatCommands.seat.index, user: user)
-                }
+                               })
             
             // Audience
             case .application:
                 self.showAlert(message: NSLocalizedString("Confirm_Application_Of_Broadcasting"),
                                action1: NSLocalizedString("Cancel"),
-                               action2: NSLocalizedString("Confirm")) { [unowned self] (_) in
+                               action2: NSLocalizedString("Confirm"), handler2:  { [unowned self] (_) in
                                 self.multiHostsVM.sendApplication(by: self.liveSession.localRole.value,
                                                                   for: seatCommands.seat.index,
                                                                   success: { [unowned self] in
@@ -400,8 +403,8 @@ private extension ChatRoomViewController {
                                                                     } else {
                                                                         self.showTextToast(text: "Your application has been sent")
                                                                     }
-                                })
-                }
+                                                                  })
+                               })
             }
         }).disposed(by: vc.bag)
     }
@@ -410,7 +413,6 @@ private extension ChatRoomViewController {
 private extension ChatRoomViewController {
     func multiHosts() {
         liveSession.customMessage.bind(to: multiHostsVM.message).disposed(by: bag)
-//        liveSession.actionMessage.bind(to: multiHostsVM.actionMessage).disposed(by: bag)
         liveSession.localRole.bind(to: multiHostsVM.localRole).disposed(by: bag)
         
         multiHostsVM.fail.subscribe(onNext: { [unowned self] (text) in

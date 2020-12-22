@@ -31,10 +31,8 @@ private extension LogTube {
         AGELock.synchronized(self.lock) { [unowned self] in
             self.debugPrint("--------------------------------------------------------------------------", type: formatter.type)
             let className = "Class: \(formatter.className)"
-            let funcName = "Func: \(formatter.funcName)"
             
             self.debugPrint(className, type: formatter.type)
-            self.debugPrint(funcName, type: formatter.type)
             
             var typeContent: String
             
@@ -50,7 +48,6 @@ private extension LogTube {
                 let extraContent = "Extra: \(extra)"
                 self.debugPrint(extraContent, type: formatter.type)
             }
-            self.debugPrint("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", type: formatter.type)
         }
     }
     

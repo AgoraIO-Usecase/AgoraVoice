@@ -43,6 +43,10 @@ struct URLGroup {
         return URLGroup.host + URLGroup.mainPath + version + "rooms"
     }
     
+    static func liveJoin(roomId: String, userId: String) -> String {
+        return URLGroup.host + URLGroup.mainPath + version + "rooms/\(roomId)/users/\(userId)/join"
+    }
+    
     static func userUpdateInfo(userId: String) -> String {
         return URLGroup.host + URLGroup.mainPath + version + "users/\(userId)"
     }

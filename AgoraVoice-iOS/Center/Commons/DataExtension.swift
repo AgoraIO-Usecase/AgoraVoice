@@ -129,7 +129,8 @@ extension String {
 
 extension Data {
     func json() throws -> [String: Any] {
-        let object = try JSONSerialization.jsonObject(with: self, options: [])
+        let object = try JSONSerialization.jsonObject(with: self,
+                                                      options: [.mutableContainers])
         guard let dic = object as? [String: Any] else {
             throw AGEError.convertedTo("Any", "[String: Any]")
         }

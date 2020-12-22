@@ -20,7 +20,6 @@ class Center: RxObject {
     
     let isWorkNormally = PublishRelay<Bool>()
     let customMessage = PublishRelay<[String: Any]>()
-//    let actionMessage = PublishRelay<ActionMessage>()
     
     // Specials
     private var files = FilesGroup()
@@ -235,15 +234,8 @@ extension Center: ArLogTube {
         log.logFromClass(formatter: fromatter)
     }
     
-    func log(error: Error, extra: String?) {
-        var localizedDescription: String
-        
-        if let arError = error as? ArError {
-            localizedDescription = arError.localizedDescription
-        } else {
-            localizedDescription = error.localizedDescription
-        }
-
+    func log(error: ArError, extra: String?) {
+        let localizedDescription = error.localizedDescription
         let fromatter = AGELogFormatter(type: .error(localizedDescription),
                                         className: NSStringFromClass(Armin.self),
                                         funcName: "",

@@ -83,12 +83,15 @@ class GiftViewController: RxViewController {
 }
 
 extension GiftViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         return Gift.list.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GiftCell", for: indexPath) as! GiftCell
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GiftCell",
+                                                      for: indexPath) as! GiftCell
         let item = Gift.list[indexPath.row]
         cell.giftImageView.image = item.image
         cell.nameLabel.text = item.description
@@ -104,7 +107,8 @@ extension GiftViewController: UICollectionViewDataSource {
 }
 
 extension GiftViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
         selectedIndex = indexPath.item
         collectionView.reloadData()
     }
