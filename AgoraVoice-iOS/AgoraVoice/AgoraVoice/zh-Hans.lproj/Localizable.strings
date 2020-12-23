@@ -1,0 +1,192 @@
+/* 
+  File.strings
+  AgoraVoice
+
+  Created by CavanSu on 2020/9/1.
+  Copyright © 2020 Agora. All rights reserved.
+*/
+
+Cancel="取消";
+Done="完成";
+Confirm="确定";
+Reject="拒绝";
+End="结束";
+Accept="接受";
+YES="是";
+NO="否";
+Music="音乐";
+Background="背景";
+Invitation="邀请";
+Inviting="邀请中";
+All="全部";
+Male="男";
+Female="女";
+LogId_Copy="LogId 已经复制到粘贴板";
+
+Lost_Connection="网络异常";
+Lost_Connection_Description="当前网络连接错误，请稍后再试";
+
+Lost_Connection_Retry="网络不给力，请稍后再试";
+Use_Cellular_Data="当前网络无WIFI，继续使用可能产生流量费用";
+
+Suggest_Upgrade_App="你可以升级一下应用";
+Must_Upgrate_App="必须要升级应用才能继续使用";
+
+Audio_Loop="耳返";
+
+// Audio Effect
+Voice_Beautifier="美声";
+
+Chat_Beautifier="语聊美声";
+Male_Magnetic="磁性";
+Female_Fresh="清新";
+Female_Vitality="活力";
+
+Singing_Beautifier="歌唱美声";
+
+Timbre_Transformation="音色变换";
+Vigorous="浑厚";
+Deep="低沉";
+Mellow="圆润";
+Falsetto="假音";
+Full="饱满";
+Clear="清澈";
+Resounding="高亢";
+Ringing="嘹亮";
+
+Audio_Effects="音效";
+
+Room_Acoustics="空间塑造";
+KTV="KTV";
+Vocal_Concert="演唱会";
+Studio="录音棚";
+Phonograph="留声机";
+Virtual_Stereo="虚拟立体声";
+Spacial="空旷";
+Ethereal="空灵";
+Three_Dimensional_Voice="3D人声";
+Three_Dimensional_Voice_Description="调节速度控制声音旋转速度(最快1s转一圈，最慢60s转一圈)";
+
+Voice_Changer_Effect="变声音效";
+Uncle="大叔";
+Old_Man="老男人";
+Boy="小男孩";
+Sister="小姐姐";
+Girl="小女孩";
+Pig_King="猪八戒";
+Hulk="绿巨人";
+
+Style_Transformation="曲风音效";
+RNB="R&B";
+Popular="流行";
+Rock="摇滚";
+HipHop="嘻哈";
+
+Pitch_Correction="电音音效";
+Major="大调";
+Minor="小调";
+Japenese_Pentatonic="和风";
+Enable_Pitch_Correction="启用电音";
+Select_Mode="选择调式";
+Select_The_Starting_Key="选择起始音阶";
+
+// LiveType
+Chat_Room="语聊房";
+Start_Chating="开始聊天";
+
+// LiveList
+Create_A_Room="请创建一个房间";
+No_Data_Please_Try_Again_Later="暂无数据，请稍后再试";
+Join_Fail="此软件为测试产品，房间最大人数为10人";
+
+// LiveRoom
+Live_Text_Input_Placeholder="说点什么...";
+BGM="背景音乐";
+Tool="工具";
+Real_Data="实时数据";
+
+Join_Live_Room="加入房间";
+Leave_Live_Room="离开房间";
+
+Send_Chat_Message_Fail="发送聊天消息失败";
+Present_Gift_Fail="赠送礼物失败";
+Give_Owner_A_Gift="向主播赠送一个";
+User_List="成员列表";
+Live_End="直播结束";
+Confirm_End_Live="是否结束直播？";
+Please_Input_Headset="请插上耳机";
+
+Online_User="在线用户";
+
+Application_List="申请上麦";
+
+// Create Room
+Create_Start="开始直播";
+Create_NameLabel="直播间的名字: ";
+Limit_Toast="您可以通过本应用体验声网质量，请勿商用。单次直播最长10分钟，每个频道最多10人。";
+
+// Mine
+Mine_Head="设置头像";
+Mine_Name="设置昵称";
+Input_Name="输入名字";
+About="关于";
+Privacy_Item="隐私条例";
+Disclaimer="免责声明";
+Register_Agora_Account="注册声网账号";
+Version_Release_Date="发版时间";
+RTC_SDK_Version="SDK 版本";
+AV_Version="Agora Voice 版本";
+Upload_Log="上传日志";
+
+Test_Product_Disclaimer="测试产品免责声明";
+
+Disclaimer_Detail="Agora Voice（“本产品”）是由Agora提供的一款产品，Agora享有本产品的著作权和所有权。特此免费授予获得本产品和相关文档文件（以下简称“软件”）副本的任何人无限制地试用软件的权利，包括但不限于试用，复制，修改，合并，发布，分发，但本产品不得用于任何商业用途，不得再许可和/或出售该软件的副本。
+
+本产品按“现状”提供，没有任何形式的明示担保，包括但不限于对适配性、特定目的的适用性和非侵权性的担保。无论是由于与本产品或本产品的试用或其他方式有关的任何合同、侵权或其他形式的行为，Agora均不对任何索赔、损害或其他责任负责。
+
+您可以自由选择是否试用本产品提供的服务，如果您下载、安装、试用本产品中所提供的服务，即表明您信任该产品所有人，Agora对任何原因在试用本产品中提供的服务时可能对您自身或他人造成的任何形式的损失和伤害不承担任何责任。";
+
+// Multi Hosts
+Became_A_Host="上麦";
+Stopped_Hosting="下麦";
+End_Broadcasting="下麦";
+
+// Owner
+Force_Broadcaster_To_End="下麦";
+Audience_Reject_Broadcasting="观众拒绝连麦";
+Invite_Broadcasting_Fail="邀请上麦失败";
+Invitation_Rejected="拒接邀请";
+Invite_Broadcasting="邀请上麦";
+Invitation_Rejected_Description="拒绝您的邀请";
+User_Invitation_Timeout="用户邀请超时";
+
+// Broadcaster
+Confirm_End_Broadcasting="确定终止连麦？";
+Owner_Forces_You_End_Broadcasting="房主强制你下麦";
+
+// Audience
+Confirm_Application_Of_Broadcasting="你确定要\“申请上麦\”吗？";
+Application_Of_Broadcasting="申请上麦";
+Owner_Reject_Broadcasting_Application="房主拒绝你的申请";
+Application_Of_Broadcasting_Fail="申请上麦失败";
+
+// Live Seat
+Seat_Ban="禁麦";
+Seat_Unban="解禁";
+Seat_Close="封麦";
+Seat_Release="解封";
+Seat_Release_Description="解封此连麦位";
+Seat_Command_Fail="麦位命令失败";
+
+// Gift
+Small_Bell="铃铛";
+Ice_Cream="冰淇淋";
+Wine="红酒";
+Cake="蛋糕";
+Ring="戒指";
+Watch="手表";
+Crystal="钻石";
+Rocket="火箭";
+Coin="金币";
+Present="赠送";
+Gift="礼物";

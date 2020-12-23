@@ -1,0 +1,23 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'AgoraVoice' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for AgoraVoice
+  platform :ios, '10.0'
+
+  pod 'RxSwift', '~> 5.0.1'
+  pod 'RxCocoa'
+  pod 'RxDataSources'
+  pod 'MJRefresh', '~> 3.3.1'
+  pod 'FLAnimatedImage'
+  pod 'MBProgressHUD', '~> 1.1.0'
+  pod 'AlamoClient', :path => '/Users/cavansu/Documents/Github/AlamoClient/AlamoClient.podspec'
+  pod 'AliyunOSSiOS'
+  pod 'Bugly'
+  pod 'SSZipArchive'
+  pod 'AgoraLog', :path => '../../../eEducation-iOS/Modules/AgoraLog/AgoraLog.podspec'
+  pod 'EduSDK', :path => '../../../eEducation-iOS/Modules/EduSDK/EduSDK.podspec'
+end

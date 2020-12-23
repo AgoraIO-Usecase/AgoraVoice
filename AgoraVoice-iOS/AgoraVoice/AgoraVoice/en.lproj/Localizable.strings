@@ -1,0 +1,193 @@
+/* 
+  File.strings
+  AgoraVoice
+
+  Created by CavanSu on 2020/9/1.
+  Copyright © 2020 Agora. All rights reserved.
+*/
+
+Cancel="Cancel";
+Done="Done";
+Confirm="Confirm";
+Reject="Reject";
+End="End";
+Accept="Accept";
+YES="YES";
+NO="NO";
+Music="Music";
+Background="Background";
+Invitation="Invite";
+Inviting="Inviting";
+All="All";
+Male="Male";
+Female="Female";
+LogId_Copy="LogId has been copied to the pasteboard";
+
+Lost_Connection="Network error";
+Lost_Connection_Description="We cannot connect to network now. Please retry later";
+
+Lost_Connection_Retry="Connection lost. Please retry later.";
+Use_Cellular_Data="Use cellular data instead of WIFI. May incur data charges.";
+
+Suggest_Upgrade_App="You can upgrade application";
+Must_Upgrate_App="You must upgrade application";
+
+Audio_Loop="Loop";
+
+// Audio Effect
+Voice_Beautifier="Voice beautifier";
+
+Chat_Beautifier="Chat beautifier";
+Male_Magnetic="Magnetic";
+Female_Fresh="Fresh";
+Female_Vitality="Vitality";
+
+Singing_Beautifier="Singing beautifier";
+
+Timbre_Transformation="Timbre transformation";
+Vigorous="Vigorous";
+Deep="Deep";
+Mellow="Mellow";
+Falsetto="Falsetto";
+Full="Full";
+Clear="Clear";
+Resounding="Resounding";
+Ringing="Ringing";
+
+Audio_Effects="Audio effects";
+
+Room_Acoustics="Room acoustics";
+KTV="KTV";
+Vocal_Concert="Vocal concert";
+Studio="Studio";
+Phonograph="Phonograph";
+Virtual_Stereo="Virtual stereo";
+Spacial="Spacial";
+Ethereal="Ethereal";
+Three_Dimensional_Voice="3D Voice";
+Three_Dimensional_Voice_Description="The fastest is 60 rpm, the slowest is 1 rpm";
+
+Voice_Changer_Effect="Voice changer effect";
+Uncle="Uncle";
+Old_Man="Old man";
+Boy="Boy";
+Sister="Sister";
+Girl="Girl";
+Pig_King="Pig king";
+Hulk="Hulk";
+
+Style_Transformation="Style transformation";
+RNB="R&B";
+Popular="Popular";
+Rock="Rock";
+HipHop="HipHop";
+
+Pitch_Correction="Pitch correction";
+Major="Major";
+Minor="Minor";
+Japenese_Pentatonic="Japenese-Pentatonic";
+Enable_Pitch_Correction="Enable pitch correction";
+Select_Mode="Select mode";
+Select_The_Starting_Key="Select the starting key";
+
+// LiveType
+Chat_Room="Chat Room";
+Start_Chating="Start";
+
+// LiveList
+Create_A_Room="Create a room to start";
+No_Data_Please_Try_Again_Later="No data, please try again later";
+Join_Fail="This is a testing application, and the max number of participants per channel is 10.";
+
+// LiveRoom
+Live_Text_Input_Placeholder="Say something...";
+BGM="Background music";
+Tool="Tools";
+Real_Data="Statistics";
+
+Join_Live_Room="entered the room";
+Leave_Live_Room="left the room";
+
+Send_Chat_Message_Fail="send message fail";
+Give_Owner_A_Gift="gives";
+Present_Gift_Fail="gives gift fail";
+User_List="Member listing";
+Live_End="Live End";
+Confirm_End_Live="Do you want to end this live streaming?";
+Please_Input_Headset="Plug in a headphone";
+
+Online_User="Online user";
+
+Application_List="ApplicationOfBroadcasting";
+
+// Create Room
+Create_Start="Go Live";
+Create_NameLabel="Channel name: ";
+Limit_Toast="This is for experiencing Agora quality. Please refrain from using it commercially. The max duration per session is 10 minutes, and the max number of participants per channel is 10. ";
+
+// Mine
+Mine_Head="Profile";
+Mine_Name="Nickname";
+Input_Name="Input";
+About="About";
+Privacy_Item="Privacy";
+Disclaimer="Disclaimer";
+Register_Agora_Account="Agora Account";
+Version_Release_Date="Release Date";
+RTC_SDK_Version="SDK Version";
+AV_Version="Agora Voice Version";
+Upload_Log="Upload Log";
+
+Test_Product_Disclaimer="Test product disclaimer ";
+
+Disclaimer_Detail="Agora Voice (\"this product\") is a product provided by Agora. Agora enjoys the copyright and ownership of this product. It is hereby granted free of charge to anyone who obtains a copy of this product and related documentation (hereinafter referred to as \"software\") to try the software without limitation, including but not limited to trial, copy, modify, merge, publish, distribute, but this product shall not be used For any commercial use, you may not sublicense and / or sell copies of the software.
+
+This product is provided \"as is\" without any express warranty, including but not limited to guarantees of suitability, suitability for specific purposes, and non-infringement. Whether it is due to any contract, infringement or other forms of conduct related to this product or the trial of this product or other methods, Agora will not be responsible for any claims, damages or other liabilities.
+
+You are free to choose whether to try the services provided by this product. If you download, install, or try the services provided in this product, it means that you trust the owner of the product, and Agora shall not be responsible for any form of loss or injury caused by yourself or others when you try the services provided in this product for any reason.";
+
+// Multi Hosts
+Became_A_Host="became a host";
+Stopped_Hosting="stopped hosting";
+End_Broadcasting="End";
+
+// Owner
+Force_Broadcaster_To_End="End hosting";
+Audience_Reject_Broadcasting="Audience rejected";
+Invite_Broadcasting_Fail="Invite a host fail";
+Invitation_Rejected="Invitation Rejected";
+Invite_Broadcasting="Invite";
+Invitation_Rejected_Description="Your Invitation has been rejected by";
+User_Invitation_Timeout="Invitation timeout";
+
+// Broadcaster
+Confirm_Apply_For_Broadcasting="Do you send a application?";
+Confirm_End_Broadcasting="End Live Streaming?";
+Owner_Forces_You_End_Broadcasting="Owner forced you to become a audience";
+
+// Audience
+Confirm_Application_Of_Broadcasting="Do you send a application?";
+Application_Of_Broadcasting="Become a host";
+Owner_Reject_Broadcasting_Application="Owner reject your application";
+Application_Of_Broadcasting_Fail="Apply to be a host fail";
+
+// Live Seat
+Seat_Ban="Mute";
+Seat_Unban="Un-mute";
+Seat_Close="Block";
+Seat_Release="Unblock";
+Seat_Release_Description="Unblock this seat";
+Seat_Command_Fail="Command fail";
+
+// Gift
+Gift="Gift";
+Small_Bell="Bell";
+Ice_Cream="Ice cream";
+Wine="Wine";
+Cake="Cake";
+Ring="Ring";
+Watch="Watch";
+Crystal="Diamond";
+Rocket="Rocket";
+Coin="Coin";
+Present="Give";
