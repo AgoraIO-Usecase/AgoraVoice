@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/live_message_item_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/room_message_item_height">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/live_message_item_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:textAlignment="gravity"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/room_message_text_padding_horizontal"
+        android:textSize="@dimen/text_size_1_1"/>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/live_message_gift_icon"
+        android:layout_width="@dimen/room_message_icon_size"
+        android:layout_height="@dimen/room_message_icon_size"
+        android:layout_toEndOf="@id/live_message_item_text"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/margin_2"
+        android:scaleType="fitXY"/>
+</RelativeLayout>

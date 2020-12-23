@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient android:startColor="@color/chat_room_card_background_color_start"
+        android:centerColor="@color/chat_room_card_background_color_middle"
+        android:endColor="@color/chat_room_card_background_color_end"
+        android:angle="315"/>
+</shape>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="theme_background">#EE000000</color>
+    <color name="theme_background_1">#FF161D27</color>
+    <color name="theme_background_3">#FF0A0F17</color>
+    <color name="theme_background_4">#FF1F2937</color>
+
+    <color name="theme_gray_1">#FFe3e3e3</color>
+    <color name="theme_gray_2">#FFababab</color>
+    <color name="theme_gray_3">#af232323</color>
+    <color name="theme_gray_4">#FFEEEEEE</color>
+    <color name="gray_1">#454545</color>
+
+    <color name="theme_blue_1">#FF0088EB</color>
+    <color name="theme_blue_1_alpha">#660088EB</color>
+
+    <color name="action_sheet_voice_enhance_item_selected_bg">#FF10284B</color>
+
+    <color name="new_message_hint_color">#FFFF097E</color>
+
+    <color name="black_90_percent_transparent">#2E000000</color>
+    <color name="black_70_percent_transparent">#4D000000</color>
+    <color name="black_60_percent_transparent">#66000000</color>
+    <color name="black_50_percent_transparent">#99000000</color>
+
+    <color name="white_70_per">#B3FFFFFF</color>
+
+    <color name="main_entry_button_start_color">#FF0048D6</color>
+    <color name="main_entry_button_end_color">#FF7B1CD4</color>
+
+    <color name="switch_on_bar_color">#FF1F5375</color>
+    <color name="switch_on_thumb_color">#FF0096FF</color>
+    <color name="switch_off_bar_color">#FF2C3440</color>
+    <color name="switch_off_thumb_color">#FF404A58</color>
+
+    <color name="action_sheet_user_list_item_btn_gray">#FF556272</color>
+
+    <color name="action_sheet_3d_voice_description_text_color">#FF686E78</color>
+    <color name="action_sheet_3d_voice_progress_text_color">#FFA0A7B4</color>
+
+    <color name="stat_background_color">#FFFAFAFA</color>
+
+    <color name="scene_exception_text_color">#FF4D5D73</color>
+
+    <color name="music_list_item_text_color_gray">#FF9BA2AB</color>
+
+    <color name="chat_room_card_background_color_start">#FF180C87</color>
+    <color name="chat_room_card_background_color_middle">#FF2D02FF</color>
+    <color name="chat_room_card_background_color_end">#FF850BC7</color>
+</resources>

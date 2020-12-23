@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/action_sheet_list_item_height">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/action_sheet_online_user_item_icon"
+        android:layout_width="@dimen/action_sheet_list_item_icon_size"
+        android:layout_height="@dimen/action_sheet_list_item_icon_size"
+        android:scaleType="fitXY"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/action_sheet_online_user_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/action_sheet_online_user_item_icon"
+        android:layout_marginStart="@dimen/common_margin_horizontal"
+        android:layout_centerVertical="true"
+        android:textSize="@dimen/text_size_1_1"
+        android:textColor="@color/theme_gray_2"/>
+
+    <LinearLayout
+        android:id="@+id/action_sheet_online_user_inviting_status_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/action_sheet_list_item_icon_size"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal"
+        android:paddingEnd="@dimen/margin_2"
+        android:background="@drawable/action_sheet_user_list_invited_status_bg"
+        android:visibility="gone">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/action_sheet_user_list_inviting_status_size"
+            android:layout_height="@dimen/action_sheet_user_list_inviting_status_size"
+            android:layout_marginStart="@dimen/action_sheet_user_list_inviting_status_margin"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/icon_loading"
+            android:scaleType="fitXY"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/action_sheet_online_user_item_status"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="@dimen/margin_1"
+            android:paddingEnd="@dimen/margin_2"
+            android:textAlignment="gravity"
+            android:gravity="center_vertical"
+            android:text="@string/action_sheet_user_list_inviting"
+            android:textSize="@dimen/text_size_2"
+            android:textColor="@color/theme_background_1" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/action_sheet_user_list_invite_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/action_sheet_list_item_icon_size"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:text="@string/action_sheet_user_list_invite"
+        android:textColor="@color/theme_blue_1"
+        android:textAlignment="gravity"
+        android:gravity="center"
+        android:paddingStart="@dimen/margin_4"
+        android:paddingEnd="@dimen/margin_4"
+        android:paddingTop="@dimen/margin_2"
+        android:paddingBottom="@dimen/margin_2"
+        android:background="@drawable/action_sheet_user_list_invite_status_bg" />
+</RelativeLayout>

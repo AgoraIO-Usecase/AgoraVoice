@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/action_sheet_voice_beauty_text_item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/action_sheet_voice_beauty_text_item_height"
+    android:background="@drawable/action_sheet_voice_beauty_text_item_bg">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/action_sheet_voice_beauty_text_item_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAlignment="gravity"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_1"/>
+</RelativeLayout>

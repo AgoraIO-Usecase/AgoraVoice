@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:gravity="center_vertical">
+        <shape android:shape="rectangle">
+            <size android:width="@dimen/action_sheet_switch_width"
+                android:height="@dimen/action_sheet_switch_bar_height"/>
+            <corners android:radius="@dimen/corner_4"/>
+            <solid android:color="@color/switch_off_bar_color"/>
+        </shape>
+    </item>
+    <item android:width="@dimen/action_sheet_switch_width_point_size"
+        android:height="@dimen/action_sheet_switch_width_point_size"
+        android:gravity="start">
+        <shape android:shape="oval">
+            <size android:width="@dimen/action_sheet_switch_width_point_size"
+                android:height="@dimen/action_sheet_switch_width_point_size"/>
+            <solid android:color="@color/switch_off_thumb_color"/>
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/room_user_action_view_height">
+    <RelativeLayout
+        android:id="@+id/live_participant_total_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/room_user_round_corner_gray_bg">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/room_user_action_view_text_height"
+            android:layout_centerInParent="true"
+            android:paddingStart="@dimen/room_user_action_view_padding"
+            android:paddingEnd="@dimen/room_user_action_view_padding"
+            android:orientation="horizontal">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="@dimen/room_user_action_view_text_height"
+                android:layout_height="@dimen/room_user_action_view_text_height"
+                android:layout_marginStart="@dimen/room_user_action_view_padding"
+                android:layout_marginEnd="@dimen/room_user_action_view_padding"
+                android:src="@drawable/icon_people"
+                android:scaleType="fitCenter"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/live_participant_count_text"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/room_user_action_view_text_height"
+                android:layout_marginEnd="@dimen/room_user_action_view_padding"
+                android:gravity="center_vertical"
+                android:textAlignment="gravity"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_1" />
+        </LinearLayout>
+    </RelativeLayout>
+    <View
+        android:id="@+id/notification_point"
+        android:layout_width="@dimen/notification_point_size"
+        android:layout_height="@dimen/notification_point_size"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/notification_point"
+        android:visibility="gone"/>
+    <RelativeLayout
+        android:id="@+id/icon_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/live_participant_total_layout"/>
+</RelativeLayout>

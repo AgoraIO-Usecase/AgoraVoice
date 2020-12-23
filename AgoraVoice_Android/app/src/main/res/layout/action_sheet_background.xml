@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/action_sheet_layout">
+    <RelativeLayout
+        android:id="@+id/action_sheet_background_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/action_sheet_title_height"
+            android:textAlignment="gravity"
+            android:gravity="center"
+            android:text="@string/action_sheet_background_title"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_2"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/action_sheet_background_back"
+            android:layout_width="@dimen/action_sheet_title_height"
+            android:layout_height="@dimen/action_sheet_title_height"
+            android:layout_marginStart="@dimen/common_margin_horizontal"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_back_arrow"/>
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/action_sheet_background_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/action_sheet_background_title"
+        android:layout_marginStart="@dimen/common_margin_vertical"
+        android:layout_marginEnd="@dimen/common_margin_vertical"
+        android:layout_marginBottom="@dimen/common_margin_vertical"
+        android:overScrollMode="never"/>
+</RelativeLayout>

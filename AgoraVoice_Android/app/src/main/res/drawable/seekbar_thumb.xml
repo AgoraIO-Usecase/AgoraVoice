@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="true">
+        <shape
+            android:shape="ring" android:innerRadius="4dp" android:thickness="7dp" android:useLevel="false">
+            <solid android:color="@color/theme_blue_1"/>
+            <size android:width="@dimen/action_sheet_music_volume_progress_thumb_size"
+                android:height="@dimen/action_sheet_music_volume_progress_thumb_size"/>
+        </shape>
+    </item>
+    <item android:state_enabled="false">
+        <shape
+            android:shape="ring" android:innerRadius="4dp" android:thickness="8dp" android:useLevel="false">
+            <solid android:color="@color/theme_blue_1_alpha"/>
+            <size android:width="@dimen/action_sheet_music_volume_progress_thumb_size"
+                android:height="@dimen/action_sheet_music_volume_progress_thumb_size"/>
+        </shape>
+    </item>
+</selector>
