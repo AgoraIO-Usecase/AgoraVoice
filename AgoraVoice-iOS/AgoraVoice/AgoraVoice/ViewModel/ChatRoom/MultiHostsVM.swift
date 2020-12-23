@@ -94,7 +94,8 @@ extension MultiHostsVM {
                 userId: "\(user.info.userId)",
                 roomId: room.roomId,
                 success: { [unowned self] (json) in
-                    let id = try json.getStringValue(of: "data")
+                    let invitationTag = "2"
+                    let id = "\(localRole.value!.info.userId)_\(user.info.userId)_\(invitationTag)"
                     let invitation = Invitation(id: id,
                                                 seatIndex: seatIndex,
                                                 initiator: self.room.owner,
@@ -292,7 +293,6 @@ private extension MultiHostsVM {
         message.subscribe(onNext: { [unowned self] (json) in
             do {
                 guard let data = try? json.getDictionaryValue(of: "data"),
-                      let processId = try? data.getStringValue(of: "processUuid"),
                       let payload = try? data.getDictionaryValue(of: "payload"),
                       let fromUserDic = try? data.getDictionaryValue(of: "fromUser") else {
                     return
@@ -316,13 +316,17 @@ private extension MultiHostsVM {
                 guard let local = self.localRole.value else {
                     throw AGEError.valueNil("local role")
                 }
-
+                
+                let applicationId = "1"
+                let invitationTag = "2"
+                
                 switch event {
                 // Owner
                 case 2: // received application:
                     let initiator = fromUser
                     let receiver = local
-                    let application = Application(id: processId,
+                    let applicationId = "\(initiator.info.userId)_\(receiver.info.userId)_\(applicationId)"
+                    let application = Application(id: applicationId,
                                                   seatIndex: seatIndex,
                                                   initiator: initiator,
                                                   receiver: receiver)
@@ -331,7 +335,8 @@ private extension MultiHostsVM {
                 case  4: // audience rejected invitation
                     let initiator = local
                     let receiver = fromUser
-                    let invitation = Invitation(id: processId,
+                    let invitationId = "\(initiator.info.userId)_\(receiver.info.userId)_\(invitationTag)"
+                    let invitation = Invitation(id: invitationId,
                                                 seatIndex: seatIndex,
                                                 initiator: initiator,
                                                 receiver: receiver)
@@ -339,7 +344,8 @@ private extension MultiHostsVM {
                 case  6: // audience accepted invitation:
                     let initiator = local
                     let receiver = fromUser
-                    let invitation = Invitation(id: processId,
+                    let invitationId = "\(initiator.info.userId)_\(receiver.info.userId)_\(invitationTag)"
+                    let invitation = Invitation(id: invitationId,
                                                 seatIndex: seatIndex,
                                                 initiator: initiator,
                                                 receiver: receiver)
@@ -349,7 +355,8 @@ private extension MultiHostsVM {
                 case  1: // receivedInvitation
                     let initiator = fromUser
                     let receiver = local
-                    let invitation = Invitation(id: processId,
+                    let invitationId = "\(initiator.info.userId)_\(receiver.info.userId)_\(invitationTag)"
+                    let invitation = Invitation(id: invitationId,
                                                 seatIndex: seatIndex,
                                                 initiator: initiator,
                                                 receiver: receiver)
@@ -358,7 +365,8 @@ private extension MultiHostsVM {
                 case  3: // application by rejected
                     let initiator = local
                     let receiver = fromUser
-                    let application = Application(id: processId,
+                    let applicationId = "\(initiator.info.userId)_\(receiver.info.userId)_\(applicationId)"
+                    let application = Application(id: applicationId,
                                                   seatIndex: seatIndex,
                                                   initiator: initiator,
                                                   receiver: receiver)
@@ -366,7 +374,8 @@ private extension MultiHostsVM {
                 case  5: // application by accepted:
                     let initiator = local
                     let receiver = fromUser
-                    let application = Application(id: processId,
+                    let applicationId = "\(initiator.info.userId)_\(receiver.info.userId)_\(applicationId)"
+                    let application = Application(id: applicationId,
                                                   seatIndex: 0,
                                                   initiator: initiator,
                                                   receiver: receiver)
