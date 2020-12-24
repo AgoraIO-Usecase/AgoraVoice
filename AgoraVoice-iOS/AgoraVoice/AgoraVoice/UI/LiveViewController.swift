@@ -64,14 +64,12 @@ extension LiveViewController {
         }).disposed(by: bag)
         
         // end
-        liveSession.end.subscribe(onNext: { [unowned self] in
-            if let vc = self.presentedViewController {
-                vc.dismiss(animated: false, completion: nil)
+        liveSession.state.subscribe(onNext: { [unowned self] (state) in
+            guard state == .end else {
+                return
             }
             
-            self.showAlert(NSLocalizedString("Live_End")) { [unowned self] (_) in
-                self.dimissSelf()
-            }
+            self.liveEndAlert()
         }).disposed(by: bag)
     }
     
@@ -174,6 +172,7 @@ extension LiveViewController {
         musicVM.pauseAction.bind(to: liveSession.pauseMusic).disposed(by: bag)
         musicVM.resumeAction.bind(to: liveSession.resumeMusic).disposed(by: bag)
         musicVM.stopAction.bind(to: liveSession.stopMusic).disposed(by: bag)
+        musicVM.volume.bind(to: liveSession.musicVolume).disposed(by: bag)
         
         liveSession.musicState.bind(to: musicVM.playerStatus).disposed(by: bag)
     }
@@ -520,7 +519,8 @@ extension LiveViewController {
         let gif = Bundle.main.url(forResource: gift.gifFileName, withExtension: "gif")
         let data = try! Data(contentsOf: gif!)
         
-        gifVC.startAnimating(of: data, repeatCount: 1) { [unowned self] in
+        gifVC.startAnimating(of: data, repeatCount: 1) { [unowned self, unowned gifVC] in
+            gifVC.view.removeFromSuperview()
             self.hiddenMaskView()
         }
     }
@@ -586,7 +586,17 @@ extension LiveViewController {
     }
 }
 
-extension LiveViewController {    
+extension LiveViewController {
+    func liveEndAlert() {
+        if let vc = self.presentedViewController {
+            vc.dismiss(animated: false, completion: nil)
+        }
+        
+        self.showAlert(NSLocalizedString("Live_End")) { [unowned self] (_) in
+            self.dimissSelf()
+        }
+    }
+    
     func dimissSelf() {
         if let _ = self.navigationController?.viewControllers.first as? LiveTypeViewController {
             self.navigationController?.popViewController(animated: true)

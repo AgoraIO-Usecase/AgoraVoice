@@ -13,6 +13,10 @@ import RxRelay
 import AgoraRte
 
 class LiveSession: RxObject {
+    enum State {
+        case active, end
+    }
+    
     private var logTube: LogTube {
         return Center.shared().centerProvideLogTubeHelper()
     }
@@ -24,8 +28,8 @@ class LiveSession: RxObject {
     var type: LiveType
     var room: BehaviorRelay<Room>
     
+    let state = BehaviorRelay<LiveSession.State>(value: .active)
     let fail = PublishRelay<String>()
-    let end = PublishRelay<()>()
     
     // Local role
     let localRole: BehaviorRelay<LiveRole>
@@ -52,6 +56,7 @@ class LiveSession: RxObject {
     let pauseMusic = PublishRelay<Music>()
     let resumeMusic = PublishRelay<Music>()
     let stopMusic = PublishRelay<Music>()
+    let musicVolume = PublishRelay<UInt>()
     let musicState = BehaviorRelay(value: AgoraRteMediaPlayerState.stopped)
     let musicError = PublishRelay<AGEError>()
     
@@ -371,7 +376,7 @@ extension LiveSession {
                                             userId: stream.owner.info.userId,
                                             mediaStreamType: .none,
                                             videoSourceType: .none,
-                                            audioSourceType: .none)
+                                            audioSourceType: .mic)
         
         userService?.createOrUpdateRemoteStream(info,
                                                 success: nil,
@@ -447,11 +452,6 @@ fileprivate extension LiveSession {
     }
     
     func streamObserve() {
-        // Check the audience list after the stream list is updated
-        streamList.subscribe(onNext: { [unowned self] (_) in
-            self.userList.accept(self.userList.value)
-        }).disposed(by: bag)
-
         userList.subscribe(onNext: { [unowned self] (all) in
             var temp = [LiveRole]()
 
@@ -488,29 +488,28 @@ fileprivate extension LiveSession {
 // MARK: - Music
 fileprivate extension LiveSession {
     func musicObserve() {
-        playMusic.subscribe(onNext: { (music) in
-            let mediaControl = Center.shared().centerProviderteEngine().getAgoraMediaControl()
-            let player = mediaControl.createMediaPlayerTrack()
+        let mediaControl = Center.shared().centerProviderteEngine().getAgoraMediaControl()
+        let player = mediaControl.createMediaPlayerTrack()
+        
+        playMusic.subscribe(onNext: { [unowned player] (music) in
             player.open(withURL: music.url)
             player.play()
         }).disposed(by: bag)
 
-        pauseMusic.subscribe { (music) in
-            let mediaControl = Center.shared().centerProviderteEngine().getAgoraMediaControl()
-            let player = mediaControl.createMediaPlayerTrack()
+        pauseMusic.subscribe { [unowned player] (music) in
             player.pause()
         }.disposed(by: bag)
         
-        resumeMusic.subscribe { (music) in
-            let mediaControl = Center.shared().centerProviderteEngine().getAgoraMediaControl()
-            let player = mediaControl.createMediaPlayerTrack()
+        resumeMusic.subscribe { [unowned player] (music) in
             player.resume()
         }.disposed(by: bag)
         
-        stopMusic.subscribe { (music) in
-            let mediaControl = Center.shared().centerProviderteEngine().getAgoraMediaControl()
-            let player = mediaControl.createMediaPlayerTrack()
+        stopMusic.subscribe { [unowned player] (music) in
             player.stop()
+        }.disposed(by: bag)
+        
+        musicVolume.subscribe { [unowned player] (volume) in
+            player.adjustPlayoutVolume(volume)
         }.disposed(by: bag)
     }
 }
@@ -575,14 +574,17 @@ extension LiveSession: AgoraRteSceneDelegate {
            let roomState = try? basic.getIntValue(of: "state"),
            roomState == 0 {
             leave()
-            end.accept(())
+            state.accept(.end)
         }
         
         customMessage.accept(properties)
     }
     
     func scene(_ scene: AgoraRteScene, didReceiveSceneMessage message: AgoraRteMessage, fromUser user: AgoraRteUserInfo) {
-        // need parse message
+        guard let liveUser = try? LiveRoleItem(rteUser: user) else {
+            return
+        }
+        chatMessage.accept((user: liveUser, message: message.message))
     }
     
     // user
@@ -626,8 +628,14 @@ extension LiveSession: AgoraRteSceneDelegate {
         userList.accept(list)
     }
     
-    func scene(_ scene: AgoraRteScene, didUpdateRemoteUserProperties changedProperties: [String], remove: Bool, cause: String?, fromUser user: AgoraRteUserInfo) {
+    func scene(_ scene: AgoraRteScene, didUpdateRemoteUserInfo userEvent: AgoraRteUserEvent) {
+        let rteList = sceneService.users
         
+        guard let list = try? [LiveRole](list: rteList) else {
+            return
+        }
+        
+        userList.accept(list)
     }
     
     // stream

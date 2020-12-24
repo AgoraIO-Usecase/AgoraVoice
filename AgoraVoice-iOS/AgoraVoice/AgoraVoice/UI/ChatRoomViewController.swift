@@ -74,6 +74,13 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         }
         
         navigation.navigationBar.isHidden = true
+        
+        // check live state
+        guard liveSession.state.value == .end else {
+            return
+        }
+        
+        liveEndAlert()
     }
     
     deinit {
@@ -338,7 +345,7 @@ private extension ChatRoomViewController {
     }
 }
 
-// MARK: Multi broadcaster
+// MARK: Multi broadcasters
 private extension ChatRoomViewController {
     func multiHosts() {
         liveSession.customMessage.bind(to: multiHostsVM.message).disposed(by: bag)
@@ -499,10 +506,7 @@ private extension ChatRoomViewController {
 private extension ChatRoomViewController {
     func closeReleaseOperation(command: LiveSeatView.Command,
                                seatCommands: LiveSeatCommands) {
-        guard let name = seatCommands.seat.state.stream?.owner.info.name else {
-            assert(false)
-            return
-        }
+        let name = seatCommands.seat.state.stream?.owner.info.name
         
         let message = self.alertMessageOfSeatCommand(command,
                                                      with: name)

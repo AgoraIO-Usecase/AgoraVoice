@@ -211,27 +211,6 @@ class LiveSeatViewController: MaskViewController {
             item.frame = CGRect(x: x, y: y, width: width, height: height)
         }
     }
-    
-//    func activeSpeaker(_ speaker: Speaker) {
-//        var agoraUid: UInt
-//
-//        switch speaker {
-//        case .local:
-//            guard let uid = ALCenter.shared().liveSession?.role.value.agUId else {
-//                return
-//            }
-//            agoraUid = UInt(uid)
-//        case .other(agoraUid: let uid):
-//            agoraUid = uid
-//        }
-//
-//        for item in seats.value where item.user != nil {
-//            let seatView = self.seatViews[item.index - 1]
-//            if let user = item.user, user.agUId == agoraUid {
-//                seatView.renderView.startSpeakerAnimating()
-//            }
-//        }
-//    }
 }
 
 private extension LiveSeatViewController {
