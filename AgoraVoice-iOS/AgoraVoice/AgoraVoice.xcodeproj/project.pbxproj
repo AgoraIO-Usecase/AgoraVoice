@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		25FE87BC8A59A85C79FC19B9 /* Pods_AgoraVoice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFA6A288AD8BCBB08EA5C83D /* Pods_AgoraVoice.framework */; };
 		8632EA54259046A00041A12F /* Http.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8632EA53259046A00041A12F /* Http.swift */; };
+		86D5867C25948D2F0057A6BD /* LauchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D5867B25948D2F0057A6BD /* LauchViewController.swift */; };
 		A70638362519EC170078A5EE /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = A706382B2519EC170078A5EE /* .gitkeep */; };
 		A70638372519EC170078A5EE /* SuperBell.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706382D2519EC170078A5EE /* SuperBell.gif */; };
 		A70638382519EC170078A5EE /* SuperCake.gif in Resources */ = {isa = PBXBuildFile; fileRef = A706382E2519EC170078A5EE /* SuperCake.gif */; };
@@ -114,6 +115,7 @@
 /* Begin PBXFileReference section */
 		80206A59AF0409FF6B450865 /* Pods-AgoraVoice.test2020-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraVoice.test2020-dev.xcconfig"; path = "Target Support Files/Pods-AgoraVoice/Pods-AgoraVoice.test2020-dev.xcconfig"; sourceTree = "<group>"; };
 		8632EA53259046A00041A12F /* Http.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Http.swift; sourceTree = "<group>"; };
+		86D5867B25948D2F0057A6BD /* LauchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauchViewController.swift; sourceTree = "<group>"; };
 		9C38CB3F6F572BDD5D054517 /* Pods-AgoraVoice.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraVoice.release-test.xcconfig"; path = "Target Support Files/Pods-AgoraVoice/Pods-AgoraVoice.release-test.xcconfig"; sourceTree = "<group>"; };
 		9FC5D8282F94142407E449F3 /* Pods-AgoraVoice.lab2020-pre.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraVoice.lab2020-pre.xcconfig"; path = "Target Support Files/Pods-AgoraVoice/Pods-AgoraVoice.lab2020-pre.xcconfig"; sourceTree = "<group>"; };
 		A706382B2519EC170078A5EE /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
@@ -505,6 +507,7 @@
 				A7FFA31F24FF667700C66569 /* LiveListViewController.swift */,
 				A7FFA32424FF85CE00C66569 /* CreateLiveViewController.swift */,
 				A750EC5D2500D0D8006E50E3 /* LiveViewController.swift */,
+				86D5867B25948D2F0057A6BD /* LauchViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -582,7 +585,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1150;
-				LastUpgradeCheck = 1220;
+				LastUpgradeCheck = 1230;
 				ORGANIZATIONNAME = Agora;
 				TargetAttributes = {
 					A75C6F4724FCC386003E5AD9 = {
@@ -764,6 +767,7 @@
 				A750EC432500A33F006E50E3 /* GiftAudienceViewController.swift in Sources */,
 				A75C70F024FE2765003E5AD9 /* LiveTypeViewController.swift in Sources */,
 				A750EC622500D1C5006E50E3 /* MusicVM.swift in Sources */,
+				86D5867C25948D2F0057A6BD /* LauchViewController.swift in Sources */,
 				A75C700824FCE41F003E5AD9 /* ImageFiles.swift in Sources */,
 				A750EC452500A33F006E50E3 /* ChatViewController.swift in Sources */,
 				A750EC3C2500A33F006E50E3 /* GIFViewController.swift in Sources */,

@@ -300,7 +300,7 @@ protocol ShowHudProtocol where Self: UIViewController {
     var hud: MBProgressHUD? {get set}
     func isShowingHUD() -> Bool
     func showHUD()
-    func hiddenHUD()
+    func hiddenHUD(animated: Bool)
 }
 
 extension ShowHudProtocol {
@@ -322,8 +322,8 @@ extension ShowHudProtocol {
         self.hud?.show(animated: true)
     }
     
-    func hiddenHUD() {
-        self.hud?.hide(animated: true)
+    func hiddenHUD(animated: Bool = true) {
+        self.hud?.hide(animated: animated)
         self.hud = nil
     }
 }

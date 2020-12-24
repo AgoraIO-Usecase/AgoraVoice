@@ -10,6 +10,13 @@ import UIKit
 import RxSwift
 
 class MainTabBarViewController: MaskTabBarController {
+    private lazy var lauchVC: LauchViewController = {
+        let vc = UIStoryboard.initViewController(of: "LauchViewController",
+                                                 class: LauchViewController.self,
+                                                 on: "Popover")
+        return vc
+    }()
+    
     let bag = DisposeBag()
     
     override func viewWillAppear(_ animated: Bool) {
@@ -26,12 +33,18 @@ class MainTabBarViewController: MaskTabBarController {
         super.viewDidLoad()
         UITabBar.appearance().barTintColor = UIColor(hexString: "#161D27")
         tabBar.isUserInteractionEnabled = false
-        showHUD()
-
+        
+        presentLauchScreen()
+        
+        #if RELEASE
+        let center = Center.shared()
+        center.registerAndLogin()
+        #endif
+        
         Center.shared().isWorkNormally.subscribe(onNext: { [unowned self] (normal) in
             if normal {
                 self.tabBar.isUserInteractionEnabled = true
-                self.hiddenHUD()
+                self.dimissLauchScreen()
             }
         }).disposed(by: bag)
     }
@@ -56,6 +69,17 @@ class MainTabBarViewController: MaskTabBarController {
         }
         
         return target
+    }
+}
+
+private extension MainTabBarViewController {
+    func presentLauchScreen() {
+        lauchVC.view.frame = UIScreen.main.bounds
+        view.addSubview(lauchVC.view)
+    }
+    
+    func dimissLauchScreen() {
+        lauchVC.view.removeFromSuperview()
     }
 }
 

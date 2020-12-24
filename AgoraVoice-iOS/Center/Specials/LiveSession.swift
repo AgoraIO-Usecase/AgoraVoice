@@ -113,7 +113,9 @@ class LiveSession: RxObject {
                                timeout: .medium,
                                header: ["token": Keys.UserToken],
                                parameters: ["roomName": roomName,
-                                            "backgroundImage": "\(backgroundIndex)"])
+                                            "backgroundImage": "\(backgroundIndex)",
+                                            "duration": 10,
+                                            "audienceLimit": 10])
         
         client.request(task: task, success: ArResponse.json({ (json) in
             let roomId = try json.getStringValue(of: "data")
@@ -193,7 +195,9 @@ class LiveSession: RxObject {
     }
     
     deinit {
+        #if !RELEASE
         print("Livesession deinit")
+        #endif
     }
 }
 

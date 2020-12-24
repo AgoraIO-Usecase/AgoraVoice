@@ -52,17 +52,14 @@ extension Center {
             func privateRegisterAndLogin() {
                 if let current = CurrentUser.local() {
                     self.current = current
-                    self.login(userId: current.info.value.userId) { [unowned self] in
+                    self.login(user: current.info.value) { [unowned self] in
                         self.isWorkNormally.accept(true)
                     }
                     return
                 }
                 
                 self.register { [unowned self] (info: BasicUserInfo) in
-                    self.login(userId: info.userId) { [unowned self] in
-                        self.current = CurrentUser(info: info)
-                        self.isWorkNormally.accept(true)
-                    }
+                    self.login(user: info)
                 }
             }
             
@@ -123,31 +120,48 @@ private extension Center {
         http.request(task: task, success: response, failRetry: retry)
     }
     
-    func login(userId: String, success: Completion) {
+    func login(user: BasicUserInfo, success: Completion = nil) {
         let url = URLGroup.userLogin
         let event = ArRequestEvent(name: "user-login")
         let task = ArRequestTask(event: event,
                                type: .http(.post, url: url),
                                timeout: .low,
-                               parameters: ["userId": userId])
+                               parameters: ["userId": user.userId])
         
         let successCallback: DicEXCompletion = { [unowned self] (json: ([String: Any])) throws in
             let object = try json.getDataObject()
             let userToken = try object.getStringValue(of: "userToken")
-            let rtmToken = try object.getStringValue(of: "rtmToken")
             Keys.UserToken = userToken
-            Keys.AgoraRtmToken = rtmToken
             
-            // RTM Login
-            self.rteLogin(userId: userId, success: success)
+            // RTE Login
+            self.rteLogin(userId: user.userId, success: success)
         }
+        
         let response = ArResponse.json(successCallback)
         
-        let retry: ArErrorRetryCompletion = { (error: Error) -> ArRetryOptions in
-            return .retry(after: 1)
+        let retry: ArErrorRetryCompletion = { [unowned self] (error: ArError) -> ArRetryOptions in
+            guard let code = error.code else {
+                return .retry(after: 1)
+            }
+            
+            if code == 404 || code == 403 {
+                self.loginFailHandle()
+                return .resign
+            } else {
+                return .retry(after: 1)
+            }
         }
         
         http.request(task: task, success: response, failRetry: retry)
+    }
+    
+    func loginFailHandle() {
+        // userId invalid, register again
+        self.register { [unowned self] (info: BasicUserInfo) in
+            self.login(user: info) { [unowned self] in
+                self.current = CurrentUser(info: info)
+            }
+        }
     }
     
     func rteLogin(userId: String, success: Completion) {
@@ -161,6 +175,8 @@ private extension Center {
         AgoraRteEngine.create(with: configuration, success: { [unowned self] (engine) in
             self.rteKit = engine
             self.rteKit.delegate = self
+            
+            self.isWorkNormally.accept(true)
             
             if let success = success {
                 success()
