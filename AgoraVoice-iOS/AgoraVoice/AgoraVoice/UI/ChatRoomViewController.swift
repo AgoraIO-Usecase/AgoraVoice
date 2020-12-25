@@ -56,8 +56,12 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
     var multiHostsVM: MultiHostsVM!
     var seatsVM: LiveSeatsVM!
     
-    fileprivate lazy var erorToast: TagImageTextToast = {
-        let view = TagImageTextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
+    fileprivate lazy var errorToast: TagImageTextToast = {
+        let view = TagImageTextToast(frame: CGRect(x: 0,
+                                                   y: 200,
+                                                   width: 0,
+                                                   height: 44),
+                                     filletRadius: 8)
         view.tagImage = UIImage(named: "icon-red warning")
         return view
     }()
@@ -613,7 +617,7 @@ private extension ChatRoomViewController {
 
 private extension ChatRoomViewController {
     func showErrorToast(_ text: String) {
-        erorToast.text = text
-        showToastView(erorToast, duration: 3)
+        errorToast.text = text
+        showToastView(errorToast, duration: 3)
     }
 }
