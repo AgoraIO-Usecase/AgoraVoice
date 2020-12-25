@@ -230,7 +230,9 @@ private extension LiveListViewController {
             }) { [unowned self] (error) in
                 self.hiddenHUD()
                 
-                if (error as NSError).code == 7 {
+                if let tError = error as? AGEError,
+                   let code = tError.code,
+                   code == 20403001 {
                     self.showTextToast(text: NSLocalizedString("Join_Fail"))
                 } else {
                     self.showTextToast(text: "join live fail")

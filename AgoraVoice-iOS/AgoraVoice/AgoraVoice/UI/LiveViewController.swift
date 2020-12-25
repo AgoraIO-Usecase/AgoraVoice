@@ -65,11 +65,12 @@ extension LiveViewController {
         
         // end
         liveSession.state.subscribe(onNext: { [unowned self] (state) in
-            guard state == .end else {
-                return
+            switch state {
+            case .end(let reason):
+                self.liveEndAlert(reason: reason)
+            case .active:
+                break
             }
-            
-            self.liveEndAlert()
         }).disposed(by: bag)
     }
     
@@ -587,12 +588,21 @@ extension LiveViewController {
 }
 
 extension LiveViewController {
-    func liveEndAlert() {
+    func liveEndAlert(reason: LiveSession.State.Reason) {
         if let vc = self.presentedViewController {
             vc.dismiss(animated: false, completion: nil)
         }
         
-        self.showAlert(NSLocalizedString("Live_End")) { [unowned self] (_) in
+        var text: String
+        
+        switch reason {
+        case .ownerClose:
+            text = NSLocalizedString("Live_End")
+        case .timeout:
+            text = NSLocalizedString("Live_Timeout")
+        }
+        
+        self.showAlert(text) { [unowned self] (_) in
             self.dimissSelf()
         }
     }

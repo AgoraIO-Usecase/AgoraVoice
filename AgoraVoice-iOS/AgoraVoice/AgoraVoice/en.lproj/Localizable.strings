@@ -97,7 +97,7 @@ Start_Chating="Start";
 // LiveList
 Create_A_Room="Create a room to start";
 No_Data_Please_Try_Again_Later="No data, please try again later";
-Join_Fail="This is a testing application, and the max number of participants per channel is 10.";
+Join_Fail="The max number of participants per channel is 10.";
 
 // LiveRoom
 Live_Text_Input_Placeholder="Say something...";
@@ -112,7 +112,8 @@ Send_Chat_Message_Fail="send message fail";
 Give_Owner_A_Gift="gives";
 Present_Gift_Fail="gives gift fail";
 User_List="Member listing";
-Live_End="Live End";
+Live_End="Live end";
+Live_Timeout="Live timeout";
 Confirm_End_Live="Do you want to end this live streaming?";
 Please_Input_Headset="Plug in a headphone";
 
@@ -138,7 +139,7 @@ RTC_SDK_Version="SDK Version";
 AV_Version="Agora Voice Version";
 Upload_Log="Upload Log";
 
-Test_Product_Disclaimer="Test product disclaimer ";
+Test_Product_Disclaimer="Product disclaimer ";
 
 Disclaimer_Detail="Agora Voice (\"this product\") is a product provided by Agora. Agora enjoys the copyright and ownership of this product. It is hereby granted free of charge to anyone who obtains a copy of this product and related documentation (hereinafter referred to as \"software\") to try the software without limitation, including but not limited to trial, copy, modify, merge, publish, distribute, but this product shall not be used For any commercial use, you may not sublicense and / or sell copies of the software.
 

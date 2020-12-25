@@ -76,11 +76,14 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         navigation.navigationBar.isHidden = true
         
         // check live state
-        guard liveSession.state.value == .end else {
-            return
-        }
+        let state = liveSession.state.value
         
-        liveEndAlert()
+        switch state {
+        case .end(let reason):
+            liveEndAlert(reason: reason)
+        case .active:
+            break
+        }
     }
     
     deinit {

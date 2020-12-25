@@ -14,7 +14,11 @@ import AgoraRte
 
 class LiveSession: RxObject {
     enum State {
-        case active, end
+        enum Reason: Int {
+            case timeout = 1, ownerClose = 2
+        }
+        
+        case active, end(Reason)
     }
     
     private var logTube: LogTube {
@@ -106,7 +110,7 @@ class LiveSession: RxObject {
                        success: ((LiveSession) -> Void)? = nil,
                        fail: ErrorCompletion = nil) {
         let client = Center.shared().centerProvideRequestHelper()
-        let event = ArRequestEvent(name: "live-create")
+        let event = ArRequestEvent(name: "live-session-create")
         let url = URLGroup.liveCreate
         let task = ArRequestTask(event: event,
                                type: .http(.post, url: url),
@@ -576,12 +580,15 @@ extension LiveSession: AgoraRteSceneDelegate {
         
         if let basic = try? properties.getDictionaryValue(of: "basic"),
            let roomState = try? basic.getIntValue(of: "state"),
-           roomState == 0 {
+           roomState == 0,
+           let cause = try? properties.getDictionaryValue(of: "cause"),
+           let data = try? cause.getIntValue(of: "data"),
+           let reason = LiveSession.State.Reason(rawValue: data) {
             leave()
-            state.accept(.end)
+            state.accept(.end(reason))
+        } else {
+            customMessage.accept(properties)
         }
-        
-        customMessage.accept(properties)
     }
     
     func scene(_ scene: AgoraRteScene, didReceiveSceneMessage message: AgoraRteMessage, fromUser user: AgoraRteUserInfo) {

@@ -97,7 +97,7 @@ Start_Chating="开始聊天";
 // LiveList
 Create_A_Room="请创建一个房间";
 No_Data_Please_Try_Again_Later="暂无数据，请稍后再试";
-Join_Fail="此软件为测试产品，房间最大人数为10人";
+Join_Fail="房间最大人数为10人";
 
 // LiveRoom
 Live_Text_Input_Placeholder="说点什么...";
@@ -113,6 +113,7 @@ Present_Gift_Fail="赠送礼物失败";
 Give_Owner_A_Gift="向主播赠送一个";
 User_List="成员列表";
 Live_End="直播结束";
+Live_Timeout="直播超时";
 Confirm_End_Live="是否结束直播？";
 Please_Input_Headset="请插上耳机";
 
@@ -138,7 +139,7 @@ RTC_SDK_Version="SDK 版本";
 AV_Version="Agora Voice 版本";
 Upload_Log="上传日志";
 
-Test_Product_Disclaimer="测试产品免责声明";
+Test_Product_Disclaimer="产品免责声明";
 
 Disclaimer_Detail="Agora Voice（“本产品”）是由Agora提供的一款产品，Agora享有本产品的著作权和所有权。特此免费授予获得本产品和相关文档文件（以下简称“软件”）副本的任何人无限制地试用软件的权利，包括但不限于试用，复制，修改，合并，发布，分发，但本产品不得用于任何商业用途，不得再许可和/或出售该软件的副本。
 
