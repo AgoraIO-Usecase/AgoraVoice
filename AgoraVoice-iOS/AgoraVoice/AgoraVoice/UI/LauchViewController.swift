@@ -33,6 +33,8 @@ class LauchViewController: RxViewController, ShowAlertProtocol {
                 self.centerRegister()
             }
         }).disposed(by: bag)
+        #else
+        logoButton.isUserInteractionEnabled = false
         #endif
     }
     
