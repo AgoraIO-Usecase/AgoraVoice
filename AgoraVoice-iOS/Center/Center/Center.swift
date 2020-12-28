@@ -59,6 +59,7 @@ extension Center {
                 }
                 
                 self.register { [unowned self] (info: BasicUserInfo) in
+                    self.current = CurrentUser(info: info)
                     self.login(user: info)
                 }
             }
