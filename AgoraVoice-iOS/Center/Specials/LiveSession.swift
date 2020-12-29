@@ -176,24 +176,14 @@ class LiveSession: RxObject {
             unpublishLocalStream()
         }
         
-        if localRole.value.type == .owner {
-            let client = Center.shared().centerProvideRequestHelper()
-            let event = ArRequestEvent(name: "live-session-close")
-            let url = URLGroup.liveClose(roomId: room.value.roomId)
-            let task = ArRequestTask(event: event,
-                                   type: .http(.post, url: url),
-                                   header: ["token": Keys.UserToken])
-            client.request(task: task)
-        } else {
-            let client = Center.shared().centerProvideRequestHelper()
-            let event = ArRequestEvent(name: "live-session-leave")
-            let url = URLGroup.liveLeave(userId: localRole.value.info.userId,
-                                         roomId: room.value.roomId)
-            let task = ArRequestTask(event: event,
-                                   type: .http(.post, url: url),
-                                   header: ["token": Keys.UserToken])
-            client.request(task: task)
-        }
+        let client = Center.shared().centerProvideRequestHelper()
+        let event = ArRequestEvent(name: "live-session-leave")
+        let url = URLGroup.liveLeave(userId: localRole.value.info.userId,
+                                     roomId: room.value.roomId)
+        let task = ArRequestTask(event: event,
+                               type: .http(.post, url: url),
+                               header: ["token": Keys.UserToken])
+        client.request(task: task)
         
         sceneService.leave()
     }
