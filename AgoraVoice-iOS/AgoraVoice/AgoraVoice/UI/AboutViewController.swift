@@ -25,7 +25,8 @@ class DisclaimerViewController: UIViewController {
         
         let string = NSAttributedString(string: NSLocalizedString("Disclaimer_Detail"),
                                         attributes: [NSAttributedString.Key.paragraphStyle : para,
-                                                     NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17)])
+                                                     NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15),
+                                                     NSAttributedString.Key.foregroundColor : UIColor.white])
         self.textView.attributedText = string
     }
 }

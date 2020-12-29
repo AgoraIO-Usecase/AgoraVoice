@@ -17,9 +17,9 @@ class LiveListPlaceholderView: RxView {
         
         var image: UIImage {
             switch self {
-            case .noInternet: return UIImage(named: "pic-empty")!
+            case .noInternet: return UIImage(named: "pic-No signal")!
             case .noData:     return UIImage(named: "pic-No signal")!
-            case .noRoom:     return UIImage(named: "pic-No data")!
+            case .noRoom:     return UIImage(named: "pic-empty")!
             }
         }
         
@@ -34,11 +34,16 @@ class LiveListPlaceholderView: RxView {
     
     @IBOutlet weak var tagImageView: UIImageView!
     @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var subLabel: UILabel!
     
     var type: PlaceholderType = .noData {
         didSet {
             tagImageView.image = type.image
             label.text = type.description
+            label.textColor = (type != .noInternet) ? UIColor(hexString: "#4D5D73") : UIColor.white
+            
+            subLabel.text = NSLocalizedString("No_Data_Please_Try_Again_Later")
+            subLabel.isHidden = (type != .noInternet)
         }
     }
     
