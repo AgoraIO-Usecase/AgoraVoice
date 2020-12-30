@@ -2,11 +2,11 @@ package io.agora.agoravoice;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.tencent.bugly.crashreport.CrashReport;
+
 import io.agora.agoravoice.manager.ProxyManager;
-import io.agora.agoravoice.ui.activities.SplashActivity;
 import io.agora.agoravoice.utils.Const;
 
 public class AgoraApplication extends Application {
@@ -18,6 +18,7 @@ public class AgoraApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initGlobalVariables();
+        initBugly();
     }
 
     private void initGlobalVariables() {
@@ -36,6 +37,12 @@ public class AgoraApplication extends Application {
 
     public SharedPreferences preferences() {
         return mPreferences;
+    }
+
+    private void initBugly() {
+        CrashReport.initCrashReport(getApplicationContext(),
+                getResources().getString(R.string.bugly_app_id),
+                BuildConfig.DEBUG);
     }
 
     @Override

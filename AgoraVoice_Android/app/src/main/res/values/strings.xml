@@ -4,6 +4,9 @@
     <string name="app_id" translatable="false"><##APP_ID##></string>
     <string name="customer_id" translatable="false"><##CUSTOMER_ID##></string>
     <string name="customer_certificate" translatable="false"><##CUSTOMER_CER##></string>
+    <string name="bugly_app_id" translatable="false"><##BUGLYl_APP_ID##></string>
+
+    <string name="powered_by_agora" translatable="false">Powered by Agora.io</string>
 
     <!-- Main Activity -->
     <string name="main_navigation_home">Home</string>

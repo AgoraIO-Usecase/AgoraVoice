@@ -73,4 +73,7 @@ dependencies {
 
     implementation 'io.agora.rtm:rtm-sdk:1.4.1'
     implementation 'com.aliyun.dpa:oss-android-sdk:2.9.4'
+
+    implementation 'com.tencent.bugly:crashreport:latest.release'
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
 }
