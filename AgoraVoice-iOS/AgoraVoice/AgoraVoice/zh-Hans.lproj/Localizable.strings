@@ -167,7 +167,6 @@ Confirm_End_Broadcasting="确定终止连麦？";
 Owner_Forces_You_End_Broadcasting="房主强制你下麦";
 
 // Audience
-
 Application_Of_Broadcasting="申请上麦";
 Owner_Reject_Broadcasting_Application="房主拒绝你的申请";
 Application_Of_Broadcasting_Fail="申请上麦失败";

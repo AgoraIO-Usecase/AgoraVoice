@@ -593,7 +593,7 @@ extension LiveViewController {
         case .ownerClose:
             text = NSLocalizedString("Live_End")
         case .timeout:
-            text = NSLocalizedString("Live_Timeout")
+            text = LiveVCLocalizable.liveTimeout()
         }
         
         self.showAlert(text) { [unowned self] (_) in

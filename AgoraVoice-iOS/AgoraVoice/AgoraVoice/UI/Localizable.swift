@@ -8,6 +8,16 @@
 
 import UIKit
 
+class LiveVCLocalizable: NSObject {
+    static func liveTimeout() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "此软件房间最长直播时间为10分钟"
+        } else {
+            return "The max duration per session is 10 minutes"
+        }
+    }
+}
+
 class ChatRoomLocalizable: NSObject {
     static func doYouRejectApplication(from: String) -> String {
         if DeviceAssistant.Language.isChinese {

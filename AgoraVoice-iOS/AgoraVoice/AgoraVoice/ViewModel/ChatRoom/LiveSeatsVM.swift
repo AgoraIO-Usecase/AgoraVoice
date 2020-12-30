@@ -76,7 +76,7 @@ class LiveSeatsVM: CustomObserver {
                 return .resign
             }
             
-            if let cError = error as? ArError, cError.code == nil {
+            if error.code == nil {
                 strongSelf.fail.accept(NSLocalizedString("Lost_Connection_Retry"))
             } else {
                 switch state {
