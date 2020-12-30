@@ -51,15 +51,9 @@ extension LiveViewController {
         
         liveSession.localStream.subscribe(onNext: { [unowned self] (stream) in
             if let stream = stream {
-                guard stream.hasAudio != self.deviceVM.mic.value.boolValue else {
-                    return
-                }
-                self.deviceVM.mic.accept(stream.hasAudio ? .on : .off)
+                self.deviceVM.micStatus.accept(stream.hasAudio ? .on : .off)
             } else {
-                guard self.deviceVM.mic.value != .off else {
-                    return
-                }
-                self.deviceVM.mic.accept(.off)
+                self.deviceVM.micStatus.accept(.off)
             }
         }).disposed(by: bag)
         
@@ -215,7 +209,7 @@ extension LiveViewController {
     }
     
     func mediaDevice() {
-        deviceVM.mic.subscribe(onNext: { [unowned self] (isOn) in
+        deviceVM.micAction.subscribe(onNext: { [unowned self] (isOn) in
             self.liveSession.updateLocalAudioStream(isOn: isOn.boolValue)
         }).disposed(by: bag)
         
@@ -253,10 +247,10 @@ extension LiveViewController {
                 return
             }
             
-            self.deviceVM.mic.accept(!isSelected ? .off : .on)
+            self.deviceVM.micAction.accept(!isSelected ? .off : .on)
         }).disposed(by: bag)
         
-        deviceVM.mic.map { (isOn) -> Bool in
+        deviceVM.micStatus.map { (isOn) -> Bool in
             return !isOn.boolValue
         }.bind(to: bottomToolsVC.micButton.rx.isSelected).disposed(by: bottomToolsVC.bag)
         

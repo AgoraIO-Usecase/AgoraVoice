@@ -12,7 +12,8 @@ import RxRelay
 import AgoraRte
 
 class MediaDeviceVM: RxObject {
-    let mic = BehaviorRelay<AGESwitch>(value: .off)
+    let micStatus = BehaviorRelay<AGESwitch>(value: .off)
+    let micAction = PublishRelay<AGESwitch>()
     let localAudioLoop = BehaviorRelay<AGESwitch>(value: .off)
     let audioOutput: BehaviorRelay<AgoraRteAudioOutputRouting> = BehaviorRelay(value: AgoraRteAudioOutputRouting.default)
 }
