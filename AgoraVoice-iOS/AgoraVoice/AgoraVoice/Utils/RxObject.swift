@@ -16,6 +16,10 @@ class RxView: UIView {
     let bag = DisposeBag()
 }
 
+class RxImageView: UIImageView {
+    let bag = DisposeBag()
+}
+
 class RxViewController: UIViewController {
     let bag = DisposeBag()
 }

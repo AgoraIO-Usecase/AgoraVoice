@@ -18,10 +18,6 @@ class GiftAudienceCell: UICollectionViewCell {
         self.headImage.backgroundColor = UIColor.blue
         self.headImage.cornerRadius(14)
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
 }
 
 class GiftAudienceViewController: RxCollectionViewController {

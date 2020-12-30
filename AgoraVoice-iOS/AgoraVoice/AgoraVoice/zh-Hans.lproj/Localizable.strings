@@ -149,6 +149,7 @@ Disclaimer_Detail="Agora Voice（“本产品”）是由Agora提供的一款产
 
 // Multi Hosts
 Became_A_Host="上麦";
+Became_A_Audience="下麦";
 Stopped_Hosting="下麦";
 End_Broadcasting="下麦";
 
@@ -166,7 +167,7 @@ Confirm_End_Broadcasting="确定终止连麦？";
 Owner_Forces_You_End_Broadcasting="房主强制你下麦";
 
 // Audience
-Confirm_Application_Of_Broadcasting="你确定要\“申请上麦\”吗？";
+
 Application_Of_Broadcasting="申请上麦";
 Owner_Reject_Broadcasting_Application="房主拒绝你的申请";
 Application_Of_Broadcasting_Fail="申请上麦失败";
@@ -176,7 +177,6 @@ Seat_Ban="禁麦";
 Seat_Unban="解禁";
 Seat_Close="封麦";
 Seat_Release="解封";
-Seat_Release_Description="解封此连麦位";
 Seat_Command_Fail="麦位命令失败";
 
 // Gift

@@ -494,21 +494,22 @@ fileprivate extension LiveSession {
             player.play()
         }).disposed(by: bag)
 
-        pauseMusic.subscribe { [unowned player] (music) in
+        pauseMusic.subscribe(onNext: { [unowned player] (music) in
             player.pause()
-        }.disposed(by: bag)
+        }).disposed(by: bag)
         
-        resumeMusic.subscribe { [unowned player] (music) in
+        resumeMusic.subscribe(onNext: { [unowned player] (music) in
             player.resume()
-        }.disposed(by: bag)
+        }).disposed(by: bag)
         
-        stopMusic.subscribe { [unowned player] (music) in
+        stopMusic.subscribe(onNext: { [unowned player] (music) in
             player.stop()
-        }.disposed(by: bag)
+        }).disposed(by: bag)
         
-        musicVolume.subscribe { [unowned player] (volume) in
+        musicVolume.subscribe(onNext: { [unowned player] (volume) in
             player.adjustPlayoutVolume(volume)
-        }.disposed(by: bag)
+            player.adjustPublishVolume(volume)
+        }).disposed(by: bag)
     }
 }
 

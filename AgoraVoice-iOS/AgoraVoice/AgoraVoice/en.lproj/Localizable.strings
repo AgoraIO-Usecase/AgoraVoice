@@ -15,7 +15,7 @@ Accept="Accept";
 YES="YES";
 NO="NO";
 Music="Music";
-Background="Background";
+Background="BG";
 Invitation="Invite";
 Inviting="Inviting";
 All="All";
@@ -149,6 +149,7 @@ You are free to choose whether to try the services provided by this product. If 
 
 // Multi Hosts
 Became_A_Host="became a host";
+Became_A_Audience="became a audience";
 Stopped_Hosting="stopped hosting";
 End_Broadcasting="End";
 
@@ -167,7 +168,6 @@ Confirm_End_Broadcasting="End Live Streaming?";
 Owner_Forces_You_End_Broadcasting="Owner forced you to become a audience";
 
 // Audience
-Confirm_Application_Of_Broadcasting="Do you send a application?";
 Application_Of_Broadcasting="Become a host";
 Owner_Reject_Broadcasting_Application="Owner reject your application";
 Application_Of_Broadcasting_Fail="Apply to be a host fail";
@@ -177,7 +177,6 @@ Seat_Ban="Mute";
 Seat_Unban="Un-mute";
 Seat_Close="Block";
 Seat_Release="Unblock";
-Seat_Release_Description="Unblock this seat";
 Seat_Command_Fail="Command fail";
 
 // Gift

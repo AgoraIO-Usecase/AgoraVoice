@@ -55,20 +55,20 @@ class SeatButton: UIButton {
 class LiveSeatView: RxView {
     enum Command {
         // 禁麦， 解禁， 封麦，下麦， 解封， 邀请，
-        case ban, unban, close, forceBroadcasterEnd, release, invitation
+        case mute, unmute, close, forceToStopBroadcasting, release, invitation
         // 申请成为主播， 主播下麦
-        case application, endBroadcasting
+        case application, stopBroadcasting
         
         var description: String {
             switch self {
-            case .ban:                  return NSLocalizedString("Seat_Ban")
-            case .unban:                return NSLocalizedString("Seat_Unban")
-            case .forceBroadcasterEnd:  return NSLocalizedString("End_Broadcasting")
-            case .close:                return NSLocalizedString("Seat_Close")
-            case .release:              return NSLocalizedString("Seat_Release")
-            case .invitation:           return NSLocalizedString("Invitation")
-            case .application:          return NSLocalizedString("Application_Of_Broadcasting")
-            case .endBroadcasting:      return NSLocalizedString("End_Broadcasting")
+            case .mute:                     return NSLocalizedString("Seat_Ban")
+            case .unmute:                   return NSLocalizedString("Seat_Unban")
+            case .forceToStopBroadcasting:  return NSLocalizedString("End_Broadcasting")
+            case .close:                    return NSLocalizedString("Seat_Close")
+            case .release:                  return NSLocalizedString("Seat_Release")
+            case .invitation:               return NSLocalizedString("Invitation")
+            case .application:              return NSLocalizedString("Application_Of_Broadcasting")
+            case .stopBroadcasting:         return NSLocalizedString("End_Broadcasting")
             }
         }
     }
@@ -104,9 +104,9 @@ class LiveSeatView: RxView {
                 self.commands.accept([.invitation, .close])
             case (.normal(let stream), .owner):
                 if stream.hasAudio {
-                    self.commands.accept([.ban, .forceBroadcasterEnd, .close])
+                    self.commands.accept([.mute, .forceToStopBroadcasting, .close])
                 } else {
-                    self.commands.accept([.unban, .forceBroadcasterEnd, .close])
+                    self.commands.accept([.unmute, .forceToStopBroadcasting, .close])
                 }
             case (.close, .owner):
                 self.commands.accept([.release])
@@ -117,7 +117,7 @@ class LiveSeatView: RxView {
                 guard stream.owner.info == Center.shared().centerProvideLocalUser().info.value else {
                     return
                 }
-                self.commands.accept([.endBroadcasting])
+                self.commands.accept([.stopBroadcasting])
             case (.close, .broadcaster):
                 break
             // audience

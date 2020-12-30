@@ -7,9 +7,54 @@
 //
 
 import UIKit
+import RxCocoa
+import RxSwift
+
+class OwnerHeadView: RxView {
+    let headImageView = UIImageView()
+    let hasAudio = BehaviorRelay(value: false)
+    let audioSilenceTag = UIImageView()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        initViews()
+        observe()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        initViews()
+        observe()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        headImageView.frame = bounds
+        headImageView.isCycle = true
+        
+        audioSilenceTag.frame = CGRect(x: bounds.width - 20,
+                                       y: bounds.height - 20,
+                                       width: 20,
+                                       height: 20)
+    }
+    
+    private func initViews() {
+        backgroundColor = .clear
+        
+        addSubview(headImageView)
+        
+        audioSilenceTag.image = UIImage(named: "icon-Mic-off-tag")
+        audioSilenceTag.isHidden = true
+        addSubview(audioSilenceTag)
+    }
+    
+    private func observe() {
+        hasAudio.bind(to: audioSilenceTag.rx.isHidden).disposed(by: bag)
+    }
+}
 
 class ChatRoomViewController: MaskViewController, LiveViewController {
-    @IBOutlet weak var ownerImageView: UIImageView!
+    @IBOutlet weak var ownerView: OwnerHeadView!
     @IBOutlet weak var ownerLabel: UILabel!
     @IBOutlet weak var ownerLabelWidth: NSLayoutConstraint!
     
@@ -172,16 +217,25 @@ private extension ChatRoomViewController {
         }).disposed(by: bag)
         
         liveSession.room.subscribe(onNext: { [unowned self] (room) in
-            self.ownerImageView.image = room.owner.info.image
+            self.ownerView.headImageView.image = room.owner.info.image
             self.ownerLabel.text = room.owner.info.name
             
+            let drawRange = CGSize(width: CGFloat(MAXFLOAT),
+                                   height: 25)
             let size = room.owner.info.name.size(font: self.ownerLabel.font,
-                                                 drawRange: CGSize(width: CGFloat(MAXFLOAT), height: 25))
+                                                 drawRange: drawRange)
             var width = size.width + 24
             if width < 42 {
                 width = 42
             }
             self.ownerLabelWidth.constant = width
+        }).disposed(by: bag)
+        
+        liveSession.streamList.subscribe(onNext: { [unowned self] (streams) in
+            let owner = self.liveSession.room.value.owner.info
+            for stream in streams where stream.owner.info == owner {
+                self.ownerView.hasAudio.accept(stream.hasAudio)
+            }
         }).disposed(by: bag)
         
         personCountView.rx.controlEvent(.touchUpInside).subscribe(onNext: { [unowned self] in
@@ -226,12 +280,8 @@ private extension ChatRoomViewController {
         vc.rejectApplicationOfUser.subscribe(onNext: { [unowned self] (application) in
             self.hiddenMaskView()
             
-            var message: String
-            if DeviceAssistant.Language.isChinese {
-                message = "你是否要拒绝\(application.initiator.info.name)的上麦申请?"
-            } else {
-                message = "Do you reject \(application.initiator.info.name)'s application?"
-            }
+            let name = application.initiator.info.name
+            let message = ChatRoomLocalizable.doYouRejectApplication(from: name)
             
             self.showAlert(message: message,
                            action1: NSLocalizedString("Cancel"),
@@ -244,12 +294,8 @@ private extension ChatRoomViewController {
         vc.acceptApplicationOfUser.subscribe(onNext: { [unowned self] (application) in
             self.hiddenMaskView()
             
-            var message: String
-            if DeviceAssistant.Language.isChinese {
-                message = "你是否要接受\(application.initiator.info.name)的上麦申请?"
-            } else {
-                message = "Do you accept \(application.initiator.info.name)'s application?"
-            }
+            let name = application.initiator.info.name
+            let message = ChatRoomLocalizable.doYouAcceptApplication(from: name)
             
             self.showAlert(message: message,
                            action1: NSLocalizedString("Cancel"),
@@ -336,13 +382,13 @@ private extension ChatRoomViewController {
             case .invitation:
                 self.invitationOperation(command: command,
                                          seatCommands: seatCommands)
-            case .forceBroadcasterEnd, .unban, .ban:
-                self.forceBroadcasterEndUnbanBanOperation(command: command,
+            case .forceToStopBroadcasting, .mute, .unmute:
+                self.forceToStopBroadcastingUnbanBanOperation(command: command,
                                                           seatCommands: seatCommands)
             // Broadcaster
-            case .endBroadcasting:
-                self.endBroadcastingOperation(command: command,
-                                              seatCommands: seatCommands)
+            case .stopBroadcasting:
+                self.stopBroadcastingOperation(command: command,
+                                               seatCommands: seatCommands)
             // Audience
             case .application:
                 self.applicationOperation(command: command,
@@ -368,38 +414,21 @@ private extension ChatRoomViewController {
         }).disposed(by: bag)
         
         multiHostsVM.invitationByRejected.subscribe(onNext: { [unowned self] (invitation) in
-            if DeviceAssistant.Language.isChinese {
-                self.showTextToast(text: invitation.receiver.info.name + "拒绝了这次邀请")
-            } else {
-                self.showTextToast(text: invitation.receiver.info.name + "rejected this invitation")
-            }
-        }).disposed(by: bag)
-        
-        multiHostsVM.invitationByRejected.subscribe(onNext: { [unowned self] (invitation) in
-            if DeviceAssistant.Language.isChinese {
-                self.showTextToast(text: invitation.receiver.info.name + "拒绝了这次邀请")
-            } else {
-                self.showTextToast(text: invitation.receiver.info.name + "rejected this invitation")
-            }
+            let message = ChatRoomLocalizable.rejectThisInvitation()
+            let name = invitation.receiver.info.name
+            self.showTextToast(text: name + message)
         }).disposed(by: bag)
         
         // broadcaster
         multiHostsVM.receivedEndBroadcasting.subscribe(onNext: { [unowned self] in
-            if DeviceAssistant.Language.isChinese {
-                self.showTextToast(text: "房主强迫你下麦")
-            } else {
-                self.showTextToast(text: "Owner forced you to becmoe a audience")
-            }
+            let message = ChatRoomLocalizable.ownerForcedYouToBecomeAudience()
+            self.showTextToast(text: message)
         }).disposed(by: bag)
         
         // audience
         multiHostsVM.receivedInvitation.subscribe(onNext: { [unowned self] (invitation) in
-            var message: String
-            if DeviceAssistant.Language.isChinese {
-                message = "\(invitation.initiator.info.name)邀请您上麦，是否接受"
-            } else {
-                message = "Do you agree to become a host?"
-            }
+            let user = invitation.initiator.info.name
+            let message = ChatRoomLocalizable.doYouAgreeToBecomeHost(owner: user)
             
             self.showAlert(message: message,
                            action1: NSLocalizedString("Reject"),
@@ -417,35 +446,20 @@ private extension ChatRoomViewController {
         
         // role update
         multiHostsVM.audienceBecameBroadcaster.subscribe(onNext: { [unowned self] (user) in
-            var chat: Chat
-            
-            if DeviceAssistant.Language.isChinese {
-                chat = Chat(name: user.info.name,
-                            text: " 上麦",
+            let message = NSLocalizedString("Became_A_Host")
+            let chat = Chat(name: user.info.name,
+                            text: " \(message)",
                             widthLimit: self.chatWidthLimit)
-                
-            } else {
-                chat = Chat(name: user.info.name,
-                            text: " became a broadcaster",
-                            widthLimit: self.chatWidthLimit)
-            }
             
             self.chatVM.newMessages([chat])
             self.showTextToast(text: chat.content.string)
         }).disposed(by: bag)
         
         multiHostsVM.broadcasterBecameAudience.subscribe(onNext: { [unowned self] (user) in
-            var chat: Chat
-            
-            if DeviceAssistant.Language.isChinese {
-                chat = Chat(name: user.info.name,
-                            text: " 下麦",
+            let message = NSLocalizedString("Became_A_Audience")
+            let chat = Chat(name: user.info.name,
+                            text: " \(message)",
                             widthLimit: self.chatWidthLimit)
-            } else {
-                chat = Chat(name: user.info.name,
-                            text: " became a audience",
-                            widthLimit: self.chatWidthLimit)
-            }
             
             self.chatVM.newMessages([chat])
             self.showTextToast(text: chat.content.string)
@@ -467,56 +481,23 @@ private extension ChatRoomViewController {
             self.showTextToast(text: text)
         }).disposed(by: bag)
     }
-    
-    func alertMessageOfSeatCommand(_ command: LiveSeatView.Command, with userName: String?) -> String {
-        switch command {
-        case .ban:
-            if DeviceAssistant.Language.isChinese {
-                return "禁止\(userName!)发言?"
-            } else {
-                return "Mute \(userName!)?"
-            }
-        case .unban:
-            if DeviceAssistant.Language.isChinese {
-                return "解除\(userName!)禁言?"
-            } else {
-                return "Unmute \(userName!)?"
-            }
-        case .forceBroadcasterEnd:
-            if DeviceAssistant.Language.isChinese {
-                return "确定将\(userName!)下麦?"
-            } else {
-                return "Stop \(userName!) hosting"
-            }
-        case .close:
-            if DeviceAssistant.Language.isChinese {
-                return "将关闭该麦位，如果该位置上有用户，将下麦该用户"
-            } else {
-                return "Block this position"
-            }
-        case .release:
-            return NSLocalizedString("Seat_Release_Description")
-        case .invitation:
-            if DeviceAssistant.Language.isChinese {
-                return "你是否要邀请\(userName!)上麦?"
-            } else {
-                return "Do you send a invitation to \(userName!)?"
-            }
-        default:
-            assert(false)
-            return ""
-        }
-    }
 }
 
 // MARK: - Seat command operation
 private extension ChatRoomViewController {
     func closeReleaseOperation(command: LiveSeatView.Command,
                                seatCommands: LiveSeatCommands) {
-        let name = seatCommands.seat.state.stream?.owner.info.name
+        var message: String
         
-        let message = self.alertMessageOfSeatCommand(command,
-                                                     with: name)
+        switch command {
+        case .release:
+            message = ChatRoomLocalizable.unblockThisSeat()
+        case .close:
+            message = ChatRoomLocalizable.blockThisSeat()
+        default:
+            assert(false)
+            return
+        }
         
         let seatState: SeatState = (command == .close ? .close : .empty)
         
@@ -534,8 +515,8 @@ private extension ChatRoomViewController {
         self.presentInvitationList { [unowned self] (user) in
             self.hiddenMaskView()
             
-            let message = self.alertMessageOfSeatCommand(command,
-                                                         with: user.info.name)
+            let message = ChatRoomLocalizable.sendInvitation(to: user.info.name)
+            
             self.showAlert(message: message,
                            action1: NSLocalizedString("NO"),
                            action2: NSLocalizedString("YES"),
@@ -546,27 +527,40 @@ private extension ChatRoomViewController {
         }
     }
     
-    func forceBroadcasterEndUnbanBanOperation(command: LiveSeatView.Command,
+    func forceToStopBroadcastingUnbanBanOperation(command: LiveSeatView.Command,
                                               seatCommands: LiveSeatCommands) {
         guard let stream = seatCommands.seat.state.stream else {
                            assert(false)
                            return
         }
         
-        let message = self.alertMessageOfSeatCommand(command,
-                                                     with: stream.owner.info.name)
+        let userName = stream.owner.info.name
+        
+        var message: String
+        
+        switch command {
+        case .forceToStopBroadcasting:
+            message = ChatRoomLocalizable.forceBroacasterToBecomeAudience(userName: userName)
+        case .mute:
+            message = ChatRoomLocalizable.muteSomeOne(userName: userName)
+        case .unmute:
+            message = ChatRoomLocalizable.ummuteSomeOne(userName: userName)
+        default:
+            assert(false)
+            return
+        }
         
         self.showAlert(message: message,
                        action1: NSLocalizedString("Cancel"),
                        action2: NSLocalizedString("Confirm"),
                        handler2: { [unowned self] (_) in
                         switch command {
-                        case .forceBroadcasterEnd:
+                        case .forceToStopBroadcasting:
                             self.multiHostsVM.forceEndWith(user: stream.owner,
                                                            on: seatCommands.seat.index)
-                        case .unban:
+                        case .unmute:
                             self.liveSession.unmuteOther(stream: stream)
-                        case .ban:
+                        case .mute:
                             self.liveSession.muteOther(stream: stream)
                         default:
                             break
@@ -574,19 +568,15 @@ private extension ChatRoomViewController {
                        })
     }
     
-    func endBroadcastingOperation(command: LiveSeatView.Command,
-                                  seatCommands: LiveSeatCommands) {
+    func stopBroadcastingOperation(command: LiveSeatView.Command,
+                                   seatCommands: LiveSeatCommands) {
         guard let user = seatCommands.seat.state.stream?.owner else {
             assert(false)
             return
         }
         
-        var message: String
-        if DeviceAssistant.Language.isChinese {
-            message = "确定终止连麦？"
-        } else {
-            message = "End Live Streaming?"
-        }
+        let message = ChatRoomLocalizable.stopBroadcasting()
+        
         self.showAlert(message: message,
                        action1: NSLocalizedString("Cancel"),
                        action2: NSLocalizedString("Confirm"),
@@ -598,18 +588,16 @@ private extension ChatRoomViewController {
     
     func applicationOperation(command: LiveSeatView.Command,
                               seatCommands: LiveSeatCommands) {
-        self.showAlert(message: NSLocalizedString("Confirm_Application_Of_Broadcasting"),
+        let message = ChatRoomLocalizable.doYouSendApplication()
+        self.showAlert(message: message,
                        action1: NSLocalizedString("Cancel"),
                        action2: NSLocalizedString("Confirm"),
                        handler2:  { [unowned self] (_) in
                         self.multiHostsVM.sendApplication(by: self.liveSession.localRole.value,
                                                           for: seatCommands.seat.index,
                                                           success: { [unowned self] in
-                                                            if DeviceAssistant.Language.isChinese {
-                                                                self.showTextToast(text: "您的上麦申请已发送")
-                                                            } else {
-                                                                self.showTextToast(text: "Your application has been sent")
-                                                            }
+                                                            let message = ChatRoomLocalizable.yourApplicationHasBeenSent()
+                                                            self.showTextToast(text: message)
                                                           })
                        })
     }

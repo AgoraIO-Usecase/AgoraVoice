@@ -22,10 +22,6 @@ class MusicCell: UITableViewCell {
             self.singerLabel.textColor = isPlaying ? UIColor(hexString: "#FFFFFF") : UIColor(hexString: "#9BA2AB")
         }
     }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
 }
 
 class MusicViewController: RxTableViewController {
