@@ -44,9 +44,13 @@
     <string name="sign_up_agora_title">注册声网账号</string>
     <string name="sign_up_website_link">https://sso.agora.io/cn/signup</string>
 
-    <string name="agoralive_version_title">AgoraVoice 版本</string>
-    <string name="agoralive_release_time_title">发布时间</string>
-    <string name="agoralive_media_sdk_version_title">媒体SDK版本</string>
+    <string name="version_title">AgoraVoice 版本</string>
+    <string name="release_date_title">发版时间</string>
+    <string name="rte_sdk_version_title">SDK 版本</string>
+    <string name="upload_log_title">上传日志</string>
+
+    <string name="upload_log_success_message_format">日志文件上传成功, 日志 id %s 已生成并复制到剪贴板</string>
+    <string name="upload_log_fail_message_format">日志上传失败: %s</string>
 
     <!-- Nickname Edit -->
     <string name="profile_name_edit_hint">输入昵称&#8230;</string>
@@ -311,7 +315,9 @@
     <string name="toast_no_wired_mic_plugged">请插入有线带麦耳机</string>
     <string name="toast_join_class_success">加入房间成功</string>
     <string name="toast_join_class_fail">加入房间失败</string>
-    <string name="toast_room_ends">直播房间已结束</string>
+    <string name="toast_room_end_timeout">直播房间超时</string>
+    <string name="toast_room_end_owner_leave">房主已离开，直播间关闭</string>
+    <string name="toast_room_end">直播房间已结束</string>
     <string name="toast_app_version_fail">获取应用版本失败</string>
     <string name="toast_link_empty">链接地址为空</string>
 
@@ -319,4 +325,5 @@
     <string name="error_no">正常</string>
     <string name="error_seat_taken">此麦位已经被其他主播占用</string>
     <string name="error_room_max_user">此软件为测试产品，房间最大人数为10人</string>
+    <string name="error_room_not_exist">房间不存在</string>
 </resources>

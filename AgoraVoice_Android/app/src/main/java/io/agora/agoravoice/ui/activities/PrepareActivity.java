@@ -177,7 +177,9 @@ public class PrepareActivity extends AbsLiveActivity {
         proxy().addRoomServiceListener(mRoomListener);
         proxy().createRoom(config().getUserToken(),
                 mNameEdit.getText().toString(),
-                RoomBgUtil.indexToString(mBackgroundSelected));
+                RoomBgUtil.indexToString(mBackgroundSelected),
+                Const.ROOM_DURATION,
+                Const.ROOM_MAX_AUDIENCE);
     }
 
     private boolean isRoomNameValid() {

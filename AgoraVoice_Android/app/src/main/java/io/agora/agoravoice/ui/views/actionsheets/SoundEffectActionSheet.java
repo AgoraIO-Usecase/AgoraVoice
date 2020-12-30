@@ -226,10 +226,15 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
                 }
             } else {
                 view.setActivated(true);
-                // Choose the first electronic parameters
-                // when switch on
-                mSelectedKey = 1;
-                mSelectedValue = 1;
+                if (mConfig != null) {
+                    mConfig.resetElectronicEffect();
+                    mSelectedKey = mConfig.getElectronicVoiceKey();
+                    mSelectedValue = mConfig.getElectronicVoiceValue();
+                } else {
+                    mSelectedKey = 1;
+                    mSelectedValue = 1;
+                }
+
                 if (mListener != null) {
                     mListener.onVoiceBeautySelected(AudioManager.EFFECT_ELECTRONIC);
                     mListener.onElectronicVoiceParamChanged(mSelectedKey, mSelectedValue);

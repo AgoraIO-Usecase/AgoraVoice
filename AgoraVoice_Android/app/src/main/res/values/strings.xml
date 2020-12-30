@@ -50,11 +50,13 @@
     <string name="sign_up_agora_title">Sign Up Agora.io</string>
     <string name="sign_up_website_link">https://sso.agora.io/en/signup</string>
 
-    <string name="agoralive_version_title">AgoraVoice Version</string>
-    <string name="agoralive_release_time_title">Release</string>
-    <string name="agoralive_release_time" translatable="false">2020.07.06</string>
-    <string name="agoralive_media_sdk_version_title">Media SDK Version</string>
-    <string name="agoralive_media_sdk_version" translatable="false">Ver 3.0.0.62</string>
+    <string name="version_title">AgoraVoice Version</string>
+    <string name="release_date_title">Release</string>
+    <string name="release_date" translatable="false">2020.07.06</string>
+    <string name="rte_sdk_version_title">SDK Version</string>
+    <string name="upload_log_title">Upload log</string>
+    <string name="upload_log_success_message_format">Logs have been uploaded, the log id %s has been generated and copied into the clipboard</string>
+    <string name="upload_log_fail_message_format">Log uploading fails: %s</string>
 
     <string name="official_website" translatable="false">www.agora.io</string>
 
@@ -340,7 +342,9 @@
     <string name="toast_no_wired_mic_plugged">Please use a wired headset with a mic</string>
     <string name="toast_join_class_success">Join room successfully</string>
     <string name="toast_join_class_fail">Join room failed</string>
-    <string name="toast_room_ends">Room Ends</string>
+    <string name="toast_room_end_timeout">Room timeout</string>
+    <string name="toast_room_end_owner_leave">Room ends because the owner left</string>
+    <string name="toast_room_end">Room Ends</string>
     <string name="toast_app_version_fail">Acquire app version fail</string>
     <string name="toast_link_empty">The link address is empty</string>
 
@@ -348,4 +352,5 @@
     <string name="error_no">OK</string>
     <string name="error_seat_taken">The seat has been taken by other host</string>
     <string name="error_room_max_user">This product is for test purpose only, each room can only have 10 users at most</string>
+    <string name="error_room_not_exist">Room dos not exist</string>
 </resources>

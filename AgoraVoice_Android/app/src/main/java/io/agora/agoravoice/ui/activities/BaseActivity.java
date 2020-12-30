@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import io.agora.agoravoice.AgoraVoiceApplication;
+import io.agora.agoravoice.AgoraApplication;
 import io.agora.agoravoice.Config;
 import io.agora.agoravoice.R;
 import io.agora.agoravoice.manager.ProxyManager;
@@ -49,8 +49,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    protected AgoraVoiceApplication application() {
-        return (AgoraVoiceApplication) getApplication();
+    protected AgoraApplication application() {
+        return (AgoraApplication) getApplication();
     }
 
     protected ProxyManager proxy() {

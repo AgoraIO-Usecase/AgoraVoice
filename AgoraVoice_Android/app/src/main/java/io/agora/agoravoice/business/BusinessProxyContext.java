@@ -9,6 +9,7 @@ public class BusinessProxyContext {
     private String mAppId;
     private String mCustomerId;
     private String mCertificate;
+    private String mUserId;
     private int mLogLevel;
     private String mLogFile;
 
@@ -36,6 +37,10 @@ public class BusinessProxyContext {
         return mLogFile;
     }
 
+    public String getUserId() {
+        return mUserId;
+    }
+
     public BusinessProxyContext(@NonNull Context context, @NonNull String appId,
                                 @NonNull String customerId, String certificate,
                                 String logFile, int logLevel) {
@@ -45,5 +50,15 @@ public class BusinessProxyContext {
         mCertificate = certificate;
         mLogFile = logFile;
         mLogLevel = logLevel;
+    }
+
+    public BusinessProxyContext(@NonNull Context context,
+                                @NonNull String appId,
+                                @NonNull String customerId,
+                                @NonNull String certificate) {
+        mContext = context;
+        mAppId = appId;
+        mCustomerId = customerId;
+        mCertificate = certificate;
     }
 }

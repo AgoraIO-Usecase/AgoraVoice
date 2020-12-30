@@ -28,6 +28,10 @@
     <dimen name="margin_7">30dp</dimen>
     <dimen name="margin_8">36dp</dimen>
 
+    <!-- Splash Activity -->
+    <dimen name="splash_icon_size">64dp</dimen>
+    <dimen name="splash_app_name_size">20dp</dimen>
+
     <!-- Main Activity -->
     <dimen name="main_app_title_height">64dp</dimen>
     <dimen name="main_app_title_text_size">18dp</dimen>
@@ -160,7 +164,7 @@
 
     <dimen name="chat_room_host_panel_owner_image_size">96dp</dimen>
     <dimen name="chat_room_host_panel_seat_size">72dp</dimen>
-    <dimen name="chat_room_host_panel_seat_mute_icon_size">32dp</dimen>
+    <dimen name="chat_room_host_panel_seat_mute_icon_size">28dp</dimen>
 
     <dimen name="dialog_width">282dp</dimen>
     <dimen name="dialog_height">150dp</dimen>

@@ -19,9 +19,15 @@ public class Const {
     // By default the app log keeps for 5 days before being destroyed
     public static final long LOG_DURATION = 1000 * 60 * 24 * 5;
 
-    public static final int LOG_CLASS_DEPTH = 1;
+    public static final String LOG_APP_SECRET = "";
 
     public static final long APP_LOG_SIZE = 1 << 30;
+
+    public static final int ROOM_DURATION = 10;
+    public static final int ROOM_MAX_AUDIENCE = 10;
+
+    public static final int ROOM_LEAVE_TIMEOUT = 1;
+    public static final int ROOM_LEAVE_OWNER = 2;
 
     public enum Role {
         owner, host, audience;
@@ -30,6 +36,22 @@ public class Const {
             switch (role) {
                 case 0: return owner;
                 case 1: return host;
+                default: return audience;
+            }
+        }
+
+        public static String toString(Role role) {
+            switch (role) {
+                case owner: return "owner";
+                case host: return "host";
+                default: return "audience";
+            }
+        }
+
+        public static Role fromString(String role) {
+            switch (role) {
+                case "owner": return owner;
+                case "host": return host;
                 default: return audience;
             }
         }

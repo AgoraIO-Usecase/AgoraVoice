@@ -51,6 +51,7 @@ public class ThreeDimenVoiceActionSheet extends AbstractActionSheet
             } else {
                 view.setActivated(true);
                 mValueBar.setEnabled(true);
+                if (mConfig != null) mConfig.reset3DVoiceEffect();
                 mValueBar.setProgress(getVoiceSpeed());
                 if (mListener != null) mListener.onThreeDimenVoiceEnabled(true);
             }

@@ -10,8 +10,6 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.elvishew.xlog.XLog;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,8 +49,11 @@ import io.agora.agoravoice.utils.Const;
 import io.agora.agoravoice.utils.GiftUtil;
 import io.agora.agoravoice.utils.RoomBgUtil;
 import io.agora.agoravoice.utils.ToastUtil;
-import io.agora.rtc.IRtcEngineEventHandler;
-import io.agora.rtc.RtcChannel;
+import io.agora.rte.AgoraRteLocalAudioStats;
+import io.agora.rte.AgoraRteLocalVideoStats;
+import io.agora.rte.AgoraRteRemoteAudioStats;
+import io.agora.rte.AgoraRteRemoteVideoStats;
+import io.agora.rte.AgoraRteRtcStats;
 
 public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickListener, RoomEventListener  {
     private static final String TAG = ChatRoomActivity.class.getSimpleName();
@@ -74,7 +75,13 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
 
     private UserListActionSheet mUserListActionSheet;
 
-    private AbsBottomBar.BottomBarListener mBottomBarListener = new AbsBottomBar.BottomBarListener() {
+    // The room finish state is parsed from room property updates, which are
+    // commands from asynchronous server callbacks. At the meantime, there
+    // may be other message callbacks pipelined in the queue.
+    // None of the commands will be executed after the room is finished
+    private volatile boolean mRoomFinished = false;
+
+    private final AbsBottomBar.BottomBarListener mBottomBarListener = new AbsBottomBar.BottomBarListener() {
         @Override
         public void onTextEditClicked() {
             if (mMessageEdit != null && mMessageEdit.getVisibility() == View.GONE) {
@@ -92,7 +99,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                     case 0:
                         ToolActionSheet toolActionSheet = (ToolActionSheet)
                             createActionSheet(ActionSheetManager.ActionSheet.tool);
-                        toolActionSheet.setRole(mRole);
+                        toolActionSheet.setRole(role);
                         toolActionSheet.setToolActionListener(mToolActionListener);
                         toolActionSheet.setAppConfig(config());
                         showActionSheet(toolActionSheet, true);
@@ -113,7 +120,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                         break;
                     case 3:
                         config().setAudioMuted(!isActivated);
-                        proxy().getAudioManager().muteLocalAudio(roomId, !isActivated);
+                        proxy().getAudioManager().muteLocalAudio(!isActivated);
                         mHostPanel.updateMuteState(null, config().getAudioMuted(),
                                 null, null, null);
                         break;
@@ -135,7 +142,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
         }
     };
 
-    private SoundEffectActionSheet.SoundEffectActionListener mSoundEffectListener
+    private final SoundEffectActionSheet.SoundEffectActionListener mSoundEffectListener
             = new SoundEffectActionSheet.SoundEffectActionListener() {
         @Override
         public void onVoiceBeautySelected(int type) {
@@ -171,7 +178,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
         }
     };
 
-    private ThreeDimenVoiceActionSheet.ThreeDimenVoiceActionListener
+    private final ThreeDimenVoiceActionSheet.ThreeDimenVoiceActionListener
         mThreeDimenVoiceListener = new ThreeDimenVoiceActionSheet.ThreeDimenVoiceActionListener() {
         @Override
         public void onThreeDimenVoiceEnabled(boolean enabled) {
@@ -199,7 +206,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
         }
     };
 
-    private VoiceBeautyActionSheet.VoiceBeautyActionListener mVoiceBeautyListener
+    private final VoiceBeautyActionSheet.VoiceBeautyActionListener mVoiceBeautyListener
             = new VoiceBeautyActionSheet.VoiceBeautyActionListener() {
         @Override
         public void onVoiceBeautySelected(int type) {
@@ -214,7 +221,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
         }
     };
 
-    private GiftActionSheet.GiftActionListener mGiftActionListener = index -> {
+    private final GiftActionSheet.GiftActionListener mGiftActionListener = index -> {
         closeActionSheet();
         // For this moment, gifts can be sent one at a time,
         // so the count will always be 1
@@ -222,7 +229,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                 GiftUtil.getGiftIdFromIndex(index), 1);
     };
 
-    private BackgroundActionSheet.BackgroundActionSheetListener mBackgroundListener =
+    private final BackgroundActionSheet.BackgroundActionSheetListener mBackgroundListener =
             new BackgroundActionSheet.BackgroundActionSheetListener() {
                 @Override
                 public void onBackgroundPicSelected(int index, int res) {
@@ -237,7 +244,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                 }
             };
 
-    private MusicActionSheet.MusicActionSheetListener mMusicListener =
+    private final MusicActionSheet.MusicActionSheetListener mMusicListener =
             new MusicActionSheet.MusicActionSheetListener() {
                 @Override
                 public void onActionSheetMusicSelected(int index, String name, String url) {
@@ -261,7 +268,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                 }
             };
 
-    private ToolActionSheet.ToolActionListener mToolActionListener = (role, view, index) -> {
+    private final ToolActionSheet.ToolActionListener mToolActionListener = (role, view, index) -> {
         switch (role) {
             case owner:
                 switch (index) {
@@ -319,18 +326,19 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
         if (mStatView != null) mStatView.show();
     }
 
-    private MessageEditLayout.MessageEditListener mMessageEditListener = message -> {
+    private final MessageEditLayout.MessageEditListener mMessageEditListener = message -> {
         if (TextUtils.isEmpty(message)) {
             ToastUtil.showShortToast(ChatRoomActivity.this, R.string.send_empty_message);
         } else {
             proxy().sendChatMessage(config().getUserToken(),
                     getString(R.string.app_id), roomId, message);
+            mMessageList.addChatMessage(config().getNickname(), message);
         }
 
         hideInputMethodWithView(mMessageEdit.editText());
     };
 
-    private UserListActionSheet.UserListActionSheetListener
+    private final UserListActionSheet.UserListActionSheetListener
             mUserListActionSheetListener = new UserListActionSheet.UserListActionSheetListener() {
         @Override
         public void onUserInvited(int no, String userId, String userName) {
@@ -389,7 +397,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
         }
     };
 
-    private RoomUserActionView.RoomUserActionViewListener
+    private final RoomUserActionView.RoomUserActionViewListener
             mRoomUserActionViewListener = view -> {
         setupUserListActionSheet(false, -1,
                 mUserAction.notificationShown());
@@ -412,7 +420,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
         showActionSheet(mUserListActionSheet, true);
     }
 
-    private HostPanelOperateActionSheet.HostPanelActionSheetListener
+    private final HostPanelOperateActionSheet.HostPanelActionSheetListener
             mHostPanelActionListener = new HostPanelOperateActionSheet.HostPanelActionSheetListener() {
         @Override
         public void onSeatUnblock(int position) {
@@ -440,8 +448,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                         if (seat.getState() == ChatRoomHostPanel.Seat.STATE_TAKEN &&
                                 seat.getUser() != null) {
                             ChatRoomHostPanel.SeatUser user = seat.getUser();
-                            proxy().getAudioManager().enableRemoteAudio(
-                                    roomId, user.getUserId(), false);
+                            proxy().getAudioManager().enableRemoteAudio(user.getUserId(), false);
                         }
 
                         changeState(ChatRoomHostPanel.Seat.STATE_BLOCK, position + 1);
@@ -495,7 +502,8 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
             closeActionSheet();
             if (mIsHost && config().getUserId().equals(userId)) {
                 config().setAudioMuted(muted);
-                proxy().getAudioManager().muteLocalAudio(roomId, muted);
+                proxy().getAudioManager().muteLocalAudio(muted);
+
                 mHostPanel.updateMuteState(null, config().getAudioMuted(),
                         null, null, null);
                 mBottomBar.setEnableAudio(!config().getAudioMuted());
@@ -510,8 +518,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                         getString(R.string.text_cancel),
                         () -> {
                             config().setAudioMuted(muted);
-                            proxy().getAudioManager().muteRemoteAudio(roomId,
-                                    mHostPanel.getStreamInfo(position), muted);
+                            proxy().getAudioManager().muteRemoteAudio(userId, muted);
                             dismissDialog();
                         }, () -> dismissDialog());
             }
@@ -550,7 +557,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
         }
     };
 
-    private ChatRoomHostPanel.ChatRoomHostPanelListener
+    private final ChatRoomHostPanel.ChatRoomHostPanelListener
             mHostPanelListener = new ChatRoomHostPanel.ChatRoomHostPanelListener() {
         @Override
         public void onSeatClicked(int position, @Nullable ChatRoomHostPanel.Seat seat) {
@@ -578,7 +585,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                 // message when he makes me leave the seat,
                 // so the only time I can know this is when
                 // I've checked that I have left the seat.
-                proxy().getAudioManager().disableLocalAudio(roomId);
+                proxy().getAudioManager().disableLocalAudio();
             }
         }
 
@@ -607,10 +614,13 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     // Callbacks to tell that the seat requests have been sent
     // to the other users by client.
     // The other users' responds will be received in another callback.
-    private ProxyManager.SeatListener mSeatListener = new ProxyManager.SeatListener() {
+    private final ProxyManager.SeatListener mSeatListener = new ProxyManager.SeatListener() {
         @Override
         public void onSeatBehaviorSuccess(int type, String userId, String userName, int no) {
-            runOnUiThread(() -> handleSeatBehaviorSuccess(type, userId, userName, no));
+            runOnUiThread(() -> {
+                if (mRoomFinished) return;
+                handleSeatBehaviorSuccess(type, userId, userName, no);
+            });
         }
 
         private void handleSeatBehaviorSuccess(int type, String userId, String userName, int no) {
@@ -630,7 +640,10 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                     // I have successfully accept the application of
                     // an audience, and now I must let the user to
                     // send audio streams
-                    proxy().getAudioManager().enableRemoteAudio(roomId, userId, true);
+                    if (mHostPanel.getStreamInfo(no - 1) != null) {
+                        proxy().getAudioManager().enableRemoteAudio(userId, true);
+                    }
+
                     proxy().getRoomInvitationManager(roomId)
                             .receiveSeatBehaviorResponse(userId, userName, no, type);
                     updateUserListActionSheetIfShown();
@@ -641,10 +654,16 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                     updateUserListActionSheetIfShown();
                     break;
                 case SeatBehavior.FORCE_LEAVE:
-                    proxy().getAudioManager().enableRemoteAudio(roomId, userId, false);
+                    if (mHostPanel.getStreamInfo(no - 1) != null) {
+                        proxy().getAudioManager().enableRemoteAudio(userId, false);
+                    }
+
                     break;
                 case SeatBehavior.LEAVE:
-                    proxy().getAudioManager().disableLocalAudio(roomId);
+                    if (mHostPanel.getStreamInfo(no - 1) != null) {
+                        proxy().getAudioManager().disableLocalAudio();
+                    }
+
                     break;
                 default: break;
             }
@@ -652,7 +671,10 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
 
         @Override
         public void onSeatBehaviorFail(int type, String userId, String userName, int no, int code, String msg) {
-            runOnUiThread(() -> handleSeatBehaviorFail(type, userId, userName, no, code, msg));
+            runOnUiThread(() -> {
+                if (mRoomFinished) return;
+                handleSeatBehaviorFail(type, userId, userName, no, code, msg);
+            });
         }
 
         private void handleSeatBehaviorFail(int type, String userId, String userName, int no, int code, String msg) {
@@ -683,8 +705,6 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                 case SeatBehavior.LEAVE:
                     String format = getResources().getString(R.string.toast_request_fail_message);
                     String message = String.format(format, msg, code);
-                    format = getResources().getString(R.string.toast_request_fail_message);
-                    message = String.format(format, msg, code);
                     ToastUtil.showShortToast(ChatRoomActivity.this, message);
                 default:
             }
@@ -764,8 +784,8 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     }
 
     private void enterRoom() {
-        proxy().enterRoom(roomId, roomName, config().getUserId(),
-                config().getNickname(), mRole, this);
+        proxy().enterRoom(config().getUserToken(), roomId, roomName,
+                config().getUserId(), config().getNickname(), this);
     }
 
     private void initSeatManager() {
@@ -815,16 +835,26 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     }
 
     @Override
-    public void onJoinSuccess(String roomId, String roomName) {
-        runOnUiThread(() -> ToastUtil.showShortToast(application(), R.string.toast_join_class_success));
+    public void onJoinSuccess(String roomId, String roomName, String streamId) {
+        runOnUiThread(() -> {
+            ToastUtil.showShortToast(application(), R.string.toast_join_class_success);
+            if (mRole == Const.Role.owner) {
+                proxy().getAudioManager().enableLocalAudio();
+            }
+        });
     }
 
     @Override
     public void onJoinFail(int code, String reason) {
         runOnUiThread(() -> {
-            int msgRes = code == ErrorCode.ERROR_ROOM_MAX_USER
-                    ? R.string.error_room_max_user
-                    : R.string.toast_join_class_fail;
+            int msgRes;
+            if (code == ErrorCode.ERROR_ROOM_MAX_USER) {
+                msgRes = R.string.error_room_max_user;
+            } else if (code == ErrorCode.ERROR_ROOM_NOT_EXIST) {
+                msgRes = R.string.error_room_not_exist;
+            } else {
+                msgRes = R.string.toast_join_class_fail;
+            }
             ToastUtil.showShortToast(application(), msgRes);
             onRoomFinish(false);
         });
@@ -832,13 +862,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
 
     @Override
     public void onRoomLeaved() {
-        if (mIsHost) {
-            ChatRoomHostPanel.Seat seat = mHostPanel.getSeatByUser(config().getUserId());
-            requestSeatBehavior(seat.getPosition() + 1, SeatBehavior.LEAVE,
-                    config().getUserId(), config().getNickname());
-        }
-        removeSeatManager();
-        if (mIsOwner) proxy().destroyRoom(config().getUserToken(), roomId);
+
     }
 
     private void updateRoomUserList(List<RoomUserInfo> userList, List<RoomUserInfo> leftList) {
@@ -864,7 +888,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     }
 
     @Override
-    public void onRoomMembersInitialized(@Nullable RoomUserInfo teacher, int count,
+    public void onRoomMembersInitialized(@Nullable RoomUserInfo owner, int count,
                                          List<RoomUserInfo> userList, List<RoomStreamInfo> streamInfo) {
         runOnUiThread(() -> {
             mUserAction.resetCount(count);
@@ -874,37 +898,21 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
             // Note: this is must be called before handling the
             // seat user's audio/video capture, because host panel
             // is used to manage the streams
-            updateHostPanel(teacher, streamInfo);
+            updateHostPanel(owner, streamInfo);
 
-            if (teacher != null) {
-                if (teacher.userId.equals(config().getUserId())) {
-                    // I am the owner, and I enter this room after
-                    // accidentally leaving this room within one minute ago.
-                    mIsOwner = true;
-                    mBottomBar.setRole(Const.Role.owner);
-                } else {
-                    // If I am not the owner, I should handle the stream of
-                    // myself.
-                    RoomStreamInfo myStreamInfo = null;
-                    for (RoomStreamInfo info : streamInfo) {
-                        if (info.userId.equals(config().getUserId())) {
-                            myStreamInfo = info;
-                        }
-                    }
-
-                    if (myStreamInfo != null) {
-                        XLog.d("onRoomMembersInitialized audio " + myStreamInfo.enableAudio);
-                        proxy().getAudioManager().enableLocalAudio(roomId, myStreamInfo.enableAudio);
-                    }
-                }
+            if (owner != null && owner.userId.equals(config().getUserId())) {
+                // I am the owner, and I enter this room after
+                // accidentally leaving this room within one minute ago.
+                mIsOwner = true;
+                mBottomBar.setRole(Const.Role.owner);
             }
         });
     }
 
-    private boolean teacherEnablesAudio(@Nullable RoomUserInfo teacher, List<RoomStreamInfo> streamInfo) {
-        if (teacher == null) return false;
+    private boolean ownerEnablesAudio(@Nullable RoomUserInfo owner, List<RoomStreamInfo> streamInfo) {
+        if (owner == null) return false;
 
-        String teacherId = teacher.userId;
+        String teacherId = owner.userId;
         if (teacherId == null) return false;
 
         for (RoomStreamInfo info : streamInfo) {
@@ -916,14 +924,14 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
         return false;
     }
 
-    private void updateHostPanel(RoomUserInfo teacher, List<RoomStreamInfo> streamInfo) {
-        if (teacher != null) {
-            ownerId = teacher.userId;
-            ownerName = teacher.userName;
+    private void updateHostPanel(RoomUserInfo owner, List<RoomStreamInfo> streamInfo) {
+        if (owner != null) {
+            ownerId = owner.userId;
+            ownerName = owner.userName;
             mHostPanel.setOwnerName(ownerName);
             mHostPanel.setOwnerUid(ownerId);
             mHostPanel.setOwnerImage(ownerId);
-            mHostPanel.setOwnerMuted(!teacherEnablesAudio(teacher, streamInfo));
+            mHostPanel.setOwnerMuted(!ownerEnablesAudio(owner, streamInfo));
         }
 
         RoomStreamInfo myStreamInfo = null;
@@ -947,6 +955,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     public void onRoomMembersJoined(int total, List<RoomUserInfo> totalList,
                                     int joinCount, List<RoomUserInfo> joinedList) {
         runOnUiThread(() -> {
+            if (mRoomFinished) return;
             if (mUserAction != null) mUserAction.resetCount(total);
             addJoinMessage(joinedList);
             updateRoomUserList(totalList, null);
@@ -963,6 +972,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     public void onRoomMembersLeft(int total, List<RoomUserInfo> totalList,
                                   int leftCount, List<RoomUserInfo> leftList) {
         runOnUiThread(() -> {
+            if (mRoomFinished) return;
             if (mUserAction != null) mUserAction.resetCount(total);
             addLeaveMessage(leftList);
             updateRoomUserList(totalList, leftList);
@@ -977,40 +987,47 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
 
     @Override
     public void onRoomMembersUpdated(int count, List<RoomUserInfo> updatedList) {
-
+        if (mRoomFinished) return;
     }
 
     @Override
     public void onChatMessageReceive(String fromUserId, String fromUserName, String message) {
-        runOnUiThread(() -> mMessageList.addChatMessage(fromUserName, message));
+        runOnUiThread(() -> {
+            if (mRoomFinished) return;
+            mMessageList.addChatMessage(fromUserName, message);
+        });
     }
 
     @Override
     public void onStreamInitialized(RoomStreamInfo myStreamInfo, List<RoomStreamInfo> streamList) {
         runOnUiThread(() -> {
+            if (mRoomFinished) return;
             updateSeatStates(myStreamInfo, streamList, null, null);
-            // My stream state also determines whether I should
-            // start capture media streams.
-            if (myStreamInfo != null && myStreamInfo.enableAudio) {
-                XLog.d("onStreamInitialized mystream audio enabled");
-                proxy().getAudioManager().enableLocalAudio(roomId, true);
-            }
         });
     }
 
     @Override
     public void onStreamAdded(RoomStreamInfo myStreamInfo, List<RoomStreamInfo> addList) {
-        runOnUiThread(() -> updateSeatStates(myStreamInfo, null, addList, null));
+        runOnUiThread(() -> {
+            if (mRoomFinished) return;
+            updateSeatStates(myStreamInfo, null, addList, null);
+        });
     }
 
     @Override
     public void onStreamUpdated(RoomStreamInfo myStreamInfo, List<RoomStreamInfo> updatedList) {
-        runOnUiThread(() -> updateSeatStates(myStreamInfo, updatedList, null, null));
+        runOnUiThread(() -> {
+            if (mRoomFinished) return;
+            updateSeatStates(myStreamInfo, updatedList, null, null);
+        });
     }
 
     @Override
     public void onStreamRemoved(RoomStreamInfo myStreamInfo, List<RoomStreamInfo> removeList) {
-        runOnUiThread(() -> updateSeatStates(myStreamInfo, null, null, removeList));
+        runOnUiThread(() -> {
+            if (mRoomFinished) return;
+            updateSeatStates(myStreamInfo, null, null, removeList);
+        });
     }
 
     private void updateSeatStates(RoomStreamInfo myStreamInfo,
@@ -1050,6 +1067,8 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     @Override
     public void onRoomPropertyUpdated(@NonNull String backgroundId, @Nullable List<SeatStateData> seats,
                                       @Nullable List<GiftSendInfo> giftRank, @Nullable GiftSendInfo giftSent) {
+        if (mRoomFinished) return;
+
         int idx = RoomBgUtil.idToIndex(backgroundId);
         int resource = RoomBgUtil.getRoomBgPicRes(idx);
         Log.i(TAG, "onRoomPropertyUpdated background set " + backgroundId + " " + idx + " " + resource);
@@ -1082,6 +1101,8 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     @Override
     public void onReceiveSeatBehavior(@NonNull String roomId, String fromUserId,
                                       String fromUserName, int no, int behavior) {
+        if (mRoomFinished) return;
+
         switch (behavior) {
             case SeatBehavior.INVITE:
                 String title = getString(R.string.dialog_invite_user_title);
@@ -1115,7 +1136,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                 break;
             case SeatBehavior.INVITE_ACCEPT:
                 runOnUiThread(() -> showToast(R.string.toast_invite_accepted, fromUserName));
-                proxy().getAudioManager().enableRemoteAudio(roomId, fromUserId, true);
+                proxy().getAudioManager().enableRemoteAudio(fromUserId, true);
                 proxy().getRoomInvitationManager(roomId).receiveSeatBehaviorResponse(
                         fromUserId, fromUserName, no, behavior);
                 break;
@@ -1126,7 +1147,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                 break;
             case SeatBehavior.APPLY_ACCEPT:
                 runOnUiThread(() -> showToast(R.string.toast_apply_accepted, fromUserName));
-                proxy().getAudioManager().enableLocalAudio(roomId, true);
+                proxy().getAudioManager().enableLocalAudio();
                 break;
             case SeatBehavior.APPLY_REJECT:
                 runOnUiThread(() -> showToast(R.string.toast_apply_rejected, fromUserName));
@@ -1135,17 +1156,39 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     }
 
     @Override
-    public void onRtcStats(@Nullable RtcChannel channel, @Nullable IRtcEngineEventHandler.RtcStats stats) {
+    public void onRtcStats(@Nullable AgoraRteRtcStats stats) {
         runOnUiThread(() -> {
+            if (mRoomFinished) return;
+
             if (stats != null && mStatView.isShown()) {
                 mStatView.setLocalStats(
-                        stats.rxAudioKBitRate,
-                        stats.rxPacketLossRate,
-                        stats.txAudioKBitRate,
-                        stats.txPacketLossRate,
-                        stats.lastmileDelay);
+                        stats.getRxAudioKBitRate(),
+                        stats.getRxPacketLossRate(),
+                        stats.getTxAudioKBitRate(),
+                        stats.getTxPacketLossRate(),
+                        stats.getLastmileDelay());
             }
         });
+    }
+
+    @Override
+    public void onLocalVideoStats(@NonNull AgoraRteLocalVideoStats stats) {
+
+    }
+
+    @Override
+    public void onLocalAudioStats(@NonNull AgoraRteLocalAudioStats stats) {
+
+    }
+
+    @Override
+    public void onRemoteVideoStats(@NonNull AgoraRteRemoteVideoStats stats) {
+
+    }
+
+    @Override
+    public void onRemoteAudioStats(@NonNull AgoraRteRemoteAudioStats stats) {
+
     }
 
     private int requestSeatBehavior(int no, int type, String userId, String userName) {
@@ -1160,10 +1203,20 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     }
 
     @Override
-    public void onRoomEnd() {
+    public void onRoomEnd(int cause) {
         runOnUiThread(() -> {
             onRoomFinish(true);
-            ToastUtil.showShortToast(application(), R.string.toast_room_ends);
+
+            int messageRes;
+            if (cause == Const.ROOM_LEAVE_TIMEOUT) {
+                messageRes = R.string.toast_room_end_timeout;
+            } else if (cause == Const.ROOM_LEAVE_OWNER) {
+                messageRes = R.string.toast_room_end_owner_leave;
+            } else {
+                messageRes = R.string.toast_room_end;
+            }
+
+            ToastUtil.showShortToast(application(), messageRes);
         });
     }
 
@@ -1189,12 +1242,17 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
         config().setInEarMonitoring(false);
         config().disableAudioEffect();
         config().setAudioMuted(false);
+        config().reset3DVoiceEffect();
+        config().resetElectronicEffect();
         config().setBgImageSelected(-1);
 
         if (needLeave) {
-            proxy().leaveRoom(config().getUserToken(), roomId);
+            proxy().leaveRoom(config().getUserToken(),
+                    roomId, config().getUserId());
         }
         finish();
+        mRoomFinished = true;
+        removeSeatManager();
     }
 
     private void removeSeatManager() {

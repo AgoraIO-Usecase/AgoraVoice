@@ -26,4 +26,20 @@ public class RoomStreamInfo {
     public void enableAudio(boolean enabled) {
         enableAudio = enabled;
     }
+
+    public RoomStreamInfo(String userId, String userName,
+                          String streamId, String streamName,
+                          boolean enableAudio, boolean enableVideo, boolean isOwner) {
+        this.userId = userId;
+        this.userName = userName;
+        this.streamId = streamId;
+        this.streamName = streamName;
+        this.enableAudio = enableAudio;
+        this.enableVideo = enableVideo;
+        this.isOwner = isOwner;
+    }
+
+    public RoomStreamInfo() {
+
+    }
 }

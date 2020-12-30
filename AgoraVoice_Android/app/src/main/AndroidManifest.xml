@@ -9,24 +9,31 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
 
+    <!-- Supports clear text to upload logs -->
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".AgoraVoiceApplication"
-        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        android:name=".AgoraApplication"
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m">
+        <activity android:name=".ui.activities.SplashActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".ui.activities.main.MainActivity"
-            android:label="@string/app_name"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <activity android:name=".ui.activities.SceneActivity"
@@ -41,10 +48,6 @@
         </activity>
 
         <activity android:name=".ui.activities.ChatRoomActivity"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".ui.activities.main.profile.AvatarSelectActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"/>
 

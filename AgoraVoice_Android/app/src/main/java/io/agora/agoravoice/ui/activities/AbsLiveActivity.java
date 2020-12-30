@@ -222,11 +222,6 @@ public abstract class AbsLiveActivity extends BaseActivity {
     }
 
     @Override
-    public void finish() {
-        super.finish();
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
     }

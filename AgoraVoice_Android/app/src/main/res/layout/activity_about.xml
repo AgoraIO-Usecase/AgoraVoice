@@ -120,7 +120,7 @@
                 android:textAlignment="gravity"
                 android:gravity="center_vertical"
                 android:textColor="@android:color/white"
-                android:text="@string/agoralive_release_time_title"
+                android:text="@string/release_date_title"
                 android:textSize="@dimen/text_size_2"/>
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
@@ -128,7 +128,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/theme_gray_2"
-                android:text="@string/agoralive_release_time"/>
+                android:text="@string/release_date"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -144,15 +144,15 @@
                 android:textAlignment="gravity"
                 android:gravity="center_vertical"
                 android:textColor="@android:color/white"
-                android:text="@string/agoralive_media_sdk_version_title"
+                android:text="@string/rte_sdk_version_title"
                 android:textSize="@dimen/text_size_2"/>
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/about_activity_rte_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:textColor="@color/theme_gray_2"
-                android:text="@string/agoralive_media_sdk_version"/>
+                android:textColor="@color/theme_gray_2"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -168,7 +168,7 @@
                 android:textAlignment="gravity"
                 android:gravity="center_vertical"
                 android:textColor="@android:color/white"
-                android:text="@string/agoralive_version_title"
+                android:text="@string/version_title"
                 android:textSize="@dimen/text_size_2"/>
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/about_activity_app_version_text"
@@ -177,6 +177,30 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/theme_gray_2"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/about_upload_log_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/main_profile_setting_item_height"
+            android:layout_marginTop="@dimen/main_profile_item_margin"
+            android:paddingStart="@dimen/common_margin_vertical"
+            android:paddingEnd="@dimen/common_margin_vertical"
+            android:background="@color/theme_background_1">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:textAlignment="gravity"
+                android:gravity="center_vertical"
+                android:textColor="@android:color/white"
+                android:text="@string/upload_log_title"
+                android:textSize="@dimen/text_size_2"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_go"/>
         </RelativeLayout>
     </LinearLayout>
 

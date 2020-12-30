@@ -422,7 +422,7 @@ public class ChatRoomHostPanel extends RelativeLayout {
                 boolean enabled;
                 if (myStreamInfo == null) {
                     enabled = !localAudioMuted;
-                    XLog.d("no local stream info not found, take local audio " +
+                    XLog.d("no local stream info found, take local audio " +
                             "setting as default " + enabled);
                 } else {
                     info.enableAudio(myStreamInfo.enableAudio);
