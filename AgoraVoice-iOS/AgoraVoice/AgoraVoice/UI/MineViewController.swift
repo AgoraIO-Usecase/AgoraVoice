@@ -121,16 +121,18 @@ class MineViewController: UITableViewController {
         return 2
     }
     
-    /*
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        /*
         switch indexPath {
         case IndexPath(row: 0, section: 0): // pick head image
             self.present(imagePicker, animated: true, completion: nil)
         default:
             break
         }
+         */
     }
-    */
 }
 
 /*

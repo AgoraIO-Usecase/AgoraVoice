@@ -23,7 +23,7 @@ class AudioEffectVM: RxObject {
     let selectedMusicGenre = BehaviorRelay<MusicGenre>(value: .disable)
     
     let selectedElectronicMusic = BehaviorRelay<ElectronicMusic>(value: ElectronicMusic())
-    let selectedThreeDimensionalVoice = BehaviorRelay<Int>(value: 0)
+    let selectedThreeDimensionalVoice = BehaviorRelay<Int>(value: 10)
     
     // Output Rx
     let outputChatOfBelcanto = PublishRelay<ChatOfBelCanto>()

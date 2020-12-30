@@ -85,7 +85,7 @@ enum MusicGenre {
 struct ElectronicMusic {
     var isAvailable: Bool = false
     var type: Int = 1
-    var value: Int = 1
+    var value: Int = 4
 }
 
 extension ChatOfBelCanto {

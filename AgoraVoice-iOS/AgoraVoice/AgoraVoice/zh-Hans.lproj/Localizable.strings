@@ -97,7 +97,7 @@ Start_Chating="开始聊天";
 // LiveList
 Create_A_Room="请创建一个房间";
 No_Data_Please_Try_Again_Later="暂无数据，请稍后再试";
-Join_Fail="房间最大人数为10人";
+Person_Count_Join_Fail="房间最大人数为10人";
 
 // LiveRoom
 Live_Text_Input_Placeholder="说点什么...";

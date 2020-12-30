@@ -97,7 +97,7 @@ Start_Chating="Start";
 // LiveList
 Create_A_Room="Create a room to start";
 No_Data_Please_Try_Again_Later="No data, please try again later";
-Join_Fail="The max number of participants per channel is 10.";
+Person_Count_Join_Fail="The max number of participants per channel is 10.";
 
 // LiveRoom
 Live_Text_Input_Placeholder="Say something...";
