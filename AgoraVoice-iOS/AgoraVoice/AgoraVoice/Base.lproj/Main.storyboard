@@ -1091,7 +1091,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uCd-SR-Sdm">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uCd-SR-Sdm">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </imageView>
@@ -1173,7 +1173,6 @@
                         <viewLayoutGuide key="safeArea" id="hH9-eg-Y3s"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="uCd-SR-Sdm" firstAttribute="top" secondItem="iT1-b2-OKw" secondAttribute="top" id="357-3d-zpp"/>
                             <constraint firstAttribute="bottom" secondItem="uCd-SR-Sdm" secondAttribute="bottom" id="6MA-g6-RFM"/>
                             <constraint firstItem="K8Z-nx-vap" firstAttribute="leading" secondItem="hH9-eg-Y3s" secondAttribute="leading" constant="15" id="9j8-XZ-kig"/>
                             <constraint firstItem="hH9-eg-Y3s" firstAttribute="trailing" secondItem="X38-7N-mf7" secondAttribute="trailing" constant="15" id="EZe-rx-Wdt"/>
@@ -1184,8 +1183,10 @@
                             <constraint firstItem="hH9-eg-Y3s" firstAttribute="bottom" secondItem="DOG-C6-9V9" secondAttribute="bottom" constant="40" id="RsQ-xC-Rsq"/>
                             <constraint firstItem="K8Z-nx-vap" firstAttribute="top" secondItem="hH9-eg-Y3s" secondAttribute="top" id="VfF-WK-tfY"/>
                             <constraint firstItem="X38-7N-mf7" firstAttribute="centerX" secondItem="iT1-b2-OKw" secondAttribute="centerX" id="Wlm-jg-dfD"/>
+                            <constraint firstAttribute="bottom" secondItem="uCd-SR-Sdm" secondAttribute="bottom" id="e4s-xN-d1z"/>
                             <constraint firstItem="uCd-SR-Sdm" firstAttribute="leading" secondItem="iT1-b2-OKw" secondAttribute="leading" id="rq8-lC-Wis"/>
                             <constraint firstAttribute="trailing" secondItem="uCd-SR-Sdm" secondAttribute="trailing" id="x3B-Xl-9YH"/>
+                            <constraint firstItem="uCd-SR-Sdm" firstAttribute="top" secondItem="iT1-b2-OKw" secondAttribute="top" id="zg8-46-JmR"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="rhK-5q-Npv"/>

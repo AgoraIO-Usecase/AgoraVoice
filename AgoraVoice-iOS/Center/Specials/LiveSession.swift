@@ -264,9 +264,14 @@ fileprivate extension LiveSession {
                 }
                 
                 // subscribe remote streams
+                var streamList = [LiveStream]()
+                
                 for item in self.sceneService.streams {
                     localUser.subscribeRemoteStream(item.streamId, type: .audio)
+                    try streamList.append(LiveStream(rteStream: item))
                 }
+                
+                self.streamList.accept(streamList)
                 
                 // event observe
                 self.streamObserve()
