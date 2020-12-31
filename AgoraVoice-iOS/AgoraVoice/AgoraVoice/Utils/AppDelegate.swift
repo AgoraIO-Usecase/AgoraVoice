@@ -7,13 +7,23 @@
 //
 
 import UIKit
+import Bugly
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        enableBugly()
+        
         return true
+    }
+    
+    func enableBugly() {
+        let config = BuglyConfig()
+        let buglyId = Keys.BuglyId
+        Bugly.start(withAppId: buglyId,
+                    config: config)
     }
 }
 
