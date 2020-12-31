@@ -25,6 +25,8 @@ typealias DataExCompletion = ((Data) throws -> Void)?
 typealias ErrorCompletion = ((Error) -> Void)?
 typealias ErrorBoolCompletion = ((Error) -> Bool)?
 
+typealias AGEErrorCompletion = ((AGEError) -> Void)?
+
 //MARK: - Dictinary
 typealias StringAnyDic = [String: Any]
 

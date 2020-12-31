@@ -147,7 +147,11 @@ private extension CreateLiveViewController {
     func showLimitToast() {
         let mainScreen = UIScreen.main
         let y = mainScreen.bounds.height - mainScreen.heightOfSafeAreaBottom - 38 - 15 - 150
-        let view = TagImageTextCloseToast(frame: CGRect(x: 15, y: y, width: 181, height: 44.0), filletRadius: 8)
+        let view = TagImageTextCloseToast(frame: CGRect(x: 15,
+                                                        y: y,
+                                                        width: 181,
+                                                        height: 44.0),
+                                          filletRadius: 8)
         
         view.labelSize = CGSize(width: UIScreen.main.bounds.width - 30, height: 0)
         view.text = NSLocalizedString("Limit_Toast")
@@ -189,11 +193,18 @@ private extension CreateLiveViewController {
     func startLivingWithName(_ name: String) {
         self.showHUD()
         
-        LiveSession.create(roomName: name, backgroundIndex: selectedImageIndex, success: { [unowned self] (session) in
-            self.joinLiving(session: session)
-        }) { [unowned self] (_) in
+        LiveSession.create(roomName: name,
+                           backgroundIndex: selectedImageIndex,
+                           success: { [unowned self] (session) in
+                            self.joinLiving(session: session)
+                           }) { [unowned self] (error) in
             self.hiddenHUD()
-            self.showAlert(message:"start live fail")
+            
+            if error.code == nil {
+                self.showAlert(message: NSLocalizedString("Lost_Connection_Retry"))
+            } else {
+                self.showAlert(message:"start live fail")
+            }
         }
     }
     
@@ -209,9 +220,14 @@ private extension CreateLiveViewController {
             case .chatRoom:
                 self.performSegue(withIdentifier: "ChatRoomViewController", sender: session)
             }
-        }) { [unowned self] (_) in
+        }) { [unowned self] (error) in
             self.hiddenHUD()
-            self.showAlert(message:"join live fail")
+            
+            if error.code == nil {
+                self.showAlert(message: NSLocalizedString("Lost_Connection_Retry"))
+            } else {
+                self.showAlert(message:"join live fail")
+            }
         }
     }
 }

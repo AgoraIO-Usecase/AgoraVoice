@@ -8,16 +8,14 @@
 
 import Foundation
 import AgoraRte
+import Armin
 
 public enum AGEErrorType: Error {
     case fail(String)
     case invalidParameter(String)
     case valueNil(String)
     case convertedTo(String, String)
-    case ipPoolDriedUp
     case timeout(TimeInterval)
-    case rtc(String)
-    case rtm(String)
     case unknown
     
     var localizedDescription: String {
@@ -26,10 +24,7 @@ public enum AGEErrorType: Error {
         case .invalidParameter(let para):   return "\(para)"
         case .valueNil(let para):           return "\(para) nil"
         case .convertedTo(let a, let b):    return "\(a) converted to \(b) error"
-        case .ipPoolDriedUp:                return "ip pool dried up"
         case .timeout(let duration):        return "timeout \(duration)"
-        case .rtc(let reason):              return "rtc \(reason)"
-        case .rtm(let reason):              return "rtm \(reason)"
         case .unknown:                      return "unknown error"
         }
     }
@@ -50,10 +45,7 @@ private extension AGEErrorType {
         case .invalidParameter:     return 1
         case .valueNil:             return 2
         case .convertedTo:          return 3
-        case .ipPoolDriedUp:        return 4
         case .timeout:              return 5
-        case .rtc:                  return 6
-        case .rtm:                  return 7
         case .unknown:              return 8
         }
     }
@@ -80,6 +72,12 @@ struct AGEError: AGEDescription, Error {
         self.type = .fail("rte error")
         self.code = rteError.code
         self.extra = rteError.message
+    }
+    
+    init(arError: ArError) {
+        self.type = .fail("armin error")
+        self.code = arError.code
+        self.extra = arError.localizedDescription
     }
     
     init(type: AGEErrorType, code: Int? = nil, extra: String? = nil) {
@@ -112,20 +110,8 @@ struct AGEError: AGEDescription, Error {
         return AGEError(type: .valueNil(text), code: code, extra: extra)
     }
     
-    static func ipPoolDriedUp(code: Int? = nil, extra: String? = nil) -> AGEError {
-        return AGEError(type: .ipPoolDriedUp, code: code)
-    }
-    
     static func timeout(duration: TimeInterval, extra: String? = nil) -> AGEError {
         return AGEError(type: .timeout(duration), extra: extra)
-    }
-    
-    static func rtc(_ text: String, code: Int? = nil, extra: String? = nil) -> AGEError {
-        return AGEError(type: .rtc(text), code: code, extra: extra)
-    }
-    
-    static func rtm(_ text: String, code: Int? = nil, extra: String? = nil) -> AGEError {
-        return AGEError(type: .rtm(text), code: code, extra: extra)
     }
     
     static func unknown(code: Int? = nil, extra: String? = nil) -> AGEError {

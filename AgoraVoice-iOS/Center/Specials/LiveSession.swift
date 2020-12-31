@@ -108,7 +108,7 @@ class LiveSession: RxObject {
     static func create(roomName: String,
                        backgroundIndex:Int,
                        success: ((LiveSession) -> Void)? = nil,
-                       fail: ErrorCompletion = nil) {
+                       fail: AGEErrorCompletion = nil) {
         let client = Center.shared().centerProvideRequestHelper()
         let event = ArRequestEvent(name: "live-session-create")
         let url = URLGroup.liveCreate
@@ -133,13 +133,13 @@ class LiveSession: RxObject {
             }
         })) { (error) -> ArRetryOptions in
             if let fail = fail {
-                fail(error)
+                fail(AGEError(arError: error))
             }
             return .resign
         }
     }
     
-    func join(success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
+    func join(success: ((LiveSession) -> Void)? = nil, fail: AGEErrorCompletion = nil) {
         var role = localRole.value
         
         let failHandle: ErrorCompletion = { [unowned self] (error) in
@@ -147,8 +147,16 @@ class LiveSession: RxObject {
             self.log(error: error,
                      extra: "live session join fail")
             
+            var ageError: AGEError
+            
+            if let arError = error as? ArError {
+                ageError = AGEError(arError: arError)
+            } else {
+                ageError = AGEError.fail(error.localizedDescription)
+            }
+            
             if let fail = fail {
-                fail(error)
+                fail(ageError)
             }
         }
         

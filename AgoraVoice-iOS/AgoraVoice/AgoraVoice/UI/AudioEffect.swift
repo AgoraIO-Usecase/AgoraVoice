@@ -276,7 +276,7 @@ extension AudioSpace {
         case .virtualStereo:
             parameters = "{\"che.audio.morph.virtual_stereo\":1}"
         case .threeDimensionalVoice:
-            parameters = "{\"che.audio.morph.threedim_voice\":\(0)}"
+            parameters = "{\"che.audio.morph.threedim_voice\":\(10)}"
         case .disable:
             parameters = "{\"che.audio.morph.reverb_preset\":0}"
         }
