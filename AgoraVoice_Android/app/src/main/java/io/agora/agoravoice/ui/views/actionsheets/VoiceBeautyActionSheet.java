@@ -45,11 +45,15 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter<?> mCurrentAdapter;
-    private VoiceTimbreItemDecoration mTimbreItemDecoration = new VoiceTimbreItemDecoration();
+    private final TextItemDecoration mTextItemDecoration = new TextItemDecoration();
 
     private String[] mVoiceBeautyChatNames;
     private String[] mVoiceBeautySingNames;
     private String[] mVoiceBeautyTimbreNames;
+
+    private RelativeLayout mVoiceBeautyLayout1;
+    private RelativeLayout mVoiceBeautyLayout2;
+    private RelativeLayout mVoiceBeautyLayout3;
 
     private VoiceBeautyActionListener mListener;
 
@@ -63,9 +67,12 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.action_sheet_voice_beauty, this);
 
-        findViewById(R.id.action_sheet_voice_beauty_layout_1).setOnClickListener(this);
-        findViewById(R.id.action_sheet_voice_beauty_layout_2).setOnClickListener(this);
-        findViewById(R.id.action_sheet_voice_beauty_layout_3).setOnClickListener(this);
+        mVoiceBeautyLayout1 = findViewById(R.id.action_sheet_voice_beauty_layout_1);
+        mVoiceBeautyLayout1.setOnClickListener(this);
+        mVoiceBeautyLayout2 = findViewById(R.id.action_sheet_voice_beauty_layout_2);
+        mVoiceBeautyLayout2.setOnClickListener(this);
+        mVoiceBeautyLayout3 = findViewById(R.id.action_sheet_voice_beauty_layout_3);
+        mVoiceBeautyLayout3.setOnClickListener(this);
 
         mTypeTexts = new AppCompatTextView[3];
         mTypeTexts[0] = findViewById(R.id.action_sheet_sound_effect_type_item_name);
@@ -78,8 +85,10 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
         mIndicators[2] = findViewById(R.id.action_sheet_voice_beauty_type_indicator_3);
 
         mVoiceBeautyChatNames = getResources().getStringArray(R.array.voice_beauty_chat_names);
-        mVoiceBeautySingNames = getResources().getStringArray(R.array.voice_beauty_sing_names);
         mVoiceBeautyTimbreNames = getResources().getStringArray(R.array.voice_beauty_timbre);
+
+        // May change in late version updates
+        mVoiceBeautySingNames = getResources().getStringArray(R.array.voice_beauty_sing_names_simple);
 
         mRecyclerView = findViewById(R.id.action_sheet_voice_beauty_recycler);
         changeType(TYPE_CHAT);
@@ -95,25 +104,27 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.action_sheet_voice_beauty_layout_1:
-                changeType(TYPE_CHAT);
-                break;
-            case R.id.action_sheet_voice_beauty_layout_2:
-                changeType(TYPE_SING);
-                break;
-            case R.id.action_sheet_voice_beauty_layout_3:
-                changeType(TYPE_TIMBRE);
-                break;
+        int id = v.getId();
+        if (id == mVoiceBeautyLayout1.getId()) {
+            changeType(TYPE_CHAT);
+        } else if (id == mVoiceBeautyLayout2.getId()) {
+            changeType(TYPE_SING);
+        } else if (id == mVoiceBeautyLayout3.getId()) {
+            changeType(TYPE_TIMBRE);
         }
     }
 
     private void changeType(int type) {
-        if (mCurrentType == type) return;
+        if (type != TYPE_CHAT && type != TYPE_SING
+                && type != TYPE_TIMBRE || mCurrentType == type) {
+             return;
+        }
+
         mCurrentType = type;
         mRecyclerView.setAdapter(null);
         mRecyclerView.setLayoutManager(layoutManager(mCurrentType));
-        highlight();
+        mRecyclerView.removeItemDecoration(mTextItemDecoration);
+        highlightSelectedTab();
 
         mSelected1 = -1;
         mSelected2 = -1;
@@ -123,25 +134,23 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
             case TYPE_CHAT:
                 mSelected1 = getSelectedItem();
                 mCurrentAdapter = new ChatBeautyAdapter();
-                mRecyclerView.removeItemDecoration(mTimbreItemDecoration);
                 break;
             case TYPE_SING:
                 mSelected2 = getSelectedItem();
-                mCurrentAdapter = new SingBeautyAdapter();
-                mRecyclerView.removeItemDecoration(mTimbreItemDecoration);
+                mCurrentAdapter = new SingBeautyAdapter2();
+                mRecyclerView.addItemDecoration(mTextItemDecoration);
                 break;
             case TYPE_TIMBRE:
                 mSelected3 = getSelectedItem();
                 mCurrentAdapter = new VoiceTimbreAdapter();
-                mRecyclerView.addItemDecoration(mTimbreItemDecoration);
+                mRecyclerView.addItemDecoration(mTextItemDecoration);
                 break;
         }
-
 
         mRecyclerView.setAdapter(mCurrentAdapter);
     }
 
-    private void highlight() {
+    private void highlightSelectedTab() {
         int index = mCurrentType;
         for (int i = 0; i < mTypeTexts.length; i++) {
             if (i == index) {
@@ -324,6 +333,56 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
         }
     }
 
+    private class SingBeautyAdapter2 extends RecyclerView.Adapter<SingBeautyViewHolder2> {
+        @NonNull
+        @Override
+        public SingBeautyViewHolder2 onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new SingBeautyViewHolder2(LayoutInflater.from(getContext()).inflate(
+                    R.layout.action_sheet_voice_beauty_item_text_only_layout, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull SingBeautyViewHolder2 holder, int position) {
+            int pos = holder.getAdapterPosition();
+            boolean selected = pos == mSelected2;
+            holder.itemView.setActivated(selected);
+            holder.title.setText(mVoiceBeautySingNames[pos]);
+            holder.title.setTextColor(selected ? Color.WHITE : TITLE_TEXT_DEFAULT);
+            holder.itemView.setOnClickListener(view -> {
+                if (pos == mSelected2) {
+                    mSelected2 = -1;
+                    if (mListener != null) {
+                        mListener.onVoiceBeautyUnselected();
+                    }
+                } else {
+                    mSelected2 = pos;
+                    if (mListener != null) {
+                        // There will be 6 different sing effects, but currently
+                        // there are only two supported. And this is used to
+                        // match the 6 remained effect of the audio effect setting.
+                        mListener.onVoiceBeautySelected(
+                                getSelectedType(pos + 2));
+                    }
+                }
+                mCurrentAdapter.notifyDataSetChanged();
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return mVoiceBeautySingNames.length;
+        }
+    }
+
+    private static class SingBeautyViewHolder2 extends RecyclerView.ViewHolder {
+        AppCompatTextView title;
+
+        public SingBeautyViewHolder2(@NonNull View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.action_sheet_voice_beauty_text_item_view);
+        }
+    }
+
     private class VoiceTimbreAdapter extends RecyclerView.Adapter<VoiceTimbreViewHolder> {
         @NonNull
         @Override
@@ -373,7 +432,7 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
         }
     }
 
-    private class VoiceTimbreItemDecoration extends RecyclerView.ItemDecoration {
+    private class TextItemDecoration extends RecyclerView.ItemDecoration {
         private int mSpacing = getResources().getDimensionPixelOffset(
                 R.dimen.action_sheet_voice_beauty_text_item_spacing);
 

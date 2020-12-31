@@ -142,6 +142,11 @@
         <item>小房间(女)</item>
     </string-array>
 
+    <string-array name="voice_beauty_sing_names_simple">
+        <item>男性</item>
+        <item>女性</item>
+    </string-array>
+
     <string-array name="voice_beauty_timbre">
         <item>浑厚</item>
         <item>低沉</item>

@@ -14,6 +14,7 @@ import io.agora.agoravoice.manager.AudioManager;
 public class ThreeDimenVoiceActionSheet extends AbstractActionSheet
         implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     private static final int MAX_VOICE_SPEED = 60;
+    private static final int MIN_VOICE_SPEED = 1;
 
     public interface ThreeDimenVoiceActionListener {
         void onThreeDimenVoiceEnabled(boolean enabled);
@@ -82,7 +83,7 @@ public class ThreeDimenVoiceActionSheet extends AbstractActionSheet
             mValueBar.setEnabled(true);
         } else {
             mSwitch.setActivated(false);
-            mValueBar.setProgress(0);
+            mValueBar.setProgress(MIN_VOICE_SPEED);
             mValueBar.setEnabled(false);
         }
     }
@@ -108,6 +109,11 @@ public class ThreeDimenVoiceActionSheet extends AbstractActionSheet
     public void onStopTrackingTouch(SeekBar seekBar) {
         if (threeDimenVoiceEnabled() && mListener != null) {
             int progress = seekBar.getProgress();
+            if (progress < MIN_VOICE_SPEED) {
+                seekBar.setProgress(MIN_VOICE_SPEED);
+                progress = MIN_VOICE_SPEED;
+            }
+
             mListener.onThreeDimenVoiceSpeedChanged(
                     progress < 0 ? 0 : Math.min(progress, MAX_VOICE_SPEED));
         }

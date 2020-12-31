@@ -86,7 +86,20 @@ public class AudioEffect {
         }
 
         public String toParameter() {
-            return String.format(Locale.getDefault(), FORMAT_PARAM, this.type, this.value);
+            return String.format(Locale.getDefault(), FORMAT_PARAM,
+                    getParameterKeyByType(this.type), this.value);
+        }
+
+        private String getParameterKeyByType(int type) {
+            switch (type) {
+                case TYPE_REVERB: return FORMAT_PRESET;
+                case TYPE_CHANGER: return FORMAT_CHANGE;
+                case TYPE_BEAUTY: return FORMAT_BEAUTY;
+                case TYPE_3D_VOICE: return FORMAT_3D_SPEED;
+                case TYPE_STEREO: return FORMAT_STEREO;
+                case TYPE_SING: return FORMAT_SING;
+                default: return FORMAT_PARAM;
+            }
         }
     }
 
@@ -105,14 +118,14 @@ public class AudioEffect {
             new AudioEffectParam(AudioEffectParam.TYPE_SING, 2),
 
             // Timbre
-            new AudioEffectParam(TYPE_VOICE_CHANGE, 7),  // Vigorous
-            new AudioEffectParam(TYPE_VOICE_CHANGE, 8),  // Deep
-            new AudioEffectParam(TYPE_VOICE_CHANGE, 9),  // Mellow
-            new AudioEffectParam(TYPE_VOICE_CHANGE, 10), // Falsetto
-            new AudioEffectParam(TYPE_VOICE_CHANGE, 11),  // Full
-            new AudioEffectParam(TYPE_VOICE_CHANGE, 12), // Clear
-            new AudioEffectParam(TYPE_VOICE_CHANGE, 13), // Resounding
-            new AudioEffectParam(TYPE_VOICE_CHANGE, 14), // Ringing
+            new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 7),  // Vigorous
+            new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 8),  // Deep
+            new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 9),  // Mellow
+            new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 10), // Falsetto
+            new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 11),  // Full
+            new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 12), // Clear
+            new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 13), // Resounding
+            new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 14), // Ringing
 
             // Spacing
             new AudioEffectParam(AudioEffectParam.TYPE_REVERB, 1),    // KTV
@@ -122,22 +135,24 @@ public class AudioEffect {
             new AudioEffectParam(AudioEffectParam.TYPE_STEREO, 1),    // Virtual stereo
             new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 15),  // Spacial
             new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 5),   // Ethereal
-            new AudioEffectParam(AudioEffectParam.TYPE_3D_VOICE, 8),  // 3D voice
+
+            // Simply setting to default speed (10) will enable 3D voice effect
+            new AudioEffectParam(AudioEffectParam.TYPE_3D_VOICE, 10),  // 3D voice
 
             // Voice Change
-            new AudioEffectParam(TYPE_VOICE_REVERB, 3), // Uncle
-            new AudioEffectParam(TYPE_VOICE_CHANGE, 1), // Old man
-            new AudioEffectParam(TYPE_VOICE_CHANGE, 2), // Baby boy
-            new AudioEffectParam(TYPE_VOICE_REVERB, 4), // Sister
-            new AudioEffectParam(TYPE_VOICE_CHANGE, 3), // Little girl
-            new AudioEffectParam(TYPE_VOICE_CHANGE, 4), // Bajie
-            new AudioEffectParam(TYPE_VOICE_CHANGE, 6), // Hulk
+            new AudioEffectParam(AudioEffectParam.TYPE_REVERB, 3), // Uncle
+            new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 1), // Old man
+            new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 2), // Baby boy
+            new AudioEffectParam(AudioEffectParam.TYPE_REVERB, 4), // Sister
+            new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 3), // Little girl
+            new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 4), // Bajie
+            new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 6), // Hulk
 
             // Flavor
-            new AudioEffectParam(TYPE_VOICE_REVERB, 7),   // RNB
-            new AudioEffectParam(TYPE_VOICE_REVERB, 6),   // Popular
-            new AudioEffectParam(TYPE_VOICE_REVERB, 11),  // Rock and roll
-            new AudioEffectParam(TYPE_VOICE_REVERB, 12),  // Hip hop
+            new AudioEffectParam(AudioEffectParam.TYPE_REVERB, 7),   // RNB
+            new AudioEffectParam(AudioEffectParam.TYPE_REVERB, 6),   // Popular
+            new AudioEffectParam(AudioEffectParam.TYPE_REVERB, 11),  // Rock and roll
+            new AudioEffectParam(AudioEffectParam.TYPE_REVERB, 12),  // Hip hop
 
             // Electronic
             new AudioEffectParam(TYPE_VOICE_REVERB, 12),  // Undefined

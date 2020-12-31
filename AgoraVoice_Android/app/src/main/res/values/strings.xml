@@ -158,6 +158,11 @@
         <item>Small Room (Female)</item>
     </string-array>
 
+    <string-array name="voice_beauty_sing_names_simple">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
     <string-array name="voice_beauty_timbre">
         <item>Vigorous</item>
         <item>Deep</item>
