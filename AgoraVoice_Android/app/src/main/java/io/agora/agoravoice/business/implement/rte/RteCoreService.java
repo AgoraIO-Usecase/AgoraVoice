@@ -246,6 +246,7 @@ public class RteCoreService implements CoreService,
     @Override
     public void adjustAudioMixingVolume(int volume) {
         mAgoraRteEngine.getAgoraRteMediaControl().getMediaPlayer().adjustPlayoutVolume(volume);
+        mAgoraRteEngine.getAgoraRteMediaControl().getMediaPlayer().adjustPublishVolume(volume);
     }
 
     @Override
