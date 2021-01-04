@@ -150,4 +150,8 @@ public class ToolActionSheet extends AbstractActionSheet {
     public void setToolActionListener(ToolActionListener listener) {
         mListener = listener;
     }
+
+    public void refreshUIState() {
+        mAdapter.notifyDataSetChanged();
+    }
 }

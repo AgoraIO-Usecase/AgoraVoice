@@ -17,7 +17,6 @@ import java.util.List;
 
 import io.agora.agoravoice.R;
 import io.agora.agoravoice.business.definition.struct.BusinessType;
-import io.agora.agoravoice.business.definition.struct.RoomInfo;
 import io.agora.agoravoice.business.server.retrofit.model.responses.RoomListResp;
 import io.agora.agoravoice.manager.ProxyManager;
 import io.agora.agoravoice.ui.views.CropBackgroundRelativeLayout;
@@ -53,12 +52,12 @@ public class PrepareActivity extends AbsLiveActivity {
 
         @Override
         public void onGetRoomList(String nextId, int total, List<RoomListResp.RoomListItem> list) {
-            //TODO nothing needs to be done here
+            // nothing needs to be done here
         }
 
         @Override
         public void onLeaveRoom() {
-            //TODO nothing needs to be done here
+            // nothing needs to be done here
         }
 
         @Override
@@ -69,6 +68,11 @@ public class PrepareActivity extends AbsLiveActivity {
             }
         }
     };
+
+    @Override
+    protected void onHeadsetWithMicPlugged(boolean plugged) {
+        // nothing needs to be done here
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -74,6 +74,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     private ChatRoomHostPanel mHostPanel;
 
     private UserListActionSheet mUserListActionSheet;
+    private ToolActionSheet mToolActionSheet;
 
     // The room finish state is parsed from room property updates, which are
     // commands from asynchronous server callbacks. At the meantime, there
@@ -103,6 +104,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                         toolActionSheet.setToolActionListener(mToolActionListener);
                         toolActionSheet.setAppConfig(config());
                         showActionSheet(toolActionSheet, true);
+                        mToolActionSheet = toolActionSheet;
                         break;
                     case 1:
                         SoundEffectActionSheet effectActionSheet = (SoundEffectActionSheet)
@@ -720,6 +722,18 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
 
         }
     };
+
+    @Override
+    protected void onHeadsetWithMicPlugged(boolean plugged) {
+        runOnUiThread(() -> {
+            if (!plugged && mToolActionSheet != null &&
+                    mToolActionSheet.isShown()) {
+                proxy().getAudioManager().enableInEarMonitoring(false);
+                config().setInEarMonitoring(false);
+                mToolActionSheet.refreshUIState();
+            }
+        });
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

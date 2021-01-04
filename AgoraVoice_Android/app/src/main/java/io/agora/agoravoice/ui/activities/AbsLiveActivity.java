@@ -59,6 +59,7 @@ public abstract class AbsLiveActivity extends BaseActivity {
                 boolean plugged = intent.getIntExtra("state", -1) == 1;
                 boolean hasMic = intent.getIntExtra("microphone", -1) == 1;
                 mHeadsetWithMicPlugged = plugged && hasMic;
+                onHeadsetWithMicPlugged(mHeadsetWithMicPlugged);
             }
         }
     };
@@ -66,6 +67,8 @@ public abstract class AbsLiveActivity extends BaseActivity {
     protected boolean headSetWithMicPlugged() {
         return mHeadsetWithMicPlugged;
     }
+
+    protected abstract void onHeadsetWithMicPlugged(boolean plugged);
 
     private NetworkReceiver mNetworkReceiver;
 
