@@ -376,23 +376,23 @@ private extension ChatRoomViewController {
             
             switch command {
             // Owenr
-            case .close, .release:
-                self.closeReleaseOperation(command: command,
-                                              seatCommands: seatCommands)
-            case .invitation:
-                self.invitationOperation(command: command,
-                                         seatCommands: seatCommands)
+            case .block, .unblock:
+                self.blockOperation(command: command,
+                                    seatCommands: seatCommands)
+            case .invite:
+                self.inviteOperation(command: command,
+                                     seatCommands: seatCommands)
             case .forceToStopBroadcasting, .mute, .unmute:
-                self.forceToStopBroadcastingUnbanBanOperation(command: command,
+                self.forceToStopBroadcastingMuteOperation(command: command,
                                                           seatCommands: seatCommands)
             // Broadcaster
             case .stopBroadcasting:
                 self.stopBroadcastingOperation(command: command,
                                                seatCommands: seatCommands)
             // Audience
-            case .application:
-                self.applicationOperation(command: command,
-                                          seatCommands: seatCommands)
+            case .apply:
+                self.applyOperation(command: command,
+                                    seatCommands: seatCommands)
             }
         }).disposed(by: vc.bag)
     }
@@ -485,21 +485,21 @@ private extension ChatRoomViewController {
 
 // MARK: - Seat command operation
 private extension ChatRoomViewController {
-    func closeReleaseOperation(command: LiveSeatView.Command,
-                               seatCommands: LiveSeatCommands) {
+    func blockOperation(command: LiveSeatView.Command,
+                        seatCommands: LiveSeatCommands) {
         var message: String
         
         switch command {
-        case .release:
+        case .block:
             message = ChatRoomLocalizable.unblockThisSeat()
-        case .close:
+        case .unblock:
             message = ChatRoomLocalizable.blockThisSeat()
         default:
             assert(false)
             return
         }
         
-        let seatState: SeatState = (command == .close ? .close : .empty)
+        let seatState: SeatState = (command == .block ? .close : .empty)
         
         self.showAlert(message: message,
                        action1: NSLocalizedString("Cancel"),
@@ -510,8 +510,8 @@ private extension ChatRoomViewController {
                        })
     }
     
-    func invitationOperation(command: LiveSeatView.Command,
-                             seatCommands: LiveSeatCommands) {
+    func inviteOperation(command: LiveSeatView.Command,
+                         seatCommands: LiveSeatCommands) {
         self.presentInvitationList { [unowned self] (user) in
             self.hiddenMaskView()
             
@@ -527,11 +527,11 @@ private extension ChatRoomViewController {
         }
     }
     
-    func forceToStopBroadcastingUnbanBanOperation(command: LiveSeatView.Command,
+    func forceToStopBroadcastingMuteOperation(command: LiveSeatView.Command,
                                               seatCommands: LiveSeatCommands) {
         guard let stream = seatCommands.seat.state.stream else {
-                           assert(false)
-                           return
+            assert(false)
+            return
         }
         
         let userName = stream.owner.info.name
@@ -586,8 +586,8 @@ private extension ChatRoomViewController {
                        })
     }
     
-    func applicationOperation(command: LiveSeatView.Command,
-                              seatCommands: LiveSeatCommands) {
+    func applyOperation(command: LiveSeatView.Command,
+                        seatCommands: LiveSeatCommands) {
         let message = ChatRoomLocalizable.doYouSendApplication()
         self.showAlert(message: message,
                        action1: NSLocalizedString("Cancel"),

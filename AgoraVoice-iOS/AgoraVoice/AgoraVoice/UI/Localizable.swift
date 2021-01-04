@@ -18,6 +18,96 @@ class LiveVCLocalizable: NSObject {
     }
 }
 
+class MineLocalizable: NSObject {
+    static func headSetting() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "设置头像"
+        } else {
+            return "Profile"
+        }
+    }
+    
+    static func nicknameSetting() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "设置昵称"
+        } else {
+            return "Nickname"
+        }
+    }
+    
+    static func inputName() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "输入名字"
+        } else {
+            return "Input"
+        }
+    }
+    
+    static func about() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "关于"
+        } else {
+            return "About"
+        }
+    }
+    
+    static func privacy() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "隐私条例"
+        } else {
+            return "Privacy"
+        }
+    }
+    
+    static func disclaimer() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "产品免责声明"
+        } else {
+            return "Disclaimer"
+        }
+    }
+    
+    static func registerAgoraAccount() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "注册声网账号"
+        } else {
+            return "Agora Account"
+        }
+    }
+    
+    static func releaseDate() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "发版时间"
+        } else {
+            return "Release Date"
+        }
+    }
+    
+    static func sdkVersion() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "SDK 版本"
+        } else {
+            return "SDK Version"
+        }
+    }
+    
+    static func appVersion() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "Agora Voice 版本"
+        } else {
+            return "Agora Voice Version"
+        }
+    }
+    
+    static func uploadLog() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "上传日志"
+        } else {
+            return "Upload Log"
+        }
+    }
+}
+
 class ChatRoomLocalizable: NSObject {
     static func doYouRejectApplication(from: String) -> String {
         if DeviceAssistant.Language.isChinese {

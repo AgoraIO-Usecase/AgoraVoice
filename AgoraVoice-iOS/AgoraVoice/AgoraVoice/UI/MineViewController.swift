@@ -164,9 +164,9 @@ private extension MineViewController {
         self.view.addSubview(view)
         
         // table cell
-        self.headLabel.text = NSLocalizedString("Mine_Head")
-        self.aboutLabel.text = NSLocalizedString("About")
-        self.nameLabel.text = NSLocalizedString("Mine_Name")
+        self.headLabel.text = MineLocalizable.headSetting()
+        self.aboutLabel.text = MineLocalizable.about()
+        self.nameLabel.text = MineLocalizable.nicknameSetting()
     }
     
     func setupBackButton() {

@@ -78,7 +78,7 @@ private extension UserNameViewController {
         
         navigation.navigationBar.isHidden = false
         
-        self.navigationItem.title = NSLocalizedString("Input_Name")
+        self.navigationItem.title = MineLocalizable.inputName()
         
         let buttonFrame = CGRect(x: 0,
                                  y: 0,

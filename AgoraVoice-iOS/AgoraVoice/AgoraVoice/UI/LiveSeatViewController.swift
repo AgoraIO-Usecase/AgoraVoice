@@ -54,21 +54,21 @@ class SeatButton: UIButton {
 
 class LiveSeatView: RxView {
     enum Command {
-        // 禁麦， 解禁， 封麦，下麦， 解封， 邀请，
-        case mute, unmute, close, forceToStopBroadcasting, release, invitation
+        // 禁麦， 解禁， 封麦，解封，下麦， 邀请，
+        case mute, unmute, block, unblock, forceToStopBroadcasting, invite
         // 申请成为主播， 主播下麦
-        case application, stopBroadcasting
+        case apply, stopBroadcasting
         
         var description: String {
             switch self {
-            case .mute:                     return NSLocalizedString("Seat_Ban")
-            case .unmute:                   return NSLocalizedString("Seat_Unban")
-            case .forceToStopBroadcasting:  return NSLocalizedString("End_Broadcasting")
-            case .close:                    return NSLocalizedString("Seat_Close")
-            case .release:                  return NSLocalizedString("Seat_Release")
-            case .invitation:               return NSLocalizedString("Invitation")
-            case .application:              return NSLocalizedString("Application_Of_Broadcasting")
-            case .stopBroadcasting:         return NSLocalizedString("End_Broadcasting")
+            case .mute:                     return DeviceAssistant.Language.isChinese ? "禁麦" : "Mute"
+            case .unmute:                   return DeviceAssistant.Language.isChinese ? "解禁" : "Unmute"
+            case .forceToStopBroadcasting:  return DeviceAssistant.Language.isChinese ? "下麦" : "End"
+            case .block:                    return DeviceAssistant.Language.isChinese ? "封麦" : "Block"
+            case .unblock:                  return DeviceAssistant.Language.isChinese ? "解封" : "Unblock"
+            case .invite:                   return DeviceAssistant.Language.isChinese ? "邀请" : "Invite"
+            case .apply:                    return DeviceAssistant.Language.isChinese ? "申请" : "Apply"
+            case .stopBroadcasting:         return DeviceAssistant.Language.isChinese ? "下麦" : "End"
             }
         }
     }
@@ -101,15 +101,15 @@ class LiveSeatView: RxView {
             switch (self.commandButton.type, self.perspective) {
             // owner
             case (.empty, .owner):
-                self.commands.accept([.invitation, .close])
+                self.commands.accept([.invite, .block])
             case (.normal(let stream), .owner):
                 if stream.hasAudio {
-                    self.commands.accept([.mute, .forceToStopBroadcasting, .close])
+                    self.commands.accept([.mute, .forceToStopBroadcasting, .block])
                 } else {
-                    self.commands.accept([.unmute, .forceToStopBroadcasting, .close])
+                    self.commands.accept([.unmute, .forceToStopBroadcasting, .block])
                 }
             case (.close, .owner):
-                self.commands.accept([.release])
+                self.commands.accept([.unblock])
             // broadcaster
             case (.empty, .broadcaster):
                 break
@@ -122,7 +122,7 @@ class LiveSeatView: RxView {
                 break
             // audience
             case (.empty, .audience):
-                self.commands.accept([.application])
+                self.commands.accept([.apply])
             case (.normal, .audience):
                 break
             case (.close, .audience):

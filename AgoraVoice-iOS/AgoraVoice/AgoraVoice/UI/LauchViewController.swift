@@ -10,7 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class LauchViewController: RxViewController, ShowAlertProtocol {
+class LauchViewController: MaskViewController {
     @IBOutlet weak var logoButton: UIButton!
     
     override func viewDidLoad() {
@@ -26,9 +26,11 @@ class LauchViewController: RxViewController, ShowAlertProtocol {
             self.showAlert("Reset AppId",
                            action1: appId1Short,
                            action2: appId2Short) { [unowned self] (_) in
+                self.showHUD()
                 Keys.AgoraAppId = appId1
                 self.centerRegister()
             } handler2: { [unowned self] (_) in
+                self.showHUD()
                 Keys.AgoraAppId = appId2
                 self.centerRegister()
             }
@@ -39,6 +41,7 @@ class LauchViewController: RxViewController, ShowAlertProtocol {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.showHUD()
         self.centerRegister()
     }
 }

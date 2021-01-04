@@ -14,7 +14,7 @@ class DisclaimerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = NSLocalizedString("Test_Product_Disclaimer")
+        self.title = MineLocalizable.disclaimer()
         
         let para = NSMutableParagraphStyle()
         para.alignment = .natural
@@ -60,20 +60,20 @@ class AboutViewController: MaskTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = NSLocalizedString("About")
-        privacyLabel.text = NSLocalizedString("Privacy_Item")
-        disclaimerLabel.text = NSLocalizedString("Disclaimer")
-        registerLabel.text = NSLocalizedString("Register_Agora_Account")
-        versionLabel.text = NSLocalizedString("Version_Release_Date")
-        sdkLabel.text = NSLocalizedString("RTC_SDK_Version")
-        alLabel.text = NSLocalizedString("AV_Version")
+        self.title = MineLocalizable.about()
+        privacyLabel.text = MineLocalizable.privacy()
+        disclaimerLabel.text = MineLocalizable.disclaimer()
+        registerLabel.text = MineLocalizable.registerAgoraAccount()
+        versionLabel.text = MineLocalizable.releaseDate()
+        sdkLabel.text = MineLocalizable.sdkVersion()
+        alLabel.text = MineLocalizable.appVersion()
         
         alValueLabel.text = "Ver \(AppAssistant.version)"
         sdkValueLabel.text = "Ver \(AgoraRteEngine.getVersion())"
         
         releaseDateValueLabel.text = "2020.6.18"
         
-        uploadLogLabel.text = NSLocalizedString("Upload_Log")
+        uploadLogLabel.text = MineLocalizable.uploadLog()
         
         agoraLabel.text = "www.agora.io"
         agoraLabel.font = UIFont.systemFont(ofSize: 16)
