@@ -119,7 +119,7 @@ class LiveSession: RxObject {
                                parameters: ["roomName": roomName,
                                             "backgroundImage": "\(backgroundIndex)",
                                             "duration": 10,
-                                            "audienceLimit": 10])
+                                            "audienceLimit": 4])
         
         client.request(task: task, success: ArResponse.json({ (json) in
             let roomId = try json.getStringValue(of: "data")

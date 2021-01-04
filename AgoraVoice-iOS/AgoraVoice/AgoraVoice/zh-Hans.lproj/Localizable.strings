@@ -19,8 +19,8 @@ Background="背景";
 Invitation="邀请";
 Inviting="邀请中";
 All="全部";
-Male="男";
-Female="女";
+Male="男性";
+Female="女性";
 LogId_Copy="LogId 已经复制到粘贴板";
 
 Lost_Connection="网络异常";

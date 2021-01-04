@@ -35,7 +35,7 @@ class MainTabBarViewController: MaskTabBarController {
         tabBar.isUserInteractionEnabled = false
         
         presentLauchScreen()
-        
+                
         #if RELEASE
         let center = Center.shared()
         center.registerAndLogin()

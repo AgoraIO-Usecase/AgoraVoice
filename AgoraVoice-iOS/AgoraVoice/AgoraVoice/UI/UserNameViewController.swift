@@ -10,8 +10,10 @@ import UIKit
 import RxSwift
 import RxRelay
 
-class UserNameViewController: UIViewController {
+class UserNameViewController: MaskViewController {
     @IBOutlet weak var nameTextField: UITextField!
+    
+    private let nameLimit = 16
     
     var newName: BehaviorRelay<String>!
     
@@ -41,11 +43,25 @@ class UserNameViewController: UIViewController {
             nameTextField.text = nil
         }
         
+        nameTextField.delegate = self
+        
         setupRightButton()
     }
     
     @objc func didDonePressed() {
-        if let name = nameTextField.text, name != newName.value {
+        guard let name = nameTextField.text,
+              name.count > 0 else {
+            
+            if DeviceAssistant.Language.isChinese {
+                self.showTextToast(text: "用户名不可为空")
+            } else {
+                self.showTextToast(text: "")
+            }
+            
+            return
+        }
+        
+        if name != newName.value {
             newName.accept(name)
         }
         
@@ -64,8 +80,15 @@ private extension UserNameViewController {
         
         self.navigationItem.title = NSLocalizedString("Input_Name")
         
-        let doneButton = UIButton(frame: CGRect(x: 0, y: 0, width: 69, height: 30))
-        doneButton.addTarget(self, action: #selector(didDonePressed), for: .touchUpInside)
+        let buttonFrame = CGRect(x: 0,
+                                 y: 0,
+                                 width: 69,
+                                 height: 30)
+         
+        let doneButton = UIButton(frame: buttonFrame)
+        doneButton.addTarget(self,
+                             action: #selector(didDonePressed),
+                             for: .touchUpInside)
         doneButton.setTitle(NSLocalizedString("Done"), for: .normal)
         doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         doneButton.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -73,5 +96,24 @@ private extension UserNameViewController {
         doneButton.backgroundColor = UIColor(hexString: "#008AF3")
         doneButton.cornerRadius(4)
         navigation.rightButton = doneButton
+    }
+}
+
+extension UserNameViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
+        if range.length == 1 && string.count == 0 {
+            return true
+        } else if let text = textField.text, text.count >= nameLimit {
+            if DeviceAssistant.Language.isChinese {
+                self.showTextToast(text: "用户名称不能超过\(nameLimit)个字符")
+            } else {
+                self.showTextToast(text: "Maximum length of user name is \(nameLimit)")
+            }
+            return false
+        } else {
+            return true
+        }
     }
 }
