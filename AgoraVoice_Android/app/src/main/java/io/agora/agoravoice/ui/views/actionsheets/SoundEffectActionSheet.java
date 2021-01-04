@@ -219,15 +219,17 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         mElectronicSwitch.setOnClickListener(view -> {
             if (view.isActivated()) {
                 view.setActivated(false);
-                mSelectedKey = 0;
-                mSelectedValue = 0;
+                mKeyAdapter.setEnabled(false);
+                mValueAdapter.setEnabled(false);
                 if (mListener != null) {
                     mListener.onVoiceBeautyUnselected();
                 }
             } else {
                 view.setActivated(true);
+                mKeyAdapter.setEnabled(true);
+                mValueAdapter.setEnabled(true);
+
                 if (mConfig != null) {
-                    mConfig.resetElectronicEffect();
                     mSelectedKey = mConfig.getElectronicVoiceKey();
                     mSelectedValue = mConfig.getElectronicVoiceValue();
                 } else {
@@ -442,6 +444,16 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
     }
 
     private class ElectronicKeyAdapter extends RecyclerView.Adapter<ElectronicKeyViewHolder> {
+        private boolean mEnabled;
+
+        ElectronicKeyAdapter() {
+            mEnabled = true;
+        }
+
+        void setEnabled(boolean enabled) {
+            mEnabled = enabled;
+        }
+
         @NonNull
         @Override
         public ElectronicKeyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -457,6 +469,8 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             holder.name.setTextColor(selected ? Color.WHITE : TITLE_TEXT_DEFAULT);
             holder.layout.setActivated(selected);
             holder.itemView.setOnClickListener(view -> {
+                if (!mEnabled) return;
+
                 if (pos == mSelectedKey - 1) {
                     mSelectedKey = 0;
                 } else {
@@ -487,6 +501,17 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
     }
 
     private class ElectronicToneAdapter extends RecyclerView.Adapter<ElectronicToneViewHolder> {
+        private boolean mEnabled;
+
+        ElectronicToneAdapter() {
+            mEnabled = true;
+        }
+
+        void setEnabled(boolean enabled) {
+            mEnabled = enabled;
+            notifyDataSetChanged();
+        }
+
         @NonNull
         @Override
         public ElectronicToneViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -502,6 +527,8 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             holder.name.setTextColor(selected ? Color.WHITE : TITLE_TEXT_DEFAULT);
             holder.layout.setActivated(selected);
             holder.itemView.setOnClickListener(view -> {
+                if (!mEnabled) return;
+
                 if (pos == mSelectedValue - 1) {
                     mSelectedValue = 0;
                 } else {

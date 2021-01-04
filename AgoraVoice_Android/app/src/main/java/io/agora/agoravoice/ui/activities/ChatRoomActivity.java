@@ -188,6 +188,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
             if (enabled) {
                 proxy().getAudioManager().enableAudioEffect(AudioManager.EFFECT_SPACING_3D_VOICE);
                 config().setAudioEffect(AudioManager.EFFECT_SPACING_3D_VOICE);
+                proxy().getAudioManager().set3DHumanVoiceParams(config().get3DVoiceSpeed());
             } else {
                 proxy().getAudioManager().disableAudioEffect();
                 config().disableAudioEffect();

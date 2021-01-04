@@ -45,15 +45,11 @@ public class ThreeDimenVoiceActionSheet extends AbstractActionSheet
         mSwitch.setOnClickListener(view -> {
             if (view.isActivated()) {
                 view.setActivated(false);
-                if (mConfig != null) mConfig.set3DVoiceSpeed(0);
-                mValueBar.setProgress(0);
                 mValueBar.setEnabled(false);
                 if (mListener != null) mListener.onThreeDimenVoiceEnabled(false);
             } else {
                 view.setActivated(true);
                 mValueBar.setEnabled(true);
-                if (mConfig != null) mConfig.reset3DVoiceEffect();
-                mValueBar.setProgress(getVoiceSpeed());
                 if (mListener != null) mListener.onThreeDimenVoiceEnabled(true);
             }
         });
@@ -77,13 +73,12 @@ public class ThreeDimenVoiceActionSheet extends AbstractActionSheet
     }
 
     public void setup() {
+        mValueBar.setProgress(getVoiceSpeed());
         if (threeDimenVoiceEnabled()) {
             mSwitch.setActivated(true);
-            mValueBar.setProgress(getVoiceSpeed());
             mValueBar.setEnabled(true);
         } else {
             mSwitch.setActivated(false);
-            mValueBar.setProgress(MIN_VOICE_SPEED);
             mValueBar.setEnabled(false);
         }
     }
