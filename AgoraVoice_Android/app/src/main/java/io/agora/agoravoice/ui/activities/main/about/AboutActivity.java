@@ -3,27 +3,22 @@ package io.agora.agoravoice.ui.activities.main.about;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import java.io.File;
-
 import io.agora.agoravoice.R;
-import io.agora.agoravoice.business.log.LogUploader;
 import io.agora.agoravoice.business.server.retrofit.listener.LogServiceListener;
 import io.agora.agoravoice.ui.activities.BaseActivity;
 import io.agora.agoravoice.utils.AppUtil;
 import io.agora.agoravoice.utils.ClipboardUtils;
 import io.agora.agoravoice.utils.ToastUtil;
-import io.agora.agoravoice.utils.UserUtil;
 import io.agora.agoravoice.utils.WindowUtil;
-import io.agora.log.AgoraLogManager;
 
-public class AboutActivity extends BaseActivity implements View.OnClickListener {
+public class AboutActivity extends BaseActivity implements
+        View.OnClickListener, LogServiceListener {
     private static final String TAG = AboutActivity.class.getSimpleName();
 
     private RelativeLayout mPrivacyLayout;
@@ -97,23 +92,25 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void uploadLog() {
-        proxy().uploadLogs(new LogServiceListener() {
-            @Override
-            public void onOssUploadSuccess(String data) {
-                ClipboardUtils.copyText(application(), "Log id", data);
-                String message = getResources().getString(
-                        R.string.upload_log_success_message_format);
-                final String successMessage = String.format(message, data);
-                runOnUiThread(() -> ToastUtil.showShortToast(application(), successMessage));
-            }
+        proxy().uploadLogs(this);
+    }
 
-            @Override
-            public void onOssUploadFail(int requestType, String message) {
-                String toast = getResources().getString(
-                        R.string.upload_log_fail_message_format);
-                final String toastMessage = String.format(toast, message);
-                runOnUiThread(() -> ToastUtil.showShortToast(application(), toastMessage));
-            }
+    @Override
+    public void onOssUploadSuccess(String data) {
+        runOnUiThread(() -> {
+            ClipboardUtils.copyText(application(), "Log id", data);
+            String message = getResources().getString(
+                    R.string.upload_log_success_message_format);
+            final String successMessage = String.format(message, data);
+            ToastUtil.showShortToast(application(), successMessage);
         });
+    }
+
+    @Override
+    public void onOssUploadFail(int requestType, String message) {
+        String toast = getResources().getString(
+                R.string.upload_log_fail_message_format);
+        final String toastMessage = String.format(toast, message);
+        runOnUiThread(() -> ToastUtil.showShortToast(application(), toastMessage));
     }
 }
