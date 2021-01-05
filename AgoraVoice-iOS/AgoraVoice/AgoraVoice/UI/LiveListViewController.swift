@@ -226,12 +226,14 @@ private extension LiveListViewController {
                 localType = .audience
             }
             
-            let session = LiveSession(room: room, role: localType)
+            let session = LiveSession(room: room,
+                                      role: localType)
             self.tempLiveSession = session
             
             session.join(success: { [unowned self] (session) in
                 self.hiddenHUD()
-                self.performSegue(withIdentifier: "ChatRoomViewController", sender: session)
+                self.performSegue(withIdentifier: "ChatRoomViewController",
+                                  sender: session)
             }) { [unowned self] (error) in
                 self.hiddenHUD()
                 

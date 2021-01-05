@@ -8,13 +8,13 @@ target 'AgoraVoice' do
   # Pods for AgoraVoice
   platform :ios, '10.0'
 
-  pod 'RxSwift', '~> 5.0.1'
+  pod 'RxSwift', '5.0.1'
   pod 'RxCocoa'
   pod 'RxDataSources'
-  pod 'MJRefresh', '~> 3.3.1'
+  pod 'MJRefresh', '3.3.1'
   pod 'FLAnimatedImage'
-  pod 'MBProgressHUD', '~> 1.1.0'
-  pod 'Bugly'
+  pod 'MBProgressHUD', '1.1.0'
+  pod 'Bugly', '2.5.2'
   pod 'SSZipArchive'
   pod 'AgoraLog'
   pod 'AgoraRte', :path => '../../../../AgoraRte/iOS/AgoraRte.podspec'
