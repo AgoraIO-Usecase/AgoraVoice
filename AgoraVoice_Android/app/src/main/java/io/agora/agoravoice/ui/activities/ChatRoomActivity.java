@@ -506,11 +506,12 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
             if (mIsHost && config().getUserId().equals(userId)) {
                 config().setAudioMuted(muted);
                 proxy().getAudioManager().muteLocalAudio(muted);
-
                 mHostPanel.updateMuteState(null, config().getAudioMuted(),
                         null, null, null);
                 mBottomBar.setEnableAudio(!config().getAudioMuted());
             } else if (mIsOwner) {
+                // I am the owner and I chose to mute the user
+                // of this seat.
                 String title = muted ? getString(R.string.dialog_mute_title)
                         : getString(R.string.dialog_unmute_title);
                 String format = muted ? getString(R.string.dialog_mute_message)
@@ -520,7 +521,6 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
                         getString(R.string.text_confirm),
                         getString(R.string.text_cancel),
                         () -> {
-                            config().setAudioMuted(muted);
                             proxy().getAudioManager().muteRemoteAudio(userId, muted);
                             dismissDialog();
                         }, () -> dismissDialog());
