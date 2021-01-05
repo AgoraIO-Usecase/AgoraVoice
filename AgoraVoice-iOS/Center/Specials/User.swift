@@ -87,7 +87,7 @@ class CurrentUser: NSObject {
         self.localStorage()
     }
     
-    func updateInfo(_ new: UpdateInfo, success: Completion, fail: Completion = nil) {
+    func updateInfo(_ new: UpdateInfo, success: Completion, fail: AGEErrorCompletion = nil) {
         let client = Center.shared().centerProvideRequestHelper()
         
         let url = URLGroup.userUpdateInfo(userId: self.info.value.userId)
@@ -116,9 +116,9 @@ class CurrentUser: NSObject {
         }
         let response = ArResponse.blank(successCallback)
         
-        let retry: ArErrorRetryCompletion = { (error: Error) -> ArRetryOptions in
+        let retry: ArErrorRetryCompletion = { (error: ArError) -> ArRetryOptions in
             if let fail = fail {
-                fail()
+                fail(AGEError(arError: error))
             }
             return .resign
         }

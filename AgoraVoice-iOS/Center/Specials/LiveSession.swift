@@ -76,6 +76,9 @@ class LiveSession: RxObject {
     let electronicMusic = PublishRelay<ElectronicMusic>()
     let threeDimensionalVoice = PublishRelay<Int>()
     
+    // Audio loop
+    let enableAudioLoop = BehaviorRelay(value: false)
+    
     // Audio output routing
     let audioOuputRouting = BehaviorRelay(value: AgoraRteAudioOutputRouting.default)
     
@@ -105,6 +108,16 @@ class LiveSession: RxObject {
         mediaControl.delegate = self
     }
     
+    deinit {
+        #if !RELEASE
+        print("Livesession deinit")
+        #endif
+    }
+}
+
+// MARK: - Public
+// MARK: - Session create & join & leave
+extension LiveSession {
     static func create(roomName: String,
                        backgroundIndex:Int,
                        success: ((LiveSession) -> Void)? = nil,
@@ -195,14 +208,122 @@ class LiveSession: RxObject {
         
         sceneService.leave()
     }
+}
+
+// MARK: - Local Stream
+extension LiveSession {
+    func updateLocalAudioStream(isOn: Bool, success: Completion = nil, fail: ErrorCompletion = nil) {
+        guard let service = userService else {
+            if let fail = fail {
+                fail(AGEError.valueNil("userService"))
+            }
+            return
+        }
+        
+        guard let stream = localStream.value else {
+            if let fail = fail {
+                fail(AGEError.valueNil("localStream"))
+            }
+            return
+        }
+        
+        let failCallback = { (error: AgoraRteError) in
+            if let fail = fail {
+                fail(AGEError(rteError: error))
+            }
+        }
+        
+        if isOn {
+            service.unmuteLocalMediaStream(stream.streamId,
+                                           type: .audio,
+                                           success: success,
+                                           fail: failCallback)
+        } else {
+            service.muteLocalMediaStream(stream.streamId,
+                                         type: .audio,
+                                         success: success,
+                                         fail: failCallback)
+        }
+    }
     
-    deinit {
-        #if !RELEASE
-        print("Livesession deinit")
-        #endif
+    func unpublishLocalStream(success: Completion = nil, fail: ErrorCompletion = nil) {
+        let rteKit = Center.shared().centerProviderteEngine()
+        let mediaControl = rteKit.getAgoraMediaControl()
+        let mic = mediaControl.createMicphoneAudioTrack()
+        let streamId = localRole.value.agUId
+        
+        userService?.unpublishLocalMediaTrack(mic,
+                                              withStreamId: streamId,
+                                              success: success,
+                                              fail: { (error) in
+                                                if let fail = fail {
+                                                    fail(AGEError(rteError: error))
+                                                }
+                                              })
+    }
+    
+    func enableLocalAudioStreamLoop(enable: Bool) {
+        let rteKit = Center.shared().centerProviderteEngine()
+        let mediaControl = rteKit.getAgoraMediaControl()
+        let mic = mediaControl.createMicphoneAudioTrack()
+        if enable {
+            mic.enableLocalPlayback()
+        } else {
+            mic.disableLocalPlayback()
+        }
     }
 }
 
+// MARK: - Remote Stream
+extension LiveSession {
+    func muteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
+        let info = AgoraRteRemoteStreamInfo(streamId: stream.streamId,
+                                            userId: stream.owner.info.userId,
+                                            mediaStreamType: .none,
+                                            videoSourceType: .none,
+                                            audioSourceType: .mic)
+        
+        userService?.createOrUpdateRemoteStream(info,
+                                                success: nil,
+                                                fail: { (error) in
+                                                    if let fail = fail {
+                                                        fail(AGEError(rteError: error))
+                                                    }
+                                                })
+    }
+    
+    func unmuteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
+        let info = AgoraRteRemoteStreamInfo(streamId: stream.streamId,
+                                            userId: stream.owner.info.userId,
+                                            mediaStreamType: .audio,
+                                            videoSourceType: .none,
+                                            audioSourceType: .mic)
+        
+        userService?.createOrUpdateRemoteStream(info,
+                                                success: nil,
+                                                fail: { (error) in
+                                                    if let fail = fail {
+                                                        fail(AGEError(rteError: error))
+                                                    }
+                                                })
+    }
+}
+
+// MARK: - Chat Message
+extension LiveSession {
+    func sendChat(_ text: String, success: Completion = nil, fail: ErrorCompletion = nil) {
+        let message = AgoraRteMessage(message: text)
+        userService?.sendSceneMessage(toAllRemoteUsers: message,
+                                      success: success,
+                                      fail: { (error) in
+                                        if let fail = fail {
+                                            fail(AGEError(rteError: error))
+                                        }
+                                      })
+    }
+}
+
+// MARK: - Private
 // MARK: - Join process
 fileprivate extension LiveSession {
     func httpJoinProcess(liveRole: LiveRole,
@@ -326,95 +447,6 @@ fileprivate extension LiveSession {
     }
 }
 
-// MARK: - Stream
-// MARK: - Local Stream
-extension LiveSession {
-    func updateLocalAudioStream(isOn: Bool, success: Completion = nil, fail: ErrorCompletion = nil) {
-        guard let service = userService else {
-            if let fail = fail {
-                fail(AGEError.valueNil("userService"))
-            }
-            return
-        }
-        
-        guard let stream = localStream.value else {
-            if let fail = fail {
-                fail(AGEError.valueNil("localStream"))
-            }
-            return
-        }
-        
-        let failCallback = { (error: AgoraRteError) in
-            if let fail = fail {
-                fail(AGEError(rteError: error))
-            }
-        }
-        
-        if isOn {
-            service.unmuteLocalMediaStream(stream.streamId,
-                                           type: .audio,
-                                           success: success,
-                                           fail: failCallback)
-        } else {
-            service.muteLocalMediaStream(stream.streamId,
-                                         type: .audio,
-                                         success: success,
-                                         fail: failCallback)
-        }
-    }
-    
-    func unpublishLocalStream(success: Completion = nil, fail: ErrorCompletion = nil) {
-        let rteKit = Center.shared().centerProviderteEngine()
-        let mediaControl = rteKit.getAgoraMediaControl()
-        let mic = mediaControl.createMicphoneAudioTrack()
-        let streamId = localRole.value.agUId
-        
-        userService?.unpublishLocalMediaTrack(mic,
-                                              withStreamId: streamId,
-                                              success: success,
-                                              fail: { (error) in
-                                                if let fail = fail {
-                                                    fail(AGEError(rteError: error))
-                                                }
-                                              })
-    }
-}
-
-// MARK: - Remote Stream
-extension LiveSession {
-    func muteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
-        let info = AgoraRteRemoteStreamInfo(streamId: stream.streamId,
-                                            userId: stream.owner.info.userId,
-                                            mediaStreamType: .none,
-                                            videoSourceType: .none,
-                                            audioSourceType: .mic)
-        
-        userService?.createOrUpdateRemoteStream(info,
-                                                success: nil,
-                                                fail: { (error) in
-                                                    if let fail = fail {
-                                                        fail(AGEError(rteError: error))
-                                                    }
-                                                })
-    }
-    
-    func unmuteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
-        let info = AgoraRteRemoteStreamInfo(streamId: stream.streamId,
-                                            userId: stream.owner.info.userId,
-                                            mediaStreamType: .audio,
-                                            videoSourceType: .none,
-                                            audioSourceType: .mic)
-        
-        userService?.createOrUpdateRemoteStream(info,
-                                                success: nil,
-                                                fail: { (error) in
-                                                    if let fail = fail {
-                                                        fail(AGEError(rteError: error))
-                                                    }
-                                                })
-    }
-}
-
 // MARK: - Stream list
 fileprivate extension LiveSession {
     func addNewStream(rteStream: AgoraRteMediaStreamInfo) {
@@ -472,20 +504,6 @@ fileprivate extension LiveSession {
 
             self.audienceList.accept(temp)
         }).disposed(by: bag)
-    }
-}
-
-// MARK: - Chat Message
-extension LiveSession {
-    func sendChat(_ text: String, success: Completion = nil, fail: ErrorCompletion = nil) {
-        let message = AgoraRteMessage(message: text)
-        userService?.sendSceneMessage(toAllRemoteUsers: message,
-                                      success: success,
-                                      fail: { (error) in
-                                        if let fail = fail {
-                                            fail(AGEError(rteError: error))
-                                        }
-                                      })
     }
 }
 
@@ -737,7 +755,8 @@ extension LiveSession: AgoraRteStatsDelegate {
 
 // MARK: - AgoraRteMediaControlDelegate
 extension LiveSession: AgoraRteMediaControlDelegate {
-    func mediaControl(_ control: AgoraRteMediaControl, didChnageAudioRouting routing: AgoraRteAudioOutputRouting) {
+    func mediaControl(_ control: AgoraRteMediaControl, didChnageAudioRouting
+                        routing: AgoraRteAudioOutputRouting) {
         audioOuputRouting.accept(routing)
     }
 }

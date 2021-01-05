@@ -58,7 +58,7 @@ class TopView: UIImageView {
     }
 }
 
-class MineViewController: UITableViewController {
+class MineViewController: MaskTableViewController {
     @IBOutlet weak var placeholderView: UIView!
     
     @IBOutlet weak var headLabel: UILabel!
@@ -68,7 +68,6 @@ class MineViewController: UITableViewController {
     
     private var topView: TopView?
     private var mineVM = MineVM()
-    private let bag = DisposeBag()
     
     /*
     private lazy var imagePicker: UIImagePickerController = {
@@ -231,8 +230,12 @@ private extension MineViewController {
             guard newName != self.mineVM.userName.value else {
                 return
             }
-            self.mineVM.updateNewName(newName) {
-
+            self.mineVM.updateNewName(newName) { [unowned self] (error) in
+                if error.code == nil {
+                    self.showTextToast(text: NetworkLocalizable.lostConnectionRetry())
+                } else {
+                    self.showTextToast(text: MineLocalizable.updateNicknameFail())
+                }
             }
         }).disposed(by: bag)
     }

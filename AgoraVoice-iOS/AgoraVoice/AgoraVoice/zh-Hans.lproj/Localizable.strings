@@ -21,16 +21,8 @@ Inviting="邀请中";
 All="全部";
 Male="男性";
 Female="女性";
-LogId_Copy="LogId 已经复制到粘贴板";
-
-Lost_Connection="网络异常";
-Lost_Connection_Description="当前网络连接错误，请稍后再试";
-
-Lost_Connection_Retry="网络不给力，请稍后再试";
-Use_Cellular_Data="当前网络无WIFI，继续使用可能产生流量费用";
-
-Suggest_Upgrade_App="你可以升级一下应用";
-Must_Upgrate_App="必须要升级应用才能继续使用";
+Coin="金币";
+Gift="礼物";
 
 Audio_Loop="耳返";
 
@@ -90,14 +82,9 @@ Enable_Pitch_Correction="启用电音";
 Select_Mode="选择调式";
 Select_The_Starting_Key="选择起始音阶";
 
-// LiveType
-Chat_Room="语聊房";
-Start_Chating="开始聊天";
-
 // LiveList
 Create_A_Room="请创建一个房间";
 No_Data_Please_Try_Again_Later="暂无数据，请稍后再试";
-Person_Count_Join_Fail="房间最大人数为10人";
 
 // LiveRoom
 Live_Text_Input_Placeholder="说点什么...";
@@ -110,10 +97,8 @@ Leave_Live_Room="离开房间";
 
 Send_Chat_Message_Fail="发送聊天消息失败";
 Present_Gift_Fail="赠送礼物失败";
-Give_Owner_A_Gift="向主播赠送一个";
 User_List="成员列表";
-Live_End="直播结束";
-Live_Timeout="直播超时";
+
 Confirm_End_Live="是否结束直播？";
 Please_Input_Headset="请插上耳机";
 
@@ -137,7 +122,6 @@ Disclaimer_Detail="Agora Voice（“本产品”）是由Agora提供的一款产
 Became_A_Host="上麦";
 Became_A_Audience="下麦";
 Stopped_Hosting="下麦";
-End_Broadcasting="下麦";
 
 // Owner
 Force_Broadcaster_To_End="下麦";
@@ -157,22 +141,3 @@ Application_Of_Broadcasting="申请上麦";
 Owner_Reject_Broadcasting_Application="房主拒绝你的申请";
 Application_Of_Broadcasting_Fail="申请上麦失败";
 
-// Live Seat
-Seat_Ban="禁麦";
-Seat_Unban="解禁";
-Seat_Close="封麦";
-Seat_Release="解封";
-Seat_Command_Fail="麦位命令失败";
-
-// Gift
-Small_Bell="铃铛";
-Ice_Cream="冰淇淋";
-Wine="红酒";
-Cake="蛋糕";
-Ring="戒指";
-Watch="手表";
-Crystal="钻石";
-Rocket="火箭";
-Coin="金币";
-Present="赠送";
-Gift="礼物";

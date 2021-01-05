@@ -68,10 +68,13 @@ class GiftViewController: RxViewController {
         layout.minimumInteritemSpacing = spacing
         layout.minimumLineSpacing = 10
 
-        collectionView.setCollectionViewLayout(layout, animated: false)
+        collectionView.setCollectionViewLayout(layout,
+                                               animated: false)
         
-        confirmButton.setTitle(NSLocalizedString("Present"), for: .normal)
-        confirmButton.setTitleColor(.white, for: .normal)
+        confirmButton.setTitle(LiveVCLocalizable.giveGiftAction(),
+                               for: .normal)
+        confirmButton.setTitleColor(.white,
+                                    for: .normal)
         confirmButton.backgroundColor = UIColor(hexString: "#0088EB")
         confirmButton.cornerRadius(22)
     }

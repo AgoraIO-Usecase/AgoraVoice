@@ -146,9 +146,12 @@ extension LiveViewController {
         liveSession.customMessage.bind(to: giftVM.message).disposed(by: bag)
         
         giftVM?.received.subscribe(onNext: { [unowned self] (userGift) in
+            let owner = self.liveSession.room.value.owner
+            
             let chat = Chat(name: userGift.userName,
-                            text: " " + NSLocalizedString("Give_Owner_A_Gift"),
-                            image: userGift.gift.image, widthLimit: self.chatWidthLimit)
+                            text: LiveVCLocalizable.sendGift(receiver: owner.info.name),
+                            image: userGift.gift.image,
+                            widthLimit: self.chatWidthLimit)
             self.chatVM.newMessages([chat])
             
             guard userGift.gift.hasGIF else {
@@ -193,7 +196,7 @@ extension LiveViewController {
             switch status {
             case .notReachable:
                 let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
-                view.text = NSLocalizedString("Lost_Connection_Retry")
+                view.text = NetworkLocalizable.lostConnectionRetry()
                 self.showToastView(view, duration: 3.0)
             case .reachable(let type):
                 guard type == .wwan else {
@@ -211,6 +214,10 @@ extension LiveViewController {
     func mediaDevice() {
         deviceVM.micAction.subscribe(onNext: { [unowned self] (isOn) in
             self.liveSession.updateLocalAudioStream(isOn: isOn.boolValue)
+        }).disposed(by: bag)
+        
+        deviceVM.localAudioLoop.subscribe(onNext: { [unowned self] (isOn) in
+            self.liveSession.enableLocalAudioStreamLoop(enable: isOn.boolValue)
         }).disposed(by: bag)
         
         liveSession.audioOuputRouting.bind(to: deviceVM.audioOutput).disposed(by: bag)
@@ -591,9 +598,9 @@ extension LiveViewController {
         
         switch reason {
         case .ownerClose:
-            text = NSLocalizedString("Live_End")
+            text = LiveVCLocalizable.liveStreamingEnds()
         case .timeout:
-            text = LiveVCLocalizable.liveTimeout()
+            text = LiveVCLocalizable.liveStreamingTimeout()
         }
         
         self.showAlert(text) { [unowned self] (_) in

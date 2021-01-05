@@ -201,7 +201,7 @@ private extension CreateLiveViewController {
             self.hiddenHUD()
             
             if error.code == nil {
-                self.showAlert(message: NSLocalizedString("Lost_Connection_Retry"))
+                self.showAlert(message: NetworkLocalizable.lostConnectionRetry())
             } else {
                 self.showAlert(message:"start live fail")
             }
@@ -218,13 +218,14 @@ private extension CreateLiveViewController {
             
             switch session.type {
             case .chatRoom:
-                self.performSegue(withIdentifier: "ChatRoomViewController", sender: session)
+                self.performSegue(withIdentifier: "ChatRoomViewController",
+                                  sender: session)
             }
         }) { [unowned self] (error) in
             self.hiddenHUD()
             
             if error.code == nil {
-                self.showAlert(message: NSLocalizedString("Lost_Connection_Retry"))
+                self.showAlert(message: NetworkLocalizable.lostConnectionRetry())
             } else {
                 self.showAlert(message:"join live fail")
             }

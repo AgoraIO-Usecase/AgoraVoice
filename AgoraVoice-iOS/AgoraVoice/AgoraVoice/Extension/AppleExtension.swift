@@ -459,10 +459,20 @@ class MaskTabBarController: UITabBarController, ShowHudProtocol {
     var hud: MBProgressHUD?
 }
 
-class MaskTableViewController: UITableViewController, ShowHudProtocol, ShowToastProtocol {
+class MaskTableViewController: RxTableViewController, ShowHudProtocol, ShowToastProtocol {
     var toastView: ToastView?
     
     var toastWork: AfterWorker?
     
     var hud: MBProgressHUD?
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        view.endEditing(true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        toastView?.removeFromSuperview()
+    }
 }

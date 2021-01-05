@@ -25,7 +25,7 @@ class LogFiles: NSObject {
         FilesGroup.check(folderPath: folderPath)
     }
     
-    func upload(success: StringCompletion, fail: ErrorCompletion) {
+    func upload(success: StringCompletion, fail: AGEErrorCompletion) {
         let rteKit = Center.shared().centerProviderteEngine()
         
         rteKit.uploadSDKLogToAgoraService(success: { (logId) in

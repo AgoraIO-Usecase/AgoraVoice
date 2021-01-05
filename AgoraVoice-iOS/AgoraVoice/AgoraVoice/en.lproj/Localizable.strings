@@ -21,16 +21,8 @@ Inviting="Inviting";
 All="All";
 Male="Male";
 Female="Female";
-LogId_Copy="LogId has been copied to the pasteboard";
-
-Lost_Connection="Network error";
-Lost_Connection_Description="We cannot connect to network now. Please retry later";
-
-Lost_Connection_Retry="Connection lost. Please retry later.";
-Use_Cellular_Data="Use cellular data instead of WIFI. May incur data charges.";
-
-Suggest_Upgrade_App="You can upgrade application";
-Must_Upgrate_App="You must upgrade application";
+Coin="Coin";
+Gift="Gift";
 
 Audio_Loop="Loop";
 
@@ -90,14 +82,9 @@ Enable_Pitch_Correction="Enable pitch correction";
 Select_Mode="Select mode";
 Select_The_Starting_Key="Select the starting key";
 
-// LiveType
-Chat_Room="Chat Room";
-Start_Chating="Start";
-
 // LiveList
 Create_A_Room="Create a room to start";
 No_Data_Please_Try_Again_Later="No data, please try again later";
-Person_Count_Join_Fail="The max number of participants per channel is 10.";
 
 // LiveRoom
 Live_Text_Input_Placeholder="Say something...";
@@ -109,11 +96,9 @@ Join_Live_Room="entered the room";
 Leave_Live_Room="left the room";
 
 Send_Chat_Message_Fail="send message fail";
-Give_Owner_A_Gift="gives";
 Present_Gift_Fail="gives gift fail";
 User_List="Member listing";
-Live_End="Live end";
-Live_Timeout="Live timeout";
+
 Confirm_End_Live="Do you want to end this live streaming?";
 Please_Input_Headset="Plug in a headphone";
 
@@ -137,7 +122,6 @@ You are free to choose whether to try the services provided by this product. If 
 Became_A_Host="became a host";
 Became_A_Audience="became a audience";
 Stopped_Hosting="stopped hosting";
-End_Broadcasting="End";
 
 // Owner
 Force_Broadcaster_To_End="End hosting";
@@ -158,15 +142,4 @@ Application_Of_Broadcasting="Become a host";
 Owner_Reject_Broadcasting_Application="Owner reject your application";
 Application_Of_Broadcasting_Fail="Apply to be a host fail";
 
-// Gift
-Gift="Gift";
-Small_Bell="Bell";
-Ice_Cream="Ice cream";
-Wine="Wine";
-Cake="Cake";
-Ring="Ring";
-Watch="Watch";
-Crystal="Diamond";
-Rocket="Rocket";
-Coin="Coin";
-Present="Give";
+

@@ -28,7 +28,7 @@ enum LiveType {
     
     var name: String {
         switch self {
-        case .chatRoom: return NSLocalizedString("Chat_Room")
+        case .chatRoom: return DeviceAssistant.Language.isChinese ? "语聊房" : "Chat Room"
         }
     }
 }
@@ -48,7 +48,8 @@ class LiveTypeCell: RxCollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        startButton.setTitle(NSLocalizedString("Start_Chating"), for: .normal)
+        startButton.setTitle(LiveTypeLocalizable.startButton(),
+                             for: .normal)
         
         startButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.delegate?.cell(self,
@@ -175,13 +176,14 @@ private extension LiveTypeViewController {
             case .noNeed:
                 break
             case .advise:
-                self.showAlert(NSLocalizedString("Suggest_Upgrade_App"),
+                self.showAlert(LiveTypeLocalizable.suggestUpgradeApp(),
                                action1: NSLocalizedString("Cancel"),
-                               action2: NSLocalizedString("Accept")) { (_) in
+                               action2: NSLocalizedString("Accept"),
+                               handler2:  { (_) in
                                 openURL()
-                }
+                               })
             case .need:
-                self.showAlert(NSLocalizedString("Must_Upgrate_App")) { (_) in
+                self.showAlert(LiveTypeLocalizable.mustUpgrateApp()) { (_) in
                     openURL()
                 }
             }

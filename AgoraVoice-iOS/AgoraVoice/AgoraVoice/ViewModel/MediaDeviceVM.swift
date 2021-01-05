@@ -15,7 +15,20 @@ class MediaDeviceVM: RxObject {
     let micStatus = BehaviorRelay<AGESwitch>(value: .off)
     let micAction = PublishRelay<AGESwitch>()
     let localAudioLoop = BehaviorRelay<AGESwitch>(value: .off)
-    let audioOutput: BehaviorRelay<AgoraRteAudioOutputRouting> = BehaviorRelay(value: AgoraRteAudioOutputRouting.default)
+    let audioOutput = BehaviorRelay(value: AgoraRteAudioOutputRouting.default)
+    
+    override init() {
+        super.init()
+        observe()
+    }
+    
+    private func observe() {
+        audioOutput.subscribe(onNext: { [unowned self] (routing) in
+            if !routing.isSupportLoop {
+                self.localAudioLoop.accept(.off)
+            }
+        }).disposed(by: bag)
+    }
 }
 
 extension AgoraRteAudioOutputRouting {

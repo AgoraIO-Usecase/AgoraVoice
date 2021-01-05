@@ -16,14 +16,14 @@ enum Gift: Int {
     
     var description: String {
         switch self {
-        case .smallBell: return NSLocalizedString("Small_Bell")
-        case .iceCream:  return NSLocalizedString("Ice_Cream")
-        case .wine:      return NSLocalizedString("Wine")
-        case .cake:      return NSLocalizedString("Cake")
-        case .ring:      return NSLocalizedString("Ring")
-        case .watch:     return NSLocalizedString("Watch")
-        case .crystal:   return NSLocalizedString("Crystal")
-        case .rocket:    return NSLocalizedString("Rocket")
+        case .smallBell: return DeviceAssistant.Language.isChinese ? "铃铛" : "Bell"
+        case .iceCream:  return DeviceAssistant.Language.isChinese ? "冰淇淋" : "Ice cream"
+        case .wine:      return DeviceAssistant.Language.isChinese ? "红酒" : "Wine"
+        case .cake:      return DeviceAssistant.Language.isChinese ? "蛋糕" : "Cake"
+        case .ring:      return DeviceAssistant.Language.isChinese ? "戒指" : "Ring"
+        case .watch:     return DeviceAssistant.Language.isChinese ? "手表" : "Watch"
+        case .crystal:   return DeviceAssistant.Language.isChinese ? "钻石" : "Diamond"
+        case .rocket:    return DeviceAssistant.Language.isChinese ? "火箭" : "Rocket"
         }
     }
     

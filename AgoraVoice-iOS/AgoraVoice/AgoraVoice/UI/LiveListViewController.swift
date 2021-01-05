@@ -25,7 +25,7 @@ class LiveListPlaceholderView: RxView {
         
         var description: String {
             switch self {
-            case .noInternet: return NSLocalizedString("Lost_Connection")
+            case .noInternet: return NetworkLocalizable.lostConnection()
             case .noData:     return NSLocalizedString("No_Data_Please_Try_Again_Later")
             case .noRoom:     return NSLocalizedString("Create_A_Room")
             }
@@ -102,7 +102,7 @@ class LiveListViewController: MaskViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = NSLocalizedString("Chat_Room")
+        title = type.name
         updateViews()
         subscribeList()
         netMonitor()

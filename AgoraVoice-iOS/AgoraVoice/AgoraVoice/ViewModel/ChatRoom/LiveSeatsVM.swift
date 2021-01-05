@@ -77,7 +77,7 @@ class LiveSeatsVM: CustomObserver {
             }
             
             if error.code == nil {
-                strongSelf.fail.accept(NSLocalizedString("Lost_Connection_Retry"))
+                strongSelf.fail.accept(NetworkLocalizable.lostConnectionRetry())
             } else {
                 switch state {
                 case .empty: strongSelf.fail.accept("un-lock seat fail")

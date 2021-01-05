@@ -265,7 +265,7 @@ private extension MultiHostsVM {
             }
             
             if error.code == nil {
-                strongSelf.fail.accept(NSLocalizedString("Lost_Connection_Retry"))
+                strongSelf.fail.accept(NetworkLocalizable.lostConnectionRetry())
             } else {
                 switch type {
                 case 1: strongSelf.fail.accept("send invitation fail")

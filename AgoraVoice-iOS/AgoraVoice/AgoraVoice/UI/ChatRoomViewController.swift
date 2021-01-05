@@ -206,14 +206,31 @@ private extension ChatRoomViewController {
         personCountView.backgroundColor = tintColor
         
         closeButton.rx.tap.subscribe(onNext: { [unowned self] in
-            self.showAlert(NSLocalizedString("Live_End"),
-                           message: NSLocalizedString("Confirm_End_Live"),
-                           action1: NSLocalizedString("Cancel"),
-                           action2: NSLocalizedString("Confirm"),
-                           handler2: { [unowned self] (_) in
-                            self.liveSession.leave()
-                            self.dimissSelf()
-                           })
+            let role = self.liveSession.localRole.value.type
+            
+            switch role {
+            case .owner:
+                self.showAlert(LiveVCLocalizable.liveSteamingEnds(),
+                               message: LiveVCLocalizable.doYouWantToEndThisLiveSession(),
+                               action1: NSLocalizedString("Cancel"),
+                               action2: NSLocalizedString("Confirm"),
+                               handler2: { [unowned self] (_) in
+                                self.liveSession.leave()
+                                self.dimissSelf()
+                               })
+            case .broadcaster:
+                self.showAlert(LiveVCLocalizable.leaveChannel(),
+                               message: LiveVCLocalizable.thisWillEndTheSession(),
+                               action1: NSLocalizedString("Cancel"),
+                               action2: NSLocalizedString("Confirm"),
+                               handler2: { [unowned self] (_) in
+                                self.liveSession.leave()
+                                self.dimissSelf()
+                               })
+            case .audience:
+                self.liveSession.leave()
+                self.dimissSelf()
+            }
         }).disposed(by: bag)
         
         liveSession.room.subscribe(onNext: { [unowned self] (room) in
@@ -410,13 +427,35 @@ private extension ChatRoomViewController {
         
         // owner
         multiHostsVM.receivedApplication.subscribe(onNext: { [unowned self] (application) in
-            self.personCountView.needRemind = true
+            if let vc = self.presentingChild as? UserListViewController,
+               vc.showType == .multiHosts {
+                vc.tabView.selectedIndex.accept(1)
+            } else {
+                self.personCountView.needRemind = true
+            }
         }).disposed(by: bag)
         
         multiHostsVM.invitationByRejected.subscribe(onNext: { [unowned self] (invitation) in
             let message = ChatRoomLocalizable.rejectThisInvitation()
             let name = invitation.receiver.info.name
             self.showTextToast(text: name + message)
+        }).disposed(by: bag)
+        
+        multiHostsVM.applyingUserList.subscribe(onNext: { [unowned self] (list) in
+            guard list.count == 0 else {
+                return
+            }
+            
+            self.personCountView.needRemind = false
+        }).disposed(by: bag)
+        
+        multiHostsVM.invitationTimeout.subscribe(onNext: { [unowned self] (_) in
+            let owner = self.liveSession.room.value.owner.info
+            let local = self.liveSession.localRole.value.info
+            guard owner == local else {
+                return
+            }
+            self.showTextToast(text: NSLocalizedString("User_Invitation_Timeout"))
         }).disposed(by: bag)
         
         // broadcaster
@@ -463,13 +502,6 @@ private extension ChatRoomViewController {
             
             self.chatVM.newMessages([chat])
             self.showTextToast(text: chat.content.string)
-        }).disposed(by: bag)
-        
-        multiHostsVM.invitationTimeout.subscribe(onNext: { [unowned self] (_) in
-            guard self.liveSession.room.value.owner.info == self.liveSession.localRole.value.info else {
-                return
-            }
-            self.showTextToast(text: NSLocalizedString("User_Invitation_Timeout"))
         }).disposed(by: bag)
     }
     

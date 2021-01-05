@@ -101,8 +101,12 @@ class AboutViewController: MaskTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        let privacyItem = 0
+        let agoraAccountItem = 2
+        let uploadLogItem = 6
+        
         switch indexPath.row {
-        case 0:
+        case privacyItem:
             var privacyURL: URL?
             if DeviceAssistant.Language.isChinese {
                 privacyURL = URL(string: "https://www.agora.io/cn/privacy-policy/")
@@ -115,22 +119,20 @@ class AboutViewController: MaskTableViewController {
             }
             
             UIApplication.shared.privateOpenURL(url)
-        case 1:
-            break
-        case 2:
-            var privacyURL: URL?
+        case agoraAccountItem:
+            var accountURL: URL?
             if DeviceAssistant.Language.isChinese {
-                privacyURL = URL(string: "https://sso.agora.io/cn/signup/")
+                accountURL = URL(string: "https://sso.agora.io/cn/signup/")
             } else {
-                privacyURL = URL(string: "https://sso.agora.io/en/signup/")
+                accountURL = URL(string: "https://sso.agora.io/en/signup/")
             }
             
-            guard let url = privacyURL else {
+            guard let url = accountURL else {
                 return
             }
             
             UIApplication.shared.privateOpenURL(url)
-        case 6:
+        case uploadLogItem:
             self.showHUD()
             let log = Center.shared().centerProvideFilesGroup().logs
             log.upload(success: { [weak self] (logId) in
@@ -139,14 +141,15 @@ class AboutViewController: MaskTableViewController {
                 let pasteboard = UIPasteboard.general
                 pasteboard.string = logId
 
-                let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
-                view.text = NSLocalizedString("LogId_Copy")
-                self?.showToastView(view, duration: 2)
-            }) { [weak self] (_) in
+                self?.showTextToast(text:  MineLocalizable.logIdCopy())
+            }) { [weak self] (error) in
                 self?.hiddenHUD()
-                let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
-                view.text = "Log upload fail"
-                self?.showToastView(view, duration: 2)
+                
+                if error.code == -1 {
+                    self?.showTextToast(text: NetworkLocalizable.lostConnectionRetry())
+                } else {
+                    self?.showTextToast(text:  MineLocalizable.uploadLogFail())
+                }
             }
         default:
             break
@@ -156,6 +159,8 @@ class AboutViewController: MaskTableViewController {
 
 extension UIApplication {
     func privateOpenURL(_ url: URL) {
-        open(url, options: [UIApplication.OpenExternalURLOptionsKey(rawValue: ""): ""], completionHandler: nil)
+        open(url,
+             options: [UIApplication.OpenExternalURLOptionsKey(rawValue: ""): ""],
+             completionHandler: nil)
     }
 }

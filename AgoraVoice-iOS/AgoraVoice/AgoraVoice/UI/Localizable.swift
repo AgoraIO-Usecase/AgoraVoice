@@ -8,16 +8,101 @@
 
 import UIKit
 
+// MARK: - LiveTypeLocalizable
+class LiveTypeLocalizable: NSObject {
+    static func startButton() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "开始聊天"
+        } else {
+            return "Start"
+        }
+    }
+    
+    static func suggestUpgradeApp() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "你可以升级一下应用"
+        } else {
+            return "You can upgrade application"
+        }
+    }
+    
+    static func mustUpgrateApp() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "必须要升级应用才能继续使用"
+        } else {
+            return "You must upgrade application"
+        }
+    }
+}
+
+// MARK: - LiveVCLocalizable
 class LiveVCLocalizable: NSObject {
-    static func liveTimeout() -> String {
+    static func liveStreamingTimeout() -> String {
         if DeviceAssistant.Language.isChinese {
             return "此软件房间最长直播时间为10分钟"
         } else {
             return "The max duration per session is 10 minutes"
         }
     }
+    
+    static func liveStreamingEnds() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "直播结束";
+        } else {
+            return "Live streaming ends"
+        }
+    }
+    
+    static func sendGift(receiver: String) -> String {
+        if DeviceAssistant.Language.isChinese {
+            return " 送\(receiver)"
+        } else {
+            return " gives \(receiver)"
+        }
+    }
+    
+    static func giveGiftAction() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "赠送"
+        } else {
+            return "Give"
+        }
+    }
+    
+    static func leaveChannel() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "确定退出直播间？"
+        } else {
+            return "Leave channel?"
+        }
+    }
+    
+    static func thisWillEndTheSession() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "退出房间会终止您与房主的连线？"
+        } else {
+            return "This will end the session"
+        }
+    }
+      
+    static func liveSteamingEnds() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "直播结束"
+        } else {
+            return "Live streaming ends"
+        }
+    }
+    
+    static func doYouWantToEndThisLiveSession() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "是否结束直播？"
+        } else {
+            return "Do you want to end this live session?"
+        }
+    }
 }
 
+// MARK: - MineLocalizable
 class MineLocalizable: NSObject {
     static func headSetting() -> String {
         if DeviceAssistant.Language.isChinese {
@@ -35,19 +120,19 @@ class MineLocalizable: NSObject {
         }
     }
     
-    static func inputName() -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "输入名字"
-        } else {
-            return "Input"
-        }
-    }
-    
     static func about() -> String {
         if DeviceAssistant.Language.isChinese {
             return "关于"
         } else {
             return "About"
+        }
+    }
+    
+    static func inputName() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "输入名字"
+        } else {
+            return "Input"
         }
     }
     
@@ -106,8 +191,49 @@ class MineLocalizable: NSObject {
             return "Upload Log"
         }
     }
+    
+    static func uploadLogFail() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "上传日志失败"
+        } else {
+            return "Upload log fail"
+        }
+    }
+    
+    static func logIdCopy() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "LogId 已经复制到粘贴板"
+        } else {
+            return "LogId has been copied to the pasteboard"
+        }
+    }
+    
+    static func updateNicknameFail() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "更新昵称失败"
+        } else {
+            return "Update nickname fail"
+        }
+    }
+    
+    static func nicknameMaxLengthLimit(_ limit: UInt) -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "用户名称不能超过\(limit)个字符"
+        } else {
+            return "Maximum length of user name is \(limit)"
+        }
+    }
+    
+    static func nicknameMinLengthLimit() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "昵称不可为空"
+        } else {
+            return "Nickname cannot be blank"
+        }
+    }
 }
 
+// MARK: - ChatRoomLocalizable
 class ChatRoomLocalizable: NSObject {
     static func doYouRejectApplication(from: String) -> String {
         if DeviceAssistant.Language.isChinese {
@@ -218,6 +344,41 @@ class ChatRoomLocalizable: NSObject {
             return "您的上麦申请已发送"
         } else {
             return "Your application has been sent"
+        }
+    }
+}
+
+// MARK: - NetworkLocalizable
+class NetworkLocalizable: NSObject {
+    static func lostConnection() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "网络异常"
+        } else {
+            return "Network error"
+        }
+    }
+    
+    static func lostConnectionDescription() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "当前网络连接错误，请稍后再试"
+        } else {
+            return "We cannot connect to network now. Please retry later"
+        }
+    }
+    
+    static func lostConnectionRetry() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "网络不给力，请稍后再试"
+        } else {
+            return "Connection lost. Please retry later"
+        }
+    }
+    
+    static func useCellularData() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "当前网络无WIFI，继续使用可能产生流量费用"
+        } else {
+            return "Use cellular data instead of WIFI. May incur data charges"
         }
     }
 }

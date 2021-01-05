@@ -13,7 +13,7 @@ import RxRelay
 class UserNameViewController: MaskViewController {
     @IBOutlet weak var nameTextField: UITextField!
     
-    private let nameLimit = 16
+    private let nameLimit: UInt = 16
     
     var newName: BehaviorRelay<String>!
     
@@ -51,13 +51,7 @@ class UserNameViewController: MaskViewController {
     @objc func didDonePressed() {
         guard let name = nameTextField.text,
               name.count > 0 else {
-            
-            if DeviceAssistant.Language.isChinese {
-                self.showTextToast(text: "用户名不可为空")
-            } else {
-                self.showTextToast(text: "")
-            }
-            
+            self.showTextToast(text: MineLocalizable.nicknameMinLengthLimit())
             return
         }
         
@@ -106,11 +100,7 @@ extension UserNameViewController: UITextFieldDelegate {
         if range.length == 1 && string.count == 0 {
             return true
         } else if let text = textField.text, text.count >= nameLimit {
-            if DeviceAssistant.Language.isChinese {
-                self.showTextToast(text: "用户名称不能超过\(nameLimit)个字符")
-            } else {
-                self.showTextToast(text: "Maximum length of user name is \(nameLimit)")
-            }
+            self.showTextToast(text: MineLocalizable.nicknameMaxLengthLimit(nameLimit))
             return false
         } else {
             return true

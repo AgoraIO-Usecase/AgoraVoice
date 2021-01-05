@@ -34,10 +34,10 @@ class MineVM: NSObject {
         }).disposed(by: bag)
     }
     
-    func updateNewName(_ new: String, completion: Completion) {
+    func updateNewName(_ new: String, fail: AGEErrorCompletion) {
         let abstraction = self.abstraction
         let info = CurrentUser.UpdateInfo(userName: new)
-        abstraction.updateInfo(info, success: completion, fail: completion)
+        abstraction.updateInfo(info, success: nil, fail: fail)
     }
 }
 
