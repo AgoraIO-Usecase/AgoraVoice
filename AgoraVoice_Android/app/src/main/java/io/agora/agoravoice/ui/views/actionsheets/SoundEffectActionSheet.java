@@ -94,8 +94,10 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         mListener = listener;
     }
 
-    public void setConfig(Config config) {
+    public void setConfig(@NonNull Config config) {
         mConfig = config;
+        mSelectedKey = mConfig.getElectronicVoiceKey();
+        mSelectedValue = mConfig.getElectronicVoiceValue();
     }
 
     private void changeType(int type) {
@@ -216,6 +218,9 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         mElectronicSwitch = layout.findViewById(R.id.action_sheet_electronic_switch);
         boolean enabled = electronicEnabled();
         mElectronicSwitch.setActivated(enabled);
+        mKeyAdapter.setEnabled(enabled);
+        mValueAdapter.setEnabled(enabled);
+
         mElectronicSwitch.setOnClickListener(view -> {
             if (view.isActivated()) {
                 view.setActivated(false);
@@ -446,10 +451,6 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
     private class ElectronicKeyAdapter extends RecyclerView.Adapter<ElectronicKeyViewHolder> {
         private boolean mEnabled;
 
-        ElectronicKeyAdapter() {
-            mEnabled = true;
-        }
-
         void setEnabled(boolean enabled) {
             mEnabled = enabled;
         }
@@ -502,10 +503,6 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
 
     private class ElectronicToneAdapter extends RecyclerView.Adapter<ElectronicToneViewHolder> {
         private boolean mEnabled;
-
-        ElectronicToneAdapter() {
-            mEnabled = true;
-        }
 
         void setEnabled(boolean enabled) {
             mEnabled = enabled;
