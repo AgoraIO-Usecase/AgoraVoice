@@ -35,73 +35,6 @@ class LiveTypeLocalizable: NSObject {
     }
 }
 
-// MARK: - LiveVCLocalizable
-class LiveVCLocalizable: NSObject {
-    static func liveStreamingTimeout() -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "此软件房间最长直播时间为10分钟"
-        } else {
-            return "The max duration per session is 10 minutes"
-        }
-    }
-    
-    static func liveStreamingEnds() -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "直播结束";
-        } else {
-            return "Live streaming ends"
-        }
-    }
-    
-    static func sendGift(receiver: String) -> String {
-        if DeviceAssistant.Language.isChinese {
-            return " 送\(receiver)"
-        } else {
-            return " gives \(receiver)"
-        }
-    }
-    
-    static func giveGiftAction() -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "赠送"
-        } else {
-            return "Give"
-        }
-    }
-    
-    static func leaveChannel() -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "确定退出直播间？"
-        } else {
-            return "Leave channel?"
-        }
-    }
-    
-    static func thisWillEndTheSession() -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "退出房间会终止您与房主的连线？"
-        } else {
-            return "This will end the session"
-        }
-    }
-      
-    static func liveSteamingEnds() -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "直播结束"
-        } else {
-            return "Live streaming ends"
-        }
-    }
-    
-    static func doYouWantToEndThisLiveSession() -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "是否结束直播？"
-        } else {
-            return "Do you want to end this live session?"
-        }
-    }
-}
-
 // MARK: - MineLocalizable
 class MineLocalizable: NSObject {
     static func headSetting() -> String {
@@ -233,48 +166,315 @@ class MineLocalizable: NSObject {
     }
 }
 
+// MARK: - LiveListLocalizable
+class LiveListLocalizable: NSObject {
+    static func createChannelToStart() -> String  {
+        if DeviceAssistant.Language.isChinese {
+            return "请创建一个房间"
+        } else {
+            return "Create a channel to start"
+        }
+    }
+    
+    static func joinChannelFail() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "加入房间失败"
+        } else {
+            return "Join channel fail"
+        }
+    }
+    
+    static func joinChannelFailWithLimit() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "房间最大人数为10人"
+        } else {
+            return "The max number of participants per channel is 10"
+        }
+    }
+}
+
+// MARK: - CreateLiveLocalizable
+class CreateLiveLocalizable: NSObject {
+    static func channelName() -> String  {
+        if DeviceAssistant.Language.isChinese {
+            return "直播间的名字: "
+        } else {
+            return "Channel name: "
+        }
+    }
+    
+    static func startButton() -> String  {
+        if DeviceAssistant.Language.isChinese {
+            return "开始直播"
+        } else {
+            return "Go live"
+        }
+    }
+    
+    static func createChannelFail() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "创建房间失败"
+        } else {
+            return "Create channel fail"
+        }
+    }
+    
+    static func joinChannelFail() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "加入房间失败"
+        } else {
+            return "Join channel fail"
+        }
+    }
+    
+    static func channelNameCannotBebBlank() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "房间名不能为空 "
+        } else {
+            return "Channel name cannot be blank"
+        }
+    }
+    
+    static func channelNameLengthLimit(_ limit: UInt) -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "房间名称不能超过\(limit)个字符"
+        } else {
+            return "Maximum length of channel name is \(limit)"
+        }
+    }
+}
+
+// MARK: - LiveVCLocalizable
+class LiveVCLocalizable: NSObject {
+    static func liveStreamingTimeout() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "此软件房间最长直播时间为10分钟"
+        } else {
+            return "The max duration per session is 10 minutes"
+        }
+    }
+    
+    static func liveStreamingEnds() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "直播结束";
+        } else {
+            return "Live streaming ends"
+        }
+    }
+    
+    static func sendGift(receiver: String) -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "送\(receiver)"
+        } else {
+            return "gives \(receiver)"
+        }
+    }
+    
+    static func giveGiftAction() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "赠送"
+        } else {
+            return "Give"
+        }
+    }
+    
+    static func leaveChannel() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "确定退出直播间？"
+        } else {
+            return "Leave channel?"
+        }
+    }
+    
+    static func thisWillEndTheSession() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "退出房间会终止您与房主的连线？"
+        } else {
+            return "This will end the session"
+        }
+    }
+      
+    static func liveSteamingEnds() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "直播结束"
+        } else {
+            return "Live streaming ends"
+        }
+    }
+    
+    static func doYouWantToEndThisLiveSession() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "是否结束直播？"
+        } else {
+            return "Do you want to end this live session?"
+        }
+    }
+    
+    static func someoneJoinedChannel() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "加入房间"
+        } else {
+            return "joined channel"
+        }
+    }
+    
+    static func someoneLeftChannel() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "离开房间"
+        } else {
+            return "left channel"
+        }
+    }
+    
+    static func sendChatFail() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "发送聊天消息失败"
+        } else {
+            return "send chat message fail"
+        }
+    }
+    
+    static func giveGiftFail() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "赠送礼物失败"
+        } else {
+            return "give gift fail"
+        }
+    }
+    
+    // Bottom tools bar
+    static func chatInputPlaceholder() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "说点什么..."
+        } else {
+            return "Say something..."
+        }
+    }
+    
+    static func audioLoopButton() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "耳返"
+        } else {
+            return "Monitor"
+        }
+    }
+    
+    static func audioLoopButtonAlert() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "请插上耳机"
+        } else {
+            return "Plug in a headphone"
+        }
+    }
+    
+    static func backgroundButton() -> String {
+        return NSLocalizedString("Background")
+    }
+    
+    static func statisticsButton() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "实时数据"
+        } else {
+            return "Statistics"
+        }
+    }
+    
+    static func userList() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "成员列表"
+        } else {
+            return "Member listing"
+        }
+        
+    }
+    
+    static func onlineUser() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "在线用户"
+        } else {
+            return "Online user"
+        }
+    }
+}
+
+// MARK: - AudioEffectsLocalizable
+class AudioEffectsLocalizable: NSObject {
+    static func selectTheStartingKey() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "选择起始音阶"
+        } else {
+            return "Select the starting key"
+        }
+    }
+    
+    static func selectMode() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "选择调式"
+        } else {
+            return "Select mode"
+        }
+    }
+    
+    static func enablePitchCorrection() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "启用电音"
+        } else {
+            return "Enable pitch correction"
+        }
+    }
+    
+    static func threeDimensionalVoice() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "3D人声"
+        } else {
+            return "3D voice"
+        }
+    }
+    
+    static func threeDimensionalVoiceDescription() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "速度调节控制声音旋转速度"
+        } else {
+            return "Speed adjustment controls the speed of sound rotation"
+        }
+    }
+    
+    static func threeDimensionalVoiceDescription2() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "最快1s转一圈，最慢60s转一圈"
+        } else {
+            return "The fastest is 60 rpm, the slowest is 1 rpm"
+        }
+    }
+    
+    static func major() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "大调"
+        } else {
+            return "Major"
+        }
+    }
+    
+    static func minor() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "小调"
+        } else {
+            return "Minor"
+        }
+    }
+    
+    static func japeneseStyle() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "和风"
+        } else {
+            return "Japenese-Style"
+        }
+    }
+}
+
 // MARK: - ChatRoomLocalizable
 class ChatRoomLocalizable: NSObject {
-    static func doYouRejectApplication(from: String) -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "你是否要拒绝\(from)的上麦申请?"
-        } else {
-            return "Do you reject \(from)'s application?"
-        }
-    }
-    
-    static func doYouAcceptApplication(from: String) -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "你是否要接受\(from)的上麦申请?"
-        } else {
-            return "Do you accept \(from)'s application?"
-        }
-    }
-    
-    static func rejectThisInvitation() -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "拒绝了这次邀请"
-        } else {
-            return "rejected this invitation"
-        }
-    }
-    
-    static func ownerForcedYouToBecomeAudience() -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "房主强迫你下麦"
-        } else {
-            return "Owner forced you to becmoe a audience"
-        }
-    }
-    
-    static func doYouAgreeToBecomeHost(owner: String) -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "\(owner)邀请您上麦，是否接受"
-        } else {
-            return "Do you agree to become a host?"
-        }
-    }
-    
+    // Owner
     static func muteSomeOne(userName: String) -> String {
         if DeviceAssistant.Language.isChinese {
             return "禁止\(userName)发言?"
@@ -291,27 +491,35 @@ class ChatRoomLocalizable: NSObject {
         }
     }
     
+    static func closeSeatTitle() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "确定封麦？"
+        } else {
+            return "Close seat?"
+        }
+    }
+    
+    static func closeSeatDescription() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "如果当前麦位上已有主播，将会被下麦"
+        } else {
+            return "Co-hosting fails if the seat is occupied"
+        }
+    }
+    
+    static func openSeat() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "解封麦位？"
+        } else {
+            return "Open seat?";
+        }
+    }
+    
     static func forceBroacasterToBecomeAudience(userName: String) -> String {
         if DeviceAssistant.Language.isChinese {
             return "确定将\(userName)下麦?"
         } else {
-            return "Stop \(userName) hosting"
-        }
-    }
-    
-    static func blockThisSeat() -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "将关闭该麦位，如果该位置上有用户，将下麦该用户"
-        } else {
-            return "Block this seat"
-        }
-    }
-    
-    static func unblockThisSeat() -> String {
-        if DeviceAssistant.Language.isChinese {
-            return "解封此连麦位"
-        } else {
-            return "Unblock this seat";
+            return "Stop \(userName) from co-hosting?"
         }
     }
     
@@ -319,7 +527,48 @@ class ChatRoomLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "你是否要邀请\(userName)上麦?"
         } else {
-            return "Do you send a invitation to \(userName)?"
+            return "Co-hosting invitation to \(userName)?"
+        }
+    }
+    
+    static func doYouRejectApplication(from: String) -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "你是否要拒绝\(from)的上麦申请？"
+        } else {
+            return "Do you reject \(from)'s application?"
+        }
+    }
+    
+    static func doYouAcceptApplication(from: String) -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "你是否要接受\(from)的上麦申请？"
+        } else {
+            return "Do you accept \(from)'s application?"
+        }
+    }
+    
+    static func rejectThisInvitation(from: String) -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "\(from)拒绝了这次邀请"
+        } else {
+            return "\(from) rejected Co-hosting invitation"
+        }
+    }
+    
+    static func invitationTimeout() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "邀请超时"
+        } else {
+            return "Invitation timeout"
+        }
+    }
+    
+    // Broadcaster
+    static func ownerForcedYouToBecomeAudience() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "房主强迫你下麦"
+        } else {
+            return "Owner forced you to becmoe a audience"
         }
     }
     
@@ -327,15 +576,16 @@ class ChatRoomLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "确定终止连麦？"
         } else {
-            return "End Live Streaming?"
+            return "Stop co-hosting?"
         }
     }
     
+    // Audience
     static func doYouSendApplication() -> String {
         if DeviceAssistant.Language.isChinese {
-            return "你确定要\"申请上麦\"吗？"
+            return "确定申请上麦？"
         } else {
-            return "Do you send a application?"
+            return "Request co-hosting?"
         }
     }
     
@@ -343,7 +593,64 @@ class ChatRoomLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "您的上麦申请已发送"
         } else {
-            return "Your application has been sent"
+            return "Co-hosting request sent"
+        }
+    }
+    
+    static func yourApplicaitonSentFail() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "上麦申请发送失败"
+        } else {
+            return "Co-hosting request fails"
+        }
+    }
+    
+    static func ownerAcceptedYourApplication() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "房主已通过您的上麦申请"
+        } else {
+            return "Co-hosting request approved"
+        }
+    }
+    
+    static func ownerRejectedYourApplication() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "房主已拒绝您的上麦申请"
+        } else {
+            return "Co-hosting request rejected"
+        }
+    }
+    
+    static func doYouAgreeToBecomeHost(owner: String) -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "\(owner)邀请您上麦，是否接受"
+        } else {
+            return "Do you agree to become a host?"
+        }
+    }
+    
+    // Others
+    static func someoneStartCoHosting() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "上麦"
+        } else {
+            return "start co-hosting"
+        }
+    }
+    
+    static func someoneStopCoHosting() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "下麦"
+        } else {
+            return "stop co-hosting"
+        }
+    }
+    
+    static func applicationList() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "申请上麦"
+        } else {
+            return "Application list"
         }
     }
 }
@@ -362,7 +669,7 @@ class NetworkLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "当前网络连接错误，请稍后再试"
         } else {
-            return "We cannot connect to network now. Please retry later"
+            return "Cannot connect to network now. Please retry later"
         }
     }
     

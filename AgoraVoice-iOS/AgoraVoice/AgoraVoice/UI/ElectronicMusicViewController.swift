@@ -53,8 +53,8 @@ class ElectronicMusicViewController: RxViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        switchNameLabel.text = NSLocalizedString("Enable_Pitch_Correction")
-        selectScaleLabel.text = NSLocalizedString("Select_The_Starting_Key")
+        switchNameLabel.text = AudioEffectsLocalizable.enablePitchCorrection()
+        selectScaleLabel.text = AudioEffectsLocalizable.selectTheStartingKey()
         
         // audioEffectVM
         audioEffectVM.selectedElectronicMusic.map { (music) -> Bool in
@@ -76,6 +76,7 @@ class ElectronicMusicViewController: RxViewController {
             let value = (self.selectedValueIndex.value + 1)
             let music = ElectronicMusic(isAvailable: isOn, type: type, value: value)
             self.audioEffectVM.selectedElectronicMusic.accept(music)
+            self.collectionView.alpha = isOn ? 1.0 : 0.6
         }).disposed(by: bag)
         
         // segmentControl
@@ -109,9 +110,12 @@ class ElectronicMusicViewController: RxViewController {
 
 private extension ElectronicMusicViewController {
     func modeSegment() {
-        segmentControl.setTitle(NSLocalizedString("Major"), forSegmentAt: 0)
-        segmentControl.setTitle(NSLocalizedString("Minor"), forSegmentAt: 1)
-        segmentControl.setTitle(NSLocalizedString("Japenese_Pentatonic"), forSegmentAt: 2)
+        segmentControl.setTitle(AudioEffectsLocalizable.major(),
+                                forSegmentAt: 0)
+        segmentControl.setTitle(AudioEffectsLocalizable.minor(),
+                                forSegmentAt: 1)
+        segmentControl.setTitle(AudioEffectsLocalizable.japeneseStyle(),
+                                forSegmentAt: 2)
                 
         if #available(iOS 13.0, *) {
             segmentControl.selectedSegmentTintColor = UIColor(hexString: "#0088EB")

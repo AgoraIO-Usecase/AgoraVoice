@@ -450,8 +450,8 @@
                                 <rect key="frame" x="38" y="157" width="338" height="31"/>
                                 <color key="minimumTrackTintColor" red="0.43529411764705883" green="0.76470588235294112" blue="1" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                             </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lUD-kG-O1n">
-                                <rect key="frame" x="191.5" y="102.5" width="31" height="14.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lUD-kG-O1n">
+                                <rect key="frame" x="10" y="102.5" width="394" height="14.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -481,6 +481,7 @@
                         <viewLayoutGuide key="safeArea" id="Clu-mO-UyX"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Clu-mO-UyX" firstAttribute="trailing" secondItem="lUD-kG-O1n" secondAttribute="trailing" constant="10" id="2EZ-l8-OZ9"/>
                             <constraint firstItem="Irv-tw-qw6" firstAttribute="top" secondItem="aaQ-kt-Sjs" secondAttribute="bottom" constant="20" id="3Bg-Uf-RIw"/>
                             <constraint firstItem="Clu-mO-UyX" firstAttribute="trailing" secondItem="s1Y-ho-6fh" secondAttribute="trailing" constant="20" id="4c6-9U-gLt"/>
                             <constraint firstItem="BAa-D7-P5A" firstAttribute="centerY" secondItem="WDW-RI-kb1" secondAttribute="centerY" id="AVC-Jw-qdy"/>
@@ -492,6 +493,7 @@
                             <constraint firstItem="lUD-kG-O1n" firstAttribute="top" secondItem="BAa-D7-P5A" secondAttribute="bottom" constant="26" id="bfZ-4o-9jw"/>
                             <constraint firstItem="Irv-tw-qw6" firstAttribute="leading" secondItem="Clu-mO-UyX" secondAttribute="leading" constant="20" id="ezn-aV-TfL"/>
                             <constraint firstItem="aaQ-kt-Sjs" firstAttribute="centerX" secondItem="5eX-cM-ZqK" secondAttribute="centerX" id="fs4-sL-ZCq"/>
+                            <constraint firstItem="lUD-kG-O1n" firstAttribute="leading" secondItem="Clu-mO-UyX" secondAttribute="leading" constant="10" id="gJn-PR-7lQ"/>
                             <constraint firstItem="aaQ-kt-Sjs" firstAttribute="top" secondItem="lUD-kG-O1n" secondAttribute="bottom" constant="40" id="hyI-Cj-850"/>
                             <constraint firstItem="tJF-0t-9dE" firstAttribute="centerY" secondItem="BAa-D7-P5A" secondAttribute="centerY" id="rOr-Ri-nni"/>
                             <constraint firstItem="aaQ-kt-Sjs" firstAttribute="leading" secondItem="Clu-mO-UyX" secondAttribute="leading" constant="40" id="rt8-o7-YIA"/>

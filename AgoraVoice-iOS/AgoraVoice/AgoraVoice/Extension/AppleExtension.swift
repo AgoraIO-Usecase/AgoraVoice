@@ -383,6 +383,16 @@ extension ShowToastProtocol {
 }
 
 class MaskViewController: RxViewController, ShowAlertProtocol, PresentChildProtocol, ShowHudProtocol, ShowToastProtocol {
+    fileprivate lazy var errorToast: TagImageTextToast = {
+        let view = TagImageTextToast(frame: CGRect(x: 0,
+                                                   y: 200,
+                                                   width: 0,
+                                                   height: 44),
+                                     filletRadius: 8)
+        view.tagImage = UIImage(named: "icon-red warning")
+        return view
+    }()
+    
     var presentedChild = PublishRelay<UIViewController>()
     var dimissChild = PublishRelay<UIViewController>()
     
@@ -423,6 +433,11 @@ class MaskViewController: RxViewController, ShowAlertProtocol, PresentChildProto
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         toastView?.removeFromSuperview()
+    }
+    
+    func showErrorToast(_ text: String) {
+        errorToast.text = text
+        showToastView(errorToast, duration: 3)
     }
     
     func showMaskView(color: UIColor = UIColor(red: 0.0,

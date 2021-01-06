@@ -13,12 +13,11 @@ import MJRefresh
 
 class LiveListPlaceholderView: RxView {
     enum PlaceholderType {
-        case noInternet, noData, noRoom
+        case noInternet, noRoom
         
         var image: UIImage {
             switch self {
             case .noInternet: return UIImage(named: "pic-No signal")!
-            case .noData:     return UIImage(named: "pic-No signal")!
             case .noRoom:     return UIImage(named: "pic-empty")!
             }
         }
@@ -26,8 +25,7 @@ class LiveListPlaceholderView: RxView {
         var description: String {
             switch self {
             case .noInternet: return NetworkLocalizable.lostConnection()
-            case .noData:     return NSLocalizedString("No_Data_Please_Try_Again_Later")
-            case .noRoom:     return NSLocalizedString("Create_A_Room")
+            case .noRoom:     return LiveListLocalizable.createChannelToStart()
             }
         }
     }
@@ -36,13 +34,13 @@ class LiveListPlaceholderView: RxView {
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var subLabel: UILabel!
     
-    var type: PlaceholderType = .noData {
+    var type: PlaceholderType = .noRoom {
         didSet {
             tagImageView.image = type.image
             label.text = type.description
             label.textColor = (type != .noInternet) ? UIColor(hexString: "#4D5D73") : UIColor.white
             
-            subLabel.text = NSLocalizedString("No_Data_Please_Try_Again_Later")
+            subLabel.text = NetworkLocalizable.lostConnectionDescription()
             subLabel.isHidden = (type != .noInternet)
         }
     }
@@ -51,7 +49,7 @@ class LiveListPlaceholderView: RxView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        type = .noData
+        type = .noRoom
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -239,9 +237,9 @@ private extension LiveListViewController {
                 
                 if let code = error.code,
                    code == 20403001 {
-                    self.showTextToast(text: NSLocalizedString("Join_Fail"))
+                    self.showTextToast(text: LiveListLocalizable.joinChannelFailWithLimit())
                 } else {
-                    self.showTextToast(text: "join live fail")
+                    self.showTextToast(text: LiveListLocalizable.joinChannelFail())
                 }
                 
                 self.roomListRefresh()

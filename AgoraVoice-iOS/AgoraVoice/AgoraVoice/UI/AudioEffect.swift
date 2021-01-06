@@ -18,8 +18,8 @@ enum AudioEffectType {
     
     var description: String {
         switch self {
-        case .belCanto:    return NSLocalizedString("Voice_Beautifier")
-        case .soundEffect: return NSLocalizedString("Audio_Effects")
+        case .belCanto:    return DeviceAssistant.Language.isChinese ? "美声" : "Voice beautifier"
+        case .soundEffect: return DeviceAssistant.Language.isChinese ? "音效" : "Audio effects"
         }
     }
 }
@@ -33,9 +33,9 @@ enum BelCantoType {
     
     var description: String {
         switch self {
-        case .chat:   return NSLocalizedString("Chat_Beautifier")
-        case .sing:   return NSLocalizedString("Singing_Beautifier")
-        case .timbre: return NSLocalizedString("Timbre_Transformation")
+        case .chat:   return DeviceAssistant.Language.isChinese ? "语聊美声" : "Chat beautifier"
+        case .sing:   return DeviceAssistant.Language.isChinese ? "歌唱美声" : "Singing beautifier"
+        case .timbre: return DeviceAssistant.Language.isChinese ? "音色变换" : "Timbre transformation"
         }
     }
 }
@@ -50,10 +50,10 @@ enum SoundEffectType {
     
     var description: String {
         switch self {
-        case .space:           return NSLocalizedString("Room_Acoustics")
-        case .role:            return NSLocalizedString("Voice_Changer_Effect")
-        case .musciGenre:      return NSLocalizedString("Style_Transformation")
-        case .electronicMusic: return NSLocalizedString("Pitch_Correction")
+        case .space:           return DeviceAssistant.Language.isChinese ? "空间塑造" : "Room acoustics"
+        case .role:            return DeviceAssistant.Language.isChinese ? "变声音效" : "Voice changer effect"
+        case .musciGenre:      return DeviceAssistant.Language.isChinese ? "曲风音效" : "Style transformation"
+        case .electronicMusic: return DeviceAssistant.Language.isChinese ? "启用电音" : "Pitch correction"
         }
     }
 }
@@ -104,9 +104,9 @@ extension ChatOfBelCanto {
     
     var description: String {
         switch self {
-        case .maleMagnetic:   return NSLocalizedString("Male_Magnetic")
-        case .femaleFresh:    return NSLocalizedString("Female_Fresh")
-        case .femaleVitality: return NSLocalizedString("Female_Vitality")
+        case .maleMagnetic:   return DeviceAssistant.Language.isChinese ? "磁性" : "Magnetic"
+        case .femaleFresh:    return DeviceAssistant.Language.isChinese ? "清新" : "Fresh"
+        case .femaleVitality: return DeviceAssistant.Language.isChinese ? "活力" : "Vitality"
         case .disable:        fatalError()
         }
     }
@@ -171,14 +171,14 @@ extension Timbre {
     
     var description: String {
         switch self {
-        case .vigorous:    return NSLocalizedString("Vigorous")
-        case .deep:        return NSLocalizedString("Deep")
-        case .mellow:      return NSLocalizedString("Mellow")
-        case .falsetto:    return NSLocalizedString("Falsetto")
-        case .full:        return NSLocalizedString("Full")
-        case .clear:       return NSLocalizedString("Clear")
-        case .resounding:  return NSLocalizedString("Resounding")
-        case .ringing:     return NSLocalizedString("Ringing")
+        case .vigorous:    return DeviceAssistant.Language.isChinese ? "浑厚" : "Vigorous"
+        case .deep:        return DeviceAssistant.Language.isChinese ? "低沉" : "Deep"
+        case .mellow:      return DeviceAssistant.Language.isChinese ? "圆润" : "Mellow"
+        case .falsetto:    return DeviceAssistant.Language.isChinese ? "假音" : "Falsetto"
+        case .full:        return DeviceAssistant.Language.isChinese ? "饱满" : "Full"
+        case .clear:       return DeviceAssistant.Language.isChinese ? "清澈" : "Clear"
+        case .resounding:  return DeviceAssistant.Language.isChinese ? "高亢" : "Resounding"
+        case .ringing:     return DeviceAssistant.Language.isChinese ? "嘹亮" : "Ringing"
         case .disable:     fatalError()
         }
     }
@@ -238,14 +238,14 @@ extension AudioSpace {
     
     var description: String {
         switch self {
-        case .ktv:                    return NSLocalizedString("KTV")
-        case .vocalConcer:            return NSLocalizedString("Vocal_Concert")
-        case .studio:                 return NSLocalizedString("Studio")
-        case .phonograph:             return NSLocalizedString("Phonograph")
-        case .virtualStereo:          return NSLocalizedString("Virtual_Stereo")
-        case .spacial:                return NSLocalizedString("Spacial")
-        case .ethereal:               return NSLocalizedString("Ethereal")
-        case .threeDimensionalVoice:  return NSLocalizedString("Three_Dimensional_Voice")
+        case .ktv:                    return "KTV"
+        case .vocalConcer:            return DeviceAssistant.Language.isChinese ? "演唱会" : "Vocal concert"
+        case .studio:                 return DeviceAssistant.Language.isChinese ? "录音棚" : "Studio"
+        case .phonograph:             return DeviceAssistant.Language.isChinese ? "留声机" : "Phonograph"
+        case .virtualStereo:          return DeviceAssistant.Language.isChinese ? "虚拟立体声" : "Virtual stereo"
+        case .spacial:                return DeviceAssistant.Language.isChinese ? "空旷" : "Spacial"
+        case .ethereal:               return DeviceAssistant.Language.isChinese ? "空灵" : "Ethereal"
+        case .threeDimensionalVoice:  return DeviceAssistant.Language.isChinese ? "3D人声" : "3D Voice"
         case .disable:                fatalError()
         }
     }
@@ -309,13 +309,13 @@ extension TimbreRole {
     
     var description: String {
         switch self {
-        case .uncle:     return NSLocalizedString("Uncle")
-        case .oldMan:    return NSLocalizedString("Old_Man")
-        case .babyBoy:   return NSLocalizedString("Boy")
-        case .sister:    return NSLocalizedString("Sister")
-        case .babyGirl:  return NSLocalizedString("Girl")
-        case .zhuBaJie:  return NSLocalizedString("Pig_King")
-        case .hulk:      return NSLocalizedString("Hulk")
+        case .uncle:     return DeviceAssistant.Language.isChinese ? "大叔" : "Uncle"
+        case .oldMan:    return DeviceAssistant.Language.isChinese ? "老男人" : "Old man"
+        case .babyBoy:   return DeviceAssistant.Language.isChinese ? "小男孩" : "Boy"
+        case .sister:    return DeviceAssistant.Language.isChinese ? "小姐姐" : "Sister"
+        case .babyGirl:  return DeviceAssistant.Language.isChinese ? "小女孩" : "Girl"
+        case .zhuBaJie:  return DeviceAssistant.Language.isChinese ? "猪八戒" : "Pig king"
+        case .hulk:      return DeviceAssistant.Language.isChinese ? "绿巨人" : "Hulk"
         case .disable:   fatalError()
         }
     }
@@ -372,10 +372,10 @@ extension MusicGenre {
     
     var description: String {
         switch self {
-        case .rnb:     return NSLocalizedString("RNB")
-        case .popular: return NSLocalizedString("Popular")
-        case .rock:    return NSLocalizedString("Rock")
-        case .hiphop:  return NSLocalizedString("HipHop")
+        case .rnb:     return "R&B"
+        case .popular: return DeviceAssistant.Language.isChinese ? "流行" : "Popular"
+        case .rock:    return DeviceAssistant.Language.isChinese ? "摇滚" : "Rock"
+        case .hiphop:  return DeviceAssistant.Language.isChinese ? "嘻哈" : "HipHop"
         case .disable: fatalError()
         }
     }

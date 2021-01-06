@@ -28,7 +28,7 @@ enum LiveType {
     
     var name: String {
         switch self {
-        case .chatRoom: return DeviceAssistant.Language.isChinese ? "语聊房" : "Chat Room"
+        case .chatRoom: return DeviceAssistant.Language.isChinese ? "语聊房" : "Chatroom"
         }
     }
 }

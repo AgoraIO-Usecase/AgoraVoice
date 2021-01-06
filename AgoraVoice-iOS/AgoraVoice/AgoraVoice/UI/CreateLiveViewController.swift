@@ -45,7 +45,7 @@ class CreateLiveViewController: MaskViewController {
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var randomButton: UIButton!
     
-    private let nameLimit = 25
+    private let nameLimit: UInt = 25
     
     var liveType: LiveType = .chatRoom
     var selectedImageIndex = 0
@@ -101,8 +101,8 @@ private extension CreateLiveViewController {
         backgroundImageView.image = Center.shared().centerProvideImagesHelper().roomBackgrounds.first
         
         nameTextField.delegate = self
-        nameLabel.text = NSLocalizedString("Create_NameLabel")
-        startButton.setTitle(NSLocalizedString("Create_Start"),
+        nameLabel.text = CreateLiveLocalizable.channelName()
+        startButton.setTitle(CreateLiveLocalizable.startButton(),
                              for: .normal)
         
         nameTextField.rx.controlEvent([.editingDidEndOnExit])
@@ -124,7 +124,7 @@ private extension CreateLiveViewController {
         
         startButton.rx.tap.subscribe(onNext: { [unowned self] in
             guard let title = self.nameTextField.text, title.count > 0 else {
-                self.showAlert("未输入房间名")
+                self.showAlert(CreateLiveLocalizable.channelNameCannotBebBlank())
                 return
             }
             
@@ -203,7 +203,7 @@ private extension CreateLiveViewController {
             if error.code == nil {
                 self.showAlert(message: NetworkLocalizable.lostConnectionRetry())
             } else {
-                self.showAlert(message:"start live fail")
+                self.showAlert(message: CreateLiveLocalizable.createChannelFail())
             }
         }
     }
@@ -227,7 +227,7 @@ private extension CreateLiveViewController {
             if error.code == nil {
                 self.showAlert(message: NetworkLocalizable.lostConnectionRetry())
             } else {
-                self.showAlert(message:"join live fail")
+                self.showAlert(message: CreateLiveLocalizable.joinChannelFail())
             }
         }
     }
@@ -238,11 +238,7 @@ extension CreateLiveViewController: UITextFieldDelegate {
         if range.length == 1 && string.count == 0 {
             return true
         } else if let text = textField.text, text.count >= nameLimit {
-            if DeviceAssistant.Language.isChinese {
-                self.showTextToast(text: "房间名称不能超过\(nameLimit)个字符")
-            } else {
-                self.showTextToast(text: "Maximum length of room name is \(nameLimit)")
-            }
+            self.showTextToast(text: CreateLiveLocalizable.channelNameLengthLimit(nameLimit))
             return false
         } else {
             return true

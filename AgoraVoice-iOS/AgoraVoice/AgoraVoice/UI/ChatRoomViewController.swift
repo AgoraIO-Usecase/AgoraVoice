@@ -101,16 +101,6 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
     var multiHostsVM: MultiHostsVM!
     var seatsVM: LiveSeatsVM!
     
-    fileprivate lazy var errorToast: TagImageTextToast = {
-        let view = TagImageTextToast(frame: CGRect(x: 0,
-                                                   y: 200,
-                                                   width: 0,
-                                                   height: 44),
-                                     filletRadius: 8)
-        view.tagImage = UIImage(named: "icon-red warning")
-        return view
-    }()
-    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -436,9 +426,9 @@ private extension ChatRoomViewController {
         }).disposed(by: bag)
         
         multiHostsVM.invitationByRejected.subscribe(onNext: { [unowned self] (invitation) in
-            let message = ChatRoomLocalizable.rejectThisInvitation()
             let name = invitation.receiver.info.name
-            self.showTextToast(text: name + message)
+            let message = ChatRoomLocalizable.rejectThisInvitation(from: name)
+            self.showTextToast(text: message)
         }).disposed(by: bag)
         
         multiHostsVM.applyingUserList.subscribe(onNext: { [unowned self] (list) in
@@ -455,7 +445,7 @@ private extension ChatRoomViewController {
             guard owner == local else {
                 return
             }
-            self.showTextToast(text: NSLocalizedString("User_Invitation_Timeout"))
+            self.showTextToast(text: ChatRoomLocalizable.invitationTimeout())
         }).disposed(by: bag)
         
         // broadcaster
@@ -485,7 +475,7 @@ private extension ChatRoomViewController {
         
         // role update
         multiHostsVM.audienceBecameBroadcaster.subscribe(onNext: { [unowned self] (user) in
-            let message = NSLocalizedString("Became_A_Host")
+            let message = ChatRoomLocalizable.someoneStartCoHosting()
             let chat = Chat(name: user.info.name,
                             text: " \(message)",
                             widthLimit: self.chatWidthLimit)
@@ -495,7 +485,7 @@ private extension ChatRoomViewController {
         }).disposed(by: bag)
         
         multiHostsVM.broadcasterBecameAudience.subscribe(onNext: { [unowned self] (user) in
-            let message = NSLocalizedString("Became_A_Audience")
+            let message = ChatRoomLocalizable.someoneStopCoHosting()
             let chat = Chat(name: user.info.name,
                             text: " \(message)",
                             widthLimit: self.chatWidthLimit)
@@ -519,13 +509,15 @@ private extension ChatRoomViewController {
 private extension ChatRoomViewController {
     func blockOperation(command: LiveSeatView.Command,
                         seatCommands: LiveSeatCommands) {
+        var title: String? = nil
         var message: String
         
         switch command {
         case .block:
-            message = ChatRoomLocalizable.unblockThisSeat()
+            message = ChatRoomLocalizable.openSeat()
         case .unblock:
-            message = ChatRoomLocalizable.blockThisSeat()
+            title = ChatRoomLocalizable.closeSeatTitle()
+            message = ChatRoomLocalizable.closeSeatDescription()
         default:
             assert(false)
             return
@@ -533,7 +525,8 @@ private extension ChatRoomViewController {
         
         let seatState: SeatState = (command == .block ? .close : .empty)
         
-        self.showAlert(message: message,
+        self.showAlert(title,
+                       message: message,
                        action1: NSLocalizedString("Cancel"),
                        action2: NSLocalizedString("Confirm"),
                        handler2:  { [unowned self] (_) in
@@ -636,8 +629,5 @@ private extension ChatRoomViewController {
 }
 
 private extension ChatRoomViewController {
-    func showErrorToast(_ text: String) {
-        errorToast.text = text
-        showToastView(errorToast, duration: 3)
-    }
+    
 }

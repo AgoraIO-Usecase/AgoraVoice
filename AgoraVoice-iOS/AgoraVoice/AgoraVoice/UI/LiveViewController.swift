@@ -96,22 +96,22 @@ extension LiveViewController {
         userListVM.joined.subscribe(onNext: { [unowned self] (list) in
             let chats = list.map { (user) -> Chat in
                 let chat = Chat(name: user.info.name,
-                                text: " \(NSLocalizedString("Join_Live_Room"))",
+                                text: " \(LiveVCLocalizable.someoneJoinedChannel())",
                           widthLimit: self.chatWidthLimit)
                 return chat
             }
-
+            
             self.chatVM.newMessages(chats)
         }).disposed(by: bag)
         
         userListVM.left.subscribe(onNext: { [unowned self] (list) in
             let chats = list.map { (user) -> Chat in
                 let chat = Chat(name: user.info.name,
-                                text: " \(NSLocalizedString("Leave_Live_Room"))",
+                                text: " \(LiveVCLocalizable.someoneLeftChannel())",
                           widthLimit: self.chatWidthLimit)
                 return chat
             }
-
+            
             self.chatVM.newMessages(chats)
         }).disposed(by: bag)
     }
@@ -195,16 +195,12 @@ extension LiveViewController {
         monitor.connect.subscribe(onNext: { [unowned self] (status) in
             switch status {
             case .notReachable:
-                let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
-                view.text = NetworkLocalizable.lostConnectionRetry()
-                self.showToastView(view, duration: 3.0)
+                self.showTextToast(text: NetworkLocalizable.lostConnectionRetry())
             case .reachable(let type):
                 guard type == .wwan else {
                     return
                 }
-                let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
-                view.text = NSLocalizedString("Use_Cellular_Data")
-                self.showToastView(view, duration: 3.0)
+                self.showTextToast(text: NetworkLocalizable.useCellularData())
             default:
                 break
             }
@@ -293,7 +289,7 @@ extension LiveViewController {
                                     widthLimit: self.chatWidthLimit)
                     self.chatVM.newMessages([chat])
                 }) { [unowned self] (_) in
-                    self.showAlert(message: NSLocalizedString("Send_Chat_Message_Fail"))
+                    self.showErrorToast(LiveVCLocalizable.sendChatFail())
                 }
         }).disposed(by: bag)
         
@@ -416,7 +412,7 @@ extension LiveViewController {
         
         extensionVC.audioLoopButton.rx.tap.subscribe(onNext: { [unowned extensionVC, unowned self] in
             guard self.deviceVM.audioOutput.value.isSupportLoop else {
-                self.showTextToast(text: NSLocalizedString("Please_Input_Headset"))
+                self.showTextToast(text: LiveVCLocalizable.audioLoopButtonAlert())
                 return
             }
             extensionVC.audioLoopButton.isSelected.toggle()
@@ -494,7 +490,7 @@ extension LiveViewController {
         giftVC.selectGift.subscribe(onNext: { [unowned self] (gift) in
             self.hiddenMaskView()
             self.giftVM?.present(gift: gift) { [unowned self] in
-                self.showAlert(message: NSLocalizedString("Present_Gift_Fail"))
+                self.showAlert(message: LiveVCLocalizable.giveGiftFail())
             }
         }).disposed(by: giftVC.bag)
     }

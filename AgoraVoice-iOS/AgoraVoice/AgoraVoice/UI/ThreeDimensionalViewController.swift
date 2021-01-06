@@ -20,8 +20,8 @@ class ThreeDimensionalViewController: RxViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        titleLabel.text = NSLocalizedString("Three_Dimensional_Voice")
-        descriptionLabel.text = NSLocalizedString("Three_Dimensional_Voice_Description")
+        titleLabel.text = AudioEffectsLocalizable.threeDimensionalVoice()
+        descriptionLabel.text = AudioEffectsLocalizable.threeDimensionalVoiceDescription() + "(\(AudioEffectsLocalizable.threeDimensionalVoiceDescription2()))"
         
         backButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.navigationController?.popViewController(animated: true)

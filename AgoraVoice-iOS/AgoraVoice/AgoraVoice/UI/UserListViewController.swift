@@ -49,7 +49,7 @@ class UserInvitationListCell: UITableViewCell {
             case .availableInvite:
                 inviteButton.isHidden = false
                 inviteButton.isEnabled = true
-                inviteButton.setTitle(NSLocalizedString("Invitation"), for: .normal)
+                inviteButton.setTitle(NSLocalizedString("Invite"), for: .normal)
                 inviteButton.setTitleColor(UIColor(hexString: "#0088EB"), for: .normal)
                 inviteButton.backgroundColor = UIColor(hexString: "#161D27")
                 inviteButton.cornerRadius(16)
@@ -160,17 +160,16 @@ class UserListViewController: RxViewController {
         tableView.delegate = nil
         tableView.dataSource = nil
         
+        titleLabel.text = LiveVCLocalizable.onlineUser()
+        
         switch showType {
         case .onlyInvitationOfMultiHosts:
-            titleLabel.text = NSLocalizedString("Online_User")
             tabView.isHidden = true
             tableViewTop.constant = 0
         case .multiHosts:
-            titleLabel.text = NSLocalizedString("Online_User")
-            let titles = [NSLocalizedString("All"), NSLocalizedString("Application_List")]
+            let titles = [NSLocalizedString("All"), ChatRoomLocalizable.applicationList()]
             tabView.update(titles)
         case .onlyUser:
-            titleLabel.text = NSLocalizedString("Online_User")
             tabView.isHidden = true
             tableViewTop.constant = 0
         }
