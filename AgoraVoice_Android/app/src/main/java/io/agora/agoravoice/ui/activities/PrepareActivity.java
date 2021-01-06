@@ -2,6 +2,7 @@ package io.agora.agoravoice.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -27,6 +28,7 @@ import io.agora.agoravoice.utils.RoomBgUtil;
 import io.agora.agoravoice.utils.ToastUtil;
 
 public class PrepareActivity extends AbsLiveActivity {
+    private static final int POLICY_MAX_DURATION = 10000;
     private static final int MAX_NAME_LENGTH = 25;
 
     private CropBackgroundRelativeLayout mBackgroundLayout;
@@ -34,7 +36,10 @@ public class PrepareActivity extends AbsLiveActivity {
     private AppCompatEditText mNameEdit;
     private AppCompatTextView mGoLiveBtn;
 
-    private ProxyManager.RoomServiceListener mRoomListener = new ProxyManager.RoomServiceListener() {
+    private Handler mHandler;
+    private final Runnable mRemovePolicyRunnable = this::closePolicyNotification;
+
+    private final ProxyManager.RoomServiceListener mRoomListener = new ProxyManager.RoomServiceListener() {
         @Override
         public void onRoomCreated(String roomId, String roomName) {
             Intent intent = new Intent(PrepareActivity.this, ChatRoomActivity.class);
@@ -80,6 +85,7 @@ public class PrepareActivity extends AbsLiveActivity {
         setContentView(R.layout.activity_prepare);
 
         init();
+        postPolicyCloseDelayed();
     }
 
     private void init() {
@@ -118,6 +124,19 @@ public class PrepareActivity extends AbsLiveActivity {
         if (mBackgroundLayout != null) {
             mBackgroundLayout.setCropBackground(RoomBgUtil.getRoomBgPicRes(mBackgroundSelected));
         }
+    }
+
+    private void setRandomRoomName() {
+        mNameEdit.setText(RandomUtil.randomLiveRoomName(this));
+    }
+
+    private void postPolicyCloseDelayed() {
+        mHandler = new Handler(getMainLooper());
+        mHandler.postDelayed(mRemovePolicyRunnable, POLICY_MAX_DURATION);
+    }
+
+    private void removePolicyCloseRunnable() {
+        if (mHandler != null) mHandler.removeCallbacks(mRemovePolicyRunnable);
     }
 
     @Override
@@ -167,10 +186,6 @@ public class PrepareActivity extends AbsLiveActivity {
         });
     }
 
-    private void setRandomRoomName() {
-        mNameEdit.setText(RandomUtil.randomLiveRoomName(this));
-    }
-
     private void checkRoomNameAndGoLive() {
         if (!isRoomNameValid()) {
             ToastUtil.showShortToast(this, R.string.no_room_name_toast);
@@ -200,6 +215,7 @@ public class PrepareActivity extends AbsLiveActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        removePolicyCloseRunnable();
         proxy().removeRoomServiceListener(mRoomListener);
     }
 }
