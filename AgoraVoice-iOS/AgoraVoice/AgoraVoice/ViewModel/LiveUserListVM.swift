@@ -57,15 +57,6 @@ class LiveUserListVM: CustomObserver {
         print("deinit LiveUserListVM")
         #endif
     }
-    
-    func updateGiftListWithJson(list: [StringAnyDic]?) {
-        guard let list = list, list.count > 0 else {
-            return
-        }
-        
-        let tList = try! Array(dicList: list)
-        giftList.accept(tList)
-    }
 }
 
 private extension LiveUserListVM {
@@ -87,11 +78,15 @@ private extension LiveUserListVM {
                     let userId = try item.getStringValue(of: "userId")
                     let userName = try item.getStringValue(of: "userName")
                     let rank = try item.getIntValue(of: "rank")
-                    let info = BasicUserInfo(userId: userId, name: userName)
-                    let role = LiveRoleItem(type: .audience, info: info, agUId: "0", giftRank: rank)
+                    let info = BasicUserInfo(userId: userId,
+                                             name: userName)
+                    let role = LiveRoleItem(type: .audience,
+                                            info: info,
+                                            agUId: "0",
+                                            giftRank: rank)
                     temp.append(role)
                 }
-                self.giftList.accept(temp.sorted(by: {$0.giftRank > $1.giftRank}))
+                self.giftList.accept(temp.sorted(by: {$0.giftRank < $1.giftRank}))
             } catch {
                 self.log(error: error)
             }

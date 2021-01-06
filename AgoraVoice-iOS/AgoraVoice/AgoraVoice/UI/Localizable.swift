@@ -196,7 +196,7 @@ class MineLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "上传日志失败"
         } else {
-            return "Upload log fail"
+            return "Log upload fails"
         }
     }
     
@@ -204,7 +204,7 @@ class MineLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "LogId 已经复制到粘贴板"
         } else {
-            return "LogId has been copied to the pasteboard"
+            return "LogId copied to the pasteboard"
         }
     }
     
@@ -212,7 +212,7 @@ class MineLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "更新昵称失败"
         } else {
-            return "Update nickname fail"
+            return "Nickname update fails"
         }
     }
     
