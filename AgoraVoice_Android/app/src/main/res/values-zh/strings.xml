@@ -320,7 +320,7 @@
     <string name="toast_no_wired_mic_plugged">请插入有线带麦耳机</string>
     <string name="toast_join_class_success">加入房间成功</string>
     <string name="toast_join_class_fail">加入房间失败</string>
-    <string name="toast_room_end_timeout">直播房间超时</string>
+    <string name="toast_room_end_timeout">此软件为测试产品，房间最长直播时间为10分钟</string>
     <string name="toast_room_end_owner_leave">房主已离开，直播间关闭</string>
     <string name="toast_room_end">直播房间已结束</string>
     <string name="toast_app_version_fail">获取应用版本失败</string>

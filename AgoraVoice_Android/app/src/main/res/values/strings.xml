@@ -350,7 +350,7 @@
     <string name="toast_no_wired_mic_plugged">Please use a wired headset with a mic</string>
     <string name="toast_join_class_success">Join room successfully</string>
     <string name="toast_join_class_fail">Join room failed</string>
-    <string name="toast_room_end_timeout">Room timeout</string>
+    <string name="toast_room_end_timeout">This product is for test purpose only, the max duration for each room is 10 minutes</string>
     <string name="toast_room_end_owner_leave">Room ends because the owner left</string>
     <string name="toast_room_end">Room Ends</string>
     <string name="toast_app_version_fail">Acquire app version fail</string>
