@@ -1,11 +1,14 @@
 package io.agora.agoravoice.manager;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.agora.agoravoice.business.BusinessProxy;
 import io.agora.agoravoice.business.definition.struct.ErrorCode;
@@ -14,16 +17,132 @@ import io.agora.agoravoice.business.server.retrofit.model.requests.SeatBehavior;
 import io.agora.agoravoice.utils.Const;
 
 public class InvitationManager {
-    private BusinessProxy mProxy;
-    private String mRoomId;
+    private static final String TAG = InvitationManager.class.getSimpleName();
 
-    private List<RoomUserInfo> mFullUserList = new ArrayList<>();
-    private List<RoomUserInfo> mInviteList = new ArrayList<>();
-    private Map<String, RoomUserInfo> mInviteMap = new HashMap<>();
+    public interface InvitationManagerListener {
+        void onInvitationTimeout(String userId);
 
-    private List<RoomUserInfo> mApplyList = new ArrayList<>();
-    private Map<String, RoomUserInfo> mApplyMap = new HashMap<>();
-    private Map<String, Integer> mApplySeatMap = new HashMap<>();
+        void onApplicationTimeout(String userId);
+    }
+
+    private static final int TIMEOUT = 30 * 1000;
+
+    private final BusinessProxy mProxy;
+    private final String mRoomId;
+
+    private final List<InvitationManagerListener> mListener = new ArrayList<>();
+
+    private final List<RoomUserInfo> mFullUserList = new ArrayList<>();
+
+    private final List<RoomUserInfo> mInviteList = new ArrayList<>();
+    private final Map<String, RoomUserInfo> mInviteUserInfoMap = new ConcurrentHashMap<>();
+    private final Map<String, Integer> mInviteSeatMap = new ConcurrentHashMap<>();
+    private final Map<String, Long> mInviteTimeMap = new ConcurrentHashMap<>();
+
+    private final List<RoomUserInfo> mApplyList = new ArrayList<>();
+    private final Map<String, RoomUserInfo> mApplyUserInfoMap = new ConcurrentHashMap<>();
+    private final Map<String, Integer> mApplySeatMap = new ConcurrentHashMap<>();
+    private final Map<String, Long> mApplyTimeMap = new ConcurrentHashMap<>();
+
+    private final Object mInviteLock = new Object();
+    private boolean mInviteTimerStop;
+    private final Object mApplyLock = new Object();
+    private boolean mApplyTimerStop;
+
+    private final Runnable mInviteTimer = () -> {
+        synchronized (mInviteLock) {
+            while (!mInviteList.isEmpty() && !mInviteTimerStop) {
+                Iterator<Map.Entry<String, Long>> iterator
+                        = mInviteTimeMap.entrySet().iterator();
+                List<String> timeoutUserList = new ArrayList<>();
+                while (iterator.hasNext()) {
+                    Map.Entry<String, Long> entry = iterator.next();
+                    String userId = entry.getKey();
+                    long timestamp = entry.getValue();
+                    long now = System.currentTimeMillis();
+                    if (now - timestamp > TIMEOUT) {
+                        timeoutUserList.add(userId);
+                    }
+                }
+
+                for (String userId : timeoutUserList) {
+                    removeInvitationInfo(userId);
+                    for (InvitationManagerListener listener : mListener) {
+                        listener.onInvitationTimeout(userId);
+                    }
+                }
+
+                try {
+                    mInviteLock.wait(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    break;
+                }
+            }
+        }
+        Log.d(TAG, "invitation timer stops");
+    };
+
+    private final Runnable mApplyTimer = () -> {
+        synchronized (mApplyLock) {
+            while (!mApplyList.isEmpty() && !mApplyTimerStop) {
+                Iterator<Map.Entry<String, Long>> iterator =
+                        mApplyTimeMap.entrySet().iterator();
+                List<String> timeoutUserList = new ArrayList<>();
+                while (iterator.hasNext()) {
+                    Map.Entry<String, Long> entry = iterator.next();
+                    String userId = entry.getKey();
+                    long timestamp = entry.getValue();
+                    long now = System.currentTimeMillis();
+                    if (now - timestamp > TIMEOUT) {
+                        timeoutUserList.add(userId);
+                    }
+                }
+
+                for (String userId : timeoutUserList) {
+                    removeApplicationInfo(userId);
+                    for (InvitationManagerListener listener : mListener) {
+                        listener.onApplicationTimeout(userId);
+                    }
+                }
+
+                try {
+                    mApplyLock.wait(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    break;
+                }
+            }
+        }
+
+        Log.d(TAG, "application timer stops");
+    };
+
+    private void startInviteTimer() {
+        mInviteTimerStop = false;
+        new Thread(mInviteTimer).start();
+    }
+
+    private void startApplyTimer() {
+        mApplyTimerStop = false;
+        new Thread(mApplyTimer).start();
+    }
+
+    private void stopInviteTimer() {
+        mInviteTimerStop = true;
+    }
+
+    private void stopApplyTimer() {
+        mApplyTimerStop = true;
+    }
+
+    public void addInvitationListener(InvitationManagerListener listener) {
+        mListener.add(listener);
+    }
+
+    public void removeInvitationListener(InvitationManagerListener listener) {
+        mListener.remove(listener);
+    }
 
     public InvitationManager(@NonNull String roomId, @NonNull BusinessProxy proxy) {
         mRoomId = roomId;
@@ -45,29 +164,56 @@ public class InvitationManager {
     }
 
     public boolean hasInvited(String userId) {
-        return mInviteMap.containsKey(userId);
+        return mInviteUserInfoMap.containsKey(userId);
     }
 
     public List<RoomUserInfo> getApplicationList() {
         return mApplyList;
     }
 
+    public boolean hasApplication() {
+        return !mApplyList.isEmpty();
+    }
+
     public boolean hasUserApplied(String userId) {
-        return mApplyMap.containsKey(userId);
+        return mApplyUserInfoMap.containsKey(userId);
+    }
+
+    private void removeInvitationInfo(String userId) {
+        mInviteSeatMap.remove(userId);
+        mInviteTimeMap.remove(userId);
+        RoomUserInfo info = mInviteUserInfoMap.remove(userId);
+        if (info != null) mInviteList.remove(info);
+    }
+
+    private void removeApplicationInfo(String userId) {
+        mApplySeatMap.remove(userId);
+        mApplyTimeMap.remove(userId);
+        RoomUserInfo info = mApplyUserInfoMap.remove(userId);
+        if (info != null) mApplyList.remove(info);
     }
 
     public int requestSeatBehavior(@NonNull String token, @NonNull String userId,
                                    String userName, int no, int behavior) {
         int seatNo = no;
         if (behavior == SeatBehavior.INVITE) {
-            if (mInviteMap.containsKey(userId)) {
+            if (mInviteUserInfoMap.containsKey(userId)) {
                 return Const.ERR_REPEAT_INVITE;
             } else {
                 RoomUserInfo info = getUserInfoByUserId(userId);
                 if (info == null) return Const.ERR_USER_UNKNOWN;
                 if (!mInviteList.contains(info)) {
+                    if (mInviteList.isEmpty()) {
+                        // When this is the first in list, start a timer
+                        // to check invitation timeout
+                        Log.d(TAG, "start invitation timer");
+                        startInviteTimer();
+                    }
+
                     mInviteList.add(info);
-                    mInviteMap.put(userId, info);
+                    mInviteUserInfoMap.put(userId, info);
+                    mInviteSeatMap.put(userId, no);
+                    mInviteTimeMap.put(userId, System.currentTimeMillis());
                 }
             }
         } else if (behavior == SeatBehavior.APPLY_ACCEPT ||
@@ -83,8 +229,7 @@ public class InvitationManager {
     public void handleSeatBehaviorRequestFail(String userId, String userName, int no, int behavior, int errorCode) {
         switch (behavior) {
             case SeatBehavior.INVITE:
-                RoomUserInfo info = mInviteMap.remove(userId);
-                if (info != null) mInviteList.remove(info);
+                removeInvitationInfo(userId);
                 break;
             case SeatBehavior.APPLY_ACCEPT:
                 if (errorCode == ErrorCode.ERROR_SEAT_TAKEN) {
@@ -92,8 +237,7 @@ public class InvitationManager {
                     // audience for a seat, but the seat has been
                     // taken by earlier operations.
                     // We remove this application from list.
-                    info = mApplyMap.remove(userId);
-                    if (info != null) mApplyList.remove(info);
+                    removeApplicationInfo(userId);
                 }
                 break;
         }
@@ -103,11 +247,11 @@ public class InvitationManager {
         switch (behavior) {
             case SeatBehavior.INVITE_ACCEPT:
             case SeatBehavior.INVITE_REJECT:
-                RoomUserInfo info = mInviteMap.remove(userId);
+                RoomUserInfo info = mInviteUserInfoMap.remove(userId);
                 if (info != null) mInviteList.remove(info);
                 break;
             case SeatBehavior.APPLY:
-                info = mApplyMap.remove(userId);
+                info = mApplyUserInfoMap.remove(userId);
                 if (info != null) {
                     mApplyList.remove(info);
                     mApplyList.add(info);
@@ -116,29 +260,30 @@ public class InvitationManager {
                 } else {
                     info = getUserInfoByUserId(userId);
                     if (info != null) {
-                        mApplyMap.put(userId, info);
+                        if (mApplyList.isEmpty()) {
+                            Log.d(TAG, "start application timer");
+                            startApplyTimer();
+                        }
+
                         mApplyList.add(info);
+                        mApplyUserInfoMap.put(userId, info);
                         mApplySeatMap.put(userId, no);
+                        mApplyTimeMap.put(userId, System.currentTimeMillis());
                     }
                 }
                 break;
             case SeatBehavior.APPLY_ACCEPT:
             case SeatBehavior.APPLY_REJECT:
-                info = mApplyMap.remove(userId);
-                if (info != null) mApplyList.remove(info);
-                if (info != null) mApplySeatMap.remove(userId);
+                removeApplicationInfo(userId);
                 break;
         }
     }
 
     public void userLeft(String userId) {
-        RoomUserInfo info = mInviteMap.remove(userId);
-        if (info != null) mInviteList.remove(info);
+        removeInvitationInfo(userId);
+        removeApplicationInfo(userId);
 
-        info = mApplyMap.remove(userId);
-        if (info != null) mApplyList.remove(info);
-
-        if (info == null) info = getUserInfoByUserId(userId);
+        RoomUserInfo info = getUserInfoByUserId(userId);
         if (info != null) mFullUserList.remove(info);
     }
 

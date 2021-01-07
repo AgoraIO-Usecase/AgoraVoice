@@ -55,7 +55,9 @@ import io.agora.rte.AgoraRteRemoteAudioStats;
 import io.agora.rte.AgoraRteRemoteVideoStats;
 import io.agora.rte.AgoraRteRtcStats;
 
-public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickListener, RoomEventListener  {
+public class ChatRoomActivity extends AbsLiveActivity
+        implements View.OnClickListener, RoomEventListener,
+        InvitationManager.InvitationManagerListener {
     private static final String TAG = ChatRoomActivity.class.getSimpleName();
 
     private CropBackgroundRelativeLayout mBackground;
@@ -741,6 +743,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
         getIntentInfo(getIntent());
+        initSeatManager();
         checkPermissions();
     }
 
@@ -748,7 +751,6 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     public void onAllPermissionsGranted() {
         initView();
         enterRoom();
-        initSeatManager();
     }
 
     private void getIntentInfo(Intent intent) {
@@ -806,6 +808,7 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     private void initSeatManager() {
         proxy().createSeatManager(roomId);
         proxy().addSeatListener(mSeatListener);
+        proxy().getRoomInvitationManager(roomId).addInvitationListener(this);
     }
 
     @Override
@@ -1171,6 +1174,25 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
     }
 
     @Override
+    public void onInvitationTimeout(String userId) {
+        updateIfApplicationExpire();
+    }
+
+    @Override
+    public void onApplicationTimeout(String userId) {
+        updateIfApplicationExpire();
+    }
+
+    private void updateIfApplicationExpire() {
+        runOnUiThread(() -> {
+            if (!proxy().getRoomInvitationManager(roomId).hasApplication()) {
+                mUserAction.showNotification(false);
+            }
+            updateUserListActionSheetIfShown();
+        });
+    }
+
+    @Override
     public void onRtcStats(@Nullable AgoraRteRtcStats stats) {
         runOnUiThread(() -> {
             if (mRoomFinished) return;
@@ -1267,6 +1289,8 @@ public class ChatRoomActivity extends AbsLiveActivity implements View.OnClickLis
         }
         finish();
         mRoomFinished = true;
+        proxy().getRoomInvitationManager(roomId)
+                .removeInvitationListener(this);
         removeSeatManager();
     }
 

@@ -277,10 +277,7 @@ public class ProxyManager implements BusinessProxyListener {
     }
 
     public void createSeatManager(String roomId) {
-        if (!mSeatManagerMap.containsKey(roomId)) {
-            mSeatManagerMap.remove(roomId);
-        }
-
+        mSeatManagerMap.remove(roomId);
         InvitationManager manager = new InvitationManager(roomId, mBusinessProxy);
         mSeatManagerMap.put(roomId, manager);
     }
