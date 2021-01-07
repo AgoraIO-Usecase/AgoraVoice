@@ -1330,6 +1330,7 @@
                         <outlet property="ableSwitch" destination="LL6-4t-1CD" id="EVs-8m-cN7"/>
                         <outlet property="collectionView" destination="LdH-Ui-1d0" id="X1c-WI-Tqo"/>
                         <outlet property="segmentControl" destination="dZd-hJ-Xqh" id="vI2-P5-g9f"/>
+                        <outlet property="segmentWidth" destination="HS2-WJ-xJp" id="qDf-15-RnN"/>
                         <outlet property="selectScaleLabel" destination="imm-vz-Usb" id="ePj-56-EGp"/>
                         <outlet property="switchNameLabel" destination="2xR-x3-BpG" id="jUs-TG-HE5"/>
                     </connections>

@@ -98,7 +98,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
     var giftVM: GiftVM!
     
     // multi hosts & live seats
-    var multiHostsVM: MultiHostsVM!
+    var coHostingVM: CoHostingVM!
     var seatsVM: LiveSeatsVM!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -275,7 +275,7 @@ private extension ChatRoomViewController {
                                                  on: "Popover")
         
         vc.userListVM = userListVM
-        vc.multiHostsVM = multiHostsVM
+        vc.coHostingVM = coHostingVM
         vc.showType = type
         vc.view.cornerRadius(10)
         
@@ -294,7 +294,7 @@ private extension ChatRoomViewController {
                            action1: NSLocalizedString("Cancel"),
                            action2: NSLocalizedString("Confirm"),
                            handler2: { [unowned self] (_) in
-                            self.multiHostsVM.reject(application: application)
+                            self.coHostingVM.reject(application: application)
                            })
         }).disposed(by: vc.bag)
         
@@ -308,7 +308,7 @@ private extension ChatRoomViewController {
                            action1: NSLocalizedString("Cancel"),
                            action2: NSLocalizedString("Confirm"),
                            handler2: { [unowned self] (_) in
-                            self.multiHostsVM.accept(application: application)
+                            self.coHostingVM.accept(application: application)
                            })
         }).disposed(by: vc.bag)
         
@@ -332,7 +332,7 @@ private extension ChatRoomViewController {
                                                  on: "Popover")
         
         vc.userListVM = userListVM
-        vc.multiHostsVM = multiHostsVM
+        vc.coHostingVM = coHostingVM
         vc.showType = .onlyInvitationOfMultiHosts
         vc.view.cornerRadius(10)
         
@@ -408,15 +408,15 @@ private extension ChatRoomViewController {
 // MARK: Multi broadcasters
 private extension ChatRoomViewController {
     func multiHosts() {
-        liveSession.customMessage.bind(to: multiHostsVM.message).disposed(by: bag)
-        liveSession.localRole.bind(to: multiHostsVM.localRole).disposed(by: bag)
+        liveSession.customMessage.bind(to: coHostingVM.message).disposed(by: bag)
+        liveSession.localRole.bind(to: coHostingVM.localRole).disposed(by: bag)
         
-        multiHostsVM.fail.subscribe(onNext: { [unowned self] (text) in
+        coHostingVM.fail.subscribe(onNext: { [unowned self] (text) in
             self.showErrorToast(text)
         }).disposed(by: bag)
         
         // owner
-        multiHostsVM.receivedApplication.subscribe(onNext: { [unowned self] (application) in
+        coHostingVM.receivedApplication.subscribe(onNext: { [unowned self] (application) in
             if let vc = self.presentingChild as? UserListViewController,
                vc.showType == .multiHosts {
                 vc.tabView.selectedIndex.accept(1)
@@ -425,13 +425,13 @@ private extension ChatRoomViewController {
             }
         }).disposed(by: bag)
         
-        multiHostsVM.invitationByRejected.subscribe(onNext: { [unowned self] (invitation) in
+        coHostingVM.invitationByRejected.subscribe(onNext: { [unowned self] (invitation) in
             let name = invitation.receiver.info.name
             let message = ChatRoomLocalizable.rejectThisInvitation(from: name)
             self.showTextToast(text: message)
         }).disposed(by: bag)
         
-        multiHostsVM.applyingUserList.subscribe(onNext: { [unowned self] (list) in
+        coHostingVM.applyingUserList.subscribe(onNext: { [unowned self] (list) in
             guard list.count == 0 else {
                 return
             }
@@ -439,7 +439,7 @@ private extension ChatRoomViewController {
             self.personCountView.needRemind = false
         }).disposed(by: bag)
         
-        multiHostsVM.invitationTimeout.subscribe(onNext: { [unowned self] (_) in
+        coHostingVM.invitationTimeout.subscribe(onNext: { [unowned self] (_) in
             let owner = self.liveSession.room.value.owner.info
             let local = self.liveSession.localRole.value.info
             guard owner == local else {
@@ -449,13 +449,13 @@ private extension ChatRoomViewController {
         }).disposed(by: bag)
         
         // broadcaster
-        multiHostsVM.receivedEndBroadcasting.subscribe(onNext: { [unowned self] in
+        coHostingVM.receivedEndBroadcasting.subscribe(onNext: { [unowned self] in
             let message = ChatRoomLocalizable.ownerForcedYouToBecomeAudience()
             self.showTextToast(text: message)
         }).disposed(by: bag)
         
         // audience
-        multiHostsVM.receivedInvitation.subscribe(onNext: { [unowned self] (invitation) in
+        coHostingVM.receivedInvitation.subscribe(onNext: { [unowned self] (invitation) in
             let user = invitation.initiator.info.name
             let message = ChatRoomLocalizable.doYouAgreeToBecomeHost(owner: user)
             
@@ -463,18 +463,18 @@ private extension ChatRoomViewController {
                            action1: NSLocalizedString("Reject"),
                            action2: NSLocalizedString("Confirm"),
                            handler1: { [unowned self] (_) in
-                            self.multiHostsVM.reject(invitation: invitation)
+                            self.coHostingVM.reject(invitation: invitation)
             }) { [unowned self] (_) in
-                self.multiHostsVM.accept(invitation: invitation)
+                self.coHostingVM.accept(invitation: invitation)
             }
         }).disposed(by: bag)
         
-        multiHostsVM.applicationByAccepted.subscribe(onNext: { [unowned self] (_) in
+        coHostingVM.applicationByAccepted.subscribe(onNext: { [unowned self] (_) in
             self.hiddenMaskView()
         }).disposed(by: bag)
         
         // role update
-        multiHostsVM.audienceBecameBroadcaster.subscribe(onNext: { [unowned self] (user) in
+        coHostingVM.audienceBecameBroadcaster.subscribe(onNext: { [unowned self] (user) in
             let message = ChatRoomLocalizable.someoneStartCoHosting()
             let chat = Chat(name: user.info.name,
                             text: " \(message)",
@@ -484,7 +484,7 @@ private extension ChatRoomViewController {
             self.showTextToast(text: chat.content.string)
         }).disposed(by: bag)
         
-        multiHostsVM.broadcasterBecameAudience.subscribe(onNext: { [unowned self] (user) in
+        coHostingVM.broadcasterBecameAudience.subscribe(onNext: { [unowned self] (user) in
             let message = ChatRoomLocalizable.someoneStopCoHosting()
             let chat = Chat(name: user.info.name,
                             text: " \(message)",
@@ -546,7 +546,7 @@ private extension ChatRoomViewController {
                            action1: NSLocalizedString("NO"),
                            action2: NSLocalizedString("YES"),
                            handler2: { [unowned self] (_) in
-                            self.multiHostsVM.sendInvitation(to: user,
+                            self.coHostingVM.sendInvitation(to: user,
                                                              on: seatCommands.seat.index)
                            })
         }
@@ -581,7 +581,7 @@ private extension ChatRoomViewController {
                        handler2: { [unowned self] (_) in
                         switch command {
                         case .forceToStopBroadcasting:
-                            self.multiHostsVM.forceEndWith(user: stream.owner,
+                            self.coHostingVM.forceEndWith(user: stream.owner,
                                                            on: seatCommands.seat.index)
                         case .unmute:
                             self.liveSession.unmuteOther(stream: stream)
@@ -606,7 +606,7 @@ private extension ChatRoomViewController {
                        action1: NSLocalizedString("Cancel"),
                        action2: NSLocalizedString("Confirm"),
                        handler2:  { [unowned self] (_) in
-                        self.multiHostsVM.endBroadcasting(seatIndex: seatCommands.seat.index,
+                        self.coHostingVM.endBroadcasting(seatIndex: seatCommands.seat.index,
                                                           user: user)
                        })
     }
@@ -618,7 +618,7 @@ private extension ChatRoomViewController {
                        action1: NSLocalizedString("Cancel"),
                        action2: NSLocalizedString("Confirm"),
                        handler2:  { [unowned self] (_) in
-                        self.multiHostsVM.sendApplication(by: self.liveSession.localRole.value,
+                        self.coHostingVM.sendApplication(by: self.liveSession.localRole.value,
                                                           for: seatCommands.seat.index,
                                                           success: { [unowned self] in
                                                             let message = ChatRoomLocalizable.yourApplicationHasBeenSent()

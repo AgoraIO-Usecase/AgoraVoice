@@ -36,7 +36,7 @@
 		A750EC452500A33F006E50E3 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC3B2500A33F006E50E3 /* ChatViewController.swift */; };
 		A750EC4B2500B1E6006E50E3 /* GiftVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC462500B1E6006E50E3 /* GiftVM.swift */; };
 		A750EC4C2500B1E6006E50E3 /* LiveUserListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC472500B1E6006E50E3 /* LiveUserListVM.swift */; };
-		A750EC4D2500B1E6006E50E3 /* MultiHostsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC482500B1E6006E50E3 /* MultiHostsVM.swift */; };
+		A750EC4D2500B1E6006E50E3 /* CoHostingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC482500B1E6006E50E3 /* CoHostingVM.swift */; };
 		A750EC4E2500B1E6006E50E3 /* ChatVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC492500B1E6006E50E3 /* ChatVM.swift */; };
 		A750EC4F2500B1E6006E50E3 /* MineVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A750EC4A2500B1E6006E50E3 /* MineVM.swift */; };
 		A750EC522500B353006E50E3 /* SubThreadTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = A750EC502500B353006E50E3 /* SubThreadTimer.m */; };
@@ -105,7 +105,7 @@
 		A75C70F724FE29AF003E5AD9 /* UserNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C70F424FE29AF003E5AD9 /* UserNameViewController.swift */; };
 		A75C70FC24FE2B70003E5AD9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A75C70FE24FE2B70003E5AD9 /* Localizable.strings */; };
 		A75FA9112511E576001B3AFC /* RoomBackgroundVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75FA9102511E576001B3AFC /* RoomBackgroundVM.swift */; };
-		A75FA9132514608C001B3AFC /* RTCStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75FA9122514608C001B3AFC /* RTCStatistics.swift */; };
+		A75FA9132514608C001B3AFC /* RTEStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75FA9122514608C001B3AFC /* RTEStatistics.swift */; };
 		A7C7385B250A1BA70092B948 /* LiveSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C7385A250A1BA70092B948 /* LiveSession.swift */; };
 		A7FFA32024FF667700C66569 /* LiveListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FFA31F24FF667700C66569 /* LiveListViewController.swift */; };
 		A7FFA32324FF6BCC00C66569 /* IconTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FFA32224FF6BCC00C66569 /* IconTextView.swift */; };
@@ -145,7 +145,7 @@
 		A750EC3B2500A33F006E50E3 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		A750EC462500B1E6006E50E3 /* GiftVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiftVM.swift; sourceTree = "<group>"; };
 		A750EC472500B1E6006E50E3 /* LiveUserListVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveUserListVM.swift; sourceTree = "<group>"; };
-		A750EC482500B1E6006E50E3 /* MultiHostsVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiHostsVM.swift; sourceTree = "<group>"; };
+		A750EC482500B1E6006E50E3 /* CoHostingVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoHostingVM.swift; sourceTree = "<group>"; };
 		A750EC492500B1E6006E50E3 /* ChatVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatVM.swift; sourceTree = "<group>"; };
 		A750EC4A2500B1E6006E50E3 /* MineVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MineVM.swift; sourceTree = "<group>"; };
 		A750EC502500B353006E50E3 /* SubThreadTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubThreadTimer.m; sourceTree = "<group>"; };
@@ -224,7 +224,7 @@
 		A75C70FD24FE2B70003E5AD9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A75C70FF24FE2B7D003E5AD9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A75FA9102511E576001B3AFC /* RoomBackgroundVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomBackgroundVM.swift; sourceTree = "<group>"; };
-		A75FA9122514608C001B3AFC /* RTCStatistics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTCStatistics.swift; sourceTree = "<group>"; };
+		A75FA9122514608C001B3AFC /* RTEStatistics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTEStatistics.swift; sourceTree = "<group>"; };
 		A7C7385A250A1BA70092B948 /* LiveSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSession.swift; sourceTree = "<group>"; };
 		A7FFA31F24FF667700C66569 /* LiveListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveListViewController.swift; sourceTree = "<group>"; };
 		A7FFA32224FF6BCC00C66569 /* IconTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconTextView.swift; sourceTree = "<group>"; };
@@ -485,7 +485,7 @@
 				A750EC6C2500DCCB006E50E3 /* LiveRole.swift */,
 				A7C7385A250A1BA70092B948 /* LiveSession.swift */,
 				A735C214250F88D800707F23 /* LiveStream.swift */,
-				A75FA9122514608C001B3AFC /* RTCStatistics.swift */,
+				A75FA9122514608C001B3AFC /* RTEStatistics.swift */,
 				8632EA53259046A00041A12F /* Http.swift */,
 			);
 			path = Specials;
@@ -528,7 +528,7 @@
 		A75FA91425188199001B3AFC /* ChatRoom */ = {
 			isa = PBXGroup;
 			children = (
-				A750EC482500B1E6006E50E3 /* MultiHostsVM.swift */,
+				A750EC482500B1E6006E50E3 /* CoHostingVM.swift */,
 				A750EC602500D1C5006E50E3 /* LiveSeatsVM.swift */,
 			);
 			path = ChatRoom;
@@ -711,7 +711,7 @@
 				A75C700624FCE41F003E5AD9 /* User.swift in Sources */,
 				A750EC5E2500D0D8006E50E3 /* LiveViewController.swift in Sources */,
 				A750EC4C2500B1E6006E50E3 /* LiveUserListVM.swift in Sources */,
-				A75FA9132514608C001B3AFC /* RTCStatistics.swift in Sources */,
+				A75FA9132514608C001B3AFC /* RTEStatistics.swift in Sources */,
 				A750EC7525060347006E50E3 /* AudioEffectVM.swift in Sources */,
 				A750EC692500D730006E50E3 /* ChatRoomViewController.swift in Sources */,
 				A75C700D24FCE6D2003E5AD9 /* FilletView.swift in Sources */,
@@ -735,7 +735,7 @@
 				A750EC3F2500A33F006E50E3 /* RealDataViewController.swift in Sources */,
 				8632EA54259046A00041A12F /* Http.swift in Sources */,
 				A75C6FC024FCD709003E5AD9 /* AppleExtension.swift in Sources */,
-				A750EC4D2500B1E6006E50E3 /* MultiHostsVM.swift in Sources */,
+				A750EC4D2500B1E6006E50E3 /* CoHostingVM.swift in Sources */,
 				A75C6FF824FCE41F003E5AD9 /* DictionaryGetable.swift in Sources */,
 				A75C6FC124FCD709003E5AD9 /* AppDelegate.swift in Sources */,
 				A75C6FF724FCE41F003E5AD9 /* ZipTool.swift in Sources */,
@@ -873,7 +873,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development: Qianze Zhang (3C9KJFP729)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 161;
+				CURRENT_PROJECT_VERSION = 162;
 				DEVELOPMENT_TEAM = GM72UGLGZW;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1021,7 +1021,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development: Qianze Zhang (3C9KJFP729)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 161;
+				CURRENT_PROJECT_VERSION = 162;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = GM72UGLGZW;
 				INFOPLIST_FILE = AgoraVoice/Utils/Info.plist;
@@ -1047,7 +1047,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 161;
+				CURRENT_PROJECT_VERSION = 162;
 				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1140,7 +1140,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Haifeng Hong (MJP2F92AG6)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 161;
+				CURRENT_PROJECT_VERSION = 162;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = JDPG69R49Z;
 				INFOPLIST_FILE = AgoraVoice/Utils/Info.plist;
@@ -1227,7 +1227,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Haifeng Hong (MJP2F92AG6)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 161;
+				CURRENT_PROJECT_VERSION = 162;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = JDPG69R49Z;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1321,7 +1321,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Chunyu Rong (546FFP6724)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 161;
+				CURRENT_PROJECT_VERSION = 162;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5459N9W32M;
 				INFOPLIST_FILE = AgoraVoice/Utils/Info.plist;
@@ -1408,7 +1408,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Chunyu Rong (546FFP6724)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 161;
+				CURRENT_PROJECT_VERSION = 162;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5459N9W32M;
 				GCC_PREPROCESSOR_DEFINITIONS = (

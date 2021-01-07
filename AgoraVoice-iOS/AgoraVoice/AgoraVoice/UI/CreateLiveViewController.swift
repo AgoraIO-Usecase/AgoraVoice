@@ -84,7 +84,7 @@ class CreateLiveViewController: MaskViewController {
             vc.backgroundVM = RoomBackgroundVM(room: liveSession.room.value)
             vc.giftVM = GiftVM(room: liveSession.room.value)
             
-            vc.multiHostsVM = MultiHostsVM(room: liveSession.room.value)
+            vc.coHostingVM = CoHostingVM(room: liveSession.room.value)
             vc.seatsVM = LiveSeatsVM(room: liveSession.room.value)
         default:
             break

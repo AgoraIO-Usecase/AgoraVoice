@@ -53,7 +53,7 @@ enum SoundEffectType {
         case .space:           return DeviceAssistant.Language.isChinese ? "空间塑造" : "Room acoustics"
         case .role:            return DeviceAssistant.Language.isChinese ? "变声音效" : "Voice changer effect"
         case .musciGenre:      return DeviceAssistant.Language.isChinese ? "曲风音效" : "Style transformation"
-        case .electronicMusic: return DeviceAssistant.Language.isChinese ? "启用电音" : "Pitch correction"
+        case .electronicMusic: return DeviceAssistant.Language.isChinese ? "电音音效" : "Pitch correction"
         }
     }
 }
@@ -289,8 +289,8 @@ extension TimbreRole {
     static var list = BehaviorRelay<[TimbreRole]>(value: [.uncle,
                                                           .oldMan,
                                                           .babyBoy,
-                                                          .babyGirl,
                                                           .sister,
+                                                          .babyGirl,
                                                           .zhuBaJie,
                                                           .hulk])
     

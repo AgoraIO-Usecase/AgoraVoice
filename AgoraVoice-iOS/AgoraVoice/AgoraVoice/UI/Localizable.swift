@@ -395,6 +395,14 @@ class LiveVCLocalizable: NSObject {
             return "Online user"
         }
     }
+    
+    static func allUsers() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "全部"
+        } else {
+            return "All users"
+        }
+    }
 }
 
 // MARK: - AudioEffectsLocalizable
@@ -467,7 +475,7 @@ class AudioEffectsLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "和风"
         } else {
-            return "Japenese-Style"
+            return "Japenese-Pantatonic"
         }
     }
 }
@@ -566,9 +574,9 @@ class ChatRoomLocalizable: NSObject {
     // Broadcaster
     static func ownerForcedYouToBecomeAudience() -> String {
         if DeviceAssistant.Language.isChinese {
-            return "房主强迫你下麦"
+            return "房主强制你下麦"
         } else {
-            return "Owner forced you to becmoe a audience"
+            return "Owner forced you to stop co-hosting"
         }
     }
     

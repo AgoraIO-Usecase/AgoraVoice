@@ -40,6 +40,7 @@ class ElectronicMusicViewController: RxViewController {
     @IBOutlet weak var ableSwitch: UISwitch!
     @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var selectScaleLabel: UILabel!
+    @IBOutlet weak var segmentWidth: NSLayoutConstraint!
     
     var audioEffectVM: AudioEffectVM!
     
@@ -123,10 +124,21 @@ private extension ElectronicMusicViewController {
             segmentControl.tintColor = UIColor(hexString: "#0088EB")
         }
         
+        var font: CGFloat
+        
+        if DeviceAssistant.Language.isChinese {
+            font = 14
+        } else {
+            segmentWidth.constant = 340
+            font = 10
+        }
+        
         segmentControl.backgroundColor = UIColor(hexString: "#161D27")
-        segmentControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : UIColor(hexString: "#686E78")],
+        segmentControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : UIColor(hexString: "#686E78"),
+                                               NSAttributedString.Key.font : UIFont.systemFont(ofSize: font)],
                                               for: .normal)
-        segmentControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : UIColor.white],
+        segmentControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : UIColor.white,
+                                               NSAttributedString.Key.font : UIFont.systemFont(ofSize: font)],
                                               for: .selected)
     }
     

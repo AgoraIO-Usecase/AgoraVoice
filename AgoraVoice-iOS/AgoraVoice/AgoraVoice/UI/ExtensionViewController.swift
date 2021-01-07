@@ -34,6 +34,7 @@ class ExtensionButton: UIButton {
         super.init(frame: frame)
         titleLabel?.textAlignment = .center
         titleLabel?.font = UIFont.systemFont(ofSize: 12)
+        titleLabel?.adjustsFontSizeToFitWidth = true
         setTitleColor(UIColor(hexString: "#9BA2AB"),
                       for: .normal)
     }

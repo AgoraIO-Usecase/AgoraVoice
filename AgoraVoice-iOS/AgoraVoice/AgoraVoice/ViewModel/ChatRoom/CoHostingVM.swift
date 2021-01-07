@@ -1,5 +1,5 @@
 //
-//  MultiHostsVM.swift
+//  coHostingVM.swift
 //  AgoraLive
 //
 //  Created by CavanSu on 2020/7/22.
@@ -11,7 +11,7 @@ import RxSwift
 import RxRelay
 import Armin
 
-class MultiHostsVM: CustomObserver {
+class CoHostingVM: CustomObserver {
     struct Invitation: TimestampModel {
         var id: String
         var seatIndex: Int
@@ -81,13 +81,13 @@ class MultiHostsVM: CustomObserver {
     
     deinit {
         #if !RELEASE
-        print("deinit MultiHostsVM")
+        print("deinit CoHostingVM")
         #endif
     }
 }
 
 // MARK: Owner
-extension MultiHostsVM {
+extension CoHostingVM {
     func sendInvitation(to user: LiveRole, on seatIndex: Int, fail: ErrorCompletion = nil) {
         request(seatIndex: seatIndex,
                 type: 1,
@@ -150,7 +150,7 @@ extension MultiHostsVM {
 }
 
 // MARK: Broadcaster
-extension MultiHostsVM {
+extension CoHostingVM {
     func endBroadcasting(seatIndex: Int, user: LiveRole, success: Completion = nil, fail: ErrorCompletion = nil) {
         request(seatIndex: seatIndex,
                 type: 8,
@@ -165,7 +165,7 @@ extension MultiHostsVM {
 }
 
 // MARK: Audience
-extension MultiHostsVM {
+extension CoHostingVM {
     func sendApplication(by local: LiveRole, for seatIndex: Int, success: Completion = nil, fail: ErrorCompletion = nil) {
         request(seatIndex: seatIndex,
                 type: 2,
@@ -221,7 +221,7 @@ extension MultiHostsVM {
     }
 }
 
-private extension MultiHostsVM {
+private extension CoHostingVM {
     // type: 1.房主邀请 2.观众申请 3.房主拒绝 4.观众拒绝 5.房主同意观众申请 6.观众接受房主邀请 7.房主让主播下麦 8.主播下麦
     func request(seatIndex: Int, type: Int, userId: String, roomId: String, success: DicEXCompletion = nil, fail: ErrorCompletion) {
         let client = Center.shared().centerProvideRequestHelper()

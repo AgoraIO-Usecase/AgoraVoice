@@ -131,13 +131,13 @@ class UserListViewController: RxViewController {
     private var invitingUserListSubscribeOnMultiHosts: Disposable?
     
     let inviteUser = PublishRelay<LiveRole>()
-    let rejectApplicationOfUser = PublishRelay<MultiHostsVM.Application>()
-    let acceptApplicationOfUser = PublishRelay<MultiHostsVM.Application>()
+    let rejectApplicationOfUser = PublishRelay<CoHostingVM.Application>()
+    let acceptApplicationOfUser = PublishRelay<CoHostingVM.Application>()
     
     var showType: ShowType = .onlyUser
     
     var userListVM: LiveUserListVM!
-    var multiHostsVM: MultiHostsVM!
+    var coHostingVM: CoHostingVM!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -184,10 +184,10 @@ class UserListViewController: RxViewController {
             }.disposed(by: bag)
         case .onlyInvitationOfMultiHosts:
             tableViewBindWithUser(userListVM.audienceList).disposed(by: bag)
-            multiHostsVM.invitationByRejected.map { [unowned self] (_) -> [LiveRole] in
+            coHostingVM.invitationByRejected.map { [unowned self] (_) -> [LiveRole] in
                 return self.userListVM.audienceList.value
             }.bind(to: userListVM.audienceList).disposed(by: bag)
-            multiHostsVM.invitationTimeout.map { [unowned self] (_) -> [LiveRole] in
+            coHostingVM.invitationTimeout.map { [unowned self] (_) -> [LiveRole] in
                 return self.userListVM.audienceList.value
             }.bind(to: userListVM.audienceList).disposed(by: bag)
         case .multiHosts:
@@ -199,7 +199,7 @@ class UserListViewController: RxViewController {
                     }
                     
                     self.userListSubscribeOnMultiHosts = self.tableViewBindWithUser(self.userListVM.list)
-                    self.invitingUserListSubscribeOnMultiHosts = self.invitingUserList(self.multiHostsVM.invitingUserList)
+                    self.invitingUserListSubscribeOnMultiHosts = self.invitingUserList(self.coHostingVM.invitingUserList)
                     
                     self.userListSubscribeOnMultiHosts?.disposed(by: self.bag)
                     self.invitingUserListSubscribeOnMultiHosts?.disposed(by: self.bag)
@@ -232,7 +232,7 @@ private extension UserListViewController {
                         if self.showType == .multiHosts {
                             buttonState = .none
                         } else {
-                            for item in self.multiHostsVM.invitingUserList.value where user.info.userId == item.info.userId {
+                            for item in self.coHostingVM.invitingUserList.value where user.info.userId == item.info.userId {
                                 buttonState = .inviting
                                 break
                             }
@@ -261,7 +261,7 @@ private extension UserListViewController {
     }
     
     func tableViewBindWithApplicationsFromUser() -> Disposable {
-        let subscribe = multiHostsVM.applyingUserList.bind(to: tableView
+        let subscribe = coHostingVM.applyingUserList.bind(to: tableView
             .rx.items(cellIdentifier: "UserApplicationListCell",
                       cellType: UserApplicationListCell.self)) { [unowned self] (index, user, cell) in
                         cell.nameLabel.text = user.info.name
@@ -293,8 +293,8 @@ extension UserListViewController: UserApplicationListCellDelegate {
     func cell(_ cell: UserApplicationListCell, didTapAcceptButton: UIButton, on index: Int) {
         switch showType {
         case .multiHosts:
-            let user = multiHostsVM.applyingUserList.value[index]
-            guard let applicationList = multiHostsVM.applicationQueue.list as? [MultiHostsVM.Application] else {
+            let user = coHostingVM.applyingUserList.value[index]
+            guard let applicationList = coHostingVM.applicationQueue.list as? [CoHostingVM.Application] else {
                 return
             }
             
@@ -315,8 +315,8 @@ extension UserListViewController: UserApplicationListCellDelegate {
     func cell(_ cell: UserApplicationListCell, didTapRejectButton: UIButton, on index: Int) {
         switch showType {
         case .multiHosts:
-            let user = multiHostsVM.applyingUserList.value[index]
-            guard let applicationList = multiHostsVM.applicationQueue.list as? [MultiHostsVM.Application] else {
+            let user = coHostingVM.applyingUserList.value[index]
+            guard let applicationList = coHostingVM.applicationQueue.list as? [CoHostingVM.Application] else {
                 return
             }
             
