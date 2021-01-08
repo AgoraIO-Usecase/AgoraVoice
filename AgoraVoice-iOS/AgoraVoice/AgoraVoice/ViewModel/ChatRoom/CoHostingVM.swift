@@ -111,6 +111,16 @@ extension CoHostingVM {
                 roomId: room.roomId,
                 success: { [unowned self] (json) in
                     self.applicationQueue.remove(application)
+                    
+                    for item in self.applicationQueue.list {
+                        guard let temp = item as? Application,
+                              temp.seatIndex == application.seatIndex else {
+                            return
+                        }
+                        
+                        self.applicationQueue.remove(temp)
+                    }
+                    
                     if let success = success {
                         success()
                     }
@@ -185,7 +195,7 @@ extension CoHostingVM {
         
         guard let _ = tInvi else {
             if let fail = fail {
-                fail(AGEError.fail("invitation timeout"))
+                fail(AGEError.fail(ChatRoomLocalizable.invitationTimeout()))
             }
             return
         }
@@ -208,7 +218,7 @@ extension CoHostingVM {
         
         guard let _ = tInvi else {
             if let fail = fail {
-                fail(AGEError.fail("invitation timeout"))
+                fail(AGEError.fail(ChatRoomLocalizable.invitationTimeout()))
             }
             return
         }
@@ -226,7 +236,7 @@ private extension CoHostingVM {
     func request(seatIndex: Int, type: Int, userId: String, roomId: String, success: DicEXCompletion = nil, fail: ErrorCompletion) {
         let client = Center.shared().centerProvideRequestHelper()
         let url = URLGroup.multiHosts(userId: userId, roomId: roomId)
-        let task = ArRequestTask(event: ArRequestEvent(name: "multi-action: \(type)"),
+        let task = ArRequestTask(event: ArRequestEvent(name: "co-hosting-action: \(type)"),
                                type: .http(.post, url: url),
                                timeout: .medium,
                                header: ["token": Keys.UserToken],
@@ -239,13 +249,7 @@ private extension CoHostingVM {
             let code = try json.getIntValue(of: "code")
             
             if code == 1301006 {
-                var message: String
-                
-                if DeviceAssistant.Language.isChinese {
-                    message = "麦位上已有观众"
-                } else {
-                    message = "The seat has been taken up"
-                }
+                let message = ChatRoomLocalizable.thisSeatHasBeenTakenUp()
                 
                 strongSelf.fail.accept(message)
                 
@@ -267,19 +271,7 @@ private extension CoHostingVM {
             if error.code == nil {
                 strongSelf.fail.accept(NetworkLocalizable.lostConnectionRetry())
             } else {
-                switch type {
-                case 1: strongSelf.fail.accept("send invitation fail")
-                case 2: strongSelf.fail.accept("send application fail")
-                case 3: strongSelf.fail.accept("owner rejects application fail")
-                case 4: strongSelf.fail.accept("audience rejects invitation fail")
-                case 5: strongSelf.fail.accept("owner accepts application fail")
-                case 6: strongSelf.fail.accept("audience accepts invitation fail")
-                case 7: strongSelf.fail.accept("owner force broadcaster to end fail")
-                case 8: strongSelf.fail.accept("broadcaster end fail")
-                default:
-                    assert(false)
-                    break
-                }
+                strongSelf.fail.accept(ChatRoomLocalizable.coHostingActionFail())
             }
             
             if let fail = fail {
@@ -395,8 +387,18 @@ private extension CoHostingVM {
         
         invitationByAccepted.subscribe(onNext: { [unowned self] (invitaion) in
             self.invitationQueue.remove(invitaion)
+            
+            for item in self.applicationQueue.list {
+                guard let temp = item as? Application,
+                      temp.seatIndex == invitaion.seatIndex else {
+                    return
+                }
+                
+                self.applicationQueue.remove(temp)
+            }
         }).disposed(by: bag)
         
+        // Audience
         applicationByRejected.subscribe(onNext: { [unowned self] (application) in
             self.applicationQueue.remove(application)
         }).disposed(by: bag)
@@ -405,7 +407,6 @@ private extension CoHostingVM {
             self.applicationQueue.remove(application)
         }).disposed(by: bag)
         
-        //
         invitationQueue.queueChanged.subscribe(onNext: { [unowned self] (list) in
             guard let tList = list as? [Invitation] else {
                 return

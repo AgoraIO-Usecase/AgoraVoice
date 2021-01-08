@@ -224,6 +224,9 @@ class UserListViewController: RxViewController {
 
 private extension UserListViewController {
     func tableViewBindWithUser(_ list: BehaviorRelay<[LiveRole]>) -> Disposable {
+        tableView.delegate = nil
+        tableView.dataSource = nil
+        
         let subscribe = list.bind(to: tableView
             .rx.items(cellIdentifier: "UserInvitationListCell",
                       cellType: UserInvitationListCell.self)) { [unowned self] (index, user, cell) in
@@ -261,6 +264,9 @@ private extension UserListViewController {
     }
     
     func tableViewBindWithApplicationsFromUser() -> Disposable {
+        tableView.delegate = nil
+        tableView.dataSource = nil
+        
         let subscribe = coHostingVM.applyingUserList.bind(to: tableView
             .rx.items(cellIdentifier: "UserApplicationListCell",
                       cellType: UserApplicationListCell.self)) { [unowned self] (index, user, cell) in

@@ -291,8 +291,8 @@ private extension ChatRoomViewController {
             let message = ChatRoomLocalizable.doYouRejectApplication(from: name)
             
             self.showAlert(message: message,
-                           action1: NSLocalizedString("Cancel"),
-                           action2: NSLocalizedString("Confirm"),
+                           action1: NSLocalizedString("No"),
+                           action2: NSLocalizedString("Yes"),
                            handler2: { [unowned self] (_) in
                             self.coHostingVM.reject(application: application)
                            })
@@ -305,8 +305,8 @@ private extension ChatRoomViewController {
             let message = ChatRoomLocalizable.doYouAcceptApplication(from: name)
             
             self.showAlert(message: message,
-                           action1: NSLocalizedString("Cancel"),
-                           action2: NSLocalizedString("Confirm"),
+                           action1: NSLocalizedString("No"),
+                           action2: NSLocalizedString("Yes"),
                            handler2: { [unowned self] (_) in
                             self.coHostingVM.accept(application: application)
                            })
@@ -514,10 +514,10 @@ private extension ChatRoomViewController {
         
         switch command {
         case .block:
-            message = ChatRoomLocalizable.openSeat()
-        case .unblock:
             title = ChatRoomLocalizable.closeSeatTitle()
             message = ChatRoomLocalizable.closeSeatDescription()
+        case .unblock:
+            message = ChatRoomLocalizable.openSeat()
         default:
             assert(false)
             return
@@ -540,11 +540,14 @@ private extension ChatRoomViewController {
         self.presentInvitationList { [unowned self] (user) in
             self.hiddenMaskView()
             
+            let action1Title = DeviceAssistant.Language.isChinese ? NSLocalizedString("No") : NSLocalizedString("Cancel")
+            let action2Title = DeviceAssistant.Language.isChinese ? NSLocalizedString("Yes") : NSLocalizedString("Confirm")
+            
             let message = ChatRoomLocalizable.sendInvitation(to: user.info.name)
             
             self.showAlert(message: message,
-                           action1: NSLocalizedString("NO"),
-                           action2: NSLocalizedString("YES"),
+                           action1: action1Title,
+                           action2: action2Title,
                            handler2: { [unowned self] (_) in
                             self.coHostingVM.sendInvitation(to: user,
                                                              on: seatCommands.seat.index)

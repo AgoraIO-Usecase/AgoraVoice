@@ -20,17 +20,17 @@ class LiveTypeLocalizable: NSObject {
     
     static func suggestUpgradeApp() -> String {
         if DeviceAssistant.Language.isChinese {
-            return "你可以升级一下应用"
+            return "建议升级应用"
         } else {
-            return "You can upgrade application"
+            return "Check the new version"
         }
     }
     
     static func mustUpgrateApp() -> String {
         if DeviceAssistant.Language.isChinese {
-            return "必须要升级应用才能继续使用"
+            return "必须要升级应用才可继续使用"
         } else {
-            return "You must upgrade application"
+            return "Please update the app"
         }
     }
 }
@@ -180,7 +180,7 @@ class LiveListLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "加入房间失败"
         } else {
-            return "Join channel fail"
+            return "Fails to join the room"
         }
     }
     
@@ -215,7 +215,7 @@ class CreateLiveLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "创建房间失败"
         } else {
-            return "Create channel fail"
+            return "Fails to create a room"
         }
     }
     
@@ -223,7 +223,7 @@ class CreateLiveLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "加入房间失败"
         } else {
-            return "Join channel fail"
+            return "Fails to join the room"
         }
     }
     
@@ -330,7 +330,7 @@ class LiveVCLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "发送聊天消息失败"
         } else {
-            return "send chat message fail"
+            return "Fails to send the text message"
         }
     }
     
@@ -338,7 +338,7 @@ class LiveVCLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "赠送礼物失败"
         } else {
-            return "give gift fail"
+            return "Fails the send the gift"
         }
     }
     
@@ -392,7 +392,7 @@ class LiveVCLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "在线用户"
         } else {
-            return "Online user"
+            return "Users"
         }
     }
     
@@ -400,7 +400,7 @@ class LiveVCLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "全部"
         } else {
-            return "All users"
+            return "All"
         }
     }
 }
@@ -567,16 +567,24 @@ class ChatRoomLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "邀请超时"
         } else {
-            return "Invitation timeout"
+            return "Request timeout"
+        }
+    }
+    
+    static func thisSeatHasBeenTakenUp() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "麦位已经被占用"
+        } else {
+            return "Seat is occupied"
         }
     }
     
     // Broadcaster
     static func ownerForcedYouToBecomeAudience() -> String {
         if DeviceAssistant.Language.isChinese {
-            return "房主强制你下麦"
+            return "您已被下麦"
         } else {
-            return "Owner forced you to stop co-hosting"
+            return "The host changes your role to audience"
         }
     }
     
@@ -631,9 +639,9 @@ class ChatRoomLocalizable: NSObject {
     
     static func doYouAgreeToBecomeHost(owner: String) -> String {
         if DeviceAssistant.Language.isChinese {
-            return "\(owner)邀请您上麦，是否接受"
+            return "\(owner)邀请您上麦，是否接受？"
         } else {
-            return "Do you agree to become a host?"
+            return "Do you accept the invitation to become a co-host??"
         }
     }
     
@@ -642,7 +650,7 @@ class ChatRoomLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "上麦"
         } else {
-            return "start co-hosting"
+            return "becomes a co-host"
         }
     }
     
@@ -650,7 +658,7 @@ class ChatRoomLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "下麦"
         } else {
-            return "stop co-hosting"
+            return "becomes an audience"
         }
     }
     
@@ -658,7 +666,15 @@ class ChatRoomLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "申请上麦"
         } else {
-            return "Application list"
+            return "Request for co-hosting"
+        }
+    }
+    
+    static func coHostingActionFail() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "操作失败"
+        } else {
+            return "Operation fails"
         }
     }
 }

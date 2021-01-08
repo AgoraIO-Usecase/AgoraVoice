@@ -1121,20 +1121,20 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AEImageLabelCell" id="X87-dY-6ud" customClass="AEImageLabelCell" customModule="AgoraVoice" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="43" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="BfS-4Y-RSW">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="43" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Tap-ow-fFA">
-                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="75"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="43" height="75"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="75" id="8Qt-sW-mbJ"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ol-61-Mf0">
-                                                    <rect key="frame" x="48.5" y="107.5" width="31" height="14.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ol-61-Mf0">
+                                                    <rect key="frame" x="6" y="107.5" width="31" height="14.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1145,10 +1145,12 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Tap-ow-fFA" firstAttribute="top" secondItem="BfS-4Y-RSW" secondAttribute="top" id="01S-qB-91R"/>
+                                                <constraint firstAttribute="trailing" secondItem="7ol-61-Mf0" secondAttribute="trailing" constant="6" id="CQz-yJ-qzZ"/>
                                                 <constraint firstItem="7ol-61-Mf0" firstAttribute="centerX" secondItem="BfS-4Y-RSW" secondAttribute="centerX" id="FV1-dn-yl7"/>
                                                 <constraint firstAttribute="trailing" secondItem="Tap-ow-fFA" secondAttribute="trailing" id="PzN-H4-lTX"/>
                                                 <constraint firstItem="Tap-ow-fFA" firstAttribute="leading" secondItem="BfS-4Y-RSW" secondAttribute="leading" id="Un7-xr-D1O"/>
                                                 <constraint firstAttribute="bottom" secondItem="7ol-61-Mf0" secondAttribute="bottom" constant="6" id="XIH-24-M9a"/>
+                                                <constraint firstItem="7ol-61-Mf0" firstAttribute="leading" secondItem="BfS-4Y-RSW" secondAttribute="leading" constant="6" id="XaF-bP-qdo"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <connections>
@@ -1157,14 +1159,14 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AELabelCell" id="KJs-Wd-h91" customClass="AELabelCell" customModule="AgoraVoice" customModuleProvider="target">
-                                        <rect key="frame" x="143" y="0.0" width="128" height="128"/>
+                                        <rect key="frame" x="53" y="0.0" width="47.5" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="tMz-5U-IQH">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="47.5" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vAx-fd-7oY">
-                                                    <rect key="frame" x="46.5" y="55.5" width="35.5" height="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vAx-fd-7oY">
+                                                    <rect key="frame" x="6" y="55.5" width="35.5" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1174,7 +1176,9 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="vAx-fd-7oY" firstAttribute="leading" secondItem="tMz-5U-IQH" secondAttribute="leading" constant="6" id="GJJ-yE-2hh"/>
                                                 <constraint firstItem="vAx-fd-7oY" firstAttribute="centerY" secondItem="tMz-5U-IQH" secondAttribute="centerY" id="abm-vr-q0l"/>
+                                                <constraint firstAttribute="trailing" secondItem="vAx-fd-7oY" secondAttribute="trailing" constant="6" id="f7i-EJ-P1o"/>
                                                 <constraint firstItem="vAx-fd-7oY" firstAttribute="centerX" secondItem="tMz-5U-IQH" secondAttribute="centerX" id="px6-io-APY"/>
                                             </constraints>
                                         </collectionViewCellContentView>

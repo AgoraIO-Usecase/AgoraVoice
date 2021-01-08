@@ -124,7 +124,7 @@ private extension CreateLiveViewController {
         
         startButton.rx.tap.subscribe(onNext: { [unowned self] in
             guard let title = self.nameTextField.text, title.count > 0 else {
-                self.showAlert(CreateLiveLocalizable.channelNameCannotBebBlank())
+                self.showTextToast(text: CreateLiveLocalizable.channelNameCannotBebBlank())
                 return
             }
             

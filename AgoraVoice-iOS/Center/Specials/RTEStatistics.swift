@@ -110,7 +110,7 @@ class RTEStatisticLocalizable: NSObject {
     // Audio rx
     static func audioRxBitrate() -> String {
         if DeviceAssistant.Language.isChinese {
-            return "音频下行丢包率"
+            return "音频下行码率"
         } else {
             return "Audio rx bitrate"
         }
@@ -128,7 +128,7 @@ class RTEStatisticLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "延迟"
         } else {
-            return "delay"
+            return "Delay"
         }
     }
 }

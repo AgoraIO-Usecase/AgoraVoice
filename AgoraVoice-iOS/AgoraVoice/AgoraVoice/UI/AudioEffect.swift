@@ -104,9 +104,9 @@ extension ChatOfBelCanto {
     
     var description: String {
         switch self {
-        case .maleMagnetic:   return DeviceAssistant.Language.isChinese ? "磁性" : "Magnetic"
-        case .femaleFresh:    return DeviceAssistant.Language.isChinese ? "清新" : "Fresh"
-        case .femaleVitality: return DeviceAssistant.Language.isChinese ? "活力" : "Vitality"
+        case .maleMagnetic:   return DeviceAssistant.Language.isChinese ? "磁性(男)" : "Magnetic(Male)"
+        case .femaleFresh:    return DeviceAssistant.Language.isChinese ? "清新(女)" : "Fresh(Female)"
+        case .femaleVitality: return DeviceAssistant.Language.isChinese ? "活力(女)" : "Vitality(Female)"
         case .disable:        fatalError()
         }
     }

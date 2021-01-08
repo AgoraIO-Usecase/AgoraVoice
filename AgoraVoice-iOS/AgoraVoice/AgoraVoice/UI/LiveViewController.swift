@@ -149,7 +149,7 @@ extension LiveViewController {
             let owner = self.liveSession.room.value.owner
             
             let chat = Chat(name: userGift.userName,
-                            text: LiveVCLocalizable.sendGift(receiver: owner.info.name),
+                            text: " " + LiveVCLocalizable.sendGift(receiver: owner.info.name),
                             image: userGift.gift.image,
                             widthLimit: self.chatWidthLimit)
             self.chatVM.newMessages([chat])

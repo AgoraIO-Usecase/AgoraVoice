@@ -14,6 +14,11 @@ class AEImageLabelCell: RxCollectionViewCell {
     @IBOutlet weak var tagImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        nameLabel.adjustsFontSizeToFitWidth = true
+    }
+    
     var isSelectedNow: Bool = false {
         didSet {
             if isSelectedNow {
@@ -37,6 +42,11 @@ class AEImageLabelCell: RxCollectionViewCell {
 
 class AELabelCell: RxCollectionViewCell {
     @IBOutlet weak var nameLabel: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        nameLabel.adjustsFontSizeToFitWidth = true
+    }
     
     var isSelectedNow: Bool = false {
         didSet {
