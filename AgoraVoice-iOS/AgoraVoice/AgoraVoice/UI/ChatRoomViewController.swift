@@ -460,8 +460,8 @@ private extension ChatRoomViewController {
             let message = ChatRoomLocalizable.doYouAgreeToBecomeHost(owner: user)
             
             self.showAlert(message: message,
-                           action1: NSLocalizedString("Reject"),
-                           action2: NSLocalizedString("Confirm"),
+                           action1: NSLocalizedString("No"),
+                           action2: NSLocalizedString("Yes"),
                            handler1: { [unowned self] (_) in
                             self.coHostingVM.reject(invitation: invitation)
             }) { [unowned self] (_) in

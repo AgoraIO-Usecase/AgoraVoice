@@ -88,7 +88,7 @@ class CoHostingVM: CustomObserver {
 
 // MARK: Owner
 extension CoHostingVM {
-    func sendInvitation(to user: LiveRole, on seatIndex: Int, fail: ErrorCompletion = nil) {
+    func sendInvitation(to user: LiveRole, on seatIndex: Int) {
         request(seatIndex: seatIndex,
                 type: 1,
                 userId: "\(user.info.userId)",
@@ -101,10 +101,10 @@ extension CoHostingVM {
                                                 initiator: self.room.owner,
                                                 receiver: user)
                     self.invitationQueue.append(invitation)
-                }, fail: fail)
+                }, fail: nil)
     }
     
-    func accept(application: Application, success: Completion = nil, fail: ErrorCompletion = nil) {
+    func accept(application: Application, success: Completion = nil) {
         request(seatIndex: application.seatIndex,
                 type: 5,
                 userId: "\(application.initiator.info.userId)",
@@ -129,54 +129,44 @@ extension CoHostingVM {
                         cError.code == 1301006 {
                         self.applicationQueue.remove(application)
                     }
-                    
-                    if let fail = fail {
-                        fail(error)
-                    }
                 }
     }
     
-    func reject(application: Application, fail: ErrorCompletion = nil) {
+    func reject(application: Application) {
         request(seatIndex: application.seatIndex,
                 type: 3,
                 userId: "\(application.initiator.info.userId)",
                 roomId: room.roomId,
                 success: { [unowned self] (json) in
                     self.applicationQueue.remove(application)
-                }, fail: fail)
+                }, fail: nil)
     }
     
-    func forceEndWith(user: LiveRole, on seatIndex: Int, success: Completion = nil, fail: ErrorCompletion = nil) {
+    func forceEndWith(user: LiveRole, on seatIndex: Int) {
         request(seatIndex: seatIndex,
                 type: 7,
                 userId: "\(user.info.userId)",
                 roomId: room.roomId,
-                success: { (_) in
-                    if let success = success {
-                        success()
-                    }
-                }, fail: fail)
+                success: nil,
+                fail: nil)
     }
 }
 
 // MARK: Broadcaster
 extension CoHostingVM {
-    func endBroadcasting(seatIndex: Int, user: LiveRole, success: Completion = nil, fail: ErrorCompletion = nil) {
+    func endBroadcasting(seatIndex: Int, user: LiveRole) {
         request(seatIndex: seatIndex,
                 type: 8,
                 userId: "\(user.info.userId)",
                 roomId: room.roomId,
-                success: { (_) in
-                    if let success = success {
-                        success()
-                    }
-                }, fail: fail)
+                success: nil,
+                fail: nil)
     }
 }
 
 // MARK: Audience
 extension CoHostingVM {
-    func sendApplication(by local: LiveRole, for seatIndex: Int, success: Completion = nil, fail: ErrorCompletion = nil) {
+    func sendApplication(by local: LiveRole, for seatIndex: Int, success: Completion = nil) {
         request(seatIndex: seatIndex,
                 type: 2,
                 userId: "\(room.owner.info.userId)",
@@ -185,18 +175,16 @@ extension CoHostingVM {
                     if let success = success {
                         success()
                     }
-                }, fail: fail)
+                }, fail: nil)
     }
     
-    func accept(invitation: Invitation, success: Completion = nil, fail: ErrorCompletion = nil) {
+    func accept(invitation: Invitation) {
         let tInvi = invitationQueue.list.first { (item) -> Bool in
             return item.id == invitation.id
         }
         
         guard let _ = tInvi else {
-            if let fail = fail {
-                fail(AGEError.fail(ChatRoomLocalizable.invitationTimeout()))
-            }
+            fail.accept(ChatRoomLocalizable.invitationTimeout())
             return
         }
         
@@ -204,22 +192,17 @@ extension CoHostingVM {
                 type: 6,
                 userId: "\(invitation.initiator.info.userId)",
                 roomId: room.roomId,
-                success: { (_) in
-                    if let success = success {
-                        success()
-                    }
-                }, fail: fail)
+                success: nil,
+                fail: nil)
     }
     
-    func reject(invitation: Invitation, fail: ErrorCompletion = nil) {
+    func reject(invitation: Invitation) {
         let tInvi = invitationQueue.list.first { (item) -> Bool in
             return item.id == invitation.id
         }
         
         guard let _ = tInvi else {
-            if let fail = fail {
-                fail(AGEError.fail(ChatRoomLocalizable.invitationTimeout()))
-            }
+            fail.accept(ChatRoomLocalizable.invitationTimeout())
             return
         }
         
@@ -227,7 +210,7 @@ extension CoHostingVM {
                 type: 4,
                 userId: "\(invitation.initiator.info.userId)",
                 roomId: room.roomId,
-                fail: fail)
+                fail: nil)
     }
 }
 
