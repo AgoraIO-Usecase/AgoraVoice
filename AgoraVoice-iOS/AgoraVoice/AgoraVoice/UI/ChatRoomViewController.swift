@@ -445,7 +445,7 @@ private extension ChatRoomViewController {
             guard owner == local else {
                 return
             }
-            self.showTextToast(text: ChatRoomLocalizable.invitationTimeout())
+            self.showErrorToast(ChatRoomLocalizable.invitationTimeout())
         }).disposed(by: bag)
         
         // broadcaster
@@ -629,8 +629,4 @@ private extension ChatRoomViewController {
                                                           })
                        })
     }
-}
-
-private extension ChatRoomViewController {
-    
 }

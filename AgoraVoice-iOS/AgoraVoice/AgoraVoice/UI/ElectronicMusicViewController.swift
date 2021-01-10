@@ -49,7 +49,11 @@ class ElectronicMusicViewController: RxViewController {
                                                             "Eb", "E", "F",
                                                             "Gb", "G", "Ab"])
     
-    private let selectedValueIndex = BehaviorRelay<Int>(value: 0)
+    private lazy var selectedValueIndex: BehaviorRelay<Int> = {
+        let index = audioEffectVM.selectedElectronicMusic.value.value - 1
+        let object = BehaviorRelay<Int>(value: index)
+        return object
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,7 +97,8 @@ class ElectronicMusicViewController: RxViewController {
         }.bind(to: segmentControl.rx.selectedSegmentIndex).disposed(by: bag)
         
         // collectionView
-        selectedValueIndex.accept(audioEffectVM.selectedElectronicMusic.value.value - 1)
+        let index = audioEffectVM.selectedElectronicMusic.value.value - 1
+        selectedValueIndex.accept(index)
 
         collectionView.rx.itemSelected.subscribe(onNext: { [unowned self] (index) in
             self.selectedValueIndex.accept(index.item)

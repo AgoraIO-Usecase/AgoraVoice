@@ -369,6 +369,40 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#0A0F17"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="svn-WR-yJa" customClass="AudioEffectPreView" customModule="AgoraVoice" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="139" width="414" height="723"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pic-coming soon" translatesAutoresizingMaskIntoConstraints="NO" id="aGn-qY-3q8">
+                                        <rect key="frame" x="129" y="358" width="156" height="156"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="156" id="7Bv-gC-tIo"/>
+                                            <constraint firstAttribute="height" constant="156" id="O9Z-es-QrL"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8kf-TI-6LM">
+                                        <rect key="frame" x="186" y="529" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="hexTextColor" value="#4D5D73"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="8kf-TI-6LM" firstAttribute="centerX" secondItem="svn-WR-yJa" secondAttribute="centerX" id="2fF-rC-OlO"/>
+                                    <constraint firstAttribute="bottom" secondItem="aGn-qY-3q8" secondAttribute="bottom" constant="209" id="48K-qz-vrd"/>
+                                    <constraint firstItem="aGn-qY-3q8" firstAttribute="centerX" secondItem="svn-WR-yJa" secondAttribute="centerX" id="4cq-td-EBU"/>
+                                    <constraint firstItem="8kf-TI-6LM" firstAttribute="top" secondItem="aGn-qY-3q8" secondAttribute="bottom" constant="15" id="ggi-lV-5lB"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#161D27"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="titleLabel" destination="8kf-TI-6LM" id="zks-tc-Bm2"/>
+                                </connections>
+                            </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6mv-Nk-toA">
                                 <rect key="frame" x="0.0" y="139" width="414" height="723"/>
                                 <connections>
@@ -391,13 +425,17 @@
                             <constraint firstItem="GEA-ku-dWR" firstAttribute="leading" secondItem="w79-om-Pgs" secondAttribute="leading" id="F2Q-FP-utt"/>
                             <constraint firstItem="w79-om-Pgs" firstAttribute="bottom" secondItem="6mv-Nk-toA" secondAttribute="bottom" id="Gdn-xY-rWh"/>
                             <constraint firstItem="Pzh-pl-Ec0" firstAttribute="centerX" secondItem="qQD-xZ-LzU" secondAttribute="centerX" id="KTl-dx-D3U"/>
+                            <constraint firstItem="svn-WR-yJa" firstAttribute="leading" secondItem="w79-om-Pgs" secondAttribute="leading" id="P8i-mR-8oq"/>
                             <constraint firstItem="uRm-ck-SZ8" firstAttribute="leading" secondItem="w79-om-Pgs" secondAttribute="leading" id="PCT-4X-faa"/>
                             <constraint firstItem="6mv-Nk-toA" firstAttribute="leading" secondItem="w79-om-Pgs" secondAttribute="leading" id="Tab-iL-Fdt"/>
                             <constraint firstItem="w79-om-Pgs" firstAttribute="trailing" secondItem="GEA-ku-dWR" secondAttribute="trailing" id="XMC-7Z-Cj6"/>
                             <constraint firstItem="uRm-ck-SZ8" firstAttribute="top" secondItem="Pzh-pl-Ec0" secondAttribute="bottom" constant="13" id="dgD-Zz-ZQb"/>
+                            <constraint firstItem="w79-om-Pgs" firstAttribute="trailing" secondItem="svn-WR-yJa" secondAttribute="trailing" id="eKH-R7-0fh"/>
                             <constraint firstItem="6mv-Nk-toA" firstAttribute="trailing" secondItem="w79-om-Pgs" secondAttribute="trailing" id="jEg-6c-yEI"/>
                             <constraint firstItem="Pzh-pl-Ec0" firstAttribute="top" secondItem="w79-om-Pgs" secondAttribute="top" constant="17" id="oc2-Yh-7eI"/>
                             <constraint firstItem="GEA-ku-dWR" firstAttribute="top" secondItem="uRm-ck-SZ8" secondAttribute="bottom" id="sfP-IL-24w"/>
+                            <constraint firstItem="svn-WR-yJa" firstAttribute="top" secondItem="uRm-ck-SZ8" secondAttribute="bottom" id="x8Z-jn-sO3"/>
+                            <constraint firstItem="w79-om-Pgs" firstAttribute="bottom" secondItem="svn-WR-yJa" secondAttribute="bottom" id="xWo-V5-QDs"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#161D27"/>
@@ -407,6 +445,7 @@
                     <connections>
                         <outlet property="aecollectionView" destination="6mv-Nk-toA" id="mUA-e0-R1d"/>
                         <outlet property="electronicMusicView" destination="GEA-ku-dWR" id="sIy-JM-clH"/>
+                        <outlet property="preView" destination="svn-WR-yJa" id="A7u-UZ-QUG"/>
                         <outlet property="tabView" destination="uRm-ck-SZ8" id="VH1-do-8be"/>
                         <outlet property="titleLabel" destination="Pzh-pl-Ec0" id="cAE-la-01w"/>
                         <segue destination="WUE-pd-blo" kind="show" identifier="ThreeDimensionalViewController" id="8yi-gh-a6x"/>
@@ -1407,6 +1446,7 @@
         <image name="icon-pause" width="30" height="30"/>
         <image name="icon-volume" width="32" height="32"/>
         <image name="logo-AgoraVoice" width="130" height="130"/>
+        <image name="pic-coming soon" width="157" height="156"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

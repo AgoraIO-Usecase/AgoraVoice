@@ -53,8 +53,9 @@ class TextToast: ToastView {
         
         if let text = label.text {
             let font = UIFont.systemFont(ofSize: 14)
-            let width: CGFloat = (labelSize.width == 0) ? CGFloat(MAXFLOAT) : (labelSize.width - contentEdgeInsets.left - contentEdgeInsets.right)
-            let height: CGFloat = (labelSize.height == 0) ? CGFloat(MAXFLOAT) : (labelSize.height - contentEdgeInsets.top - contentEdgeInsets.bottom)
+            
+            let width: CGFloat = UIScreen.main.bounds.width - contentEdgeInsets.left - contentEdgeInsets.right
+            let height: CGFloat = CGFloat(MAXFLOAT)
             
             let newSize = text.size(font: font,
                                     drawRange: CGSize(width: width, height: height))
@@ -137,8 +138,9 @@ class TagImageTextToast: ToastView {
         
         if let text = label.text {
             let font = UIFont.systemFont(ofSize: 14)
-            let width: CGFloat = (labelSize.width == 0) ? CGFloat(MAXFLOAT) : (labelSize.width - contentEdgeInsets.left - contentEdgeInsets.right - space)
-            let height: CGFloat = (labelSize.height == 0) ? CGFloat(MAXFLOAT) : (labelSize.height - contentEdgeInsets.top - contentEdgeInsets.bottom)
+            
+            let width: CGFloat = UIScreen.main.bounds.width - contentEdgeInsets.left - contentEdgeInsets.right - (space * 5)
+            let height: CGFloat = CGFloat(MAXFLOAT)
             
             let newSize = text.size(font: font,
                                     drawRange: CGSize(width: width, height: height))

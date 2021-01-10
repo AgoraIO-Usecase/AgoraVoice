@@ -478,6 +478,14 @@ class AudioEffectsLocalizable: NSObject {
             return "Japenese-Pantatonic"
         }
     }
+    
+    static func comingSoon() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "即将发布"
+        } else {
+            return "Coming soon"
+        }
+    }
 }
 
 // MARK: - ChatRoomLocalizable
@@ -641,7 +649,7 @@ class ChatRoomLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "\(owner)邀请您上麦，是否接受？"
         } else {
-            return "Do you accept the invitation to become a co-host??"
+            return "Do you accept the invitation to become a co-host?"
         }
     }
     

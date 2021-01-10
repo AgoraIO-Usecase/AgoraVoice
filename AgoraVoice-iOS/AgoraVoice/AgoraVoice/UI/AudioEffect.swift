@@ -41,19 +41,21 @@ enum BelCantoType {
 }
 
 enum SoundEffectType {
-    case space, role, musciGenre, electronicMusic
+    case space, voiceChangerEffect, styleTransformation, pitchCorrection, magicTone
     
     static var list = BehaviorRelay<[SoundEffectType]>(value: [.space,
-                                                               .role,
-                                                               .musciGenre,
-                                                               .electronicMusic])
+                                                               .voiceChangerEffect,
+                                                               .styleTransformation,
+                                                               .pitchCorrection,
+                                                               .magicTone])
     
     var description: String {
         switch self {
-        case .space:           return DeviceAssistant.Language.isChinese ? "空间塑造" : "Room acoustics"
-        case .role:            return DeviceAssistant.Language.isChinese ? "变声音效" : "Voice changer effect"
-        case .musciGenre:      return DeviceAssistant.Language.isChinese ? "曲风音效" : "Style transformation"
-        case .electronicMusic: return DeviceAssistant.Language.isChinese ? "电音音效" : "Pitch correction"
+        case .space:               return DeviceAssistant.Language.isChinese ? "空间塑造" : "Room acoustics"
+        case .voiceChangerEffect:  return DeviceAssistant.Language.isChinese ? "变声音效" : "Voice changer effect"
+        case .styleTransformation: return DeviceAssistant.Language.isChinese ? "曲风音效" : "Style transformation"
+        case .pitchCorrection:     return DeviceAssistant.Language.isChinese ? "电音音效" : "Pitch correction"
+        case .magicTone:           return DeviceAssistant.Language.isChinese ? "魔力音阶" : "Magic tone"
         }
     }
 }

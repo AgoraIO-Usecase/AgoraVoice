@@ -10,12 +10,22 @@ import UIKit
 import RxSwift
 import RxRelay
 
+class AudioEffectPreView: UIView {
+    @IBOutlet weak var titleLabel: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        titleLabel.text = AudioEffectsLocalizable.comingSoon()
+    }
+}
+
 class AudioEffectViewController: RxViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tabView: TabSelectView!
     
     @IBOutlet weak var aecollectionView: UIView!
     @IBOutlet weak var electronicMusicView: UIView!
+    @IBOutlet weak var preView: AudioEffectPreView!
     
     weak var collectionVC: AECollectionViewController?
     
@@ -119,12 +129,19 @@ private extension AudioEffectViewController {
         
         // special for eletronic music
         vc.selectedSoundEffectType.subscribe(onNext: { [unowned self] (type) in
-            if type == .electronicMusic {
+            switch type {
+            case .pitchCorrection:
                 self.aecollectionView.isHidden = true
                 self.electronicMusicView.isHidden = false
-            } else {
+                self.preView.isHidden = true
+            case .magicTone:
+                self.aecollectionView.isHidden = true
+                self.electronicMusicView.isHidden = true
+                self.preView.isHidden = false
+            default:
                 self.aecollectionView.isHidden = false
                 self.electronicMusicView.isHidden = true
+                self.preView.isHidden = true
             }
         }).disposed(by: vc.bag)
     }

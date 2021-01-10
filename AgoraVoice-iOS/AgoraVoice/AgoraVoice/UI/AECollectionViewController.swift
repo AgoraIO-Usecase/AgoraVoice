@@ -286,7 +286,7 @@ private extension AECollectionViewController {
             lastSubscribes.append(listSubscribe)
             lastSubscribes.append(selectSubscribe)
             lastSubscribes.append(threeDimensionSubscribe)
-        case .role:
+        case .voiceChangerEffect:
             let listSubscribe = TimbreRole.list.bind(to: collectionView.rx.items(cellIdentifier: "AEImageLabelCell",
                                                                                  cellType: AEImageLabelCell.self)) { [unowned self] (index, item, cell) in
                                                                                     cell.tagImageView.image = item.image
@@ -306,7 +306,7 @@ private extension AECollectionViewController {
             
             lastSubscribes.append(listSubscribe)
             lastSubscribes.append(selectSubscribe)
-        case .musciGenre:
+        case .styleTransformation:
             let listSubscribe = MusicGenre.list.bind(to: collectionView.rx.items(cellIdentifier: "AEImageLabelCell",
                                                                                  cellType: AEImageLabelCell.self)) { [unowned self] (index, item, cell) in
                                                                                     cell.tagImageView.image = item.image
@@ -326,7 +326,7 @@ private extension AECollectionViewController {
             
             lastSubscribes.append(listSubscribe)
             lastSubscribes.append(selectSubscribe)
-        case .electronicMusic:
+        case .pitchCorrection, .magicTone:
             break
         }
     }

@@ -184,10 +184,7 @@ class UserListViewController: RxViewController {
             }.disposed(by: bag)
         case .onlyInvitationOfMultiHosts:
             tableViewBindWithUser(userListVM.audienceList).disposed(by: bag)
-            coHostingVM.invitationByRejected.map { [unowned self] (_) -> [LiveRole] in
-                return self.userListVM.audienceList.value
-            }.bind(to: userListVM.audienceList).disposed(by: bag)
-            coHostingVM.invitationTimeout.map { [unowned self] (_) -> [LiveRole] in
+            coHostingVM.invitationQueue.queueChanged.map { [unowned self] (_) -> [LiveRole] in
                 return self.userListVM.audienceList.value
             }.bind(to: userListVM.audienceList).disposed(by: bag)
         case .multiHosts:

@@ -111,7 +111,7 @@ class GiftVM: CustomObserver {
                                parameters: ["giftId": gift.rawValue, "count": 1])
         
         client.request(task: task) { [unowned self] (_) -> ArRetryOptions in
-            self.fail.accept("give a gift fail")
+            self.fail.accept(LiveVCLocalizable.giveGiftFail())
             return .resign
         }
     }

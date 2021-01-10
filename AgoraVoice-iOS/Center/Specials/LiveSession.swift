@@ -720,6 +720,7 @@ extension LiveSession: AgoraRteLocalUserDelegate {
             updateStream(rteStream: event.modifiedStream)
         case .removed:
             localStream.accept(nil)
+            removeStream(rteStream: event.modifiedStream)
         @unknown default:
             assert(false)
             break

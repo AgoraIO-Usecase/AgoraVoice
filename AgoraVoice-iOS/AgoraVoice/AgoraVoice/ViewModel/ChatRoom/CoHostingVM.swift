@@ -325,7 +325,11 @@ private extension CoHostingVM {
                                                 initiator: initiator,
                                                 receiver: receiver)
                     self.invitationByAccepted.accept(invitation)
-
+                
+                // Broadcastor
+                case 7:
+                    self.receivedEndBroadcasting.accept(())
+                    
                 // Audience
                 case  1: // receivedInvitation
                     let initiator = fromUser
