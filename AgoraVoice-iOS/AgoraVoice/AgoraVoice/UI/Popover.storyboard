@@ -369,7 +369,7 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#0A0F17"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="svn-WR-yJa" customClass="AudioEffectPreView" customModule="AgoraVoice" customModuleProvider="target">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="svn-WR-yJa" customClass="AudioEffectPreView" customModule="AgoraVoice" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="139" width="414" height="723"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pic-coming soon" translatesAutoresizingMaskIntoConstraints="NO" id="aGn-qY-3q8">
