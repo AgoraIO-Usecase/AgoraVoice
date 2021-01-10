@@ -19,7 +19,10 @@ class CoHostingVM: CustomObserver {
         var receiver: LiveRole
         var timestamp: TimeInterval
         
-        init(id: String, seatIndex: Int, initiator: LiveRole, receiver: LiveRole) {
+        init(id: String,
+             seatIndex: Int,
+             initiator: LiveRole,
+             receiver: LiveRole) {
             self.id = id
             self.seatIndex = seatIndex
             self.initiator = initiator
@@ -35,7 +38,10 @@ class CoHostingVM: CustomObserver {
         var receiver: LiveRole
         var timestamp: TimeInterval
         
-        init(id: String, seatIndex: Int, initiator: LiveRole, receiver: LiveRole) {
+        init(id: String,
+             seatIndex: Int,
+             initiator: LiveRole,
+             receiver: LiveRole) {
             self.id = id
             self.seatIndex = seatIndex
             self.initiator = initiator
@@ -60,7 +66,7 @@ class CoHostingVM: CustomObserver {
     let invitationTimeout = PublishRelay<[Invitation]>()
     
     // Broadcaster
-    var receivedEndBroadcasting = PublishRelay<()>()
+    var receivedEndBroadcasting = PublishRelay<(LiveRole)>()
     
     // Audience
     var receivedInvitation = PublishRelay<Invitation>()
@@ -267,6 +273,43 @@ private extension CoHostingVM {
     func observe() {
         message.subscribe(onNext: { [unowned self] (json) in
             do {
+                guard let cause = try? json.getDictionaryValue(of: "cause"),
+                      let cmd = try? cause.getIntValue(of: "cmd"),
+                      cmd == 2,
+                      let data =  try? cause.getDictionaryValue(of: "data")  else {
+                    return
+                }
+                
+                let type = try data.getIntValue(of: "type")
+                let userDic = try data.getDictionaryValue(of: "user")
+                let user = try LiveRoleItem(dic: userDic)
+                
+                let ownerAcceptedAudienceRequest = 5
+                let audienceAcceptedOwnerInvitation = 6
+                let ownerForcedYouBecomeAudience = 7
+                let broadcastorStoppedCoHosting = 8
+                
+                switch type {
+                case ownerForcedYouBecomeAudience:
+                    self.receivedEndBroadcasting.accept((user))
+                    self.broadcasterBecameAudience.accept((user))
+                case ownerAcceptedAudienceRequest, audienceAcceptedOwnerInvitation:
+                    self.audienceBecameBroadcaster.accept((user))
+                case broadcastorStoppedCoHosting:
+                    self.broadcasterBecameAudience.accept((user))
+                default:
+                    break
+                }
+                
+            } catch {
+                self.log(error: error)
+            }
+            
+           print("~~~~~~~~~~~~ json: \(json)")
+        }).disposed(by: bag)
+        
+        message.subscribe(onNext: { [unowned self] (json) in
+            do {
                 guard let data = try? json.getDictionaryValue(of: "data"),
                       let payload = try? data.getDictionaryValue(of: "payload"),
                       let fromUserDic = try? data.getDictionaryValue(of: "fromUser") else {
@@ -326,10 +369,6 @@ private extension CoHostingVM {
                                                 receiver: receiver)
                     self.invitationByAccepted.accept(invitation)
                 
-                // Broadcastor
-                case 7:
-                    self.receivedEndBroadcasting.accept(())
-                    
                 // Audience
                 case  1: // receivedInvitation
                     let initiator = fromUser

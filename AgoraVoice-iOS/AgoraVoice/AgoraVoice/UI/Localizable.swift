@@ -551,7 +551,7 @@ class ChatRoomLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "你是否要拒绝\(from)的上麦申请？"
         } else {
-            return "Do you reject \(from)'s application?"
+            return "Do you reject \(from)'s request?"
         }
     }
     
@@ -559,7 +559,7 @@ class ChatRoomLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "你是否要接受\(from)的上麦申请？"
         } else {
-            return "Do you accept \(from)'s application?"
+            return "Do you accept \(from)'s request?"
         }
     }
     

@@ -67,7 +67,7 @@ class LiveSeatView: RxView {
             case .block:                    return DeviceAssistant.Language.isChinese ? "封麦" : "Close"
             case .unblock:                  return DeviceAssistant.Language.isChinese ? "解封" : "Open"
             case .invite:                   return DeviceAssistant.Language.isChinese ? "邀请" : "Invite"
-            case .apply:                    return DeviceAssistant.Language.isChinese ? "申请" : "Apply"
+            case .apply:                    return DeviceAssistant.Language.isChinese ? "申请" : "Request"
             case .stopBroadcasting:         return DeviceAssistant.Language.isChinese ? "下麦" : "End"
             }
         }

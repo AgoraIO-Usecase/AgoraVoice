@@ -148,7 +148,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
         mediaDevice()
         syncLiveSessionInfo()
         
-        multiHosts()
+        coHosting()
         liveSeats()
     }
     
@@ -407,7 +407,7 @@ private extension ChatRoomViewController {
 
 // MARK: Multi broadcasters
 private extension ChatRoomViewController {
-    func multiHosts() {
+    func coHosting() {
         liveSession.customMessage.bind(to: coHostingVM.message).disposed(by: bag)
         liveSession.localRole.bind(to: coHostingVM.localRole).disposed(by: bag)
         
@@ -449,7 +449,11 @@ private extension ChatRoomViewController {
         }).disposed(by: bag)
         
         // broadcaster
-        coHostingVM.receivedEndBroadcasting.subscribe(onNext: { [unowned self] in
+        coHostingVM.receivedEndBroadcasting.subscribe(onNext: { [unowned self] (user) in
+            guard user.info == self.liveSession.localRole.value.info else {
+                return
+            }
+            
             let message = ChatRoomLocalizable.ownerForcedYouToBecomeAudience()
             self.showTextToast(text: message)
         }).disposed(by: bag)
@@ -481,7 +485,6 @@ private extension ChatRoomViewController {
                             widthLimit: self.chatWidthLimit)
             
             self.chatVM.newMessages([chat])
-            self.showTextToast(text: chat.content.string)
         }).disposed(by: bag)
         
         coHostingVM.broadcasterBecameAudience.subscribe(onNext: { [unowned self] (user) in
@@ -491,7 +494,6 @@ private extension ChatRoomViewController {
                             widthLimit: self.chatWidthLimit)
             
             self.chatVM.newMessages([chat])
-            self.showTextToast(text: chat.content.string)
         }).disposed(by: bag)
     }
     
