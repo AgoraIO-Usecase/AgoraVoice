@@ -473,6 +473,10 @@ private extension ChatRoomViewController {
             }
         }).disposed(by: bag)
         
+        coHostingVM.applicationByRejected.subscribe(onNext: { [unowned self] (_) in
+            self.showTextToast(text: ChatRoomLocalizable.ownerRejectedYourApplication())
+        }).disposed(by: bag)
+        
         coHostingVM.applicationByAccepted.subscribe(onNext: { [unowned self] (_) in
             self.hiddenMaskView()
         }).disposed(by: bag)

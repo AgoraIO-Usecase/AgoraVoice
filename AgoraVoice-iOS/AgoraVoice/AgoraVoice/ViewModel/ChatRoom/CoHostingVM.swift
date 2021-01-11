@@ -304,8 +304,6 @@ private extension CoHostingVM {
             } catch {
                 self.log(error: error)
             }
-            
-           print("~~~~~~~~~~~~ json: \(json)")
         }).disposed(by: bag)
         
         message.subscribe(onNext: { [unowned self] (json) in
