@@ -240,7 +240,7 @@
         <item>Ab</item>
     </string-array>
 
-    <string name="action_sheet_3d_voice_title">Enable 3D Voice</string>
+    <string name="action_sheet_3d_voice_title">3D Voice</string>
     <string name="action_sheet_3d_voice_description">Speed adjustment controls the speed of sound rotation (The fastest is 60 rpm, the slowest is 1 rpm) </string>
     <string name="action_sheet_3d_voice_text_min">Min</string>
     <string name="action_sheet_3d_voice_text_max">Max</string>

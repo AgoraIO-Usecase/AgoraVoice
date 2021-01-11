@@ -199,7 +199,7 @@
         <item>嘻哈</item>
     </string-array>
 
-    <string name="action_sheet_3d_voice_title">启用 3D人声</string>
+    <string name="action_sheet_3d_voice_title">3D人声</string>
     <string name="action_sheet_3d_voice_description">速度调节控制声音旋转速度 (最快1s转一圈，最慢60s转一圈) </string>
     <string name="action_sheet_3d_voice_text_min">最小</string>
     <string name="action_sheet_3d_voice_text_max">最大</string>
