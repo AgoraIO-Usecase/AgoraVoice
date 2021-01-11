@@ -81,7 +81,7 @@ class ElectronicMusicViewController: RxViewController {
             let value = (self.selectedValueIndex.value + 1)
             let music = ElectronicMusic(isAvailable: isOn, type: type, value: value)
             self.audioEffectVM.selectedElectronicMusic.accept(music)
-            self.collectionView.alpha = isOn ? 1.0 : 0.6
+            self.collectionView.alpha = isOn ? 1.0 : 0.5
         }).disposed(by: bag)
         
         // segmentControl
@@ -97,8 +97,7 @@ class ElectronicMusicViewController: RxViewController {
         }.bind(to: segmentControl.rx.selectedSegmentIndex).disposed(by: bag)
         
         // collectionView
-        let index = audioEffectVM.selectedElectronicMusic.value.value - 1
-        selectedValueIndex.accept(index)
+        collectionView.alpha = ableSwitch.isOn ? 1.0 : 0.5
 
         collectionView.rx.itemSelected.subscribe(onNext: { [unowned self] (index) in
             self.selectedValueIndex.accept(index.item)

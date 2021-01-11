@@ -19,20 +19,16 @@ class UserNameViewController: MaskViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let navigation = self.navigationController as? CSNavigationController else {
-            assert(false)
-            return
+        if let navigation = self.navigationController as? CSNavigationController {
+            navigation.navigationBar.isHidden = false
         }
-        navigation.navigationBar.isHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let navigation = self.navigationController as? CSNavigationController else {
-            assert(false)
-            return
+        if let navigation = self.navigationController as? CSNavigationController {
+            navigation.rightButton = nil
         }
-        navigation.rightButton = nil
     }
     
     override func viewDidLoad() {

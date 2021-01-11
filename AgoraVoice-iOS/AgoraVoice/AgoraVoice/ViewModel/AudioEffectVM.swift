@@ -148,6 +148,8 @@ private extension AudioEffectVM {
     }
     
     func disableElectronicMusic() {
-        self.selectedElectronicMusic.accept(ElectronicMusic(isAvailable: false, type: 1, value: 1))
+        var model = self.selectedElectronicMusic.value
+        model.isAvailable = false
+        self.selectedElectronicMusic.accept(model)
     }
 }

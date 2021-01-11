@@ -110,7 +110,7 @@ class LiveSession: RxObject {
     
     deinit {
         #if !RELEASE
-        print("Livesession deinit")
+        print("deinit Livesession")
         #endif
     }
 }

@@ -53,7 +53,7 @@ class OwnerHeadView: RxView {
     }
 }
 
-class ChatRoomViewController: MaskViewController, LiveViewController {
+class ChatRoomViewController: MaskLogViewController, LiveViewController {
     @IBOutlet weak var ownerView: OwnerHeadView!
     @IBOutlet weak var ownerLabel: UILabel!
     @IBOutlet weak var ownerLabelWidth: NSLayoutConstraint!
@@ -97,7 +97,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
     var backgroundVM: RoomBackgroundVM!
     var giftVM: GiftVM!
     
-    // multi hosts & live seats
+    // co-hosting & live seats
     var coHostingVM: CoHostingVM!
     var seatsVM: LiveSeatsVM!
     
@@ -107,12 +107,14 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let navigation = self.navigationController as? CSNavigationController else {
-            assert(false)
-            return
+        if let navigation = self.navigationController as? CSNavigationController {
+            navigation.navigationBar.isHidden = true
+        } else if let navigation = self.navigationController {
+            log(error: AGEError.fail("navigation is not CSNavigationController",
+                                     extra: "navigationController: \(type(of: navigation))"))
+        } else {
+            log(error: AGEError.fail("navigation is nil"))
         }
-        
-        navigation.navigationBar.isHidden = true
         
         // check live state
         let state = liveSession.state.value
@@ -126,9 +128,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
     }
     
     deinit {
-        #if !RELEASE
-        print("deinit ChatRoomViewController")
-        #endif
+        self.log(info: "deinit")
     }
     
     override func viewDidLoad() {
@@ -171,7 +171,7 @@ class ChatRoomViewController: MaskViewController, LiveViewController {
             
             seatsVM.seatList.filter { (list) -> Bool in
                 return (list.count != 0)
-            }.bind(to: vc.seats).disposed(by: bag)
+            }.bind(to: vc.seats).disposed(by: vc.bag)
         case "GiftAudienceViewController":
             let vc = segue.destination as! GiftAudienceViewController
             self.giftAudienceVC = vc

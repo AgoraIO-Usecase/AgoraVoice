@@ -51,12 +51,6 @@ class LiveUserListVM: CustomObserver {
         super.init()
         observe()
     }
-    
-    deinit {
-        #if !RELEASE
-        print("deinit LiveUserListVM")
-        #endif
-    }
 }
 
 private extension LiveUserListVM {

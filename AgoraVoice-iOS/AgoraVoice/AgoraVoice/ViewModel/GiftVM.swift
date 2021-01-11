@@ -94,12 +94,6 @@ class GiftVM: CustomObserver {
         observe()
     }
     
-    deinit {
-        #if !RELEASE
-        print("deinit GiftVM")
-        #endif
-    }
-    
     func present(gift: Gift, fail: Completion) {
         let client = Center.shared().centerProvideRequestHelper()
         let event = ArRequestEvent(name: "present-gift")

@@ -581,9 +581,9 @@ class ChatRoomLocalizable: NSObject {
     
     static func thisSeatHasBeenTakenUp() -> String {
         if DeviceAssistant.Language.isChinese {
-            return "麦位已经被占用"
+            return "麦位已经被占用，请选择其他麦位"
         } else {
-            return "Seat is occupied"
+            return "Seat is occupied. Please try another seat"
         }
     }
     

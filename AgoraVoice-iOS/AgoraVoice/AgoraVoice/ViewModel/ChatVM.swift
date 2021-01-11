@@ -46,12 +46,6 @@ class ChatVM: CustomObserver {
     var chatWidthLimit: CGFloat = UIScreen.main.bounds.width - 60
     var list = BehaviorRelay(value: [Chat]())
     
-    deinit {
-        #if !RELEASE
-        print("deinit ChatVM")
-        #endif
-    }
-    
     func newMessages(_ chats: [Chat]) {
         var new = self.list.value
         new.insert(contentsOf: chats, at: 0)

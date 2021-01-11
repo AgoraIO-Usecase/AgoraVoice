@@ -88,12 +88,9 @@ class LiveListViewController: MaskViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let navigation = self.navigationController as? CSNavigationController else {
-            assert(false)
-            return
+        if let navigation = self.navigationController as? CSNavigationController {
+            navigation.navigationBar.isHidden = false
         }
-        
-        navigation.navigationBar.isHidden = false
         
         perMinuterRefresh()
     }
