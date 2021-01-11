@@ -363,7 +363,7 @@ class LiveVCLocalizable: NSObject {
         if DeviceAssistant.Language.isChinese {
             return "请插上耳机"
         } else {
-            return "Plug in a headphone"
+            return "Plug in a headset"
         }
     }
     
