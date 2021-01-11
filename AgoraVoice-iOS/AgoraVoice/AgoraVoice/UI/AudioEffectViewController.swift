@@ -70,17 +70,21 @@ private extension AudioEffectViewController {
             for item in BelCantoType.list.value {
                 titles.append(item.description)
             }
-            tabView.titleSpace = 53
+            tabView.titleSpace = DeviceAssistant.Language.isChinese ? 53 : 24
+            tabView.alignment = DeviceAssistant.Language.isChinese ? .center : .left
         case .soundEffect:
             for item in SoundEffectType.list.value {
                 titles.append(item.description)
             }
             
             tabView.titleSpace = 24
+            tabView.alignment = .left
         }
         
-        tabView.titleTopSpace = 14
-        tabView.alignment = DeviceAssistant.Language.isChinese ? .center : .left
+        tabView.insets = UIEdgeInsets(top: 0,
+                                      left: 15,
+                                      bottom: 0,
+                                      right: 15)
         
         tabView.selectedTitle = TabSelectView.TitleProperty(color: UIColor(hexString: "#EEEEEE"),
                                                             font: UIFont.systemFont(ofSize: 14, weight: .medium))

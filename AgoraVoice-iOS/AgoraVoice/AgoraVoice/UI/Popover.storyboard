@@ -350,6 +350,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Csc-J0-pLG">
+                                <rect key="frame" x="0.0" y="91" width="414" height="55"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#0A0F17"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pzh-pl-Ec0">
                                 <rect key="frame" x="189.5" y="61" width="35.5" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -421,6 +428,7 @@
                         <constraints>
                             <constraint firstItem="6mv-Nk-toA" firstAttribute="top" secondItem="uRm-ck-SZ8" secondAttribute="bottom" id="2Bd-bL-vaD"/>
                             <constraint firstItem="w79-om-Pgs" firstAttribute="bottom" secondItem="GEA-ku-dWR" secondAttribute="bottom" id="Dsj-0A-Orj"/>
+                            <constraint firstItem="Csc-J0-pLG" firstAttribute="trailing" secondItem="w79-om-Pgs" secondAttribute="trailing" id="E9Q-lh-Xak"/>
                             <constraint firstItem="w79-om-Pgs" firstAttribute="trailing" secondItem="uRm-ck-SZ8" secondAttribute="trailing" id="Ei0-Wz-jsy"/>
                             <constraint firstItem="GEA-ku-dWR" firstAttribute="leading" secondItem="w79-om-Pgs" secondAttribute="leading" id="F2Q-FP-utt"/>
                             <constraint firstItem="w79-om-Pgs" firstAttribute="bottom" secondItem="6mv-Nk-toA" secondAttribute="bottom" id="Gdn-xY-rWh"/>
@@ -428,6 +436,8 @@
                             <constraint firstItem="svn-WR-yJa" firstAttribute="leading" secondItem="w79-om-Pgs" secondAttribute="leading" id="P8i-mR-8oq"/>
                             <constraint firstItem="uRm-ck-SZ8" firstAttribute="leading" secondItem="w79-om-Pgs" secondAttribute="leading" id="PCT-4X-faa"/>
                             <constraint firstItem="6mv-Nk-toA" firstAttribute="leading" secondItem="w79-om-Pgs" secondAttribute="leading" id="Tab-iL-Fdt"/>
+                            <constraint firstItem="Csc-J0-pLG" firstAttribute="height" secondItem="uRm-ck-SZ8" secondAttribute="height" multiplier="1.14583" id="Usx-1X-DcZ"/>
+                            <constraint firstItem="Csc-J0-pLG" firstAttribute="leading" secondItem="w79-om-Pgs" secondAttribute="leading" id="XGn-qT-GiL"/>
                             <constraint firstItem="w79-om-Pgs" firstAttribute="trailing" secondItem="GEA-ku-dWR" secondAttribute="trailing" id="XMC-7Z-Cj6"/>
                             <constraint firstItem="uRm-ck-SZ8" firstAttribute="top" secondItem="Pzh-pl-Ec0" secondAttribute="bottom" constant="13" id="dgD-Zz-ZQb"/>
                             <constraint firstItem="w79-om-Pgs" firstAttribute="trailing" secondItem="svn-WR-yJa" secondAttribute="trailing" id="eKH-R7-0fh"/>
@@ -436,6 +446,7 @@
                             <constraint firstItem="GEA-ku-dWR" firstAttribute="top" secondItem="uRm-ck-SZ8" secondAttribute="bottom" id="sfP-IL-24w"/>
                             <constraint firstItem="svn-WR-yJa" firstAttribute="top" secondItem="uRm-ck-SZ8" secondAttribute="bottom" id="x8Z-jn-sO3"/>
                             <constraint firstItem="w79-om-Pgs" firstAttribute="bottom" secondItem="svn-WR-yJa" secondAttribute="bottom" id="xWo-V5-QDs"/>
+                            <constraint firstItem="Csc-J0-pLG" firstAttribute="top" secondItem="Pzh-pl-Ec0" secondAttribute="bottom" constant="13" id="zqz-cf-8QT"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="string" keyPath="hexBackgroundColor" value="#161D27"/>
@@ -547,6 +558,8 @@
                         <outlet property="ableSwitch" destination="tJF-0t-9dE" id="F81-jt-YZL"/>
                         <outlet property="backButton" destination="WDW-RI-kb1" id="dXa-Ar-mtA"/>
                         <outlet property="descriptionLabel" destination="lUD-kG-O1n" id="ePO-vX-eAs"/>
+                        <outlet property="maxLabel" destination="s1Y-ho-6fh" id="Ndg-Z3-dBk"/>
+                        <outlet property="minLabel" destination="Irv-tw-qw6" id="ODf-dz-AmU"/>
                         <outlet property="slider" destination="aaQ-kt-Sjs" id="q0F-wF-ExZ"/>
                         <outlet property="titleLabel" destination="BAa-D7-P5A" id="qK4-pY-AQX"/>
                     </connections>

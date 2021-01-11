@@ -152,7 +152,8 @@ extension LiveSession {
         }
     }
     
-    func join(success: ((LiveSession) -> Void)? = nil, fail: AGEErrorCompletion = nil) {
+    func join(success: ((LiveSession) -> Void)? = nil,
+              fail: AGEErrorCompletion = nil) {
         var role = localRole.value
         
         let failHandle: ErrorCompletion = { [unowned self] (error) in
@@ -162,7 +163,9 @@ extension LiveSession {
             
             var ageError: AGEError
             
-            if let arError = error as? ArError {
+            if let aError = error as? AGEError {
+                ageError = aError
+            } else if let arError = error as? ArError {
                 ageError = AGEError(arError: arError)
             } else {
                 ageError = AGEError.fail(error.localizedDescription)

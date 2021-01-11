@@ -25,6 +25,8 @@ Coin="Coin";
 Gift="Gift";
 Tools="Tools";
 BGM="Background music";
+Min="Min";
+Max="Max";
 
 Limit_Toast="This is for experiencing Agora quality. Please refrain from using it commercially. The max duration per session is 10 minutes, and the max number of participants per channel is 10. ";
 

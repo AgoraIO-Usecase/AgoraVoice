@@ -412,13 +412,13 @@ private extension CoHostingVM {
         invitationByAccepted.subscribe(onNext: { [unowned self] (invitaion) in
             self.invitationQueue.remove(invitaion)
             
-            for item in self.applicationQueue.list {
-                guard let temp = item as? Application,
+            for item in self.invitationQueue.list {
+                guard let temp = item as? Invitation,
                       temp.seatIndex == invitaion.seatIndex else {
                     return
                 }
                 
-                self.applicationQueue.remove(temp)
+                self.invitationQueue.remove(temp)
             }
         }).disposed(by: bag)
         

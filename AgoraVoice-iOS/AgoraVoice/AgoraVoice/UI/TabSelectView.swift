@@ -20,9 +20,9 @@ class TabSelectView: UIScrollView {
         var font: UIFont
     }
     
-    private lazy var underline: CALayer = {
-        let line = CALayer()
-        line.backgroundColor = underlineColor.cgColor
+    private lazy var underline: UIView = {
+        let line = UIView()
+        line.backgroundColor = underlineColor
         return line
     }()
     
@@ -42,7 +42,7 @@ class TabSelectView: UIScrollView {
     
     var underlineColor: UIColor = UIColor(hexString: "#0088EB") {
         didSet {
-            underline.backgroundColor = underlineColor.cgColor
+            underline.backgroundColor = underlineColor
         }
     }
     
@@ -53,8 +53,12 @@ class TabSelectView: UIScrollView {
                                       font: UIFont.systemFont(ofSize: 16, weight: .medium))
     
     var alignment = Aligment.left
+    var insets = UIEdgeInsets(top: 0,
+                              left: 0,
+                              bottom: 0,
+                              right: 0)
+    
     var titleSpace: CGFloat = 28.0
-    var titleTopSpace: CGFloat = 0
     var underlineWidth: CGFloat? = nil
     var underlineHeight: CGFloat = 5
     
@@ -70,7 +74,8 @@ class TabSelectView: UIScrollView {
         
         if needLayoutButtons, let titles = titles {
             needLayoutButtons = false
-            layoutButtons(titles: titles, space: titleSpace)
+            layoutButtons(titles: titles,
+                          space: titleSpace)
         }
     }
 }
@@ -96,7 +101,8 @@ extension TabSelectView {
         selectedIndex.subscribe(onNext: { [unowned self] (index) in
             self.updateSelectedButton(index)
             self.updateUnderlinePosition()
-            self.needRemind(false, index: index)
+            self.needRemind(false,
+                            index: index)
         }).disposed(by: bag)
     }
     
@@ -118,22 +124,25 @@ private extension TabSelectView {
         var lastButtonMaxX: CGFloat? = nil
         var buttons = [RemindButton]()
         
+        // alignment left layout
         for (index, title) in titles.enumerated() {
             let textSize = title.size(font: selectedTitle.font,
                                       drawRange: CGSize(width: CGFloat(MAXFLOAT), height: bounds.height))
             
-            let frame = CGRect(x: lastButtonMaxX ?? 0,
-                               y: titleTopSpace,
+            let height = bounds.height - insets.top - insets.bottom
+            let frame = CGRect(x: lastButtonMaxX ?? insets.left,
+                               y: insets.top,
                                width: textSize.width,
-                               height: textSize.height)
+                               height: height)
             
             let button = RemindButton(frame: frame)
             button.setTitle(title, for: .normal)
             button.titleLabel?.font = unselectedTitle.font
             button.tag = index
-            button.setTitleColor(unselectedTitle.color, for: .normal)
+            button.setTitleColor(unselectedTitle.color,
+                                 for: .normal)
             buttons.append(button)
-            self.addSubview(button)
+            addSubview(button)
             lastButtonMaxX = button.frame.maxX + space
             
             button.rx.tap.subscribe(onNext: { [weak button, weak self] (event) in
@@ -147,8 +156,9 @@ private extension TabSelectView {
         
         lastButtonMaxX = nil
         
+        // alignment center layout
         if alignment == .center {
-            let totalLength = buttons.last!.frame.maxX
+            let totalLength = buttons.last!.frame.maxX - insets.left
             let beginX = (bounds.width - totalLength) * 0.5
             
             for item in buttons {
@@ -163,9 +173,24 @@ private extension TabSelectView {
             }
         }
         
-        self.contentSize = CGSize(width: buttons.last!.frame.maxX,
-                                  height: 0)
-        self.titleButtons = buttons
+        var contentSize: CGSize
+        
+        switch alignment {
+        case .left:
+            contentSize = CGSize(width: buttons.last!.frame.maxX + insets.right,
+                                 height: 0)
+        case .center:
+            contentSize = CGSize(width: bounds.width + insets.left + insets.right,
+                                 height: 0)
+        }
+        
+        self.contentSize = contentSize
+        titleButtons = buttons
+        
+        insertSubview(underline,
+                      at: subviews.count - 1)
+        
+        updateUnderlinePosition(false)
     }
     
     func updateSelectedButton(_ index: Int) {
@@ -187,14 +212,13 @@ private extension TabSelectView {
         }
     }
     
-    func updateUnderlinePosition() {
+    func updateUnderlinePosition(_ animate: Bool = true) {
         guard let buttons = self.titleButtons else {
             assert(false, "buttons nil")
             return
         }
-        self.layer.insertSublayer(underline, at: 0)
-        let index = selectedIndex.value
         
+        let index = selectedIndex.value
         let h: CGFloat = underlineHeight
     
         var x: CGFloat
@@ -208,23 +232,32 @@ private extension TabSelectView {
             w = buttons[index].frame.width
         }
         
-        let boundsWidth = UIScreen.main.bounds.width - 30
+        let boundsWidth = bounds.width
         let y = bounds.height - h
         
         var offsetX: CGFloat = (x + w) - boundsWidth
-        offsetX = offsetX >= 0 ? offsetX : 0
+        offsetX = (offsetX >= 0 ? offsetX : 0)
         
         if (contentOffset.x + boundsWidth) < (x + w) {
-            self.setContentOffset(CGPoint(x: offsetX, y: 0), animated: true)
+            self.setContentOffset(CGPoint(x: offsetX, y: 0),
+                                  animated: true)
         } else if (contentOffset.x > x) {
-            self.setContentOffset(CGPoint(x: offsetX, y: 0), animated: true)
+            self.setContentOffset(CGPoint(x: offsetX, y: 0),
+                                  animated: true)
         }
-                
-        UIView.animate(withDuration: 0.3) { [unowned self] in
-            self.underline.frame = CGRect(x: x,
-                                          y: y,
-                                          width: w,
-                                          height: h)
+        
+        if animate {
+            UIView.animate(withDuration: 0.3) { [unowned self] in
+                self.underline.frame = CGRect(x: x,
+                                              y: y,
+                                              width: w,
+                                              height: h)
+            }
+        } else {
+            underline.frame = CGRect(x: x,
+                                     y: y,
+                                     width: w,
+                                     height: h)
         }
     }
 }

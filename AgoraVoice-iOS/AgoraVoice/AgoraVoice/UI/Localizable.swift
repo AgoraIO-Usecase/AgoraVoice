@@ -197,7 +197,7 @@ class LiveListLocalizable: NSObject {
 class CreateLiveLocalizable: NSObject {
     static func channelName() -> String  {
         if DeviceAssistant.Language.isChinese {
-            return "直播间的名字: "
+            return "直播间名字: "
         } else {
             return "Channel name: "
         }

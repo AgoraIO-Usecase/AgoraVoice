@@ -14,11 +14,15 @@ class ThreeDimensionalViewController: RxViewController {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var minLabel: UILabel!
+    @IBOutlet weak var maxLabel: UILabel!
     
     var audioEffectVM: AudioEffectVM!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        minLabel.text = NSLocalizedString("Min")
+        maxLabel.text = NSLocalizedString("Max")
         
         titleLabel.text = AudioEffectsLocalizable.threeDimensionalVoice()
         descriptionLabel.text = AudioEffectsLocalizable.threeDimensionalVoiceDescription() + "(\(AudioEffectsLocalizable.threeDimensionalVoiceDescription2()))"

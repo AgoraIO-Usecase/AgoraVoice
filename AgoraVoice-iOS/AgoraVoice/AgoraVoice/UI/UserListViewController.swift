@@ -144,7 +144,6 @@ class UserListViewController: RxViewController {
         tableView.rowHeight = 54
         tableViewBottom.constant = UIScreen.main.heightOfSafeAreaBottom
         
-        tabView.titleTopSpace = 14
         tabView.underlineWidth = 68
         tabView.alignment = .center
         tabView.titleSpace = 80
