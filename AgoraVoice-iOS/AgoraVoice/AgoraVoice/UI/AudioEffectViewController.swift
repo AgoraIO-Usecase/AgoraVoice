@@ -81,10 +81,12 @@ private extension AudioEffectViewController {
             tabView.alignment = .left
         }
         
-        tabView.insets = UIEdgeInsets(top: 0,
-                                      left: 15,
-                                      bottom: 0,
-                                      right: 15)
+        if tabView.alignment == .left {
+            tabView.insets = UIEdgeInsets(top: 0,
+                                          left: 15,
+                                          bottom: 0,
+                                          right: 15)
+        }
         
         tabView.selectedTitle = TabSelectView.TitleProperty(color: UIColor(hexString: "#EEEEEE"),
                                                             font: UIFont.systemFont(ofSize: 14, weight: .medium))

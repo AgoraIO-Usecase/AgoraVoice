@@ -238,12 +238,14 @@ private extension TabSelectView {
         var offsetX: CGFloat = (x + w) - boundsWidth
         offsetX = (offsetX >= 0 ? offsetX : 0)
         
+        // over right
         if (contentOffset.x + boundsWidth) < (x + w) {
-            self.setContentOffset(CGPoint(x: offsetX, y: 0),
-                                  animated: true)
+            setContentOffset(CGPoint(x: offsetX + insets.right, y: 0),
+                             animated: true)
+        // over left
         } else if (contentOffset.x > x) {
-            self.setContentOffset(CGPoint(x: offsetX, y: 0),
-                                  animated: true)
+            setContentOffset(CGPoint(x: offsetX, y: 0),
+                             animated: true)
         }
         
         if animate {
