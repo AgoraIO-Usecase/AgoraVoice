@@ -1,7 +1,5 @@
 package io.agora.agoravoice.manager;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -13,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import io.agora.agoravoice.business.BusinessProxy;
 import io.agora.agoravoice.business.definition.struct.ErrorCode;
 import io.agora.agoravoice.business.definition.struct.RoomUserInfo;
+import io.agora.agoravoice.business.log.Logging;
 import io.agora.agoravoice.business.server.retrofit.model.requests.SeatBehavior;
 import io.agora.agoravoice.utils.Const;
 
@@ -80,7 +79,8 @@ public class InvitationManager {
                 }
             }
         }
-        Log.d(TAG, "invitation timer stops");
+
+        Logging.i("invitation timer stops");
     };
 
     private final Runnable mApplyTimer = () -> {
@@ -115,7 +115,7 @@ public class InvitationManager {
             }
         }
 
-        Log.d(TAG, "application timer stops");
+        Logging.i("application timer stops");
     };
 
     private void startInviteTimer() {
@@ -206,7 +206,7 @@ public class InvitationManager {
                     if (mInviteList.isEmpty()) {
                         // When this is the first in list, start a timer
                         // to check invitation timeout
-                        Log.d(TAG, "start invitation timer");
+                        Logging.i("start invitation timer");
                         startInviteTimer();
                     }
 
@@ -247,11 +247,10 @@ public class InvitationManager {
         switch (behavior) {
             case SeatBehavior.INVITE_ACCEPT:
             case SeatBehavior.INVITE_REJECT:
-                RoomUserInfo info = mInviteUserInfoMap.remove(userId);
-                if (info != null) mInviteList.remove(info);
+                removeInvitationInfo(userId);
                 break;
             case SeatBehavior.APPLY:
-                info = mApplyUserInfoMap.remove(userId);
+                RoomUserInfo info = mApplyUserInfoMap.remove(userId);
                 if (info != null) {
                     mApplyList.remove(info);
                     mApplyList.add(info);
@@ -261,7 +260,7 @@ public class InvitationManager {
                     info = getUserInfoByUserId(userId);
                     if (info != null) {
                         if (mApplyList.isEmpty()) {
-                            Log.d(TAG, "start application timer");
+                            Logging.i("start application timer");
                             startApplyTimer();
                         }
 
@@ -300,5 +299,10 @@ public class InvitationManager {
         }
 
         return ret;
+    }
+
+    public void stopTimer() {
+        stopInviteTimer();
+        stopApplyTimer();
     }
 }

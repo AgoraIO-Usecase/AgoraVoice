@@ -20,7 +20,6 @@ import io.agora.agoravoice.business.BusinessProxyBuilder;
 import io.agora.agoravoice.business.BusinessProxyContext;
 import io.agora.agoravoice.business.BusinessProxyListener;
 import io.agora.agoravoice.business.definition.interfaces.RoomEventListener;
-import io.agora.agoravoice.business.definition.interfaces.VoiceCallback;
 import io.agora.agoravoice.business.definition.struct.AppVersionInfo;
 import io.agora.agoravoice.business.definition.struct.BusinessType;
 import io.agora.agoravoice.business.definition.struct.GiftInfo;
@@ -407,6 +406,7 @@ public class ProxyManager implements BusinessProxyListener {
                 break;
             case BusinessType.LOGIN:
             case BusinessType.CREATE_USER:
+            case BusinessType.JOIN:
                 for (UserServiceListener listener : mUserServiceListeners) {
                     listener.onUserServiceFailed(type, code, message);
                 }

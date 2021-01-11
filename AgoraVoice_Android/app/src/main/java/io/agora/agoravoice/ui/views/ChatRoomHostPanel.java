@@ -17,8 +17,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.elvishew.xlog.XLog;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +25,7 @@ import java.util.Map;
 import io.agora.agoravoice.R;
 import io.agora.agoravoice.business.definition.struct.RoomStreamInfo;
 import io.agora.agoravoice.business.definition.struct.SeatStateData;
-import io.agora.agoravoice.business.server.retrofit.interfaces.RoomService;
-import io.agora.agoravoice.business.server.retrofit.model.responses.BooleanResp;
+import io.agora.agoravoice.business.log.Logging;
 import io.agora.agoravoice.utils.Const;
 import io.agora.agoravoice.utils.UserUtil;
 
@@ -260,10 +257,10 @@ public class ChatRoomHostPanel extends RelativeLayout {
                     String uid = user.getUserId();
                     RoomStreamInfo info = mRoomStreamMap.get(uid);
                     boolean enableAudio = info != null && info.enableAudio;
-                    XLog.d("Seat " + (pos + 1) + " user " + user.getUserId() +
+                    Logging.d("Seat " + (pos + 1) + " user " + user.getUserId() +
                             " audio state " + enableAudio);
                     if (info == null) {
-                        XLog.d("Stream info not found for seat " +
+                        Logging.d("Stream info not found for seat " +
                                 (pos + 1) + " user id " + user.getUserId());
                     }
 
@@ -422,20 +419,20 @@ public class ChatRoomHostPanel extends RelativeLayout {
                 boolean enabled;
                 if (myStreamInfo == null) {
                     enabled = !localAudioMuted;
-                    XLog.d("no local stream info found, take local audio " +
+                    Logging.d("no local stream info found, take local audio " +
                             "setting as default " + enabled);
                 } else {
                     info.enableAudio(myStreamInfo.enableAudio);
-                    XLog.d("Local stream info found, audio state reset to " + info.enableAudio);
+                    Logging.d("Local stream info found, audio state reset to " + info.enableAudio);
                     enabled = info.enableAudio;
                 }
 
                 info.enableAudio(enabled);
             } else if (myStreamInfo != null) {
-                XLog.d("Local stream info found, cached local audio state " + info.enableAudio);
+                Logging.d("Local stream info found, cached local audio state " + info.enableAudio);
                 mRoomStreamMap.put(mMyUserId, myStreamInfo);
             } else {
-                XLog.d("No cached local stream info");
+                Logging.d("No cached local stream info");
             }
         }
 
@@ -453,7 +450,7 @@ public class ChatRoomHostPanel extends RelativeLayout {
                 RoomStreamInfo info = entry.getValue();
                 mRoomStreamMap.remove(key);
                 mRoomStreamMap.put(key, RoomStreamInfo.copy(info));
-                XLog.d("updateHostMuteState updated streams " +
+                Logging.d("updateHostMuteState updated streams " +
                         info.userId + " " + info.enableAudio) ;
             }
         }

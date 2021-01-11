@@ -16,6 +16,10 @@ public class Const {
     public static final String KEY_USER_ROLE = "key-user-role";
     public static final String KEY_TOKEN = "key-token";
 
+    public static final String LOG_PREFIX = "agoravoice";
+    public static final int LOG_MAX_FILES = 5;
+    public static final String LOG_TAG = "AgoraVoice";
+
     // By default the app log keeps for 5 days before being destroyed
     public static final long LOG_DURATION = 1000 * 60 * 24 * 5;
 

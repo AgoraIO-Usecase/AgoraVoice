@@ -41,7 +41,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
     private String[] mSoundEffectTypeNames;
     private String[] mSpaceEffectNames;
     private String[] mChangeEffectNames;
-    private String[] mFlavourEffectNames;
+    private String[] mStyleEffectNames;
     private String[] mElectronicKeyNames;
     private String[] mElectronicToneNames;
 
@@ -83,7 +83,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         mSoundEffectTypeNames = getResources().getStringArray(R.array.action_sheet_sound_effect_types);
         mSpaceEffectNames = getResources().getStringArray(R.array.action_sheet_sound_effect_space_names);
         mChangeEffectNames = getResources().getStringArray(R.array.action_sheet_sound_effect_change_names);
-        mFlavourEffectNames = getResources().getStringArray(R.array.action_sheet_sound_effect_flavour_names);
+        mStyleEffectNames = getResources().getStringArray(R.array.action_sheet_sound_effect_style_names);
         mElectronicKeyNames = getResources().getStringArray(R.array.action_sheet_sound_effect_electronic_keys);
         mElectronicToneNames = getResources().getStringArray(R.array.action_sheet_sound_effect_electronic_tones);
 
@@ -153,7 +153,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
                 }
             case TYPE_FLAVOUR:
                 if (AudioManager.EFFECT_FLAVOR_RNB <= type &&
-                        type <= AudioManager.EFFECT_FLAVOR_ROCK_N_ROLL) {
+                        type <= AudioManager.EFFECT_FLAVOR_HIP_HOP) {
                     return type - AudioManager.EFFECT_FLAVOR_RNB;
                 } else {
                     return -1;
@@ -169,7 +169,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             case TYPE_CHANGE:
                 return AudioManager.EFFECT_VOICE_CHANGE_UNCLE + position;
             case TYPE_FLAVOUR:
-                return AudioManager.EFFECT_FLAVOR_RNB + position;
+                return AudioManager.EFFECT_FLAVOR_HIP_HOP + position;
             default: return -1;
         }
     }
@@ -191,7 +191,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
     private void initFlavourSoundEffect() {
         RecyclerView recyclerView = new RecyclerView(getContext());
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), GRID_COUNT));
-        recyclerView.setAdapter(new FlavourEffectAdapter());
+        recyclerView.setAdapter(new StyleEffectAdapter());
         mContentLayout.addView(recyclerView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     }
 
@@ -410,7 +410,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         }
     }
 
-    private class FlavourEffectAdapter extends RecyclerView.Adapter<EffectImageViewHolder> {
+    private class StyleEffectAdapter extends RecyclerView.Adapter<EffectImageViewHolder> {
         @NonNull
         @Override
         public EffectImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -423,7 +423,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             int pos = holder.getAdapterPosition();
             boolean selected = pos == mSelected3;
             holder.image.setImageResource(VoiceUtil.FLAVOUR_EFFECT_IMAGE_RES[pos]);
-            holder.name.setText(mFlavourEffectNames[pos]);
+            holder.name.setText(mStyleEffectNames[pos]);
             holder.name.setTextColor(selected ? Color.WHITE : TITLE_TEXT_DEFAULT);
             holder.itemView.setActivated(selected);
             holder.itemView.setOnClickListener(view -> {
@@ -444,7 +444,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
 
         @Override
         public int getItemCount() {
-            return mFlavourEffectNames.length;
+            return mStyleEffectNames.length;
         }
     }
 

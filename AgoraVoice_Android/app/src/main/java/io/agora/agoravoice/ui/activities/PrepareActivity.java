@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -18,6 +17,8 @@ import java.util.List;
 
 import io.agora.agoravoice.R;
 import io.agora.agoravoice.business.definition.struct.BusinessType;
+import io.agora.agoravoice.business.log.Logging;
+import io.agora.agoravoice.business.server.ServerClient;
 import io.agora.agoravoice.business.server.retrofit.model.responses.RoomListResp;
 import io.agora.agoravoice.manager.ProxyManager;
 import io.agora.agoravoice.ui.views.CropBackgroundRelativeLayout;
@@ -51,7 +52,6 @@ public class PrepareActivity extends AbsLiveActivity {
             intent.putExtra(Const.KEY_USER_ID, config().getUserId());
             intent.putExtras(getIntent());
             startActivity(intent);
-
             finish();
         }
 
@@ -67,9 +67,19 @@ public class PrepareActivity extends AbsLiveActivity {
 
         @Override
         public void onRoomServiceFailed(int type, int code, String msg) {
+            if (code == ServerClient.ERROR_CONNECTION) {
+                runOnUiThread(() -> ToastUtil.showShortToast(application(), R.string.error_no_connection));
+                return;
+            }
+
             if (type == BusinessType.CREATE_ROOM) {
-                Log.i("Prepare", "create room fail:" + code + " " + msg);
-                runOnUiThread(() -> mGoLiveBtn.setEnabled(true));
+                Logging.e("create room fail:" + code + " " + msg);
+                runOnUiThread(() -> {
+                    mGoLiveBtn.setEnabled(true);
+                    String format = getApplicationContext().getString(R.string.create_room_fail);
+                    String message = String.format(format, code, msg);
+                    ToastUtil.showShortToast(getApplicationContext(), message);
+                });
             }
         }
     };

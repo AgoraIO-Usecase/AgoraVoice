@@ -149,10 +149,10 @@ public class AudioEffect {
             new AudioEffectParam(AudioEffectParam.TYPE_CHANGER, 6), // Hulk
 
             // Flavor
-            new AudioEffectParam(AudioEffectParam.TYPE_REVERB, 7),   // RNB
+            new AudioEffectParam(AudioEffectParam.TYPE_REVERB, 12),  // Hip hop
             new AudioEffectParam(AudioEffectParam.TYPE_REVERB, 6),   // Popular
             new AudioEffectParam(AudioEffectParam.TYPE_REVERB, 11),  // Rock and roll
-            new AudioEffectParam(AudioEffectParam.TYPE_REVERB, 12),  // Hip hop
+            new AudioEffectParam(AudioEffectParam.TYPE_REVERB, 7),   // RNB
 
             // Electronic
             new AudioEffectParam(TYPE_VOICE_REVERB, 12),  // Undefined

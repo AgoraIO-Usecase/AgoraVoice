@@ -111,7 +111,7 @@
     <dimen name="action_sheet_voice_beauty_text_item_height">38dp</dimen>
     <dimen name="action_sheet_voice_beauty_text_item_spacing">8dp</dimen>
 
-    <dimen name="action_sheet_electronic_line_height">48dp</dimen>
+    <dimen name="action_sheet_electronic_line_height">26dp</dimen>
     <dimen name="action_sheet_switch_width">48dp</dimen>
     <dimen name="action_sheet_switch_bar_height">20dp</dimen>
     <dimen name="action_sheet_switch_width_point_size">24dp</dimen>
@@ -168,7 +168,9 @@
 
     <dimen name="dialog_width">282dp</dimen>
     <dimen name="dialog_height">150dp</dimen>
+    <dimen name="dialog_height_low">110dp</dimen>
     <dimen name="dialog_content_height">100dp</dimen>
+    <dimen name="dialog_content_height_low">60dp</dimen>
     <dimen name="dialog_button_height">49dp</dimen>
 
     <dimen name="scene_exception_icon_size">186dp</dimen>

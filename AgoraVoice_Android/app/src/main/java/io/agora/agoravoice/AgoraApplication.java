@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import com.tencent.bugly.crashreport.CrashReport;
 
+import io.agora.agoravoice.business.log.Logging;
 import io.agora.agoravoice.manager.ProxyManager;
 import io.agora.agoravoice.utils.Const;
 
@@ -17,6 +18,9 @@ public class AgoraApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        // Log must be initialized before 
+        // all other functions
+        Logging.init(this);
         initGlobalVariables();
         initBugly();
     }

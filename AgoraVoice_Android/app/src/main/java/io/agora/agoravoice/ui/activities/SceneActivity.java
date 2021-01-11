@@ -22,11 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.agora.agoravoice.R;
-import io.agora.agoravoice.business.definition.struct.RoomInfo;
+import io.agora.agoravoice.business.server.ServerClient;
 import io.agora.agoravoice.business.server.retrofit.model.responses.RoomListResp;
 import io.agora.agoravoice.manager.ProxyManager;
 import io.agora.agoravoice.ui.views.SquareRelativeLayout;
 import io.agora.agoravoice.utils.Const;
+import io.agora.agoravoice.utils.ToastUtil;
 import io.agora.agoravoice.utils.UserUtil;
 import io.agora.agoravoice.utils.WindowUtil;
 

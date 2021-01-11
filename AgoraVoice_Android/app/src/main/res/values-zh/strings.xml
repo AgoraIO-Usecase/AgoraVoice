@@ -13,10 +13,8 @@
     <string name="scene_type_chat_room">语聊房</string>
 
     <!-- Profile -->
-    <string name="profile_setting_title_avatar">设置头像</string>
     <string name="profile_setting_title_nickname">设置昵称</string>
     <string name="profile_setting_title_about">关于</string>
-
     <string name="profile_edit_avatar_title">请选择头像</string>
     <string name="profile_edit_nickname_title">输入名字</string>
 
@@ -34,7 +32,7 @@
     <string name="privacy_website_link">https://www.agora.io/cn/privacy-policy/</string>
 
 
-    <string name="disclaimer_title">测试产品免责声明</string>
+    <string name="disclaimer_title">产品免责声明</string>
     <string name="disclaimer_content">&#160;&#160;&#160;&#160;Agora Voice（“本产品”）是由Agora提供的一款测试产品，Agora享有本产品的著作权和所有权。特此免费授予获得本产品和相关文档文件（以下简称“软件”）副本的任何人无限制地试用软件的权利，包括但不限于试用，复制，修改，合并，发布，分发，但本产品不得用于任何商业用途，不得再许可和/或出售该软件的副本。\n\n
 
 &#160;&#160;&#160;&#160;本产品按“现状”提供，没有任何形式的明示担保，包括但不限于对适配性、特定目的的适用性和非侵权性的担保。无论是由于与本产品或本产品的试用或其他方式有关的任何合同、侵权或其他形式的行为，Agora均不对任何索赔、损害或其他责任负责。\n\n
@@ -49,21 +47,23 @@
     <string name="rte_sdk_version_title">SDK 版本</string>
     <string name="upload_log_title">上传日志</string>
 
-    <string name="upload_log_success_message_format">日志文件上传成功, 日志 id %s 已生成并复制到剪贴板</string>
-    <string name="upload_log_fail_message_format">日志上传失败: %s</string>
+    <string name="upload_log_success_message_format">日志 id %s 已经复制到剪贴板</string>
+    <string name="upload_log_fail_message_format">上传日志失败: %s</string>
 
     <!-- Nickname Edit -->
     <string name="profile_name_edit_hint">输入昵称&#8230;</string>
-    <string name="profile_name_edit_message_empty">您输入了一个空的昵称</string>
-    <string name="profile_name_edit_message_success">您的昵称已更改成功</string>
-    <string name="profile_name_edit_message_fail">昵称修改失败</string>
+    <string name="profile_name_edit_message_empty">昵称不可为空</string>
+    <string name="profile_name_edit_message_success">更新昵称成功</string>
+    <string name="profile_name_edit_message_fail">更新昵称失败</string>
     <string name="profile_name_edit_message_same">昵称相同</string>
+    <string name="profile_name_too_long_toast_message">昵称不可超过%d个字符</string>
 
     <!-- Prepare Activity -->
     <string name="live_prepare_hint">直播间名字</string>
     <string name="go_live">开始直播</string>
     <string name="room_name_too_long_toast_format">房间名称不能超过%d个字符</string>
-    <string name="no_room_name_toast">请输入您的房间名称</string>
+    <string name="no_room_name_toast">房间名不能为空</string>
+    <string name="create_room_fail">创建房间失败 %d %s</string>
 
     <string name="send_empty_message">您不能发空的消息</string>
 
@@ -114,10 +114,13 @@
 
     <string name="live_system_notification_member_joined">加入房间</string>
     <string name="live_system_notification_member_left">离开房间</string>
+    <string name="co_hosting_occupied">上麦</string>
+    <string name="co_hosting_left">下麦</string>
 
-    <string name="live_message_gift_send">赠送了一个</string>
+    <string name="live_message_gift_send">送 %s</string>
 
-    <string name="rtc_stats_format">音频接收码率: %.2f kbps%n音频接收丢包率: %.2f%% %n音频发送码率: %.2f kbps%n音频发送丢包率: %.2f%% %n延迟: %d ms </string>
+    <string name="rtc_starts_property_format">音频上行声道数: %d %n音频上行采样率: %d</string>
+    <string name="rtc_stats_format">音频上行码率: %.2f kbps%n音频上行丢包率: %.2f%% %n音频下行码率: %.2f kbps%n音频下行丢包率: %.2f%% %n延迟: %d ms </string>
 
     <!-- Action Sheets -->
     <string name="action_sheet_background_title">背景</string>
@@ -128,9 +131,9 @@
     <string name="action_sheet_voice_beauty_type_title_3">音色变换</string>
 
     <string-array name="voice_beauty_chat_names">
-        <item>磁性 (男)</item>
-        <item>清新 (女)</item>
-        <item>活力 (女)</item>
+        <item>磁性</item>
+        <item>清新</item>
+        <item>活力</item>
     </string-array>
 
     <string-array name="voice_beauty_sing_names">
@@ -189,20 +192,21 @@
         <item>绿巨人</item>
     </string-array>
 
-    <string-array name="action_sheet_sound_effect_flavour_names">
+    <string-array name="action_sheet_sound_effect_style_names">
         <item>R&#38;B</item>
         <item>流行</item>
-        <item>嘻哈</item>
         <item>摇滚</item>
+        <item>嘻哈</item>
     </string-array>
 
-    <string name="action_sheet_3d_voice_title">3D人声</string>
+    <string name="action_sheet_3d_voice_title">启用 3D人声</string>
     <string name="action_sheet_3d_voice_description">速度调节控制声音旋转速度 (最快1s转一圈，最慢60s转一圈) </string>
     <string name="action_sheet_3d_voice_text_min">最小</string>
     <string name="action_sheet_3d_voice_text_max">最大</string>
 
-    <string name="action_sheet_sound_effect_enable_electronic_voice">开启电音</string>
-    <string name="action_sheet_sound_effect_electronic_tones_hint">选择起始音阶</string>
+    <string name="action_sheet_sound_effect_enable_electronic_voice">启用电音</string>
+    <string name="action_sheet_sound_effect_electronic_mode_hint">选择调式</string>
+    <string name="action_sheet_sound_effect_electronic_key_hint">选择起始音阶</string>
     <string name="action_sheet_sound_effect_magic_notes_coming_soon">即将发布</string>
 
     <string-array name="action_sheet_sound_effect_electronic_keys">
@@ -270,7 +274,7 @@
     <string name="action_sheet_seat_operate_unmute">取消静音</string>
 
     <!-- Network status detection -->
-    <string name="network_unavailable">网络不给力，请稍候再试</string>
+    <string name="network_unavailable">网络异常 - 当前网络连接错误，请稍候再试</string>
     <string name="network_switch_to_wifi">当前处于 WIFI 网络</string>
     <string name="network_switch_to_mobile">当前处于非 WIFI 网络, 您可能需要支付移动网络数据费用</string>
 
@@ -279,56 +283,53 @@
     <string name="scene_no_connection_title">网络异常</string>
 
     <!-- Dialogs -->
-    <string name="dialog_leave_room_title">离开房间</string>
-    <string name="dialog_leave_room_message">您要离开直播房间吗?</string>
-    <string name="dialog_owner_end_live_title">结束直播</string>
+    <string name="dialog_leave_room_title_host">确定退出直播间?</string>
+    <string name="dialog_leave_room_message_host">退出直播间会终止您与房主的连线</string>
+    <string name="dialog_owner_end_live_title">直播结束</string>
     <string name="dialog_owner_end_live_message">是否结束直播?</string>
-    <string name="dialog_invite_user_title">邀请上麦</string>
-    <string name="dialog_apply_seat_title">申请上麦</string>
-    <string name="dialog_invite_user_message">您是否要邀请%s上麦?</string>
-    <string name="dialog_receive_invite_message">%s邀请您上麦, 是否接受?</string>
-    <string name="dialog_leave_seat_title">下麦</string>
-    <string name="dialog_leave_seat_message_owner">您要让%s离开麦位吗?</string>
-    <string name="dialog_leave_seat_message_host">确定下麦?</string>
-    <string name="dialog_lock_seat_title">封麦</string>
-    <string name="dialog_lock_seat_message">您要封掉此麦位吗? 已上麦的主播会被下麦</string>
-    <string name="dialog_unlock_seat_title">解封</string>
-    <string name="dialog_unlock_seat_message">您是否要解封此麦位?</string>
-    <string name="dialog_apply_seat_message">您确定要申请上麦吗?</string>
-    <string name="dialog_application_accepted_message">是否接受%s的上麦申请?</string>
-    <string name="dialog_application_rejected_message">是否拒绝%s的上麦申请?</string>
-    <string name="dialog_mute_title">禁麦</string>
-    <string name="dialog_mute_message">禁止%s发言?</string>
-    <string name="dialog_unmute_title">解禁</string>
-    <string name="dialog_unmute_message">解除%s禁言?</string>
-    <string name="dialog_upgrade_title">发现新版本</string>
-    <string name="dialog_upgrade_force_message">您使用的AgoraLive版本太旧了，软件将关闭并跳转到最新版本的下载链接</string>
-    <string name="dialog_upgrade_recommend_message">有新的AgoraLive版本，建议您升级到最新版本体验最新功能</string>
+    <string name="dialog_invite_user_title">您是否要邀请%s上麦?</string>
+    <string name="dialog_receive_invite_message">邀请您上麦, 是否接受?</string>
+    <string name="dialog_leave_seat_message_owner">确定将%s下麦?</string>
+    <string name="dialog_leave_seat_message_host">确定终止连麦?</string>
+    <string name="dialog_lock_seat_title">确定封麦？</string>
+    <string name="dialog_lock_seat_message">如果当前麦位上已有主播，将会被下麦</string>
+    <string name="dialog_unlock_seat_title">解封麦位？</string>\
+    <string name="dialog_application_accepted_title">你是否要接受%s的上麦申请?</string>
+    <string name="dialog_application_rejected_title">你是否要拒绝%s的上麦申请?</string>
+    <string name="dialog_application_title">确定申请上麦？</string>
+    <string name="dialog_mute_title">禁止%s发言?</string>
+    <string name="dialog_unmute_title">解除%s禁言？</string>
+    <string name="dialog_upgrade_recommend_title">建议升级</string>
+    <string name="dialog_upgrade_recommend_message">你可以升级一下应用</string>
+    <string name="dialog_upgrade_force_title">强制升级</string>
+    <string name="dialog_upgrade_force_message">必须要升级应用才能继续使用</string>
 
     <!-- Toasts -->
-    <string name="toast_invite_success">您已成功将邀请发送给%s</string>
+    <string name="toast_invite_success">您的麦位邀请已发送</string>
+    <string name="toast_invite_timeout">邀请超时</string>
     <string name="toast_repeat_invite">%s近期已经被邀请过</string>
     <string name="toast_request_fail_message">%s, 错误码: %d</string>
     <string name="toast_invite_fail">邀请发送失败，错误码 %d</string>
-    <string name="toast_invite_accepted">您的上麦邀请已经被%s接受</string>
-    <string name="toast_invite_rejected">您的上麦邀请已经被%s拒绝</string>
-    <string name="toast_apply_accepted">您的上麦申请已经被房主接受</string>
-    <string name="toast_apply_rejected">您的上麦申请已经被房主拒绝</string>
+    <string name="toast_invite_accept">%s接受了这次邀请</string>
+    <string name="toast_invite_rejected">%s拒绝了这次邀请</string>
     <string name="toast_user_has_taken_seat">您邀请的用户已经是主播了</string>
-    <string name="toast_application_sent">您的申请已发送给房主</string>
-    <string name="toast_application_sent_fail">申请发送失败</string>
-    <string name="toast_no_wired_mic_plugged">请插入有线带麦耳机</string>
-    <string name="toast_join_class_success">加入房间成功</string>
+    <string name="toast_force_leave_by_owner">您已被下麦</string>
+    <string name="toast_apply_accepted">房主已通过您的上麦申请</string>
+    <string name="toast_apply_rejected">房主已拒绝您的上麦申请</string>
+    <string name="toast_application_sent">您的上麦申请已发送</string>
+    <string name="toast_no_wired_mic_plugged">请插上耳机</string>
     <string name="toast_join_class_fail">加入房间失败</string>
-    <string name="toast_room_end_timeout">此软件为测试产品，房间最长直播时间为10分钟</string>
-    <string name="toast_room_end_owner_leave">房主已离开，直播间关闭</string>
+    <string name="toast_room_end_timeout">此软件房间最长直播时间为10分钟</string>
+    <string name="toast_room_end_owner_leave">直播结束</string>
     <string name="toast_room_end">直播房间已结束</string>
     <string name="toast_app_version_fail">获取应用版本失败</string>
     <string name="toast_link_empty">链接地址为空</string>
 
     <!-- Error Messages -->
     <string name="error_no">正常</string>
-    <string name="error_seat_taken">此麦位已经被其他主播占用</string>
+    <string name="error_seat_taken">麦位已经被占用，请选择其他麦位</string>
     <string name="error_room_max_user">此软件为测试产品，房间最大人数为10人</string>
     <string name="error_room_not_exist">房间不存在</string>
+    <string name="error_no_connection">网络不给力，请稍后再试</string>
+    <string name="operation_fail">操作失败</string>
 </resources>

@@ -3,7 +3,6 @@ package io.agora.agoravoice.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -23,6 +22,8 @@ import io.agora.agoravoice.business.definition.struct.GiftSendInfo;
 import io.agora.agoravoice.business.definition.struct.RoomStreamInfo;
 import io.agora.agoravoice.business.definition.struct.RoomUserInfo;
 import io.agora.agoravoice.business.definition.struct.SeatStateData;
+import io.agora.agoravoice.business.log.Logging;
+import io.agora.agoravoice.business.server.ServerClient;
 import io.agora.agoravoice.business.server.retrofit.model.requests.SeatBehavior;
 import io.agora.agoravoice.manager.AudioManager;
 import io.agora.agoravoice.manager.InvitationManager;
@@ -150,14 +151,14 @@ public class ChatRoomActivity extends AbsLiveActivity
             = new SoundEffectActionSheet.SoundEffectActionListener() {
         @Override
         public void onVoiceBeautySelected(int type) {
-            Log.i(TAG, "onVoiceBeautySelected:" + type);
+            Logging.i("onVoiceBeautySelected:" + type);
             config().setAudioEffect(type);
             proxy().getAudioManager().enableAudioEffect(type);
         }
 
         @Override
         public void on3DHumanVoiceSelected() {
-            Log.i(TAG, "on3DHumanVoiceSelected");
+            Logging.i("on3DHumanVoiceSelected");
             ThreeDimenVoiceActionSheet voiceActionSheet =
                     (ThreeDimenVoiceActionSheet) createActionSheet(
                             ActionSheetManager.ActionSheet.three_dimen_voice);
@@ -169,14 +170,14 @@ public class ChatRoomActivity extends AbsLiveActivity
 
         @Override
         public void onElectronicVoiceParamChanged(int key, int value) {
-            Log.i(TAG, "onElectronicVoiceParamChanged " + key + "," + value);
+            Logging.i("onElectronicVoiceParamChanged " + key + "," + value);
             proxy().getAudioManager().setElectronicParams(key, value);
             config().setElectronicVoiceParam(key, value);
         }
 
         @Override
         public void onVoiceBeautyUnselected() {
-            Log.i(TAG, "onVoiceBeautyUnselected");
+            Logging.i("onVoiceBeautyUnselected");
             config().disableAudioEffect();
             proxy().getAudioManager().disableAudioEffect();
         }
@@ -186,7 +187,7 @@ public class ChatRoomActivity extends AbsLiveActivity
         mThreeDimenVoiceListener = new ThreeDimenVoiceActionSheet.ThreeDimenVoiceActionListener() {
         @Override
         public void onThreeDimenVoiceEnabled(boolean enabled) {
-            Log.i(TAG, "onThreeDimenVoiceEnabled:" + enabled);
+            Logging.i("onThreeDimenVoiceEnabled:" + enabled);
             if (enabled) {
                 proxy().getAudioManager().enableAudioEffect(AudioManager.EFFECT_SPACING_3D_VOICE);
                 config().setAudioEffect(AudioManager.EFFECT_SPACING_3D_VOICE);
@@ -199,14 +200,14 @@ public class ChatRoomActivity extends AbsLiveActivity
 
         @Override
         public void onThreeDimenVoiceSpeedChanged(int speed) {
-            Log.i(TAG, "onThreeDimenVoiceSpeedChanged:" + speed);
+            Logging.i("onThreeDimenVoiceSpeedChanged:" + speed);
             proxy().getAudioManager().set3DHumanVoiceParams(speed);
             config().set3DVoiceSpeed(speed);
         }
 
         @Override
         public void onThreeDimenVoiceActionClosed() {
-            Log.i(TAG, "onThreeDimenVoiceActionClosed");
+            Logging.i("onThreeDimenVoiceActionClosed");
             closeActionSheet();
         }
     };
@@ -353,9 +354,9 @@ public class ChatRoomActivity extends AbsLiveActivity
                 return;
             }
 
-            String format = getResources().getString(R.string.dialog_invite_user_message);
-            String message = String.format(format, userName);
-            curDialog = showDialog(getString(R.string.dialog_invite_user_title), message,
+            String format = getResources().getString(R.string.dialog_invite_user_title);
+            String title = String.format(format, userName);
+            curDialog = showDialog(title,
                     getString(R.string.text_yes), getString(R.string.text_no),
                     () -> {
                         dismissDialog();
@@ -364,7 +365,7 @@ public class ChatRoomActivity extends AbsLiveActivity
                         // local implementation but not those returned
                         // from the server.
                         if (ret == Const.ERR_REPEAT_INVITE) {
-                            Log.i("ChatRoom", "repeat invitation exception");
+                            Logging.i("repeat invitation exception for seat " + no + " user " + userId);
                             String f = getResources().getString(R.string.toast_repeat_invite);
                             String toast = String.format(f, userName);
                             ToastUtil.showShortToast(ChatRoomActivity.this, toast);
@@ -374,12 +375,11 @@ public class ChatRoomActivity extends AbsLiveActivity
 
         @Override
         public void onApplicationAccepted(int no, String userId, String userName) {
-            String title = getResources().getString(R.string.dialog_apply_seat_title);
-            String message = getResources().getString(R.string.dialog_application_accepted_message);
-            message = String.format(Locale.getDefault(), message, userName);
-            curDialog = showDialog(title, message,
-                    getResources().getString(R.string.text_accept),
-                    getResources().getString(R.string.text_cancel),
+            String title = getResources().getString(R.string.dialog_application_accepted_title);
+            title = String.format(Locale.getDefault(), title, userName);
+            curDialog = showDialog(title,
+                    getResources().getString(R.string.text_yes),
+                    getResources().getString(R.string.text_no),
                     () -> {
                         dismissDialog();
                         requestSeatBehavior(no, SeatBehavior.APPLY_ACCEPT, userId, userName);
@@ -389,10 +389,9 @@ public class ChatRoomActivity extends AbsLiveActivity
 
         @Override
         public void onApplicationRejected(int no, String userId, String userName) {
-            String title = getResources().getString(R.string.dialog_apply_seat_title);
-            String message = getResources().getString(R.string.dialog_application_rejected_message);
-            message = String.format(Locale.getDefault(), message, userName);
-            curDialog = showDialog(title, message,
+            String title = getResources().getString(R.string.dialog_application_rejected_title);
+            title = String.format(Locale.getDefault(), title, userName);
+            curDialog = showDialog(title,
                     getResources().getString(R.string.text_accept),
                     getResources().getString(R.string.text_cancel),
                     () -> {
@@ -431,9 +430,7 @@ public class ChatRoomActivity extends AbsLiveActivity
         public void onSeatUnblock(int position) {
             closeActionSheet();
             curDialog = showDialog(R.string.dialog_unlock_seat_title,
-                    R.string.dialog_unlock_seat_message,
-                    R.string.text_confirm,
-                    R.string.text_cancel,
+                    R.string.text_confirm, R.string.text_cancel,
                     () -> {
                         dismissDialog();
                         changeState(ChatRoomHostPanel.Seat.STATE_OPEN, position + 1);
@@ -445,8 +442,7 @@ public class ChatRoomActivity extends AbsLiveActivity
             closeActionSheet();
             curDialog = showDialog(R.string.dialog_lock_seat_title,
                     R.string.dialog_lock_seat_message,
-                    R.string.text_confirm,
-                    R.string.text_cancel,
+                    R.string.text_confirm, R.string.text_cancel,
                     () -> {
                         dismissDialog();
                         ChatRoomHostPanel.Seat seat = mHostPanel.getSeat(position);
@@ -489,8 +485,7 @@ public class ChatRoomActivity extends AbsLiveActivity
         @Override
         public void onSeatApplied(int position) {
             closeActionSheet();
-            curDialog = showDialog(R.string.dialog_apply_seat_title,
-                    R.string.dialog_apply_seat_message,
+            curDialog = showDialog(R.string.dialog_application_title,
                     R.string.text_confirm,
                     R.string.text_cancel,
                     () -> {
@@ -514,12 +509,10 @@ public class ChatRoomActivity extends AbsLiveActivity
             } else if (mIsOwner) {
                 // I am the owner and I chose to mute the user
                 // of this seat.
-                String title = muted ? getString(R.string.dialog_mute_title)
+                String format = muted ? getString(R.string.dialog_mute_title)
                         : getString(R.string.dialog_unmute_title);
-                String format = muted ? getString(R.string.dialog_mute_message)
-                        : getString(R.string.dialog_unmute_message);
-                String message = String.format(format, userName);
-                curDialog = showDialog(title, message,
+                String title = String.format(format, userName);
+                curDialog = showDialog(title,
                         getString(R.string.text_confirm),
                         getString(R.string.text_cancel),
                         () -> {
@@ -536,20 +529,19 @@ public class ChatRoomActivity extends AbsLiveActivity
             boolean isHostLeave = mIsHost && config().getUserId().equals(userId);
             if (!isHostLeave && !mIsOwner) return;
 
-            String title = getResources().getString(R.string.dialog_leave_seat_title);
-            final String message;
+            final String title;
             if (mIsOwner) {
                 String format = getResources().getString(R.string.dialog_leave_seat_message_owner);
-                message = String.format(format, userName);
+                title = String.format(format, userName);
             } else if (mIsHost && config().getUserId().equals(userId)) {
-                message = getResources().getString(R.string.dialog_leave_seat_message_host);
-            } else message = "";
+                title = getResources().getString(R.string.dialog_leave_seat_message_host);
+            } else title = "";
 
             runOnUiThread(() -> {
                 closeActionSheet();
                 // Only owner and host can trigger user leave.
                 int behavior = mIsOwner ? SeatBehavior.FORCE_LEAVE : SeatBehavior.LEAVE;
-                curDialog = showDialog(title, message,
+                curDialog = showDialog(title,
                         getResources().getString(R.string.text_confirm),
                         getResources().getString(R.string.text_cancel),
                         () -> {
@@ -592,6 +584,7 @@ public class ChatRoomActivity extends AbsLiveActivity
                 // I've checked that I have left the seat.
                 proxy().getAudioManager().disableLocalAudio();
             }
+            sendCoHostingMessage(userName, true);
         }
 
         @Override
@@ -603,6 +596,7 @@ public class ChatRoomActivity extends AbsLiveActivity
                 mHostPanel.setStreamInfo(userId,
                         createFakeStreamInfoForMyself(!config().getAudioMuted()));
             }
+            sendCoHostingMessage(userName, false);
         }
 
         private RoomStreamInfo createFakeStreamInfoForMyself(boolean enableAudio) {
@@ -613,6 +607,12 @@ public class ChatRoomActivity extends AbsLiveActivity
             RoomStreamInfo info = new RoomStreamInfo();
             info.enableAudio(enableAudio);
             return info;
+        }
+
+        private void sendCoHostingMessage(String userName, boolean leave) {
+            String message = leave ? getResources().getString(R.string.co_hosting_left)
+                    : getResources().getString(R.string.co_hosting_occupied);
+            runOnUiThread(() -> mMessageList.addTextMessage(userName, message));
         }
     };
 
@@ -631,9 +631,7 @@ public class ChatRoomActivity extends AbsLiveActivity
         private void handleSeatBehaviorSuccess(int type, String userId, String userName, int no) {
             switch (type) {
                 case SeatBehavior.INVITE:
-                    String inviteFormat = getResources().getString(R.string.toast_invite_success);
-                    String inviteToast = String.format(inviteFormat, userName);
-                    ToastUtil.showShortToast(ChatRoomActivity.this, inviteToast);
+                    ToastUtil.showShortToast(ChatRoomActivity.this, R.string.toast_invite_success);
                     break;
                 case SeatBehavior.APPLY:
                     ToastUtil.showShortToast(application(), R.string.toast_application_sent);
@@ -676,8 +674,14 @@ public class ChatRoomActivity extends AbsLiveActivity
 
         @Override
         public void onSeatBehaviorFail(int type, String userId, String userName, int no, int code, String msg) {
+            if (mRoomFinished) return;
+
+            if (code == ServerClient.ERROR_CONNECTION) {
+                runOnUiThread(() -> ToastUtil.showShortToast(application(), R.string.error_no_connection));
+                return;
+            }
+
             runOnUiThread(() -> {
-                if (mRoomFinished) return;
                 handleSeatBehaviorFail(type, userId, userName, no, code, msg);
             });
         }
@@ -692,7 +696,7 @@ public class ChatRoomActivity extends AbsLiveActivity
                             handleSeatBehaviorRequestFail(userId, userName, no, type, code);
                     break;
                 case SeatBehavior.APPLY:
-                    ToastUtil.showShortToast(application(), R.string.toast_application_sent_fail);
+                    ToastUtil.showShortToast(application(), R.string.operation_fail);
                     break;
                 case SeatBehavior.INVITE_ACCEPT:
                 case SeatBehavior.APPLY_ACCEPT:
@@ -708,9 +712,7 @@ public class ChatRoomActivity extends AbsLiveActivity
                 case SeatBehavior.APPLY_REJECT:
                 case SeatBehavior.FORCE_LEAVE:
                 case SeatBehavior.LEAVE:
-                    String format = getResources().getString(R.string.toast_request_fail_message);
-                    String message = String.format(format, msg, code);
-                    ToastUtil.showShortToast(ChatRoomActivity.this, message);
+                    ToastUtil.showShortToast(ChatRoomActivity.this, R.string.operation_fail);
                 default:
             }
         }
@@ -855,7 +857,6 @@ public class ChatRoomActivity extends AbsLiveActivity
     @Override
     public void onJoinSuccess(String roomId, String roomName, String streamId) {
         runOnUiThread(() -> {
-            ToastUtil.showShortToast(application(), R.string.toast_join_class_success);
             if (mRole == Const.Role.owner) {
                 proxy().getAudioManager().enableLocalAudio();
             }
@@ -864,12 +865,19 @@ public class ChatRoomActivity extends AbsLiveActivity
 
     @Override
     public void onJoinFail(int code, String reason) {
+        if (code == ServerClient.ERROR_CONNECTION) {
+            runOnUiThread(() -> ToastUtil.showShortToast(application(), R.string.error_no_connection));
+            return;
+        }
+
         runOnUiThread(() -> {
             int msgRes;
             if (code == ErrorCode.ERROR_ROOM_MAX_USER) {
                 msgRes = R.string.error_room_max_user;
             } else if (code == ErrorCode.ERROR_ROOM_NOT_EXIST) {
                 msgRes = R.string.error_room_not_exist;
+            } else if (code == ErrorCode.ERROR_ROOM_END) {
+                msgRes = R.string.toast_room_end;
             } else {
                 msgRes = R.string.toast_join_class_fail;
             }
@@ -902,6 +910,7 @@ public class ChatRoomActivity extends AbsLiveActivity
         if (mUserListActionSheet != null &&
                 mUserListActionSheet.isShown()) {
             mUserListActionSheet.updateUserList(mHostPanel.getAllUsers());
+            mUserListActionSheet.refresh();
         }
     }
 
@@ -1087,12 +1096,14 @@ public class ChatRoomActivity extends AbsLiveActivity
                                       @Nullable List<GiftSendInfo> giftRank, @Nullable GiftSendInfo giftSent) {
         if (mRoomFinished) return;
 
-        int idx = RoomBgUtil.idToIndex(backgroundId);
-        int resource = RoomBgUtil.getRoomBgPicRes(idx);
-        Log.i(TAG, "onRoomPropertyUpdated background set " + backgroundId + " " + idx + " " + resource);
-
         runOnUiThread(() -> {
             mHostPanel.updateSeatStates(seats);
+
+            // The seat states comes asynchronously, and if
+            // the invitation list shows, we must remove those
+            // that have already become host, or who have
+            // refused the invitation.
+            updateUserListActionSheetIfShown();
 
             if (giftRank != null && giftRank.size() > 0) {
                 ArrayList<String> rankIds = new ArrayList<>();
@@ -1105,15 +1116,62 @@ public class ChatRoomActivity extends AbsLiveActivity
             if (giftSent != null) {
                 int index = GiftUtil.parseGiftIndexFromId(giftSent.giftId);
                 GiftUtil.showGiftAnimation(this, index);
-                mMessageList.addGiftSendMessage(giftSent.userName, index);
+                mMessageList.addGiftSendMessage(giftSent.userName, ownerName, index);
             }
 
             if (!TextUtils.isEmpty(backgroundId)) {
+                int idx = RoomBgUtil.idToIndex(backgroundId);
+                int resource = RoomBgUtil.getRoomBgPicRes(idx);
+                Logging.i("onRoomPropertyUpdated background set " + backgroundId + " " + idx + " " + resource);
                 int index = RoomBgUtil.idToIndex(backgroundId);
                 int res = RoomBgUtil.getRoomBgPicRes(index);
                 if (res > 0) mBackground.setCropBackground(res);
             }
         });
+    }
+
+    @Override
+    public void onRoomPropertyUpdated(@NonNull Map<String, Object> cause) {
+        checkSeatLeaveEvent(cause);
+    }
+
+    private void checkSeatLeaveEvent(@NonNull Map<String, Object> cause) {
+        Object dataObj = cause.get("data");
+        if (dataObj == null) return;
+        Map<String, Object> dataMap = castMap(dataObj);
+        if (dataMap == null) return;
+
+        Object typeObj = dataMap.get("type");
+        int type = castInteger(typeObj);
+        if (type == SeatBehavior.FORCE_LEAVE) {
+            Object userObj = dataMap.get("user");
+            Map<String, Object> userMap = castMap(userObj);
+            if (userMap == null) return;
+            Object userIdObject = userMap.get("userId");
+            String userId = castString(userIdObject);
+            if (config().getUserId().equals(userId)) {
+                runOnUiThread(() -> ToastUtil.showShortToast(
+                        application(), R.string.toast_force_leave_by_owner));
+            }
+        }
+    }
+
+    private Map<String, Object> castMap(Object object) {
+        if (object instanceof Map) {
+            return (Map<String, Object>) object;
+        } else {
+            return null;
+        }
+    }
+
+    private int castInteger(Object object) {
+        if (!(object instanceof Double)) return 0;
+        return ((Double) object).intValue();
+    }
+
+    private String castString(Object object) {
+        if (object instanceof String) return (String) object;
+        return null;
     }
 
     @Override
@@ -1123,12 +1181,10 @@ public class ChatRoomActivity extends AbsLiveActivity
 
         switch (behavior) {
             case SeatBehavior.INVITE:
-                String title = getString(R.string.dialog_invite_user_title);
-                String msgFormat = getString(R.string.dialog_receive_invite_message);
-                String message = String.format(msgFormat, fromUserName);
-                runOnUiThread(() -> curDialog = showDialog(title, message,
-                    getResources().getString(R.string.text_accept),
-                    getResources().getString(R.string.text_reject),
+                runOnUiThread(() -> curDialog = showDialog(
+                        getResources().getString(R.string.dialog_receive_invite_message),
+                    getResources().getString(R.string.text_yes),
+                    getResources().getString(R.string.text_no),
                     () -> {
                         requestSeatBehavior(no, SeatBehavior.INVITE_ACCEPT, fromUserId, fromUserName);
                         dismissDialog();
@@ -1153,15 +1209,21 @@ public class ChatRoomActivity extends AbsLiveActivity
                 });
                 break;
             case SeatBehavior.INVITE_ACCEPT:
-                runOnUiThread(() -> showToast(R.string.toast_invite_accepted, fromUserName));
                 proxy().getAudioManager().enableRemoteAudio(fromUserId, true);
                 proxy().getRoomInvitationManager(roomId).receiveSeatBehaviorResponse(
                         fromUserId, fromUserName, no, behavior);
+                runOnUiThread(() -> {
+                    showToast(R.string.toast_invite_accept, fromUserName);
+                    updateUserListActionSheetIfShown();
+                });
                 break;
             case SeatBehavior.INVITE_REJECT:
-                runOnUiThread(() -> showToast(R.string.toast_invite_rejected, fromUserName));
                 proxy().getRoomInvitationManager(roomId).receiveSeatBehaviorResponse(
                         fromUserId, fromUserName, no, behavior);
+                runOnUiThread(() -> {
+                    showToast(R.string.toast_invite_rejected, fromUserName);
+                    updateUserListActionSheetIfShown();
+                });
                 break;
             case SeatBehavior.APPLY_ACCEPT:
                 runOnUiThread(() -> showToast(R.string.toast_apply_accepted, fromUserName));
@@ -1175,6 +1237,7 @@ public class ChatRoomActivity extends AbsLiveActivity
 
     @Override
     public void onInvitationTimeout(String userId) {
+        runOnUiThread(() -> ToastUtil.showShortToast(application(), R.string.toast_invite_timeout));
         updateIfApplicationExpire();
     }
 
@@ -1215,7 +1278,12 @@ public class ChatRoomActivity extends AbsLiveActivity
 
     @Override
     public void onLocalAudioStats(@NonNull AgoraRteLocalAudioStats stats) {
-
+        runOnUiThread(() -> {
+            if (mRoomFinished) return;
+            if (stats != null && mStatView.isShown()) {
+                mStatView.setProperty(stats.getNumChannels(), stats.getSentSampleRate());
+            }
+        });
     }
 
     @Override
@@ -1259,17 +1327,22 @@ public class ChatRoomActivity extends AbsLiveActivity
 
     @Override
     public void onBackPressed() {
-        int titleRes = mIsOwner
-                ? R.string.dialog_owner_end_live_title
-                : R.string.dialog_leave_room_title;
-        int msgRes = mIsOwner
-                ? R.string.dialog_owner_end_live_message
-                : R.string.dialog_leave_room_message;
-        curDialog = showDialog(titleRes, msgRes,
-            R.string.text_confirm,
-            R.string.text_cancel,
-            () -> onRoomFinish(true),
-            this::dismissDialog);
+        if (!mIsHost && !mIsOwner) {
+            // The audience leave room directly
+            onRoomFinish(true);
+        } else {
+            int titleRes = mIsOwner
+                    ? R.string.dialog_owner_end_live_title
+                    : R.string.dialog_leave_room_title_host;
+            int msgRes = mIsOwner
+                    ? R.string.dialog_owner_end_live_message
+                    : R.string.dialog_leave_room_message_host;
+            curDialog = showDialog(titleRes, msgRes,
+                    R.string.text_confirm,
+                    R.string.text_cancel,
+                    () -> onRoomFinish(true),
+                    this::dismissDialog);
+        }
     }
 
     private void onRoomFinish(boolean needLeave) {
@@ -1287,11 +1360,12 @@ public class ChatRoomActivity extends AbsLiveActivity
             proxy().leaveRoom(config().getUserToken(),
                     roomId, config().getUserId());
         }
-        finish();
+
         mRoomFinished = true;
+        proxy().getRoomInvitationManager(roomId).stopTimer();
         proxy().getRoomInvitationManager(roomId)
                 .removeInvitationListener(this);
-        removeSeatManager();
+        finish();
     }
 
     private void removeSeatManager() {
@@ -1309,5 +1383,11 @@ public class ChatRoomActivity extends AbsLiveActivity
     public void onPause() {
         super.onPause();
         stopDetectNetworkState();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        removeSeatManager();
     }
 }

@@ -14,7 +14,7 @@ public class DialogUtil {
                                     final Runnable positiveClick,
                                     final Runnable negativeClick) {
         final Dialog dialog = new Dialog(context, R.style.dialog_center);
-        dialog.setContentView(R.layout.agora_voice_dialog);
+        dialog.setContentView(R.layout.agora_voice_dialog_message);
         AppCompatTextView titleTextView = dialog.findViewById(R.id.dialog_title);
         titleTextView.setText(title);
 

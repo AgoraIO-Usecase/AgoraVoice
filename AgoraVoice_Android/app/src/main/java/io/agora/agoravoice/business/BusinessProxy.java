@@ -1,12 +1,9 @@
 package io.agora.agoravoice.business;
 
-import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.elvishew.xlog.XLog;
 
 import java.util.List;
 
@@ -15,9 +12,11 @@ import io.agora.agoravoice.business.definition.interfaces.CoreService;
 import io.agora.agoravoice.business.definition.interfaces.RoomEventListener;
 import io.agora.agoravoice.business.definition.interfaces.VoiceCallback;
 import io.agora.agoravoice.business.definition.struct.AppVersionInfo;
+import io.agora.agoravoice.business.definition.struct.BusinessType;
 import io.agora.agoravoice.business.definition.struct.GiftInfo;
 import io.agora.agoravoice.business.definition.struct.MusicInfo;
 import io.agora.agoravoice.business.log.LogUploader;
+import io.agora.agoravoice.business.log.Logging;
 import io.agora.agoravoice.business.server.ServerClient;
 import io.agora.agoravoice.business.server.retrofit.listener.GeneralServiceListener;
 import io.agora.agoravoice.business.server.retrofit.listener.LogServiceListener;
@@ -182,7 +181,7 @@ public abstract class BusinessProxy implements
             @Override
             public void onJoinSuccess(String userId, String streamId, String role) {
                 if (mCoreService != null) {
-                    XLog.d("agora voice join success stream id "
+                    Logging.d("agora voice join success stream id "
                             + streamId + " role " + role);
                     mCoreService.enterRoom(roomId, roomName, userId, userName,
                             streamId, Const.Role.fromString(role), listener);
@@ -191,7 +190,10 @@ public abstract class BusinessProxy implements
 
             @Override
             public void onUserServiceFailed(int type, int code, String msg) {
-                XLog.d("agora voice join fail stream id " + code + " " + msg);
+                Logging.d("agora voice join fail stream id " + code + " " + msg);
+                if (type == BusinessType.JOIN) {
+                    listener.onJoinFail(code, msg);
+                }
             }
         });
     }

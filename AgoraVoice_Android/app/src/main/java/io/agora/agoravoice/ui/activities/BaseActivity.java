@@ -70,7 +70,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                                 final Runnable positiveClick,
                                 final Runnable negativeClick) {
         final Dialog dialog = new Dialog(this, R.style.dialog_center);
-        dialog.setContentView(R.layout.agora_voice_dialog);
+        dialog.setContentView(R.layout.agora_voice_dialog_message);
         AppCompatTextView titleTextView = dialog.findViewById(R.id.dialog_title);
         titleTextView.setText(title);
 
@@ -101,5 +101,39 @@ public abstract class BaseActivity extends AppCompatActivity {
         String p = res.getString(positiveText);
         String n = res.getString(negativeText);
         return showDialog(t, m, p, n, positiveClick, negativeClick);
+    }
+
+    protected Dialog showDialog(String title,
+                                String positiveText, String negativeText,
+                                final Runnable positiveClick,
+                                final Runnable negativeClick) {
+        final Dialog dialog = new Dialog(this, R.style.dialog_center);
+        dialog.setContentView(R.layout.agora_voice_dialog);
+        AppCompatTextView titleTextView = dialog.findViewById(R.id.dialog_title);
+        titleTextView.setText(title);
+
+        AppCompatTextView positiveButton = dialog.findViewById(R.id.dialog_positive_button);
+        positiveButton.setText(positiveText);
+        positiveButton.setOnClickListener(view -> positiveClick.run());
+
+        AppCompatTextView negativeButton = dialog.findViewById(R.id.dialog_negative_button);
+        negativeButton.setText(negativeText);
+        negativeButton.setOnClickListener(view -> negativeClick.run());
+
+        WindowUtil.hideStatusBar(dialog.getWindow(), false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        return dialog;
+    }
+
+    protected Dialog showDialog(int title,
+                                int positiveText, int negativeText,
+                                final Runnable positiveClick,
+                                final Runnable negativeClick) {
+        Resources res = getResources();
+        String t = res.getString(title);
+        String p = res.getString(positiveText);
+        String n = res.getString(negativeText);
+        return showDialog(t, p, n, positiveClick, negativeClick);
     }
 }

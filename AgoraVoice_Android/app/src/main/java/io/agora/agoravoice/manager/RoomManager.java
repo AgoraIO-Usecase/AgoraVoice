@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 
 import io.agora.agoravoice.business.BusinessProxy;
 import io.agora.agoravoice.business.definition.interfaces.RoomEventListener;
-import io.agora.agoravoice.business.server.retrofit.listener.RoomServiceListener;
-import io.agora.agoravoice.utils.Const;
 
 public class RoomManager {
     private BusinessProxy mProxy;

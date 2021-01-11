@@ -198,6 +198,10 @@ public class UserListActionSheet extends AbstractActionSheet implements View.OnC
         return mDefaultShowAll ? mAllUserAdapter : mApplyAdapter;
     }
 
+    public void refresh() {
+        getCurrentAdapter().notifyDataSetChanged();
+    }
+
     public void showApplication(boolean show) {
         if (show && mDefaultShowAll) {
             if (isShown()) {

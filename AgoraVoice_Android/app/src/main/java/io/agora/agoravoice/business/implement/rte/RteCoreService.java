@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import com.elvishew.xlog.XLog;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
@@ -26,9 +25,9 @@ import io.agora.agoravoice.business.definition.struct.RoomStreamInfo;
 import io.agora.agoravoice.business.definition.struct.RoomUserInfo;
 import io.agora.agoravoice.business.definition.struct.SeatStateData;
 import io.agora.agoravoice.business.implement.AudioEffect;
+import io.agora.agoravoice.business.log.Logging;
 import io.agora.agoravoice.business.server.retrofit.model.requests.SeatBehavior;
 import io.agora.agoravoice.utils.Const;
-import io.agora.log.AgoraLogManager;
 import io.agora.rte.AgoraRteAudioEncoderConfig;
 import io.agora.rte.AgoraRteAudioProfile;
 import io.agora.rte.AgoraRteAudioScenario;
@@ -109,7 +108,7 @@ public class RteCoreService implements CoreService,
     // instance is created asynchronously, and cannot set
     // an instance variable in a static method.
     private void setRteEngine(AgoraRteEngine engine) {
-        XLog.d("set rtc engine " + engine.toString());
+        Logging.d("set rtc engine " + engine.toString());
         mAgoraRteEngine = engine;
     }
 
@@ -201,7 +200,7 @@ public class RteCoreService implements CoreService,
             mAgoraRteScene = null;
             mRoomEventListener.onRoomLeaved();
         } else {
-            XLog.e("Cannot find rte scene instance when leaving room " + roomId);
+            Logging.e("Cannot find rte scene instance when leaving room " + roomId);
         }
     }
 
@@ -216,18 +215,18 @@ public class RteCoreService implements CoreService,
             mLocalUser.sendSceneMessage(msg, new AgoraRteCallback<Void>() {
                 @Override
                 public void success(@Nullable Void param) {
-                    XLog.i("Send room chat message success, from user " +
+                    Logging.i("Send room chat message success, from user " +
                             mLocalUser.getUserName() + " message content " + message);
                 }
 
                 @Override
                 public void fail(@NotNull AgoraRteError error) {
-                    XLog.w("Send room chat message fails code " +
+                    Logging.w("Send room chat message fails code " +
                             error.getCode() + ", error message " + error.getMessage());
                 }
             });
         } else {
-            XLog.e("Cannot find a local user when sending a chat message " + message);
+            Logging.e("Cannot find a local user when sending a chat message " + message);
         }
     }
 
@@ -292,12 +291,12 @@ public class RteCoreService implements CoreService,
         mLocalUser.publishLocalMediaTrack(mLocalUser.getStreamId(), audioTrack, new AgoraRteCallback<Void>() {
             @Override
             public void success(@Nullable Void param) {
-                XLog.i("enable local audio success");
+                Logging.i("enable local audio success");
             }
 
             @Override
             public void fail(@NotNull AgoraRteError error) {
-                XLog.w("enable local audio fail " +
+                Logging.w("enable local audio fail " +
                         error.getCode() + " " + error.getMessage());
             }
         });
@@ -311,12 +310,12 @@ public class RteCoreService implements CoreService,
                 audioTrack, new AgoraRteCallback<Void>() {
             @Override
             public void success(@Nullable Void param) {
-                XLog.w("disable local video success");
+                Logging.w("disable local video success");
             }
 
             @Override
             public void fail(@NotNull AgoraRteError error) {
-                XLog.w("disable local video fails " +
+                Logging.w("disable local video fails " +
                         error.getCode() + " " + error.getMessage());
             }
         });
@@ -340,10 +339,10 @@ public class RteCoreService implements CoreService,
             }
 
             if (!found) {
-                XLog.w("enableRemoteAudio cannot find a remote user stream " + userId);
+                Logging.w("enableRemoteAudio cannot find a remote user stream " + userId);
             }
         } else {
-            XLog.e("enableRemoteAudio scene not initialized");
+            Logging.e("enableRemoteAudio scene not initialized");
         }
     }
 
@@ -362,10 +361,10 @@ public class RteCoreService implements CoreService,
             }
 
             if (!found) {
-                XLog.w("disableRemoteAudio cannot find a remote user stream " + userId);
+                Logging.w("disableRemoteAudio cannot find a remote user stream " + userId);
             }
         } else {
-            XLog.e("disableRemoteAudio scene not initialized");
+            Logging.e("disableRemoteAudio scene not initialized");
         }
     }
 
@@ -385,12 +384,12 @@ public class RteCoreService implements CoreService,
                     mLocalUser.createOrUpdateRemoteStream(remoteInfo, new AgoraRteCallback<Void>() {
                         @Override
                         public void success(@Nullable Void param) {
-                            XLog.i("enableRemoteAudio true success");
+                            Logging.i("enableRemoteAudio true success");
                         }
 
                         @Override
                         public void fail(@NotNull AgoraRteError error) {
-                            XLog.w("enableRemoteAudio true fail " +
+                            Logging.w("enableRemoteAudio true fail " +
                                     error.getCode() + " " + error.getMessage());
                         }
                     });
@@ -398,19 +397,19 @@ public class RteCoreService implements CoreService,
                     mLocalUser.deleteRemoteStream(info, new AgoraRteCallback<Void>() {
                         @Override
                         public void success(@Nullable Void param) {
-                            XLog.i("enableRemoteAudio false success");
+                            Logging.i("enableRemoteAudio false success");
                         }
 
                         @Override
                         public void fail(@NotNull AgoraRteError error) {
-                            XLog.w("enableRemoteAudio false fail " +
+                            Logging.w("enableRemoteAudio false fail " +
                                     error.getCode() + " " + error.getMessage());
                         }
                     });
                 }
             }
         } else {
-            XLog.e("enableRemoteAudio stream id is invalid");
+            Logging.e("enableRemoteAudio stream id is invalid");
         }
     }
 
@@ -425,7 +424,7 @@ public class RteCoreService implements CoreService,
                         mLocalUser.getStreamId(), AgoraRteMediaStreamType.audio);
             }
         } else {
-            XLog.w("muteLocalAudio local user or the user stream id not found");
+            Logging.w("muteLocalAudio local user or the user stream id not found");
         }
     }
 
@@ -433,13 +432,13 @@ public class RteCoreService implements CoreService,
     public void muteRemoteAudio(String userId, boolean muted) {
         AgoraRteUserInfo userInfo = findUserByUserId(userId);
         if (userInfo == null) {
-            XLog.w("mute remote audio, cannot find a user " + userId);
+            Logging.w("mute remote audio, cannot find a user " + userId);
             return;
         }
 
         AgoraRteStreamInfo streamInfo = findStreamInfoByUserId(userId);
         if (streamInfo == null) {
-            XLog.w("mute remote audio, cannot find the stream info of user " + userId);
+            Logging.w("mute remote audio, cannot find the stream info of user " + userId);
             return;
         }
 
@@ -465,16 +464,18 @@ public class RteCoreService implements CoreService,
                 }
             });
         } else {
-            XLog.w("mute remote audio local user not found");
+            Logging.w("mute remote audio local user not found");
         }
     }
 
     @Override
     public String getCoreServiceVersion() {
-        return mAgoraRteEngine == null ? "" : mAgoraRteEngine.getVersion();
+        return mAgoraRteEngine == null ? "" : mAgoraRteEngine.version();
     }
 
     private AgoraRteUserInfo findUserByUserId(@NonNull String userId) {
+        if (mAgoraRteScene == null) return null;
+
         for (AgoraRteUserInfo info : mAgoraRteScene.getAllUsers()) {
             if (userId.equals(info.getUserId())) {
                 return info;
@@ -500,7 +501,7 @@ public class RteCoreService implements CoreService,
         // Chat peer text messages, user actions, or other mechanisms using
         // rtm peer messages should be parsed and handled in application
         // layers.
-        XLog.d("peer message received " + message.getMessage());
+        Logging.d("peer message received " + message.getMessage());
         InvitationMessage invitation = new Gson().fromJson(
                 message.getMessage(), InvitationMessage.class);
         if (invitation != null && invitation.cmd == 1) {
@@ -573,7 +574,7 @@ public class RteCoreService implements CoreService,
 
     @Override
     public void onLocalStreamAdded(@NotNull AgoraRteStreamEvent streamEvent) {
-        XLog.i("onLocalStreamAdded " + streamEvent.getStreamInfo().getOwner().getUserName() +
+        Logging.i("onLocalStreamAdded " + streamEvent.getStreamInfo().getOwner().getUserName() +
                 " " + streamEvent.getStreamInfo().getStreamId());
         if (mRoomEventListener != null) {
             mRoomEventListener.onStreamAdded(toStreamInfo(streamEvent), null);
@@ -582,7 +583,7 @@ public class RteCoreService implements CoreService,
 
     @Override
     public void onLocalStreamUpdated(@NotNull AgoraRteStreamEvent streamEvent) {
-        XLog.i("onLocalStreamUpdated " + streamEvent.getStreamInfo().getOwner().getUserName() +
+        Logging.i("onLocalStreamUpdated " + streamEvent.getStreamInfo().getOwner().getUserName() +
                 " " + streamEvent.getStreamInfo().getStreamId());
         if (mRoomEventListener != null) {
             mRoomEventListener.onStreamUpdated(toStreamInfo(streamEvent), null);
@@ -591,7 +592,7 @@ public class RteCoreService implements CoreService,
 
     @Override
     public void onLocalStreamRemoved(@NotNull AgoraRteStreamEvent streamEvent) {
-        XLog.i("onLocalStreamRemoved " +  streamEvent.getStreamInfo().getOwner().getUserName() +
+        Logging.i("onLocalStreamRemoved " +  streamEvent.getStreamInfo().getOwner().getUserName() +
                 " " + streamEvent.getStreamInfo().getStreamId());
         if (mRoomEventListener != null) {
             mRoomEventListener.onStreamRemoved(toStreamInfo(streamEvent), null);
@@ -696,7 +697,7 @@ public class RteCoreService implements CoreService,
                 getSeatInfo(properties), getGiftRank(properties), null);
     }
 
-    private String getBgIdFromProperty(@androidx.annotation.Nullable Map<String, Object> map) {
+    private String getBgIdFromProperty(@Nullable Map<String, Object> map) {
         String id = "-1";
         if (map == null || map.get("basic") == null) return id;
 
@@ -876,7 +877,7 @@ public class RteCoreService implements CoreService,
             // cmd 1 means room state change
             if (checkSceneEnds(changed)) {
                 // check to room state is actually closed
-                XLog.i("scene has been ended, cause ");
+                Logging.i("scene has been ended, cause ");
                 mRoomEventListener.onRoomEnd(roomEnd.status);
                 return;
             }
@@ -884,6 +885,12 @@ public class RteCoreService implements CoreService,
 
         mRoomEventListener.onRoomPropertyUpdated(getBgIdFromProperty(changed),
                 getSeatInfo(changed), getGiftRank(changed), getGiftSend(cause));
+
+        // Room properties that occur just one time and are
+        // not maintained in the room property map
+        if (cause != null && !cause.isEmpty()) {
+            mRoomEventListener.onRoomPropertyUpdated(cause);
+        }
     }
 
     private RoomEndCause getRoomEndCause(Map<String, Object> cause) {
@@ -975,10 +982,4 @@ public class RteCoreService implements CoreService,
     public void onCustomPeerMessageReceived(@NotNull String message,
                                             @NotNull AgoraRteUserInfo fromUser) {
     }
-
-//    public void uploadLogs() {
-//        if (Logger.INSTANCE != null) {
-//            Logger.INSTANCE
-//        }
-//    }
 }

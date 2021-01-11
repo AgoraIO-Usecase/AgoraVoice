@@ -28,11 +28,21 @@
             android:scaleType="fitXY"/>
     </RelativeLayout>
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/action_sheet_sound_effect_electronic_key_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/action_sheet_sound_effect_enable_layout"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_1_1"
+        android:text="@string/action_sheet_sound_effect_electronic_mode_hint"
+        android:layout_marginTop="@dimen/margin_2"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/action_sheet_sound_effect_electronic_key_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/action_sheet_sound_effect_enable_layout"
+        android:layout_below="@id/action_sheet_sound_effect_electronic_key_hint"
         android:layout_marginTop="@dimen/margin_2"/>
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -42,8 +52,8 @@
         android:layout_below="@id/action_sheet_sound_effect_electronic_key_recycler"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_1_1"
-        android:text="@string/action_sheet_sound_effect_electronic_tones_hint"
-        android:layout_marginTop="@dimen/margin_3"/>
+        android:text="@string/action_sheet_sound_effect_electronic_key_hint"
+        android:layout_marginTop="@dimen/margin_2"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/action_sheet_sound_effect_electronic_tone_recycler"

@@ -31,6 +31,7 @@ public class RoomMessageList extends RecyclerView {
     public static final int MSG_TYPE_LEAVE = 1;
     public static final int MSG_TYPE_CHAT = 2;
     public static final int MSG_TYPE_GIFT = 3;
+    public static final int MSG_TYPE_TEXT = 4;
 
     private static final int MESSAGE_TEXT_COLOR = Color.rgb(196, 196, 196);
     private static final int MAX_SAVED_MESSAGE = 50;
@@ -83,14 +84,21 @@ public class RoomMessageList extends RecyclerView {
         addMessage(item);
     }
 
-    public void addGiftSendMessage(String user, int giftIndex) {
-        LiveMessageItem item = new LiveMessageItem(MSG_TYPE_GIFT, user, mGiftSendHintText);
+    public void addGiftSendMessage(String fromUser, String toUser, int giftIndex) {
+        String message = String.format(mGiftSendHintText, toUser);
+        LiveMessageItem item = new LiveMessageItem(MSG_TYPE_GIFT, fromUser, message);
         item.giftIndex = giftIndex;
+        item.toUser = toUser;
         addMessage(item);
     }
 
     public void addChatMessage(String user, String message) {
         LiveMessageItem item = new LiveMessageItem(MSG_TYPE_CHAT, user, message);
+        addMessage(item);
+    }
+
+    public void addTextMessage(String user, String message) {
+        LiveMessageItem item = new LiveMessageItem(MSG_TYPE_TEXT, user, message);
         addMessage(item);
     }
 
@@ -118,7 +126,7 @@ public class RoomMessageList extends RecyclerView {
         @Override
         public void onBindViewHolder(@NonNull MessageListViewHolder holder, int position) {
             LiveMessageItem item = mMessageList.get(position);
-            holder.setMessage(item.user, item.message);
+            holder.setMessage(item.fromUser, item.message);
             if (item.type == MSG_TYPE_GIFT && holder.giftIcon != null) {
                 holder.giftIcon.setImageResource(GiftUtil.GIFT_ICON_RES[item.giftIndex]);
             }
@@ -194,13 +202,14 @@ public class RoomMessageList extends RecyclerView {
 
     private static class LiveMessageItem {
         int type;
-        String user;
+        String fromUser;
         String message;
+        String toUser;
         int giftIndex;
 
         LiveMessageItem(int type, String user, String message) {
             this.type = type;
-            this.user = user;
+            this.fromUser = user;
             this.message = message;
         }
     }

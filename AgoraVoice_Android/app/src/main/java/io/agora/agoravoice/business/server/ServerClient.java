@@ -1,15 +1,18 @@
 package io.agora.agoravoice.business.server;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.elvishew.xlog.XLog;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import io.agora.agoravoice.BuildConfig;
+import io.agora.agoravoice.business.log.Logging;
 import io.agora.agoravoice.business.server.retrofit.interfaces.GeneralService;
 import io.agora.agoravoice.business.server.retrofit.interfaces.SeatService;
 import io.agora.agoravoice.business.server.retrofit.interfaces.RoomService;
@@ -42,6 +45,7 @@ import io.agora.agoravoice.business.server.retrofit.model.responses.RoomListResp
 import io.agora.agoravoice.business.server.retrofit.model.responses.StringResp;
 import io.agora.agoravoice.business.server.retrofit.model.responses.VersionResp;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,8 +65,8 @@ public class ServerClient {
     private static final int DEFAULT_TIMEOUT_IN_SECONDS = 30;
 
     private static final int ERROR_OK = 0;
-    private static final int ERROR_UNKNOWN = -1;
-    private static final int ERROR_CONNECTION = -2;
+    public static final int ERROR_UNKNOWN = -1;
+    public static final int ERROR_CONNECTION = -2;
 
     private final GeneralService mGeneralService;
     private final UserService mUserService;
@@ -87,7 +91,8 @@ public class ServerClient {
                 .addConverterFactory(GsonConverterFactory.create());
 
         if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(XLog::d);
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(Logging::d);
+
             interceptor.level(HttpLoggingInterceptor.Level.BODY);
             OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
             builder.client(client);
@@ -221,7 +226,7 @@ public class ServerClient {
 
     private boolean appIdValid() {
         if (TextUtils.isEmpty(mAppId)) {
-            XLog.e("createUser app id is empty");
+            Logging.e("createUser app id is empty");
             return false;
         } else {
             return true;
@@ -315,12 +320,20 @@ public class ServerClient {
             @EverythingIsNonNull
             public void onResponse(Call<JoinResp> call, Response<JoinResp> response) {
                 JoinResp resp = response.body();
-                if (resp == null || resp.data == null) {
-                    listener.onUserServiceFailed(Request.JOIN, ERROR_UNKNOWN, ERROR_UNKNOWN_MSG);
-                } else if (resp.code != ERROR_OK) {
-                    listener.onUserServiceFailed(Request.JOIN, resp.code, resp.msg);
+                if (resp != null && resp.data != null) {
+                    if (resp.code == ERROR_OK) {
+                        listener.onJoinSuccess(userId, resp.data.streamId, resp.data.role);
+                    } else {
+                        listener.onUserServiceFailed(Request.JOIN, resp.code, resp.msg);
+                    }
                 } else {
-                    listener.onJoinSuccess(userId, resp.data.streamId, resp.data.role);
+                    try {
+                        String message = response.errorBody().string();
+                        Resp r = new Gson().fromJson(message, Resp.class);
+                        listener.onUserServiceFailed(Request.JOIN, r.code, r.msg);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 

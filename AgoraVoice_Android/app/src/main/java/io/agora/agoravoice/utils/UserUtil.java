@@ -21,7 +21,6 @@ import java.util.zip.ZipOutputStream;
 
 public class UserUtil {
     private static final String LOG_FOLDER_NAME = "logs";
-    private static final String LOG_APP_NAME = "agoravoice-app.log";
     private static final String LOG_ZIP_NAME = "agoravoice.logs.zip";
 
     public static int getUserProfileIcon(String userId) {

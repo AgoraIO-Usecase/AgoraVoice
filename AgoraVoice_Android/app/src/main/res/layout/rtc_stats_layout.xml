@@ -12,9 +12,16 @@
         android:layout_alignParentEnd="true"
         android:src="@drawable/icon_exit"/>
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/prop_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_50_percent_transparent"
+        android:layout_toStartOf="@id/stats_close_btn"/>
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/stats_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/prop_text"
         android:textColor="@color/black_50_percent_transparent"
         android:layout_toStartOf="@id/stats_close_btn"/>
 </RelativeLayout>

@@ -7,37 +7,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.elvishew.xlog.LogConfiguration;
-import com.elvishew.xlog.LogLevel;
-import com.elvishew.xlog.XLog;
-import com.elvishew.xlog.flattener.PatternFlattener;
-import com.elvishew.xlog.formatter.message.json.DefaultJsonFormatter;
-import com.elvishew.xlog.formatter.message.throwable.DefaultThrowableFormatter;
-import com.elvishew.xlog.formatter.message.xml.DefaultXmlFormatter;
-import com.elvishew.xlog.formatter.stacktrace.DefaultStackTraceFormatter;
-import com.elvishew.xlog.formatter.thread.DefaultThreadFormatter;
-import com.elvishew.xlog.printer.AndroidPrinter;
-import com.elvishew.xlog.printer.Printer;
-import com.elvishew.xlog.printer.file.FilePrinter;
-import com.elvishew.xlog.printer.file.backup.FileSizeBackupStrategy;
-import com.elvishew.xlog.printer.file.clean.FileLastModifiedCleanStrategy;
-import com.elvishew.xlog.printer.file.naming.DateFileNameGenerator;
-
 import java.util.List;
 
-import io.agora.agoravoice.BuildConfig;
 import io.agora.agoravoice.R;
 import io.agora.agoravoice.business.definition.struct.AppVersionInfo;
 import io.agora.agoravoice.business.definition.struct.BusinessType;
 import io.agora.agoravoice.business.definition.struct.GiftInfo;
 import io.agora.agoravoice.business.definition.struct.MusicInfo;
+import io.agora.agoravoice.business.log.Logging;
+import io.agora.agoravoice.business.server.ServerClient;
 import io.agora.agoravoice.manager.ProxyManager;
 import io.agora.agoravoice.ui.activities.main.MainActivity;
 import io.agora.agoravoice.ui.views.CropBackgroundRelativeLayout;
@@ -45,7 +28,6 @@ import io.agora.agoravoice.utils.Const;
 import io.agora.agoravoice.utils.DialogUtil;
 import io.agora.agoravoice.utils.RandomUtil;
 import io.agora.agoravoice.utils.ToastUtil;
-import io.agora.agoravoice.utils.UserUtil;
 import io.agora.agoravoice.utils.WindowUtil;
 
 public class SplashActivity extends BaseActivity implements
@@ -62,7 +44,6 @@ public class SplashActivity extends BaseActivity implements
     }
 
     private void initialize() {
-        initXLog();
         initProxy();
         checkAppVersion();
         login();
@@ -109,37 +90,6 @@ public class SplashActivity extends BaseActivity implements
         }
     }
 
-    private void initXLog() {
-        LogConfiguration config = new LogConfiguration.Builder()
-                .logLevel(BuildConfig.DEBUG ?
-                        LogLevel.DEBUG : LogLevel.INFO)                         // Specify log level, logs below this level won't be printed, default: LogLevel.ALL
-                .tag("AgoraVoice")                                              // Specify TAG, default: "X-LOG"
-                .jsonFormatter(new DefaultJsonFormatter())                      // Default: DefaultJsonFormatter
-                .xmlFormatter(new DefaultXmlFormatter())                        // Default: DefaultXmlFormatter
-                .throwableFormatter(new DefaultThrowableFormatter())            // Default: DefaultThrowableFormatter
-                .threadFormatter(new DefaultThreadFormatter())                  // Default: DefaultThreadFormatter
-                .stackTraceFormatter(new DefaultStackTraceFormatter())          // Default: DefaultStackTraceFormatter
-                .build();
-
-        Printer androidPrinter = new AndroidPrinter();                          // Printer that print the log using android.util.Log
-
-        String flatPattern = "{d yy/MM/dd HH:mm:ss} {l}|{t}: {m}";
-        Printer filePrinter = new FilePrinter                                   // Printer that print the log to the file system
-                .Builder(UserUtil.appLogFolderPath(this))               // Specify the path to save log file
-                .fileNameGenerator(new DateFileNameGenerator())                 // Default: ChangelessFileNameGenerator("log")
-                .backupStrategy(new FileSizeBackupStrategy(
-                        Const.APP_LOG_SIZE))                                    // Default: FileSizeBackupStrategy(1024 * 1024)
-                .cleanStrategy(new FileLastModifiedCleanStrategy(
-                        Const.LOG_DURATION))
-                .flattener(new PatternFlattener(flatPattern))                   // Default: DefaultFlattener
-                .build();
-
-        XLog.init(                                                              // Initialize XLog
-                config,                                                         // Specify the log configuration, if not specified, will use new LogConfiguration.Builder().build()
-                androidPrinter,
-                filePrinter);
-    }
-
     private void initProxy() {
         proxy().addGeneralServiceListener(this);
         proxy().addUserServiceListener(this);
@@ -170,7 +120,7 @@ public class SplashActivity extends BaseActivity implements
 
     @Override
     public void onCheckVersionSuccess(AppVersionInfo info) {
-        XLog.d("onCheckVersionSuccess " + info.appVersion);
+        Logging.d("onCheckVersionSuccess " + info.appVersion);
         if (info == null) {
             ToastUtil.showShortToast(SplashActivity.this, R.string.toast_app_version_fail);
             return;
@@ -180,7 +130,7 @@ public class SplashActivity extends BaseActivity implements
             if (info.forcedUpgrade == 2) {
                 // force to upgrade
                 mUpgradeDialog = DialogUtil.showDialog(SplashActivity.this,
-                        R.string.dialog_upgrade_title,
+                        R.string.dialog_upgrade_force_title,
                         R.string.dialog_upgrade_force_message,
                         R.string.text_upgrade,
                         R.string.text_cancel,
@@ -197,7 +147,7 @@ public class SplashActivity extends BaseActivity implements
             } else if (info.forcedUpgrade == 1) {
                 // recommend to upgrade
                 mUpgradeDialog = DialogUtil.showDialog(SplashActivity.this,
-                        R.string.dialog_upgrade_title,
+                        R.string.dialog_upgrade_recommend_title,
                         R.string.dialog_upgrade_recommend_message,
                         R.string.text_upgrade,
                         R.string.text_cancel,
@@ -251,7 +201,7 @@ public class SplashActivity extends BaseActivity implements
 
     @Override
     public void onUserCreated(String userId, String userName) {
-            XLog.i("agora voice application onUserCreated " +
+        Logging.i("agora voice application onUserCreated " +
                     userId + " " + config().getNickname());
             config().setUserId(userId);
             preferences().edit().putString(Const.KEY_USER_ID, userId).apply();
@@ -266,12 +216,9 @@ public class SplashActivity extends BaseActivity implements
 
     @Override
     public void onLoginSuccess(String userId, String userToken, String rtmToken) {
-        XLog.i("onLoginSuccess " + userToken);
+        Logging.i("onLoginSuccess " + userToken);
         config().setUserToken(userToken);
-        runOnUiThread(() -> {
-            ToastUtil.showShortToast(this, "login success");
-            gotoMainActivity();
-        });
+        gotoMainActivity();
     }
 
     private void gotoMainActivity() {
@@ -282,9 +229,15 @@ public class SplashActivity extends BaseActivity implements
 
     @Override
     public void onUserServiceFailed(int type, int code, String message) {
+        if (code == ServerClient.ERROR_CONNECTION) {
+            runOnUiThread(() -> ToastUtil.showShortToast(
+                    application(), R.string.error_no_connection));
+            return;
+        }
+
         if (type == BusinessType.CREATE_USER) {
             String msg = "Create user fails " + code + " " + message;
-            XLog.e(msg);
+            Logging.e(msg);
             runOnUiThread(() -> ToastUtil.showShortToast(this, msg));
         }
     }

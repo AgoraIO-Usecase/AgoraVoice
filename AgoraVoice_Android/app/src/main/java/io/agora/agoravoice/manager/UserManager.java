@@ -3,7 +3,6 @@ package io.agora.agoravoice.manager;
 import androidx.annotation.NonNull;
 
 import io.agora.agoravoice.business.BusinessProxy;
-import io.agora.agoravoice.business.definition.interfaces.VoiceCallback;
 
 public class UserManager {
     private BusinessProxy mProxy;

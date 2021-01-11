@@ -61,6 +61,7 @@
         android:gravity="center_vertical"
         android:textSize="@dimen/text_size_2"
         android:textColor="@android:color/white"
+        android:textColorHint="@color/theme_gray_2"
         android:hint="@string/profile_name_edit_hint"
         android:lines="1"
         android:background="@color/theme_background_4"/>

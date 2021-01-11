@@ -49,8 +49,8 @@ public class AudioManager {
 
     public static final int EFFECT_FLAVOR_RNB = 32;
     public static final int EFFECT_FLAVOR_POP = 33;
-    public static final int EFFECT_FLAVOR_HIP_HOP = 34;
-    public static final int EFFECT_FLAVOR_ROCK_N_ROLL = 35;
+    public static final int EFFECT_FLAVOR_ROCK = 34;
+    public static final int EFFECT_FLAVOR_HIP_HOP = 35;
 
     public static final int EFFECT_ELECTRONIC = 35;
 

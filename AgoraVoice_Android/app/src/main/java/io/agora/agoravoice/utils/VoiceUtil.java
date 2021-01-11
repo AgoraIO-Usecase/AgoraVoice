@@ -69,7 +69,7 @@ public class VoiceUtil {
     public static final int[] FLAVOUR_EFFECT_IMAGE_RES = {
             R.drawable.icon_sound_effect_flavour_r_n_b,
             R.drawable.icon_sound_effect_flavour_pop,
+            R.drawable.icon_sound_effect_flavour_rock,
             R.drawable.icon_sound_effect_flavour_hipop,
-            R.drawable.icon_sound_effect_flavour_rock_n_roll,
     };
 }

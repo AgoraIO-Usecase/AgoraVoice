@@ -13,16 +13,10 @@ import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
-import com.elvishew.xlog.XLog;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.File;
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 import io.agora.agoravoice.business.server.ServerClient;
@@ -42,8 +36,8 @@ public class LogUploader {
             public void onOssParamsResponse(OssResp response) {
                 response.data.callbackUrl = client.logStsCallback(host).request()
                         .url().toString().concat(callbackPath);
-                XLog.d("oss params obtained " + response.data.ossKey);
-                XLog.d("callback url " + response.data.callbackUrl);
+                Logging.d("oss params obtained " + response.data.ossKey);
+                Logging.d("callback url " + response.data.callbackUrl);
                 uploadByOss(context, sourcePath, response, listener);
             }
 
@@ -88,7 +82,7 @@ public class LogUploader {
                 public void onSuccess(PutObjectRequest request, PutObjectResult result) {
                     file.delete();
                     String body = result.getServerCallbackReturnBody();
-                    XLog.d("oss async object success " + body);
+                    Logging.d("oss async object success " + body);
                     JsonObject json = new JsonParser().parse(body).getAsJsonObject();
                     listener.onOssUploadSuccess(json.get("data").getAsString());
                 }
@@ -97,7 +91,7 @@ public class LogUploader {
                 public void onFailure(PutObjectRequest request, ClientException clientException,
                                       ServiceException serviceException) {
                     file.delete();
-                    XLog.d("oss async object fail " + clientException.getMessage());
+                    Logging.d("oss async object fail " + clientException.getMessage());
                     listener.onOssUploadFail(Request.UPLOAD_LOGS, clientException.getMessage());
                 }
             });

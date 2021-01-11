@@ -12,16 +12,15 @@
     <string name="main_navigation_home">Home</string>
     <string name="main_navigation_profile">My Profile</string>
 
-    <string name="main_start_chat">Begin Chat</string>
+    <string name="main_start_chat">Start</string>
 
-    <string name="scene_type_chat_room">Chat Room</string>
+    <string name="scene_type_chat_room">Chatroom</string>
 
     <!-- Profile -->
-    <string name="profile_setting_title_avatar">Avatar Setting</string>
-    <string name="profile_setting_title_nickname">Nickname Setting</string>
+    <string name="profile_setting_title_nickname">Nickname</string>
     <string name="profile_setting_title_about">About</string>
     <string name="profile_edit_avatar_title">Select Avatar</string>
-    <string name="profile_edit_nickname_title">Input Nickname</string>
+    <string name="profile_edit_nickname_title">Input</string>
 
     <string name="text_cancel">Cancel</string>
     <string name="text_done">Done</string>
@@ -33,10 +32,10 @@
     <string name="text_no">No</string>
 
     <string name="about_title">About</string>
-    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="privacy_policy_title">Privacy</string>
     <string name="privacy_website_link">https://www.agora.io/en/privacy-policy/</string>
 
-    <string name="disclaimer_title">Test Product Disclaimer</string>
+    <string name="disclaimer_title">Disclaimer</string>
     <string name="disclaimer_content">&#160;&#160;&#160;&#160;Agora Voice ("this product") is a test product provided by Agora.
         Agora enjoys the copyright and ownership of this product. It is hereby granted free of charge to anyone who obtains
         a copy of this product and related documentation (hereinafter referred to as "software") to try the software without limitation,
@@ -50,16 +49,16 @@
         and Agora shall not be responsible for any form of loss or injury caused by yourself or others when you try the services
         provided in this product for any reason.</string>
 
-    <string name="sign_up_agora_title">Sign Up Agora.io</string>
+    <string name="sign_up_agora_title">Agora Account</string>
     <string name="sign_up_website_link">https://sso.agora.io/en/signup</string>
 
-    <string name="version_title">AgoraVoice Version</string>
-    <string name="release_date_title">Release</string>
+    <string name="version_title">Agora Voice Version</string>
+    <string name="release_date_title">Release Date</string>
     <string name="release_date" translatable="false">2020.07.06</string>
     <string name="rte_sdk_version_title">SDK Version</string>
     <string name="upload_log_title">Upload log</string>
-    <string name="upload_log_success_message_format">Logs have been uploaded, the log id %s has been generated and copied into the clipboard</string>
-    <string name="upload_log_fail_message_format">Log uploading fails: %s</string>
+    <string name="upload_log_success_message_format">Log id %s copied into the clipboard</string>
+    <string name="upload_log_fail_message_format">Log upload fails: %s</string>
 
     <string name="official_website" translatable="false">www.agora.io</string>
 
@@ -69,17 +68,19 @@
     <string name="permission_not_granted">Necessary permissions not granted</string>
 
     <!-- Nickname Edit -->
-    <string name="profile_name_edit_hint">Input your nickname&#8230;</string>
-    <string name="profile_name_edit_message_empty">You have input an empty name</string>
-    <string name="profile_name_edit_message_success">Your nickname has changed</string>
-    <string name="profile_name_edit_message_fail">Nickname change failed</string>
+    <string name="profile_name_edit_hint">Input nickname&#8230;</string>
+    <string name="profile_name_edit_message_empty">Nickname cannot be blank</string>
+    <string name="profile_name_edit_message_success">Nickname updated</string>
+    <string name="profile_name_edit_message_fail">Nickname update fails</string>
     <string name="profile_name_edit_message_same">Same nickname</string>
+    <string name="profile_name_too_long_toast_message">Nickname cannot exceed %d characters</string>
 
     <!-- Prepare Activity -->
-    <string name="live_prepare_hint">Room Name</string>
+    <string name="live_prepare_hint">Channel Name</string>
     <string name="go_live">Go Live</string>
-    <string name="room_name_too_long_toast_format">Room name cannot be longer than %d characters</string>
-    <string name="no_room_name_toast">Please enter your room name</string>
+    <string name="room_name_too_long_toast_format">Maximum length of channel name is %d</string>
+    <string name="no_room_name_toast">Channel name cannot be blank</string>
+    <string name="create_room_fail">Fails to create a room %d %s</string>
 
     <string name="send_empty_message">Empty messages are not sent</string>
 
@@ -128,25 +129,28 @@
     <!-- Components -->
     <string name="room_bottom_bar_input_hint">Say something &#8230;</string>
 
-    <string name="live_system_notification_member_joined">has joined</string>
-    <string name="live_system_notification_member_left">has left</string>
+    <string name="live_system_notification_member_joined">joined channel</string>
+    <string name="live_system_notification_member_left">left channel</string>
+    <string name="co_hosting_occupied">becomes a co-host</string>
+    <string name="co_hosting_left">becomes an audience</string>
 
-    <string name="live_message_gift_send">has sent out</string>
+    <string name="live_message_gift_send">gives %s</string>
 
-    <string name="rtc_stats_format">Audio Received Bitrate: %.2f kbps%nAudio Received Loss Rate: %.2f%% %nAudio Sent Bitrate: %.2f kbps%nAudio Sent Loss Rate: %.2f%% %nDelay: %d ms</string>
+    <string name="rtc_starts_property_format">Audio tx channels: %d %nAudio tx sampleRate: %d</string>
+    <string name="rtc_stats_format">Audio tx bitrate: %.2f kbps%nAudio tx packet loss rate: %.2f%% %nAudio rx bitrate: %.2f kbps%nAudio rx packet loss rate: %.2f%% %nDelay: %d ms</string>
 
     <!-- Action Sheets -->
     <string name="action_sheet_background_title">Background</string>
 
-    <string name="action_sheet_voice_beauty_title">Voice Beauty</string>
-    <string name="action_sheet_voice_beauty_type_title_1">Chat</string>
-    <string name="action_sheet_voice_beauty_type_title_2">Sing</string>
-    <string name="action_sheet_voice_beauty_type_title_3">Timbre</string>
+    <string name="action_sheet_voice_beauty_title">Voice Beautifier</string>
+    <string name="action_sheet_voice_beauty_type_title_1">Chat Beautifier</string>
+    <string name="action_sheet_voice_beauty_type_title_2">Singing Beautifier</string>
+    <string name="action_sheet_voice_beauty_type_title_3">Timbre Transformation</string>
 
     <string-array name="voice_beauty_chat_names">
-        <item>Magnetic (Male)</item>
-        <item>Fresh (Female)</item>
-        <item>Vitality (Female)</item>
+        <item>Magnetic</item>
+        <item>Fresh</item>
+        <item>Vitality</item>
     </string-array>
 
     <string-array name="voice_beauty_sing_names">
@@ -159,8 +163,8 @@
     </string-array>
 
     <string-array name="voice_beauty_sing_names_simple">
-        <item>Male</item>
-        <item>Female</item>
+        <item>Man</item>
+        <item>Woman</item>
     </string-array>
 
     <string-array name="voice_beauty_timbre">
@@ -176,19 +180,19 @@
 
     <string name="action_sheet_sound_effect_title">Sound Effect</string>
     <string-array name="action_sheet_sound_effect_types">
-        <item>Spacing</item>
-        <item>Voice Change</item>
-        <item>Flavour</item>
-        <item>Electronic</item>
-        <item>Magic Notes</item>
+        <item>Room Acoustics</item>
+        <item>Voice Changer Effect</item>
+        <item>Style Transformation</item>
+        <item>Pitch Correction</item>
+        <item>Magic Tone</item>
     </string-array>
 
     <string-array name="action_sheet_sound_effect_space_names">
         <item>KTV</item>
-        <item>Concert</item>
+        <item>Vocal Concert</item>
         <item>Studio</item>
         <item>Phonograph</item>
-        <item>Stereo</item>
+        <item>Virtual Stereo</item>
         <item>Spacial</item>
         <item>Ethereal</item>
         <item>3D Voice</item>
@@ -200,25 +204,26 @@
         <item>Boy</item>
         <item>Sister</item>
         <item>Girl</item>
-        <item>Bajie</item>
+        <item>Pig King</item>
         <item>Hulk</item>
     </string-array>
 
-    <string-array name="action_sheet_sound_effect_flavour_names">
+    <string-array name="action_sheet_sound_effect_style_names">
         <item>R&#38;B</item>
-        <item>Pop</item>
-        <item>HiPop</item>
-        <item>Rock\'n\'Roll</item>
+        <item>Popular</item>
+        <item>Rock</item>
+        <item>HipHop</item>
     </string-array>
 
     <string name="action_sheet_sound_effect_enable_electronic_voice">Enable Electronic Voice</string>
+    <string name="action_sheet_sound_effect_electronic_mode_hint">Select Mode</string>
+    <string name="action_sheet_sound_effect_electronic_key_hint">Select the starting key</string>
+
     <string-array name="action_sheet_sound_effect_electronic_keys">
         <item>Major</item>
         <item>Minor</item>
-        <item>Breeze</item>
+        <item>Japanese\nPantatonic</item>
     </string-array>
-
-    <string name="action_sheet_sound_effect_electronic_tones_hint">Choose the starting tone</string>
 
     <string-array name="action_sheet_sound_effect_electronic_tones">
         <item>A</item>
@@ -235,7 +240,7 @@
         <item>Ab</item>
     </string-array>
 
-    <string name="action_sheet_3d_voice_title">3D Voice</string>
+    <string name="action_sheet_3d_voice_title">Enable 3D Voice</string>
     <string name="action_sheet_3d_voice_description">Speed adjustment controls the speed of sound rotation (The fastest is 60 rpm, the slowest is 1 rpm) </string>
     <string name="action_sheet_3d_voice_text_min">Min</string>
     <string name="action_sheet_3d_voice_text_max">Max</string>
@@ -245,19 +250,19 @@
     <string name="action_sheet_tool_title">Tool</string>
 
     <string-array name="action_sheet_tool_audience">
-        <item>Data</item>
+        <item>Statistics</item>
     </string-array>
 
     <string-array name="action_sheet_tool_host">
         <item>Monitor</item>
-        <item>Data</item>
+        <item>Statistics</item>
     </string-array>
 
     <string-array name="action_sheet_tool_owner">
         <item>Monitor</item>
-        <item>Music</item>
+        <item>Background Music</item>
         <item>Background</item>
-        <item>Data</item>
+        <item>Statistics</item>
     </string-array>
 
     <string-array name="action_sheet_gift_names">
@@ -279,86 +284,83 @@
     <string name="action_sheet_music_credit_hint">Music:&#160;&#160;</string>
     <string name="action_sheet_music_credit_link">https://www.bensound.com</string>
 
-    <string name="action_sheet_user_list_title">Online Users</string>
-    <string name="action_sheet_user_list_type_all">All Users</string>
-    <string name="action_sheet_user_list_type_apply">Apply</string>
+    <string name="action_sheet_user_list_title">Users</string>
+    <string name="action_sheet_user_list_type_all">All</string>
+    <string name="action_sheet_user_list_type_apply">Request</string>
     <string name="action_sheet_user_list_inviting">Inviting</string>
     <string name="action_sheet_user_list_invite">Invite</string>
 
     <string-array name="action_sheet_seat_operations">
         <item>Open</item>
-        <item>Block</item>
+        <item>Close</item>
         <item>Invite</item>
-        <item>Apply</item>
+        <item>Request</item>
         <item>Mute</item>
         <item>Unmute</item>
-        <item>ForceLeave</item>
-        <item>Leave</item>
+        <item>End</item>
+        <item>End</item>
     </string-array>
 
     <string name="action_sheet_seat_operate_mute">Mute</string>
     <string name="action_sheet_seat_operate_unmute">Unmute</string>
 
     <!-- Network status detection -->
-    <string name="network_unavailable">Network is unavailable, please try later</string>
+    <string name="network_unavailable">Network error - Cannot connect to network now, please try later</string>
     <string name="network_switch_to_wifi">You are in WIFI network</string>
     <string name="network_switch_to_mobile">You are in the mobile network, you may pay for the mobile data usage if you continue.</string>
 
-    <string name="scene_empty_list_hint">Please create a room</string>
+    <string name="scene_empty_list_hint">Create a channel to start</string>
     <string name="scene_server_error">No data, please try later</string>
     <string name="scene_no_connection_title">Network error</string>
 
     <!-- Dialogs -->
-    <string name="dialog_leave_room_title">Leave Room</string>
-    <string name="dialog_leave_room_message">Do you want to leave this room?</string>
-    <string name="dialog_owner_end_live_title">Live End</string>
-    <string name="dialog_owner_end_live_message">Do you want to end this live room?</string>
-    <string name="dialog_invite_user_title">Invitation</string>
-    <string name="dialog_apply_seat_title">Application</string>
-    <string name="dialog_invite_user_message">Do you want to invite %s? </string>
-    <string name="dialog_receive_invite_message">%s has invited you, do you accept？</string>
-    <string name="dialog_leave_seat_title">Leave</string>
-    <string name="dialog_leave_seat_message_owner">Do you want %s to leave the seat?</string>
-    <string name="dialog_leave_seat_message_host">Do you want to leave the seat?</string>
-    <string name="dialog_lock_seat_title">Lock Seat</string>
-    <string name="dialog_lock_seat_message">Do you want to lock the seat? Any host that has taken the seat will be forced to leave.</string>
-    <string name="dialog_unlock_seat_title">Unlock</string>
-    <string name="dialog_unlock_seat_message">Do you want to unlock this seat?</string>
-    <string name="dialog_apply_seat_message">Do you want to apply this seat?</string>
-    <string name="dialog_application_accepted_message">Do you accept the application from %s?</string>
-    <string name="dialog_application_rejected_message">Do you reject the application from %s?</string>
-    <string name="dialog_mute_title">Mute</string>
-    <string name="dialog_mute_message">Do you want to mute %s\'s mic?</string>
-    <string name="dialog_unmute_title">Unmute</string>
-    <string name="dialog_unmute_message">Do you want %s to speak again?</string>
-    <string name="dialog_upgrade_title">New Version Found</string>
-    <string name="dialog_upgrade_force_message">AgoraVoice you are using is too old, do you want to close and download new apk file?</string>
-    <string name="dialog_upgrade_recommend_message">New AgoraVoice version found, you are recommended to upgrade for new features.</string>
+    <string name="dialog_leave_room_title_host">Leave Channel?</string>
+    <string name="dialog_leave_room_message_host">This will end the session.</string>
+    <string name="dialog_owner_end_live_title">Live streaming ends</string>
+    <string name="dialog_owner_end_live_message">Do you want to end this live session?</string>
+    <string name="dialog_invite_user_title">Co-hosting invitation to %s? </string>
+    <string name="dialog_receive_invite_message">Do you accept the invitation to become a co-host？</string>
+    <string name="dialog_leave_seat_message_owner">Stop %s from co-hosting?</string>
+    <string name="dialog_leave_seat_message_host">Stop co-hosting?</string>
+    <string name="dialog_lock_seat_title">Close seat?</string>
+    <string name="dialog_lock_seat_message">Co-hosting fails if the seat is occupied</string>
+    <string name="dialog_unlock_seat_title">Open seat?</string>
+    <string name="dialog_application_accepted_title">Do you accept %s\'s request?</string>
+    <string name="dialog_application_rejected_title">Do you reject %s\'s request?</string>
+    <string name="dialog_application_title">Request co-hosting?</string>
+    <string name="dialog_mute_title">Mute %s?</string>
+    <string name="dialog_unmute_title">Unmute %s?</string>
+    <string name="dialog_upgrade_recommend_title">Recommend upgrade</string>
+    <string name="dialog_upgrade_recommend_message">You are recommended to upgrade Agora Voice for new features.</string>
+    <string name="dialog_upgrade_force_title">Forced upgrade</string>
+    <string name="dialog_upgrade_force_message">You must upgrade to use Agora Voice</string>
 
     <!-- Toasts -->
-    <string name="toast_invite_success">You have sent your invitation to %s</string>
+    <string name="toast_invite_success">Invitation sent</string>
+    <string name="toast_invite_timeout">Invitation timeout</string>
     <string name="toast_repeat_invite">%s has been invited recently</string>
     <string name="toast_request_fail_message">%s, error code: %d</string>
     <string name="toast_invite_fail">Invitation failed, error code %d</string>
-    <string name="toast_invite_accepted">Your invitation has been accepted by %s</string>
-    <string name="toast_invite_rejected">Your invitation has been rejected by %s</string>
-    <string name="toast_apply_accepted">Your application has been accepted by the owner</string>
-    <string name="toast_apply_rejected">Your application has been rejected by the owner</string>
+    <string name="toast_invite_accept">%s accepted co-hosting invitation</string>
+    <string name="toast_invite_rejected">%s rejected co-hosting invitation</string>
+    <string name="toast_apply_accepted">Co-hosting request approved</string>
+    <string name="toast_apply_rejected">Co-hosting request rejected</string>
     <string name="toast_user_has_taken_seat">The user you invited is a host.</string>
-    <string name="toast_application_sent">Your application has been sent to the owner</string>
-    <string name="toast_application_sent_fail">Your application failed to be sent</string>
-    <string name="toast_no_wired_mic_plugged">Please use a wired headset with a mic</string>
-    <string name="toast_join_class_success">Join room successfully</string>
+    <string name="toast_force_leave_by_owner">The host changes your role to audience</string>
+    <string name="toast_application_sent">Co-hosting request sent</string>
+    <string name="toast_no_wired_mic_plugged">Plug in a headset</string>
     <string name="toast_join_class_fail">Join room failed</string>
-    <string name="toast_room_end_timeout">This product is for test purpose only, the max duration for each room is 10 minutes</string>
-    <string name="toast_room_end_owner_leave">Room ends because the owner left</string>
+    <string name="toast_room_end_timeout">The max duration per session is 10 minutes</string>
+    <string name="toast_room_end_owner_leave">Live streaming ends</string>
     <string name="toast_room_end">Room Ends</string>
     <string name="toast_app_version_fail">Acquire app version fail</string>
     <string name="toast_link_empty">The link address is empty</string>
 
     <!-- Error Messages -->
     <string name="error_no">OK</string>
-    <string name="error_seat_taken">The seat has been taken by other host</string>
+    <string name="error_seat_taken">Seat is occupied. Please try another seat</string>
     <string name="error_room_max_user">This product is for test purpose only, each room can only have 10 users at most</string>
     <string name="error_room_not_exist">Room dos not exist</string>
+    <string name="error_no_connection">Connection lost. Please try later</string>
+    <string name="operation_fail">Operation fails</string>
 </resources>

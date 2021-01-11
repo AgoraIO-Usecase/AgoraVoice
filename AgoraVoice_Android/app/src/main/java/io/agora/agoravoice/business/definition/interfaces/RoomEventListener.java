@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 import io.agora.agoravoice.business.definition.struct.GiftSendInfo;
 import io.agora.agoravoice.business.definition.struct.RoomStreamInfo;
@@ -44,6 +45,8 @@ public interface RoomEventListener {
 
     void onRoomPropertyUpdated(@NonNull String backgroundId, @Nullable List<SeatStateData> seats,
                                @Nullable List<GiftSendInfo> giftRank, @Nullable GiftSendInfo giftSent);
+
+    void onRoomPropertyUpdated(@Nullable Map<String, Object> cause);
 
     void onReceiveSeatBehavior(@NonNull String roomId, String fromUserId, String fromUserName, int no, int behavior);
 
