@@ -469,9 +469,9 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             holder.name.setText(mElectronicKeyNames[pos]);
             holder.name.setTextColor(selected ? Color.WHITE : TITLE_TEXT_DEFAULT);
             holder.layout.setActivated(selected);
+            holder.layout.setEnabled(mEnabled);
+            if (!mEnabled) return;
             holder.itemView.setOnClickListener(view -> {
-                if (!mEnabled) return;
-
                 if (pos == mSelectedKey - 1) {
                     mSelectedKey = 0;
                 } else {
@@ -523,9 +523,9 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             holder.name.setText(mElectronicToneNames[pos]);
             holder.name.setTextColor(selected ? Color.WHITE : TITLE_TEXT_DEFAULT);
             holder.layout.setActivated(selected);
+            holder.layout.setEnabled(mEnabled);
+            if (!mEnabled) return;
             holder.itemView.setOnClickListener(view -> {
-                if (!mEnabled) return;
-
                 if (pos == mSelectedValue - 1) {
                     mSelectedValue = 0;
                 } else {

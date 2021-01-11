@@ -15,6 +15,7 @@
     <color name="theme_blue_1_alpha">#660088EB</color>
 
     <color name="action_sheet_voice_enhance_item_selected_bg">#FF10284B</color>
+    <color name="action_sheet_voice_enhance_item_enable_bg">#FF2F3947</color>
 
     <color name="new_message_hint_color">#FFFF097E</color>
 
