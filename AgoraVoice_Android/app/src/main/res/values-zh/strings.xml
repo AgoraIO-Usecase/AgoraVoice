@@ -276,7 +276,7 @@
     <!-- Network status detection -->
     <string name="network_unavailable">网络异常 - 当前网络连接错误，请稍候再试</string>
     <string name="network_switch_to_wifi">当前处于 WIFI 网络</string>
-    <string name="network_switch_to_mobile">当前处于非 WIFI 网络, 您可能需要支付移动网络数据费用</string>
+    <string name="network_switch_to_mobile">当前网络无 WIFI, 继续使用可能产生流量费用</string>
 
     <string name="scene_empty_list_hint">请创建一个房间</string>
     <string name="scene_server_error">暂无数据请稍候再试</string>

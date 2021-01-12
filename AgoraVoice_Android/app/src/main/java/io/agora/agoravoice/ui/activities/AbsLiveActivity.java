@@ -84,7 +84,7 @@ public abstract class AbsLiveActivity extends BaseActivity {
             } else {
                 int type = info.getType();
                 if (ConnectivityManager.TYPE_WIFI == type) {
-                    ToastUtil.showShortToast(context, R.string.network_switch_to_wifi);
+                    // ToastUtil.showShortToast(context, R.string.network_switch_to_wifi);
                 } else if (ConnectivityManager.TYPE_MOBILE == type) {
                     ToastUtil.showShortToast(context, R.string.network_switch_to_mobile);
                 }

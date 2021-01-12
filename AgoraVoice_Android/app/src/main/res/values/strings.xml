@@ -307,7 +307,7 @@
     <!-- Network status detection -->
     <string name="network_unavailable">Network error - Cannot connect to network now, please try later</string>
     <string name="network_switch_to_wifi">You are in WIFI network</string>
-    <string name="network_switch_to_mobile">You are in the mobile network, you may pay for the mobile data usage if you continue.</string>
+    <string name="network_switch_to_mobile">Use cellular data instead of WIFI， May incur data charges</string>
 
     <string name="scene_empty_list_hint">Create a channel to start</string>
     <string name="scene_server_error">No data, please try later</string>
