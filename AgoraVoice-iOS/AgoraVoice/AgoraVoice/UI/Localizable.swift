@@ -403,6 +403,14 @@ class LiveVCLocalizable: NSObject {
             return "All"
         }
     }
+    
+    static func leave() -> String {
+        if DeviceAssistant.Language.isChinese {
+            return "退出"
+        } else {
+            return "Leave"
+        }
+    }
 }
 
 // MARK: - AudioEffectsLocalizable

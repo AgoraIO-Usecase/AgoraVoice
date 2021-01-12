@@ -599,7 +599,8 @@ extension LiveViewController {
             text = LiveVCLocalizable.liveStreamingTimeout()
         }
         
-        self.showAlert(text) { [unowned self] (_) in
+        self.showAlert(text,
+                       action: LiveVCLocalizable.leave()) { [unowned self] (_) in
             self.dimissSelf()
         }
     }

@@ -223,6 +223,7 @@ extension PresentChildProtocol {
 protocol ShowAlertProtocol where Self: UIViewController {
     func showAlert(_ title: String?,
                    message: String?,
+                   action: String,
                    handler: ((UIAlertAction) -> Void)?)
     func showAlert(_ title: String?,
                    message: String?,
@@ -241,8 +242,11 @@ protocol ShowAlertProtocol where Self: UIViewController {
 extension ShowAlertProtocol {
     func showAlert(_ title: String? = nil,
                    message: String? = nil,
+                   action: String = "OK",
                    handler: ((UIAlertAction) -> Void)? = nil) {
-        let action = UIAlertAction(title: "OK", style: .default, handler: handler)
+        let action = UIAlertAction(title: action,
+                                   style: .default,
+                                   handler: handler)
         showAlert(title,
                   message: message,
                   preferredStyle: .alert,
@@ -257,9 +261,17 @@ extension ShowAlertProtocol {
                    action2: String,
                    handler1: ((UIAlertAction) -> Void)? = nil,
                    handler2: ((UIAlertAction) -> Void)? = nil) {
-        let act1 = UIAlertAction(title: action1, style: .default, handler: handler1)
-        let act2 = UIAlertAction(title: action2, style: .default, handler: handler2)
-        showAlert(title, message: message, preferredStyle: preferredStyle, actions: [act1, act2], completion: nil)
+        let act1 = UIAlertAction(title: action1,
+                                 style: .default,
+                                 handler: handler1)
+        let act2 = UIAlertAction(title: action2,
+                                 style: .default,
+                                 handler: handler2)
+        showAlert(title,
+                  message: message,
+                  preferredStyle: preferredStyle,
+                  actions: [act1, act2],
+                  completion: nil)
     }
     
     func showAlert(_ title: String? = nil,
