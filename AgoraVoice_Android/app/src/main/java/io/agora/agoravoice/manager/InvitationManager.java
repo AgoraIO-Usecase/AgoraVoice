@@ -3,9 +3,11 @@ package io.agora.agoravoice.manager;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.agora.agoravoice.business.BusinessProxy;
@@ -22,6 +24,8 @@ public class InvitationManager {
         void onInvitationTimeout(String userId);
 
         void onApplicationTimeout(String userId);
+
+        void onInvitationListChanged();
     }
 
     private static final int TIMEOUT = 30 * 1000;
@@ -37,6 +41,7 @@ public class InvitationManager {
     private final Map<String, RoomUserInfo> mInviteUserInfoMap = new ConcurrentHashMap<>();
     private final Map<String, Integer> mInviteSeatMap = new ConcurrentHashMap<>();
     private final Map<String, Long> mInviteTimeMap = new ConcurrentHashMap<>();
+    private final Map<Integer, Set<String>> mMultiInviteForSeatMap = new ConcurrentHashMap<>();
 
     private final List<RoomUserInfo> mApplyList = new ArrayList<>();
     private final Map<String, RoomUserInfo> mApplyUserInfoMap = new ConcurrentHashMap<>();
@@ -193,6 +198,37 @@ public class InvitationManager {
         if (info != null) mApplyList.remove(info);
     }
 
+    // We may invite multiple users for a seat at the same time
+    private void addMultiInviteRecord(int no, String userId) {
+        Set<String> seatInvitations = mMultiInviteForSeatMap.get(no);
+        if (seatInvitations == null) {
+            mMultiInviteForSeatMap.put(no, new HashSet<>());
+        }
+        seatInvitations = mMultiInviteForSeatMap.get(no);
+        seatInvitations.add(userId);
+    }
+
+    // Once a user accepts the invitation for a seat, all
+    // users' invitations should be removed from the
+    // invitation map for this seat.
+    private void removeMultiInviteRecord(int no) {
+        Set<String> seatInvitations = mMultiInviteForSeatMap.get(no);
+        if (seatInvitations != null) {
+            for (String userId : seatInvitations) {
+                removeInvitationInfo(userId);
+            }
+        }
+    }
+
+    // Remove a single user's record, maybe because the
+    // user has left, or the invitation fails
+    private void removeMultiInviteRecord(int no, String userId) {
+        Set<String> seatInvitations = mMultiInviteForSeatMap.get(no);
+        if (seatInvitations != null) {
+            seatInvitations.remove(userId);
+        }
+    }
+
     public int requestSeatBehavior(@NonNull String token, @NonNull String userId,
                                    String userName, int no, int behavior) {
         int seatNo = no;
@@ -214,6 +250,7 @@ public class InvitationManager {
                     mInviteUserInfoMap.put(userId, info);
                     mInviteSeatMap.put(userId, no);
                     mInviteTimeMap.put(userId, System.currentTimeMillis());
+                    addMultiInviteRecord(no, userId);
                 }
             }
         } else if (behavior == SeatBehavior.APPLY_ACCEPT ||
@@ -246,8 +283,16 @@ public class InvitationManager {
     public void receiveSeatBehaviorResponse(String userId, String userName, int no, int behavior) {
         switch (behavior) {
             case SeatBehavior.INVITE_ACCEPT:
+                // Remove all invitation information related
+                // to this seat
+                removeMultiInviteRecord(no);
+                for (InvitationManagerListener listener : mListener) {
+                    listener.onInvitationListChanged();
+                }
+                break;
             case SeatBehavior.INVITE_REJECT:
                 removeInvitationInfo(userId);
+                removeMultiInviteRecord(no, userId);
                 break;
             case SeatBehavior.APPLY:
                 RoomUserInfo info = mApplyUserInfoMap.remove(userId);
@@ -279,9 +324,13 @@ public class InvitationManager {
     }
 
     public void userLeft(String userId) {
+        if (mInviteSeatMap.containsKey(userId)) {
+            int no = mInviteSeatMap.get(userId);
+            removeMultiInviteRecord(no, userId);
+        }
+
         removeInvitationInfo(userId);
         removeApplicationInfo(userId);
-
         RoomUserInfo info = getUserInfoByUserId(userId);
         if (info != null) mFullUserList.remove(info);
     }

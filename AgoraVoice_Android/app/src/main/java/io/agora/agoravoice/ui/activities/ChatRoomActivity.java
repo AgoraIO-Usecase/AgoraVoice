@@ -1246,6 +1246,11 @@ public class ChatRoomActivity extends AbsLiveActivity
         updateIfApplicationExpire();
     }
 
+    @Override
+    public void onInvitationListChanged() {
+        runOnUiThread(this::updateUserListActionSheetIfShown);
+    }
+
     private void updateIfApplicationExpire() {
         runOnUiThread(() -> {
             if (!proxy().getRoomInvitationManager(roomId).hasApplication()) {
