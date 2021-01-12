@@ -22,12 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.agora.agoravoice.R;
-import io.agora.agoravoice.business.server.ServerClient;
+import io.agora.agoravoice.business.log.Logging;
 import io.agora.agoravoice.business.server.retrofit.model.responses.RoomListResp;
 import io.agora.agoravoice.manager.ProxyManager;
 import io.agora.agoravoice.ui.views.SquareRelativeLayout;
 import io.agora.agoravoice.utils.Const;
-import io.agora.agoravoice.utils.ToastUtil;
 import io.agora.agoravoice.utils.UserUtil;
 import io.agora.agoravoice.utils.WindowUtil;
 
@@ -36,10 +35,6 @@ import io.agora.agoravoice.utils.WindowUtil;
  */
 public class SceneActivity extends BaseActivity implements
         SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
-    public interface OnRoomClickedListener {
-        void onRoomClicked(String roomId, String roomName, String ownerId);
-    }
-
     private static final int SPAN_COUNT = 2;
     private static final int REFRESH_DELAY = 1000 * 60;
 
@@ -55,7 +50,9 @@ public class SceneActivity extends BaseActivity implements
     private int mListItemCorner;
     private RelativeLayout mExceptionLayout;
 
-    private ProxyManager.RoomServiceListener mRoomListener
+    private boolean mRoomEntered;
+
+    private final ProxyManager.RoomServiceListener mRoomListener
             = new ProxyManager.RoomServiceListener() {
         @Override
         public void onRoomCreated(String roomId, String roomName) {
@@ -128,7 +125,7 @@ public class SceneActivity extends BaseActivity implements
         stopSwipeRefresh();
     }
 
-    private ProxyManager.NetworkStateChangedListener mNetworkListener = new
+    private final ProxyManager.NetworkStateChangedListener mNetworkListener = new
         ProxyManager.NetworkStateChangedListener() {
             @Override
             public void onNetworkDisconnected() {
@@ -285,6 +282,7 @@ public class SceneActivity extends BaseActivity implements
         super.onResume();
         refreshPage();
         startRefreshTimer();
+        mRoomEntered = false;
     }
 
     @Override
@@ -326,8 +324,15 @@ public class SceneActivity extends BaseActivity implements
             d.setCornerRadius(mListItemCorner);
             holder.layout.setBackground(d);
             holder.itemView.setOnClickListener((view) -> {
+                if (mRoomEntered) {
+                    Logging.d("too frequently call enter a room");
+                    return;
+                }
+
                 if (config().isUserExisted() && position < mRoomList.size()) {
+                    mRoomEntered = true;
                     RoomListResp.RoomListItem selectedInfo = mRoomList.get(position);
+                    Logging.d("enter room " + selectedInfo.channelName);
                     enterRoom(selectedInfo.roomId,
                             selectedInfo.roomName,
                             selectedInfo.ownerUserInfo.userId,
