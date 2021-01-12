@@ -870,6 +870,8 @@ public class ChatRoomActivity extends AbsLiveActivity
             return;
         }
 
+        if (mRoomFinished) return;
+
         runOnUiThread(() -> {
             int msgRes;
             if (code == ErrorCode.ERROR_ROOM_MAX_USER) {
@@ -883,8 +885,9 @@ public class ChatRoomActivity extends AbsLiveActivity
             }
 
             dismissDialog();
-            curDialog = showOneButtonDialog( msgRes, R.string.text_confirm,
-                    () -> onRoomFinish(false), false);
+            curDialog = showOneButtonDialog(msgRes, R.string.text_confirm,
+                    this::dismissDialog, false);
+            curDialog.setOnDismissListener(dialog -> onRoomFinish(false));
         });
     }
 
@@ -1327,8 +1330,9 @@ public class ChatRoomActivity extends AbsLiveActivity
             }
 
             dismissDialog();
-            curDialog = showOneButtonDialog(messageRes, R.string.text_confirm,
-                    () -> onRoomFinish(true), false);
+            curDialog = showOneButtonDialog(messageRes, R.string.text_leave,
+                    this::dismissDialog, false);
+            curDialog.setOnDismissListener(dialog -> onRoomFinish(true));
         });
     }
 

@@ -30,6 +30,7 @@
     <string name="text_upgrade">Upgrade</string>
     <string name="text_yes">Yes</string>
     <string name="text_no">No</string>
+    <string name="text_leave">Leave</string>
 
     <string name="about_title">About</string>
     <string name="privacy_policy_title">Privacy</string>

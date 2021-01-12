@@ -26,6 +26,7 @@
     <string name="text_upgrade">升级</string>
     <string name="text_yes">是</string>
     <string name="text_no">否</string>
+    <string name="text_leave">退出</string>
 
     <string name="about_title">关于</string>
     <string name="privacy_policy_title">隐私条例</string>
