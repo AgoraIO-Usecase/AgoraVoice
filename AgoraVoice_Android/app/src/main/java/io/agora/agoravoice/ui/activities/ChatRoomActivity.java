@@ -881,8 +881,10 @@ public class ChatRoomActivity extends AbsLiveActivity
             } else {
                 msgRes = R.string.toast_join_class_fail;
             }
-            ToastUtil.showShortToast(application(), msgRes);
-            onRoomFinish(false);
+
+            dismissDialog();
+            curDialog = showOneButtonDialog( msgRes, R.string.text_confirm,
+                    () -> onRoomFinish(false), false);
         });
     }
 
@@ -1324,7 +1326,9 @@ public class ChatRoomActivity extends AbsLiveActivity
                 messageRes = R.string.toast_room_end;
             }
 
-            ToastUtil.showShortToast(application(), messageRes);
+            dismissDialog();
+            curDialog = showOneButtonDialog(messageRes, R.string.text_confirm,
+                    () -> onRoomFinish(true), false);
         });
     }
 
@@ -1365,15 +1369,19 @@ public class ChatRoomActivity extends AbsLiveActivity
         }
 
         mRoomFinished = true;
-        proxy().getRoomInvitationManager(roomId).stopTimer();
-        proxy().getRoomInvitationManager(roomId)
-                .removeInvitationListener(this);
+        removeSeatManager();
         finish();
     }
 
     private void removeSeatManager() {
         proxy().removeSeatListener(mSeatListener);
-        proxy().removeSeatManager(roomId);
+
+        if (proxy().getRoomInvitationManager(roomId) != null) {
+            proxy().getRoomInvitationManager(roomId).stopTimer();
+            proxy().getRoomInvitationManager(roomId)
+                    .removeInvitationListener(this);
+            proxy().removeSeatManager(roomId);
+        }
     }
 
     @Override
@@ -1391,6 +1399,5 @@ public class ChatRoomActivity extends AbsLiveActivity
     @Override
     public void onDestroy() {
         super.onDestroy();
-        removeSeatManager();
     }
 }

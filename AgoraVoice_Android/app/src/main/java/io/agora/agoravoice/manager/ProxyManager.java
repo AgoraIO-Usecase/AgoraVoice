@@ -24,6 +24,7 @@ import io.agora.agoravoice.business.definition.struct.AppVersionInfo;
 import io.agora.agoravoice.business.definition.struct.BusinessType;
 import io.agora.agoravoice.business.definition.struct.GiftInfo;
 import io.agora.agoravoice.business.definition.struct.MusicInfo;
+import io.agora.agoravoice.business.log.Logging;
 import io.agora.agoravoice.business.server.retrofit.listener.LogServiceListener;
 import io.agora.agoravoice.business.server.retrofit.model.responses.RoomListResp;
 import io.agora.agoravoice.utils.Const;
@@ -282,7 +283,13 @@ public class ProxyManager implements BusinessProxyListener {
     }
 
     public void removeSeatManager(String roomId) {
-        mSeatManagerMap.remove(roomId);
+        synchronized (this) {
+            // To avoid frequently call this remove method
+            // in a short time, when conflicts may occur for
+            // the outside world.
+            Logging.d("remove invitation manager, room id " + roomId);
+            mSeatManagerMap.remove(roomId);
+        }
     }
 
     public int requestSeatBehavior(String token, String roomId, String userId, String userName, int no, int type) {

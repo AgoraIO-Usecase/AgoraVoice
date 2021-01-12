@@ -877,7 +877,7 @@ public class RteCoreService implements CoreService,
             // cmd 1 means room state change
             if (checkSceneEnds(changed)) {
                 // check to room state is actually closed
-                Logging.i("scene has been ended, cause ");
+                Logging.i("scene has been ended, cause " + roomEnd.status);
                 mRoomEventListener.onRoomEnd(roomEnd.status);
                 return;
             }
