@@ -1315,8 +1315,6 @@ public class ChatRoomActivity extends AbsLiveActivity
     @Override
     public void onRoomEnd(int cause) {
         runOnUiThread(() -> {
-            onRoomFinish(true);
-
             int messageRes;
             if (cause == Const.ROOM_LEAVE_TIMEOUT) {
                 messageRes = R.string.toast_room_end_timeout;

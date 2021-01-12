@@ -136,4 +136,33 @@ public abstract class BaseActivity extends AppCompatActivity {
         String n = res.getString(negativeText);
         return showDialog(t, p, n, positiveClick, negativeClick);
     }
+
+    protected Dialog showOneButtonDialog(String message,
+                                         String positiveText,
+                                         final Runnable positiveClick,
+                                         boolean cancelable) {
+        final Dialog dialog = new Dialog(this, R.style.dialog_center);
+        dialog.setContentView(R.layout.agora_voice_dialog_simple);
+
+        AppCompatTextView msgTextView = dialog.findViewById(R.id.dialog_message);
+        msgTextView.setText(message);
+
+        AppCompatTextView positiveButton = dialog.findViewById(R.id.dialog_positive_button);
+        positiveButton.setText(positiveText);
+        positiveButton.setOnClickListener(view -> positiveClick.run());
+
+        WindowUtil.hideStatusBar(dialog.getWindow(), false);
+        dialog.setCanceledOnTouchOutside(cancelable);
+        dialog.show();
+        return dialog;
+    }
+
+    protected Dialog showOneButtonDialog(int messageRes, int positiveText,
+                                         final Runnable positiveClick,
+                                         boolean cancelable) {
+        Resources res = getResources();
+        String message = res.getString(messageRes);
+        String positive = res.getString(positiveText);
+        return showOneButtonDialog(message, positive, positiveClick, cancelable);
+    }
 }

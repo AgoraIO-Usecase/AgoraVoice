@@ -25,7 +25,6 @@ import io.agora.agoravoice.manager.ProxyManager;
 import io.agora.agoravoice.ui.activities.main.MainActivity;
 import io.agora.agoravoice.ui.views.CropBackgroundRelativeLayout;
 import io.agora.agoravoice.utils.Const;
-import io.agora.agoravoice.utils.DialogUtil;
 import io.agora.agoravoice.utils.RandomUtil;
 import io.agora.agoravoice.utils.ToastUtil;
 import io.agora.agoravoice.utils.WindowUtil;
@@ -129,8 +128,7 @@ public class SplashActivity extends BaseActivity implements
         runOnUiThread(() -> {
             if (info.forcedUpgrade == 2) {
                 // force to upgrade
-                mUpgradeDialog = DialogUtil.showDialog(SplashActivity.this,
-                        R.string.dialog_upgrade_force_title,
+                mUpgradeDialog = showDialog(R.string.dialog_upgrade_force_title,
                         R.string.dialog_upgrade_force_message,
                         R.string.text_upgrade,
                         R.string.text_cancel,
@@ -146,8 +144,7 @@ public class SplashActivity extends BaseActivity implements
                 );
             } else if (info.forcedUpgrade == 1) {
                 // recommend to upgrade
-                mUpgradeDialog = DialogUtil.showDialog(SplashActivity.this,
-                        R.string.dialog_upgrade_recommend_title,
+                mUpgradeDialog = showDialog(R.string.dialog_upgrade_recommend_title,
                         R.string.dialog_upgrade_recommend_message,
                         R.string.text_upgrade,
                         R.string.text_cancel,
