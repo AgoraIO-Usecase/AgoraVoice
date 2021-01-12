@@ -472,9 +472,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             holder.layout.setEnabled(mEnabled);
             if (!mEnabled) return;
             holder.itemView.setOnClickListener(view -> {
-                if (pos == mSelectedKey - 1) {
-                    mSelectedKey = 0;
-                } else {
+                if (pos != mSelectedKey - 1) {
                     mSelectedKey = pos + 1;
                     if (mListener != null) {
                         mListener.onElectronicVoiceParamChanged(mSelectedKey, mSelectedValue);
@@ -526,9 +524,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             holder.layout.setEnabled(mEnabled);
             if (!mEnabled) return;
             holder.itemView.setOnClickListener(view -> {
-                if (pos == mSelectedValue - 1) {
-                    mSelectedValue = 0;
-                } else {
+                if (pos != mSelectedValue - 1) {
                     mSelectedValue = pos + 1;
                     if (mListener != null && electronicEnabled()) {
                         mListener.onElectronicVoiceParamChanged(mSelectedKey, mSelectedValue);
