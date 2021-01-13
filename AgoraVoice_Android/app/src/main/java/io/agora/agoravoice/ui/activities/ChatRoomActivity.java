@@ -884,10 +884,12 @@ public class ChatRoomActivity extends AbsLiveActivity
                 msgRes = R.string.toast_join_class_fail;
             }
 
+            onRoomFinish(false);
+
             dismissDialog();
             curDialog = showOneButtonDialog(msgRes, R.string.text_confirm,
                     this::dismissDialog, false);
-            curDialog.setOnDismissListener(dialog -> onRoomFinish(false));
+            curDialog.setOnDismissListener(dialog -> finish());
         });
     }
 
@@ -1329,10 +1331,11 @@ public class ChatRoomActivity extends AbsLiveActivity
                 messageRes = R.string.toast_room_end;
             }
 
+            onRoomFinish(false);
             dismissDialog();
             curDialog = showOneButtonDialog(messageRes, R.string.text_leave,
                     this::dismissDialog, false);
-            curDialog.setOnDismissListener(dialog -> onRoomFinish(true));
+            curDialog.setOnDismissListener(dialog -> finish());
         });
     }
 
@@ -1356,7 +1359,7 @@ public class ChatRoomActivity extends AbsLiveActivity
         }
     }
 
-    private void onRoomFinish(boolean needLeave) {
+    private void onRoomFinish(boolean finish) {
         config().setCurMusicIndex(-1);
         dismissDialog();
         closeActionSheet();
@@ -1367,14 +1370,12 @@ public class ChatRoomActivity extends AbsLiveActivity
         config().resetElectronicEffect();
         config().setBgImageSelected(-1);
 
-        if (needLeave) {
-            proxy().leaveRoom(config().getUserToken(),
-                    roomId, config().getUserId());
-        }
-
+        proxy().leaveRoom(config().getUserToken(),
+                roomId, config().getUserId());
         mRoomFinished = true;
         removeSeatManager();
-        finish();
+
+        if (finish) finish();
     }
 
     private void removeSeatManager() {
