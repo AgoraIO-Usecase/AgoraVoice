@@ -72,6 +72,8 @@ public class RteCoreService implements CoreService,
         AgoraRteEngineEventListener,
         AgoraRteLocalUserChannelEventListener,
         AgoraRteSceneEventListener {
+    private final Object mInstanceLock = new Object();
+
     private AgoraRteEngine mAgoraRteEngine;
     private AgoraRteScene mAgoraRteScene;
     private AgoraRteLocalUser mLocalUser;
@@ -189,18 +191,19 @@ public class RteCoreService implements CoreService,
                         AgoraRteAudioProfile.musicHighQualityStereo,
                         AgoraRteAudioScenario.gameStreaming));
         mAgoraRteScene.setParameters("\"che.audio.morph.earsback\":true");
-
     }
 
     @Override
     public void leaveRoom(@NonNull String roomId) {
-        if (mAgoraRteScene != null) {
-            mAgoraRteScene.leave();
-            mAgoraRteScene.destroy();
-            mAgoraRteScene = null;
-            mRoomEventListener.onRoomLeaved();
-        } else {
-            Logging.e("Cannot find rte scene instance when leaving room " + roomId);
+        synchronized (mInstanceLock) {
+            if (mAgoraRteScene != null) {
+                mAgoraRteScene.leave();
+                mAgoraRteScene.destroy();
+                mAgoraRteScene = null;
+                mRoomEventListener.onRoomLeaved();
+            } else {
+                Logging.e("Cannot find rte scene instance when leaving room " + roomId);
+            }
         }
     }
 
@@ -285,6 +288,7 @@ public class RteCoreService implements CoreService,
 
     @Override
     public void enableLocalAudio() {
+        if (mLocalUser == null) return;
         AgoraRteMediaTrack audioTrack = mAgoraRteEngine
                 .getAgoraRteMediaControl().getAudioMediaTrack();
 
@@ -303,6 +307,7 @@ public class RteCoreService implements CoreService,
     }
 
     public void disableLocalAudio() {
+        if (mLocalUser == null) return;
         AgoraRteMediaTrack audioTrack = mAgoraRteEngine
                 .getAgoraRteMediaControl().getAudioMediaTrack();
 
@@ -530,6 +535,8 @@ public class RteCoreService implements CoreService,
                         type = SeatBehavior.INVITE_ACCEPT;
                         break;
                     case InvitationActions.REJECT:
+                    case InvitationActions.CANCEL:
+                        // When server sends cancel
                         type = SeatBehavior.INVITE_REJECT;
                         break;
                 }

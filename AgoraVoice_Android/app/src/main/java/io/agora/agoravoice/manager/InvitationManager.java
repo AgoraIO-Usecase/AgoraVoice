@@ -25,7 +25,7 @@ public class InvitationManager {
 
         void onApplicationTimeout(String userId);
 
-        void onInvitationListChanged();
+        void onListChanged();
     }
 
     private static final int TIMEOUT = 30 * 1000;
@@ -47,6 +47,7 @@ public class InvitationManager {
     private final Map<String, RoomUserInfo> mApplyUserInfoMap = new ConcurrentHashMap<>();
     private final Map<String, Integer> mApplySeatMap = new ConcurrentHashMap<>();
     private final Map<String, Long> mApplyTimeMap = new ConcurrentHashMap<>();
+    private final Map<Integer, Set<String>> mMultiApplyForSeatMap = new ConcurrentHashMap<>();
 
     private final Object mInviteLock = new Object();
     private boolean mInviteTimerStop;
@@ -105,7 +106,7 @@ public class InvitationManager {
                 }
 
                 for (String userId : timeoutUserList) {
-                    removeApplicationInfo(userId);
+                    removeApplicationInfo(userId, false);
                     for (InvitationManagerListener listener : mListener) {
                         listener.onApplicationTimeout(userId);
                     }
@@ -191,11 +192,10 @@ public class InvitationManager {
         if (info != null) mInviteList.remove(info);
     }
 
-    private void removeApplicationInfo(String userId) {
-        mApplySeatMap.remove(userId);
-        mApplyTimeMap.remove(userId);
-        RoomUserInfo info = mApplyUserInfoMap.remove(userId);
-        if (info != null) mApplyList.remove(info);
+    private void removeApplyForASeatMapForAUser(int no, String userId) {
+        if (!mMultiApplyForSeatMap.containsKey(no)) return;
+        Set<String> set = mMultiApplyForSeatMap.get(no);
+        if (set != null) set.remove(userId);
     }
 
     // We may invite multiple users for a seat at the same time
@@ -229,6 +229,33 @@ public class InvitationManager {
         }
     }
 
+    private void removeApplicationInfo(String userId, boolean allSeat) {
+        if (allSeat) {
+            if (mApplySeatMap.containsKey(userId)) {
+                int no = mApplySeatMap.get(userId);
+                Set<String> userSet = mMultiApplyForSeatMap.get(no);
+                if (userSet != null) {
+                    Set<String> newSet = new HashSet<>(userSet);
+                    for (String user : newSet) {
+                        removeApplyForAUser(user);
+                    }
+                }
+            }
+        } else {
+            removeApplyForAUser(userId);
+        }
+    }
+
+    private void removeApplyForAUser(String userId) {
+        if (mApplySeatMap.containsKey(userId)) {
+            int no = mApplySeatMap.get(userId);
+            RoomUserInfo userInfo = mApplyUserInfoMap.remove(userId);
+            if (userInfo != null) mApplyList.remove(userInfo);
+            removeApplyForASeatMapForAUser(no, userId);
+            mApplyTimeMap.remove(userId);
+        }
+    }
+
     public int requestSeatBehavior(@NonNull String token, @NonNull String userId,
                                    String userName, int no, int behavior) {
         int seatNo = no;
@@ -257,6 +284,10 @@ public class InvitationManager {
             behavior == SeatBehavior.APPLY_REJECT) {
             Integer seatNum = mApplySeatMap.get(userId);
             seatNo = seatNum != null ? seatNum : 0;
+            removeApplicationInfo(userId, true);
+            for (InvitationManagerListener listener : mListener) {
+                listener.onListChanged();
+            }
         }
 
         mProxy.requestSeatBehavior(token, mRoomId, userId, userName, seatNo, behavior);
@@ -274,10 +305,44 @@ public class InvitationManager {
                     // audience for a seat, but the seat has been
                     // taken by earlier operations.
                     // We remove this application from list.
-                    removeApplicationInfo(userId);
+                    removeApplicationInfo(userId, false);
                 }
                 break;
         }
+    }
+
+    private void addApplyMap(int no, String userId) {
+        RoomUserInfo info = mApplyUserInfoMap.remove(userId);
+        if (info != null) {
+            mApplyList.remove(info);
+            mApplyList.add(info);
+            int oldApplyNo = mApplySeatMap.remove(userId);
+            removeApplyForASeatMapForAUser(oldApplyNo, userId);
+            addApplyForSeat(no, userId);
+            mApplySeatMap.put(userId, no);
+        } else {
+            info = getUserInfoByUserId(userId);
+            if (info != null) {
+                if (mApplyList.isEmpty()) {
+                    Logging.i("start application timer");
+                    startApplyTimer();
+                }
+
+                mApplyList.add(info);
+                mApplyUserInfoMap.put(userId, info);
+                mApplySeatMap.put(userId, no);
+                mApplyTimeMap.put(userId, System.currentTimeMillis());
+                addApplyForSeat(no, userId);
+            }
+        }
+    }
+
+    private void addApplyForSeat(int no, String userId) {
+        if (mMultiApplyForSeatMap.get(no) == null) {
+            mMultiApplyForSeatMap.put(no, new HashSet<>());
+        }
+        Set<String> set = mMultiApplyForSeatMap.get(no);
+        set.add(userId);
     }
 
     public void receiveSeatBehaviorResponse(String userId, String userName, int no, int behavior) {
@@ -287,7 +352,7 @@ public class InvitationManager {
                 // to this seat
                 removeMultiInviteRecord(no);
                 for (InvitationManagerListener listener : mListener) {
-                    listener.onInvitationListChanged();
+                    listener.onListChanged();
                 }
                 break;
             case SeatBehavior.INVITE_REJECT:
@@ -295,30 +360,16 @@ public class InvitationManager {
                 removeMultiInviteRecord(no, userId);
                 break;
             case SeatBehavior.APPLY:
-                RoomUserInfo info = mApplyUserInfoMap.remove(userId);
-                if (info != null) {
-                    mApplyList.remove(info);
-                    mApplyList.add(info);
-                    mApplySeatMap.remove(userId);
-                    mApplySeatMap.put(userId, no);
-                } else {
-                    info = getUserInfoByUserId(userId);
-                    if (info != null) {
-                        if (mApplyList.isEmpty()) {
-                            Logging.i("start application timer");
-                            startApplyTimer();
-                        }
-
-                        mApplyList.add(info);
-                        mApplyUserInfoMap.put(userId, info);
-                        mApplySeatMap.put(userId, no);
-                        mApplyTimeMap.put(userId, System.currentTimeMillis());
-                    }
+                addApplyMap(no, userId);
+                for (InvitationManagerListener listener : mListener) {
+                    listener.onListChanged();
                 }
                 break;
             case SeatBehavior.APPLY_ACCEPT:
+                removeApplicationInfo(userId, true);
+                break;
             case SeatBehavior.APPLY_REJECT:
-                removeApplicationInfo(userId);
+                removeApplicationInfo(userId, false);
                 break;
         }
     }
@@ -330,7 +381,7 @@ public class InvitationManager {
         }
 
         removeInvitationInfo(userId);
-        removeApplicationInfo(userId);
+        removeApplicationInfo(userId, false);
         RoomUserInfo info = getUserInfoByUserId(userId);
         if (info != null) mFullUserList.remove(info);
     }

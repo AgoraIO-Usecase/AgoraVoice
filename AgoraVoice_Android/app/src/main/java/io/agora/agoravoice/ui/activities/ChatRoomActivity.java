@@ -1254,7 +1254,7 @@ public class ChatRoomActivity extends AbsLiveActivity
     }
 
     @Override
-    public void onInvitationListChanged() {
+    public void onListChanged() {
         runOnUiThread(this::updateUserListActionSheetIfShown);
     }
 
