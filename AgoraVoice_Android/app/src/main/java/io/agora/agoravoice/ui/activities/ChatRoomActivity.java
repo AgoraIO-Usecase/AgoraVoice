@@ -83,7 +83,15 @@ public class ChatRoomActivity extends AbsLiveActivity
     // commands from asynchronous server callbacks. At the meantime, there
     // may be other message callbacks pipelined in the queue.
     // None of the commands will be executed after the room is finished
-    private volatile boolean mRoomFinished = false;
+    private boolean mRoomFinished = false;
+
+    private synchronized boolean hasRoomFinished() {
+        return mRoomFinished;
+    }
+
+    private synchronized void setRoomFinished() {
+        mRoomFinished = true;
+    }
 
     private final AbsBottomBar.BottomBarListener mBottomBarListener = new AbsBottomBar.BottomBarListener() {
         @Override
@@ -623,7 +631,7 @@ public class ChatRoomActivity extends AbsLiveActivity
         @Override
         public void onSeatBehaviorSuccess(int type, String userId, String userName, int no) {
             runOnUiThread(() -> {
-                if (mRoomFinished) return;
+                if (hasRoomFinished()) return;
                 handleSeatBehaviorSuccess(type, userId, userName, no);
             });
         }
@@ -674,16 +682,14 @@ public class ChatRoomActivity extends AbsLiveActivity
 
         @Override
         public void onSeatBehaviorFail(int type, String userId, String userName, int no, int code, String msg) {
-            if (mRoomFinished) return;
+            if (hasRoomFinished()) return;
 
             if (code == ServerClient.ERROR_CONNECTION) {
                 runOnUiThread(() -> ToastUtil.showShortToast(application(), R.string.error_no_connection));
                 return;
             }
 
-            runOnUiThread(() -> {
-                handleSeatBehaviorFail(type, userId, userName, no, code, msg);
-            });
+            runOnUiThread(() -> handleSeatBehaviorFail(type, userId, userName, no, code, msg));
         }
 
         private void handleSeatBehaviorFail(int type, String userId, String userName, int no, int code, String msg) {
@@ -870,7 +876,7 @@ public class ChatRoomActivity extends AbsLiveActivity
             return;
         }
 
-        if (mRoomFinished) return;
+        if (hasRoomFinished()) return;
 
         runOnUiThread(() -> {
             int msgRes;
@@ -989,7 +995,7 @@ public class ChatRoomActivity extends AbsLiveActivity
     public void onRoomMembersJoined(int total, List<RoomUserInfo> totalList,
                                     int joinCount, List<RoomUserInfo> joinedList) {
         runOnUiThread(() -> {
-            if (mRoomFinished) return;
+            if (hasRoomFinished()) return;
             if (mUserAction != null) mUserAction.resetCount(total);
             addJoinMessage(joinedList);
             updateRoomUserList(totalList, null);
@@ -1006,7 +1012,7 @@ public class ChatRoomActivity extends AbsLiveActivity
     public void onRoomMembersLeft(int total, List<RoomUserInfo> totalList,
                                   int leftCount, List<RoomUserInfo> leftList) {
         runOnUiThread(() -> {
-            if (mRoomFinished) return;
+            if (hasRoomFinished()) return;
             if (mUserAction != null) mUserAction.resetCount(total);
             addLeaveMessage(leftList);
             updateRoomUserList(totalList, leftList);
@@ -1021,13 +1027,13 @@ public class ChatRoomActivity extends AbsLiveActivity
 
     @Override
     public void onRoomMembersUpdated(int count, List<RoomUserInfo> updatedList) {
-        if (mRoomFinished) return;
+        if (hasRoomFinished()) return;
     }
 
     @Override
     public void onChatMessageReceive(String fromUserId, String fromUserName, String message) {
         runOnUiThread(() -> {
-            if (mRoomFinished) return;
+            if (hasRoomFinished()) return;
             mMessageList.addChatMessage(fromUserName, message);
         });
     }
@@ -1035,7 +1041,7 @@ public class ChatRoomActivity extends AbsLiveActivity
     @Override
     public void onStreamInitialized(RoomStreamInfo myStreamInfo, List<RoomStreamInfo> streamList) {
         runOnUiThread(() -> {
-            if (mRoomFinished) return;
+            if (hasRoomFinished()) return;
             updateSeatStates(myStreamInfo, streamList, null, null);
         });
     }
@@ -1043,7 +1049,7 @@ public class ChatRoomActivity extends AbsLiveActivity
     @Override
     public void onStreamAdded(RoomStreamInfo myStreamInfo, List<RoomStreamInfo> addList) {
         runOnUiThread(() -> {
-            if (mRoomFinished) return;
+            if (hasRoomFinished()) return;
             updateSeatStates(myStreamInfo, null, addList, null);
         });
     }
@@ -1051,7 +1057,7 @@ public class ChatRoomActivity extends AbsLiveActivity
     @Override
     public void onStreamUpdated(RoomStreamInfo myStreamInfo, List<RoomStreamInfo> updatedList) {
         runOnUiThread(() -> {
-            if (mRoomFinished) return;
+            if (hasRoomFinished()) return;
             updateSeatStates(myStreamInfo, updatedList, null, null);
         });
     }
@@ -1059,7 +1065,7 @@ public class ChatRoomActivity extends AbsLiveActivity
     @Override
     public void onStreamRemoved(RoomStreamInfo myStreamInfo, List<RoomStreamInfo> removeList) {
         runOnUiThread(() -> {
-            if (mRoomFinished) return;
+            if (hasRoomFinished()) return;
             updateSeatStates(myStreamInfo, null, null, removeList);
         });
     }
@@ -1101,7 +1107,7 @@ public class ChatRoomActivity extends AbsLiveActivity
     @Override
     public void onRoomPropertyUpdated(@NonNull String backgroundId, @Nullable List<SeatStateData> seats,
                                       @Nullable List<GiftSendInfo> giftRank, @Nullable GiftSendInfo giftSent) {
-        if (mRoomFinished) return;
+        if (hasRoomFinished()) return;
 
         runOnUiThread(() -> {
             mHostPanel.updateSeatStates(seats);
@@ -1184,7 +1190,7 @@ public class ChatRoomActivity extends AbsLiveActivity
     @Override
     public void onReceiveSeatBehavior(@NonNull String roomId, String fromUserId,
                                       String fromUserName, int no, int behavior) {
-        if (mRoomFinished) return;
+        if (hasRoomFinished()) return;
 
         switch (behavior) {
             case SeatBehavior.INVITE:
@@ -1270,7 +1276,7 @@ public class ChatRoomActivity extends AbsLiveActivity
     @Override
     public void onRtcStats(@Nullable AgoraRteRtcStats stats) {
         runOnUiThread(() -> {
-            if (mRoomFinished) return;
+            if (hasRoomFinished()) return;
 
             if (stats != null && mStatView.isShown()) {
                 mStatView.setLocalStats(
@@ -1291,8 +1297,8 @@ public class ChatRoomActivity extends AbsLiveActivity
     @Override
     public void onLocalAudioStats(@NonNull AgoraRteLocalAudioStats stats) {
         runOnUiThread(() -> {
-            if (mRoomFinished) return;
-            if (stats != null && mStatView.isShown()) {
+            if (hasRoomFinished()) return;
+            if (mStatView.isShown()) {
                 mStatView.setProperty(stats.getNumChannels(), stats.getSentSampleRate());
             }
         });
@@ -1322,6 +1328,8 @@ public class ChatRoomActivity extends AbsLiveActivity
     @Override
     public void onRoomEnd(int cause) {
         runOnUiThread(() -> {
+            if (hasRoomFinished()) return;
+
             int messageRes;
             if (cause == Const.ROOM_LEAVE_TIMEOUT) {
                 messageRes = R.string.toast_room_end_timeout;
@@ -1372,7 +1380,7 @@ public class ChatRoomActivity extends AbsLiveActivity
 
         proxy().leaveRoom(config().getUserToken(),
                 roomId, config().getUserId());
-        mRoomFinished = true;
+        setRoomFinished();
         removeSeatManager();
 
         if (finish) finish();
