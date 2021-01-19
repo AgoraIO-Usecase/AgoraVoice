@@ -27,7 +27,7 @@ class AppAssistant: NSObject {
         let parameters: StringAnyDic = ["appCode": "ent-voice",
                                         "osType": 1,
                                         "terminalType": 1,
-                                        "version": AppAssistant.version]
+                                        "appVersion": AppAssistant.version]
         
         let task = ArRequestTask(event: event,
                                type: .http(.get, url: url),

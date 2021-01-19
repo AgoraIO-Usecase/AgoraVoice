@@ -226,10 +226,10 @@ private extension CoHostingVM {
         let client = Center.shared().centerProvideRequestHelper()
         let url = URLGroup.multiHosts(userId: userId, roomId: roomId)
         let task = ArRequestTask(event: ArRequestEvent(name: "co-hosting-action: \(type)"),
-                               type: .http(.post, url: url),
-                               timeout: .medium,
-                               header: ["token": Keys.UserToken],
-                               parameters: ["no": seatIndex, "type": type])
+                                 type: .http(.post, url: url),
+                                 timeout: .medium,
+                                 header: ["token": Keys.UserToken],
+                                 parameters: ["no": seatIndex, "type": type])
         client.request(task: task, success: ArResponse.json({ [weak self] (json) in
             guard let strongSelf = self else {
                 return

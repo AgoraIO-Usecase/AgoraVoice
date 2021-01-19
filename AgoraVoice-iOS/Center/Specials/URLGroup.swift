@@ -9,7 +9,7 @@ import UIKit
 
 struct URLGroup {
     #if PREPRODUCT
-    private static let host = "http://api-solutions-pre.sh.agoralab.co/"
+    private static let host = "http://api-solutions-pre.sh2.agoralab.co/"
     #elseif PRODUCT
     private static let host = "http://api-solutions.sh2.agoralab.co/"
     #else
