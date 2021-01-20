@@ -28,7 +28,7 @@ public class Const {
     public static final long APP_LOG_SIZE = 1 << 30;
 
     public static final int ROOM_DURATION = 10;
-    public static final int ROOM_MAX_AUDIENCE = 10;
+    public static final int ROOM_MAX_AUDIENCE = 9;
 
     public static final int ROOM_LEAVE_TIMEOUT = 1;
     public static final int ROOM_LEAVE_OWNER = 2;
