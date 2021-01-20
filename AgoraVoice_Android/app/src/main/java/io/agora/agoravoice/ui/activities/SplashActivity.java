@@ -45,7 +45,6 @@ public class SplashActivity extends BaseActivity implements
     private void initialize() {
         initProxy();
         checkAppVersion();
-        login();
     }
 
     @Override
@@ -120,8 +119,8 @@ public class SplashActivity extends BaseActivity implements
     @Override
     public void onCheckVersionSuccess(AppVersionInfo info) {
         Logging.d("onCheckVersionSuccess " + info.appVersion);
-        if (info == null) {
-            ToastUtil.showShortToast(SplashActivity.this, R.string.toast_app_version_fail);
+        if (info.forcedUpgrade == 0) {
+            login();
             return;
         }
 
@@ -152,7 +151,10 @@ public class SplashActivity extends BaseActivity implements
                             dismissUpgradeDialog();
                             gotoDownloadLink(info.upgradeUrl);
                         },
-                        SplashActivity.this::dismissUpgradeDialog
+                        () -> {
+                            dismissUpgradeDialog();
+                            login();
+                        }
                 );
             }
         });
@@ -193,7 +195,11 @@ public class SplashActivity extends BaseActivity implements
 
     @Override
     public void onGeneralServiceFailed(int type, int code, String message) {
-
+        if (type == BusinessType.CHECK_VERSION) {
+            // If check version errors, nothing done and
+            // continue to try login
+            login();
+        }
     }
 
     @Override
