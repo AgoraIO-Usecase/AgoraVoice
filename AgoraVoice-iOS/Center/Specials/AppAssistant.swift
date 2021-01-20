@@ -17,8 +17,16 @@ enum AppUpdate: Int {
     case noNeed, advise, need
 }
 
-class AppAssistant: NSObject {
-    let update = PublishRelay<AppUpdate>()
+class AppAssistant: RxObject {
+    let updateNotification = PublishRelay<AppUpdate>()
+    let update = BehaviorRelay<AppUpdate>(value: .noNeed)
+    
+    override init() {
+        super.init()
+        updateNotification.subscribe(onNext: { [unowned self] (update) in
+            self.update.accept(update)
+        }).disposed(by: bag)
+    }
     
     func checkMinVersion() {
         let client = Center.shared().centerProvideRequestHelper()
@@ -37,7 +45,7 @@ class AppAssistant: NSObject {
         let successCallback: ArDicEXCompletion = { [unowned self] (json: ([String: Any])) throws in
             let data = try json.getDataObject()
             let update = try data.getEnum(of: "forcedUpgrade", type: AppUpdate.self)
-            self.update.accept(update)
+            self.updateNotification.accept(update)
         }
         
         let response = ArResponse.json(successCallback)

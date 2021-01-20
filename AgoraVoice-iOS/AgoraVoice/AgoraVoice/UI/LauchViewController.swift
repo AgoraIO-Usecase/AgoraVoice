@@ -38,11 +38,15 @@ class LauchViewController: MaskViewController {
         #else
         logoButton.isUserInteractionEnabled = false
         #endif
+        
+        checkAppNeedUpdaate()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        #if !RELEASE
         self.showHUD()
         self.centerRegister()
+        #endif
     }
 }
 
@@ -50,5 +54,50 @@ private extension LauchViewController {
     func centerRegister() {
         let center = Center.shared()
         center.registerAndLogin()
+    }
+    
+    func checkAppNeedUpdaate() {
+        let app = Center.shared().centerProvideAppAssistant()
+        app.updateNotification.subscribe(onNext: { [unowned self] (update) in
+            self.ifNeedUpdateApp(update)
+        }).disposed(by: bag)
+                
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(appDidBecomeActiveCheckAppUpdate),
+                                               name: UIApplication.didBecomeActiveNotification,
+                                               object: nil)
+    }
+    
+    @objc func appDidBecomeActiveCheckAppUpdate() {
+        let app = Center.shared().centerProvideAppAssistant()
+        self.ifNeedUpdateApp(app.update.value)
+    }
+    
+    func ifNeedUpdateApp(_ update: AppUpdate) {
+        guard update != .noNeed else {
+            return
+        }
+        
+        func openURL() {
+            let urlString = "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=\(AppAssistant.idOfAppStore)"
+            let url = URL(string: urlString)
+            UIApplication.shared.privateOpenURL(url!)
+        }
+        
+        switch update {
+        case .noNeed:
+            break
+        case .advise:
+            self.showAlert(LiveTypeLocalizable.suggestUpgradeApp(),
+                           action1: NSLocalizedString("Cancel"),
+                           action2: NSLocalizedString("Accept"),
+                           handler2:  { (_) in
+                            openURL()
+                           })
+        case .need:
+            self.showAlert(LiveTypeLocalizable.mustUpgrateApp()) { (_) in
+                openURL()
+            }
+        }
     }
 }

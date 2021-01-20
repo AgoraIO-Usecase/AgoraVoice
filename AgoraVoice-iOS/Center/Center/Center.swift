@@ -48,7 +48,7 @@ class Center: RxObject {
 extension Center {
     func registerAndLogin() {
         appAssistant.checkMinVersion()
-        appAssistant.update.subscribe(onNext: { [unowned self] (update) in
+        appAssistant.updateNotification.subscribe(onNext: { [unowned self] (update) in
             func privateRegisterAndLogin() {
                 if let current = CurrentUser.local() {
                     self.current = current

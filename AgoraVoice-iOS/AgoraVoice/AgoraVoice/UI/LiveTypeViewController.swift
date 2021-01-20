@@ -73,8 +73,6 @@ class LiveTypeViewController: MaskViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         titleLabel.text = AppAssistant.name
-        
-        ifNeedUpdateApp()
         updateCollectionViewLayout()
     }
     
@@ -157,37 +155,6 @@ private extension LiveTypeViewController {
         }
         
         navigation.setupTitleFontColor(color: UIColor(hexString: "#EEEEEE"))
-    }
-    
-    func ifNeedUpdateApp() {
-        let app = Center.shared().centerProvideAppAssistant()
-        app.update.subscribe(onNext: { [unowned self] (update) in
-            guard update != .noNeed else {
-                return
-            }
-            
-            func openURL() {
-                let urlString = "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=\(AppAssistant.idOfAppStore)"
-                let url = URL(string: urlString)
-                UIApplication.shared.privateOpenURL(url!)
-            }
-            
-            switch update {
-            case .noNeed:
-                break
-            case .advise:
-                self.showAlert(LiveTypeLocalizable.suggestUpgradeApp(),
-                               action1: NSLocalizedString("Cancel"),
-                               action2: NSLocalizedString("Accept"),
-                               handler2:  { (_) in
-                                openURL()
-                               })
-            case .need:
-                self.showAlert(LiveTypeLocalizable.mustUpgrateApp()) { (_) in
-                    openURL()
-                }
-            }
-        }).disposed(by: bag)
     }
 }
 
