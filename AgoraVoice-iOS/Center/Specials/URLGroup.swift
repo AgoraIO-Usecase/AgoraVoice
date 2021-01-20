@@ -76,4 +76,8 @@ struct URLGroup {
     static func roomBackground(roomId: String) -> String {
         return URLGroup.host + URLGroup.mainPath + version + "rooms/\(roomId)"
     }
+    
+    static func appStore(_ appId: Int) -> String {
+        return "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=\(appId)"
+    }
 }

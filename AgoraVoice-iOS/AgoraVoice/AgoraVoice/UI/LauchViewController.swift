@@ -79,7 +79,7 @@ private extension LauchViewController {
         }
         
         func openURL() {
-            let urlString = "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=\(AppAssistant.idOfAppStore)"
+            let urlString = URLGroup.appStore(AppAssistant.idOfAppStore)
             let url = URL(string: urlString)
             UIApplication.shared.privateOpenURL(url!)
         }
