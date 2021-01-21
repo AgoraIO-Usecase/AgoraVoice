@@ -115,19 +115,10 @@ class ChatRoomViewController: MaskLogViewController, LiveViewController {
         } else {
             log(error: AGEError.fail("navigation is nil"))
         }
-        
-        // check live state
-        let state = liveSession.state.value
-        
-        switch state {
-        case .end(let reason):
-            liveEndAlert(reason: reason)
-        case .active:
-            break
-        }
     }
     
     deinit {
+        NotificationCenter.default.removeObserver(self)
         self.log(info: "deinit")
     }
     
@@ -150,6 +141,8 @@ class ChatRoomViewController: MaskLogViewController, LiveViewController {
         
         coHosting()
         liveSeats()
+        
+        checkRoomStatus()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -259,6 +252,25 @@ private extension ChatRoomViewController {
         let itemWidth: CGFloat = (UIScreen.main.bounds.width - (space * 5)) / 4
         let itemHeight = itemWidth
         seatViewHeight.constant = itemHeight * 2 + space
+    }
+    
+    func checkRoomStatus() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(appDidBecomeActiveCheckRoomStatus),
+                                               name: UIApplication.didBecomeActiveNotification,
+                                               object: nil)
+    }
+    
+    @objc func appDidBecomeActiveCheckRoomStatus() {
+        // check live state
+        let state = liveSession.state.value
+        
+        switch state {
+        case .end(let reason):
+            liveEndAlert(reason: reason)
+        case .active:
+            break
+        }
     }
 }
 
