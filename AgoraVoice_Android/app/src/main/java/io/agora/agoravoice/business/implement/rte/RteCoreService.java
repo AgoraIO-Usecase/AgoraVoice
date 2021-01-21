@@ -535,9 +535,11 @@ public class RteCoreService implements CoreService,
                         type = SeatBehavior.INVITE_ACCEPT;
                         break;
                     case InvitationActions.REJECT:
+                        type = SeatBehavior.INVITE_REJECT;
+                        break;
                     case InvitationActions.CANCEL:
                         // When server sends cancel
-                        type = SeatBehavior.INVITE_REJECT;
+                        type = SeatBehavior.INVITE_CANCEL;
                         break;
                 }
             }

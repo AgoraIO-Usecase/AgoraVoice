@@ -416,18 +416,14 @@ public class ChatRoomHostPanel extends RelativeLayout {
         if (mRoomStreamMap.containsKey(mMyUserId)) {
             RoomStreamInfo info = mRoomStreamMap.get(mMyUserId);
             if (info != null) {
-                boolean enabled;
                 if (myStreamInfo == null) {
-                    enabled = !localAudioMuted;
-                    Logging.d("no local stream info found, take local audio " +
-                            "setting as default " + enabled);
+                    Logging.d("i am the host, but no local stream info update found, " +
+                            "keep current local audio state unchanged");
+                    info.enableAudio = !localAudioMuted;
                 } else {
                     info.enableAudio(myStreamInfo.enableAudio);
                     Logging.d("Local stream info found, audio state reset to " + info.enableAudio);
-                    enabled = info.enableAudio;
                 }
-
-                info.enableAudio(enabled);
             } else if (myStreamInfo != null) {
                 Logging.d("Local stream info found, cached local audio state " + info.enableAudio);
                 mRoomStreamMap.put(mMyUserId, myStreamInfo);

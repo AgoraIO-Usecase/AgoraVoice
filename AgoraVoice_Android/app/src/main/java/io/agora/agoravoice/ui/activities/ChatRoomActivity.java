@@ -1050,6 +1050,7 @@ public class ChatRoomActivity extends AbsLiveActivity
     public void onStreamAdded(RoomStreamInfo myStreamInfo, List<RoomStreamInfo> addList) {
         runOnUiThread(() -> {
             if (hasRoomFinished()) return;
+            if (myStreamInfo != null) config().setAudioMuted(!myStreamInfo.enableAudio);
             updateSeatStates(myStreamInfo, null, addList, null);
         });
     }
@@ -1058,6 +1059,7 @@ public class ChatRoomActivity extends AbsLiveActivity
     public void onStreamUpdated(RoomStreamInfo myStreamInfo, List<RoomStreamInfo> updatedList) {
         runOnUiThread(() -> {
             if (hasRoomFinished()) return;
+            if (myStreamInfo != null) config().setAudioMuted(!myStreamInfo.enableAudio);
             updateSeatStates(myStreamInfo, updatedList, null, null);
         });
     }
@@ -1244,6 +1246,8 @@ public class ChatRoomActivity extends AbsLiveActivity
                 break;
             case SeatBehavior.APPLY_REJECT:
                 runOnUiThread(() -> showToast(R.string.toast_apply_rejected, fromUserName));
+                break;
+            case SeatBehavior.INVITE_CANCEL:
                 break;
         }
     }
