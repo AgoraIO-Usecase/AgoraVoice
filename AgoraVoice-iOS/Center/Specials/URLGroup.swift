@@ -8,13 +8,7 @@
 import UIKit
 
 struct URLGroup {
-    #if PREPRODUCT
-    private static let host = "http://api-solutions-pre.sh2.agoralab.co/"
-    #elseif PRODUCT
-    private static let host = "http://api-solutions.sh2.agoralab.co/"
-    #else
-    private static let host = "http://api-solutions-dev.bj2.agoralab.co/"
-    #endif
+    private static let host = "http://api.agora.io/"
     private static let version = "v1/"
     private static let rootPath = "ent/voice/"
     private static var mainPath: String {
