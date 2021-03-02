@@ -16,7 +16,7 @@ android {
         applicationId "io.agora.agoravoice"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 11003
+        versionCode 11011
         versionName "1.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -71,6 +71,7 @@ dependencies {
     implementation 'com.elvishew:xlog:1.7.2'
     implementation 'com.github.AgoraIO-Usecase:Tools:log_java_1.0.4'
 
+    implementation 'io.agora.rtc:full-sdk:3.3.0'
     implementation 'io.agora.rtm:rtm-sdk:1.4.1'
     implementation 'com.aliyun.dpa:oss-android-sdk:2.9.4'
 
