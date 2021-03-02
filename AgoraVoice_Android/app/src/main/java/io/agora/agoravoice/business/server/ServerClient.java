@@ -1,7 +1,6 @@
 package io.agora.agoravoice.business.server;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -11,9 +10,9 @@ import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import io.agora.agoravoice.BuildConfig;
 import io.agora.agoravoice.business.log.Logging;
 import io.agora.agoravoice.business.server.retrofit.interfaces.GeneralService;
+import io.agora.agoravoice.business.server.retrofit.interfaces.LogService;
 import io.agora.agoravoice.business.server.retrofit.interfaces.SeatService;
 import io.agora.agoravoice.business.server.retrofit.interfaces.RoomService;
 import io.agora.agoravoice.business.server.retrofit.interfaces.UserService;
@@ -45,7 +44,6 @@ import io.agora.agoravoice.business.server.retrofit.model.responses.RoomListResp
 import io.agora.agoravoice.business.server.retrofit.model.responses.StringResp;
 import io.agora.agoravoice.business.server.retrofit.model.responses.VersionResp;
 import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,8 +54,8 @@ import retrofit2.http.Url;
 import retrofit2.internal.EverythingIsNonNull;
 
 public class ServerClient {
-    private static final String SERVER_HOST_DEV = "https://api-solutions-dev.bj2.agoralab.co";
-    private static final String SERVER_HOST_PRODUCT = "https://api-solutions.bj2.agoralab.co";
+    private static final String SERVER_HOST_PRODUCT = "https://api.agora.io/";
+    private static final String OSS_HOST_PRODUCT = "https://api-solutions.agoralab.co/";
     private static final String ERROR_UNKNOWN_MSG = "";
     private static final String API_ROOT_PATH = "ent/voice";
 
@@ -72,9 +70,9 @@ public class ServerClient {
     private final UserService mUserService;
     private final RoomService mRoomService;
     private final SeatService mSeatService;
+    private final LogService mLogService;
 
     private String mAppId;
-    private String mBaseUrl;
 
     public ServerClient(String appId) {
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
@@ -83,26 +81,33 @@ public class ServerClient {
                 .writeTimeout(DEFAULT_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
                 .build();
 
-        mBaseUrl = BuildConfig.DEBUG ? SERVER_HOST_DEV : SERVER_HOST_PRODUCT;
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(mBaseUrl)
+                .baseUrl(SERVER_HOST_PRODUCT)
                 .client(okHttpClient)
                 .callbackExecutor(Executors.newFixedThreadPool(MAX_RESPONSE_THREAD))
                 .addConverterFactory(GsonConverterFactory.create());
 
-        if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(Logging::d);
-
-            interceptor.level(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-            builder.client(client);
-        }
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(Logging::d);
+        interceptor.level(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+        builder.client(client);
 
         Retrofit retrofit = builder.build();
         mGeneralService = retrofit.create(GeneralService.class);
         mUserService = retrofit.create(UserService.class);
         mRoomService = retrofit.create(RoomService.class);
         mSeatService = retrofit.create(SeatService.class);
+
+        builder = new Retrofit.Builder()
+                .baseUrl(OSS_HOST_PRODUCT)
+                .client(okHttpClient)
+                .callbackExecutor(Executors.newFixedThreadPool(MAX_RESPONSE_THREAD))
+                .addConverterFactory(GsonConverterFactory.create());
+        builder.client(client);
+        retrofit = builder.build();
+
+        mLogService = retrofit.create(LogService.class);
+
         mAppId = appId;
     }
 
@@ -124,7 +129,7 @@ public class ServerClient {
     }
 
     public String getBaseUrl() {
-        return mBaseUrl;
+        return SERVER_HOST_PRODUCT;
     }
 
     @EverythingIsNonNull
@@ -200,7 +205,7 @@ public class ServerClient {
 
     @EverythingIsNonNull
     public void getOssParams(String appId, OssBody body, LogUploaderListener listener) {
-        mGeneralService.getOssParams(appId, body).enqueue(new Callback<OssResp>() {
+        mLogService.getOssParams(appId, body).enqueue(new Callback<OssResp>() {
             @Override
             public void onResponse(Call<OssResp> call, Response<OssResp> response) {
                 OssResp resp = response.body();
@@ -221,7 +226,7 @@ public class ServerClient {
     }
 
     public Call<StringResp> logStsCallback(@Url String url) {
-        return mGeneralService.logStsCallback(url);
+        return mLogService.logStsCallback(url);
     }
 
     private boolean appIdValid() {
