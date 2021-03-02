@@ -28,6 +28,7 @@ jobs:
           appId: $(appId.release)
           customerId: $(customer.id)
           customerCert: $(customer.cer)
+          buglyId: $(bugly_appId_android)
 
       - task: CopyFiles@2
         inputs:
