@@ -98,10 +98,10 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         mConfig = config;
         mSelectedKey = mConfig.getElectronicVoiceKey();
         mSelectedValue = mConfig.getElectronicVoiceValue();
+        changeType(mSelectedType);
     }
 
     private void changeType(int type) {
-        if (mSelectedType == type) return;
         mSelectedType = type;
         mTypeAdapter.notifyDataSetChanged();
         mContentLayout.removeAllViews();
@@ -169,7 +169,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             case TYPE_CHANGE:
                 return AudioManager.EFFECT_VOICE_CHANGE_UNCLE + position;
             case TYPE_FLAVOUR:
-                return AudioManager.EFFECT_FLAVOR_HIP_HOP + position;
+                return AudioManager.EFFECT_FLAVOR_RNB + position;
             default: return -1;
         }
     }

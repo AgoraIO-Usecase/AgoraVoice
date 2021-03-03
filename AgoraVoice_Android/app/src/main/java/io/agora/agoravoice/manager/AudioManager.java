@@ -52,7 +52,7 @@ public class AudioManager {
     public static final int EFFECT_FLAVOR_ROCK = 34;
     public static final int EFFECT_FLAVOR_HIP_HOP = 35;
 
-    public static final int EFFECT_ELECTRONIC = 35;
+    public static final int EFFECT_ELECTRONIC = 36;
 
     private BusinessProxy mProxy;
 

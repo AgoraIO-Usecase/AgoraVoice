@@ -100,6 +100,7 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
 
     public void setConfig(Config config) {
         mConfig = config;
+        changeType(mCurrentType);
     }
 
     @Override
@@ -115,11 +116,6 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
     }
 
     private void changeType(int type) {
-        if (type != TYPE_CHAT && type != TYPE_SING
-                && type != TYPE_TIMBRE || mCurrentType == type) {
-             return;
-        }
-
         mCurrentType = type;
         mRecyclerView.setAdapter(null);
         mRecyclerView.setLayoutManager(layoutManager(mCurrentType));
@@ -148,6 +144,7 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
         }
 
         mRecyclerView.setAdapter(mCurrentAdapter);
+        mCurrentAdapter.notifyDataSetChanged();
     }
 
     private void highlightSelectedTab() {
@@ -203,7 +200,8 @@ public class VoiceBeautyActionSheet extends AbstractActionSheet implements View.
             case TYPE_SING:
                 if (AudioManager.EFFECT_MALE_HALL <= type &&
                         type <= AudioManager.EFFECT_FEMALE_SMALL_ROOM) {
-                    return type - AudioManager.EFFECT_MALE_HALL;
+                    // currently only 3 options for room effect
+                    return (type - AudioManager.EFFECT_MALE_HALL) / 3;
                 } else {
                     return -1;
                 }
