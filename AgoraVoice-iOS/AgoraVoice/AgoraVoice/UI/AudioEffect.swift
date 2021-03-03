@@ -412,7 +412,14 @@ extension MusicGenre {
 
 extension ElectronicMusic {
     var parameters: String {
-        let parameters = "{\"che.audio.morph.electronic_voice\":{\"key\":\(self.type),\"value\":\(self.value)}}"
+        var parameters: String
+        
+        if isAvailable {
+            parameters = "{\"che.audio.morph.electronic_voice\":{\"key\":\(self.type),\"value\":\(self.value)}}"
+        } else {
+            parameters = "{\"che.audio.morph.reverb_preset\":0}"
+        }
+        
         return parameters
     }
 }
