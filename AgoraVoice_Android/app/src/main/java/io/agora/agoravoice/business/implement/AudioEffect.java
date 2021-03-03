@@ -18,7 +18,7 @@ public class AudioEffect {
         private static final String FORMAT_STEREO = "che.audio.morph.virtual_stereo";
         private static final String FORMAT_SING = "che.audio.morph.beauty_sing";
         private static final String FORMAT_PARAM = "{\"%s\":%d}";
-        private static final String FORMAT_PARAM_SING = "{\"%s\":{\"key\":%d,\"value\":1}";
+        private static final String FORMAT_PARAM_SING = "{\"%s\":{\"key\":%d,\"value\":1}}";
 
         public final int type;
         public final int value;
