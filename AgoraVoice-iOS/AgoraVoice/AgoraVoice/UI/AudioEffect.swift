@@ -145,18 +145,21 @@ extension SingOfBelCanto {
     }
     
     var parameters: String {
+        var key: Int
         var value: Int
         
         switch self {
         case .male:
+            key = 1
             value = 1
         case .female:
-            value = 2
+            key = 2
+            value = 1
         case .disable:
             return "{\"che.audio.morph.reverb_preset\":0}"
         }
         
-        let parameters = "{\"che.audio.morph.beauty_sing\":\(value)}"
+        let parameters = "{\"che.audio.morph.beauty_sing\":{\"key\":\(key),\"value\":\(value)}}"
         return parameters
     }
 }
@@ -259,16 +262,16 @@ extension AudioSpace {
         switch self {
         case .ktv:
             value = 1
-            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
         case .vocalConcer:
             value = 2
-            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
         case .studio:
             value = 5
-            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
         case .phonograph:
             value = 8
-            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
         case .spacial:
             value = 15
             parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
