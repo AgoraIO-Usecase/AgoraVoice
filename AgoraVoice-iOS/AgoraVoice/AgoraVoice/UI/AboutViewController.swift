@@ -68,7 +68,7 @@ class AboutViewController: MaskTableViewController {
         alValueLabel.text = "Ver \(AppAssistant.version)"
         sdkValueLabel.text = "Ver \(AgoraRteEngine.getVersion())"
         
-        releaseDateValueLabel.text = "2020.6.18"
+        releaseDateValueLabel.text = "2021.3.4"
         
         uploadLogLabel.text = MineLocalizable.uploadLog()
         
