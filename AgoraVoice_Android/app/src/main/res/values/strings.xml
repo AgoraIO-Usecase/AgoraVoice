@@ -55,7 +55,7 @@
 
     <string name="version_title">Agora Voice Version</string>
     <string name="release_date_title">Release Date</string>
-    <string name="release_date" translatable="false">2020.07.06</string>
+    <string name="release_date" translatable="false">2021.03.04</string>
     <string name="rte_sdk_version_title">SDK Version</string>
     <string name="upload_log_title">Upload log</string>
     <string name="upload_log_success_message_format">Log id %s copied into the clipboard</string>
