@@ -36,7 +36,7 @@ class MainTabBarViewController: MaskTabBarController {
         
         presentLauchScreen()
                 
-        #if RELEASE
+        #if PRODUCT
         let center = Center.shared()
         center.registerAndLogin()
         #endif

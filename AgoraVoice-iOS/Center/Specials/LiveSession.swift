@@ -585,14 +585,8 @@ fileprivate extension LiveSession {
     }
 }
 
-// MARK: - AgoraRteSceneDelegate
-extension LiveSession: AgoraRteSceneDelegate {
-    // scene
-    func scene(_ scene: AgoraRteScene, didChange state: AgoraRteSceneConnectionState, withError error: AgoraRteError?) {
-        
-    }
-    
-    func scene(_ scene: AgoraRteScene, didUpdateSceneProperties changedProperties: [String], remove: Bool, cause: String?) {
+private extension LiveSession {
+    func getProperties(cause: String? = nil) {
         guard let roomProperties = sceneService.properties else {
             return
         }
@@ -605,15 +599,34 @@ extension LiveSession: AgoraRteSceneDelegate {
         
         if let basic = try? properties.getDictionaryValue(of: "basic"),
            let roomState = try? basic.getIntValue(of: "state"),
-           roomState == 0,
-           let cause = try? properties.getDictionaryValue(of: "cause"),
-           let data = try? cause.getIntValue(of: "data"),
-           let reason = LiveSession.State.Reason(rawValue: data) {
-            leave()
-            state.accept(.end(reason))
+           roomState == 0 {
+            
+            if let cause = try? properties.getDictionaryValue(of: "cause"),
+               let data = try? cause.getIntValue(of: "data"),
+               let reason = LiveSession.State.Reason(rawValue: data) {
+                leave()
+                state.accept(.end(reason))
+            } else {
+                leave()
+                state.accept(.end(.timeout))
+            }
         } else {
             customMessage.accept(properties)
         }
+    }
+}
+
+// MARK: - AgoraRteSceneDelegate
+extension LiveSession: AgoraRteSceneDelegate {
+    // scene
+    func scene(_ scene: AgoraRteScene, didChange state: AgoraRteSceneConnectionState, withError error: AgoraRteError?) {
+        if state == .connected {
+            getProperties(cause: nil)
+        }
+    }
+    
+    func scene(_ scene: AgoraRteScene, didUpdateSceneProperties changedProperties: [String], remove: Bool, cause: String?) {
+        getProperties(cause: cause)
     }
     
     func scene(_ scene: AgoraRteScene, didReceiveSceneMessage message: AgoraRteMessage, fromUser user: AgoraRteUserInfo) {

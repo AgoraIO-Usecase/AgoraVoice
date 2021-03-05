@@ -15,7 +15,7 @@ class LauchViewController: MaskViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        #if !RELEASE
+        #if !PRODUCT
         logoButton.rx.controlEvent(.touchUpInside).subscribe(onNext: { [unowned self] in
             let appId1 = ""
             let appId1Short = ""
@@ -43,7 +43,7 @@ class LauchViewController: MaskViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        #if !RELEASE
+        #if !PRODUCT
         self.showHUD()
         self.centerRegister()
         #endif
