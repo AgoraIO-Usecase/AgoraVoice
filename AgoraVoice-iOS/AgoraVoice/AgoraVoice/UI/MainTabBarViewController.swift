@@ -36,10 +36,8 @@ class MainTabBarViewController: MaskTabBarController {
         
         presentLauchScreen()
                 
-        #if PRODUCT
         let center = Center.shared()
         center.registerAndLogin()
-        #endif
         
         Center.shared().isWorkNormally.subscribe(onNext: { [unowned self] (normal) in
             if normal {

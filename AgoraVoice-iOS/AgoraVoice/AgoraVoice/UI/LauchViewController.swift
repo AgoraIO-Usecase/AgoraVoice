@@ -15,38 +15,8 @@ class LauchViewController: MaskViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        #if !PRODUCT
-        logoButton.rx.controlEvent(.touchUpInside).subscribe(onNext: { [unowned self] in
-            let appId1 = ""
-            let appId1Short = ""
-            
-            let appId2 = ""
-            let appId2Short = ""
-            
-            self.showAlert("Reset AppId",
-                           action1: appId1Short,
-                           action2: appId2Short) { [unowned self] (_) in
-                self.showHUD()
-                Keys.AgoraAppId = appId1
-                self.centerRegister()
-            } handler2: { [unowned self] (_) in
-                self.showHUD()
-                Keys.AgoraAppId = appId2
-                self.centerRegister()
-            }
-        }).disposed(by: bag)
-        #else
         logoButton.isUserInteractionEnabled = false
-        #endif
-        
         checkAppNeedUpdaate()
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        #if !PRODUCT
-        self.showHUD()
-        self.centerRegister()
-        #endif
     }
 }
 
