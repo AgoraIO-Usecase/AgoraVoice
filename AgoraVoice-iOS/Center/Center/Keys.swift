@@ -9,11 +9,9 @@
 import UIKit
 
 struct Keys {
-    static var AgoraAppId: String = ""
-    static var customerId: String = ""
-    static var customerCertificate: String = ""
-    static var AgoraRtcToken: String = ""
-    static var AgoraRtmToken: String = ""
+    static var AgoraAppId: String = <#Your AppId#>
+    static var customerId: String = <#Your customerId#>
+    static var customerCertificate: String = <#Your customerCertificate#>
     static var UserToken: String = ""
     static var BuglyId: String = ""
 }

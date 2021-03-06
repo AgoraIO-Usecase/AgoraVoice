@@ -15,8 +15,5 @@ target 'AgoraVoice' do
   pod 'FLAnimatedImage'
   pod 'MBProgressHUD', '1.1.0'
   pod 'Bugly', '2.5.2'
-  pod 'SSZipArchive'
-  pod 'AgoraLog'
-  pod 'AgoraRte', :path => '../../../../AgoraRte/iOS/AgoraRte.podspec'
-  pod 'Armin', :path => '/Users/cavan/Documents/Github/Armin/'
+  pod 'AgoraRte', :path => '../AgoraRte/AgoraRte_Binary.podspec'
  end
