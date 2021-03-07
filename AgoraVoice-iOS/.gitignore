@@ -14,6 +14,8 @@ Super app-picture_slices
 app
 local_build.sh
 short_local.sh
+archive
+
 
 # Xcode
 #

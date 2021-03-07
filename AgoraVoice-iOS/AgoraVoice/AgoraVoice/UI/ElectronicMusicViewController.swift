@@ -40,6 +40,7 @@ class ElectronicMusicViewController: RxViewController {
     @IBOutlet weak var ableSwitch: UISwitch!
     @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var selectScaleLabel: UILabel!
+    @IBOutlet weak var segmentWidth: NSLayoutConstraint!
     
     var audioEffectVM: AudioEffectVM!
     
@@ -48,13 +49,17 @@ class ElectronicMusicViewController: RxViewController {
                                                             "Eb", "E", "F",
                                                             "Gb", "G", "Ab"])
     
-    private let selectedValueIndex = BehaviorRelay<Int>(value: 0)
+    private lazy var selectedValueIndex: BehaviorRelay<Int> = {
+        let index = audioEffectVM.selectedElectronicMusic.value.value - 1
+        let object = BehaviorRelay<Int>(value: index)
+        return object
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        switchNameLabel.text = NSLocalizedString("Enable_Pitch_Correction")
-        selectScaleLabel.text = NSLocalizedString("Select_The_Starting_Key")
+        switchNameLabel.text = AudioEffectsLocalizable.enablePitchCorrection()
+        selectScaleLabel.text = AudioEffectsLocalizable.selectTheStartingKey()
         
         // audioEffectVM
         audioEffectVM.selectedElectronicMusic.map { (music) -> Bool in
@@ -76,6 +81,7 @@ class ElectronicMusicViewController: RxViewController {
             let value = (self.selectedValueIndex.value + 1)
             let music = ElectronicMusic(isAvailable: isOn, type: type, value: value)
             self.audioEffectVM.selectedElectronicMusic.accept(music)
+            self.collectionView.alpha = isOn ? 1.0 : 0.5
         }).disposed(by: bag)
         
         // segmentControl
@@ -91,7 +97,7 @@ class ElectronicMusicViewController: RxViewController {
         }.bind(to: segmentControl.rx.selectedSegmentIndex).disposed(by: bag)
         
         // collectionView
-        selectedValueIndex.accept(audioEffectVM.selectedElectronicMusic.value.value - 1)
+        collectionView.alpha = ableSwitch.isOn ? 1.0 : 0.5
 
         collectionView.rx.itemSelected.subscribe(onNext: { [unowned self] (index) in
             self.selectedValueIndex.accept(index.item)
@@ -109,9 +115,12 @@ class ElectronicMusicViewController: RxViewController {
 
 private extension ElectronicMusicViewController {
     func modeSegment() {
-        segmentControl.setTitle(NSLocalizedString("Major"), forSegmentAt: 0)
-        segmentControl.setTitle(NSLocalizedString("Minor"), forSegmentAt: 1)
-        segmentControl.setTitle(NSLocalizedString("Japenese_Pentatonic"), forSegmentAt: 2)
+        segmentControl.setTitle(AudioEffectsLocalizable.major(),
+                                forSegmentAt: 0)
+        segmentControl.setTitle(AudioEffectsLocalizable.minor(),
+                                forSegmentAt: 1)
+        segmentControl.setTitle(AudioEffectsLocalizable.japeneseStyle(),
+                                forSegmentAt: 2)
                 
         if #available(iOS 13.0, *) {
             segmentControl.selectedSegmentTintColor = UIColor(hexString: "#0088EB")
@@ -119,10 +128,21 @@ private extension ElectronicMusicViewController {
             segmentControl.tintColor = UIColor(hexString: "#0088EB")
         }
         
+        var font: CGFloat
+        
+        if DeviceAssistant.Language.isChinese {
+            font = 14
+        } else {
+            segmentWidth.constant = 340
+            font = 10
+        }
+        
         segmentControl.backgroundColor = UIColor(hexString: "#161D27")
-        segmentControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : UIColor(hexString: "#686E78")],
+        segmentControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : UIColor(hexString: "#686E78"),
+                                               NSAttributedString.Key.font : UIFont.systemFont(ofSize: font)],
                                               for: .normal)
-        segmentControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : UIColor.white],
+        segmentControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : UIColor.white,
+                                               NSAttributedString.Key.font : UIFont.systemFont(ofSize: font)],
                                               for: .selected)
     }
     

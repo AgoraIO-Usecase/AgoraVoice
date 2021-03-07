@@ -14,6 +14,11 @@ class AEImageLabelCell: RxCollectionViewCell {
     @IBOutlet weak var tagImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        nameLabel.adjustsFontSizeToFitWidth = true
+    }
+    
     var isSelectedNow: Bool = false {
         didSet {
             if isSelectedNow {
@@ -37,6 +42,11 @@ class AEImageLabelCell: RxCollectionViewCell {
 
 class AELabelCell: RxCollectionViewCell {
     @IBOutlet weak var nameLabel: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        nameLabel.adjustsFontSizeToFitWidth = true
+    }
     
     var isSelectedNow: Bool = false {
         didSet {
@@ -114,7 +124,8 @@ private extension AECollectionViewController {
                                                        left: space,
                                                        bottom: 0,
                                                        right: space)
-            collectionView.setCollectionViewLayout(layout, animated: false)
+            collectionView.setCollectionViewLayout(layout,
+                                                   animated: false)
             
             let listSubscribe = ChatOfBelCanto.list.bind(to: collectionView.rx.items(cellIdentifier: "AEImageLabelCell",
                                                                                  cellType: AEImageLabelCell.self)) { [unowned self] (index, item, cell) in
@@ -227,7 +238,7 @@ private extension AECollectionViewController {
         let width: CGFloat = 78.0
         let height: CGFloat = 98.0
         let itemSize = CGSize(width: width, height: height)
-        let space = (UIScreen.main.bounds.width - (width * 3)) / CGFloat(4)
+        let space = (UIScreen.main.bounds.width - (width * 4)) / CGFloat(5)
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = itemSize
         layout.scrollDirection = .vertical
@@ -275,7 +286,7 @@ private extension AECollectionViewController {
             lastSubscribes.append(listSubscribe)
             lastSubscribes.append(selectSubscribe)
             lastSubscribes.append(threeDimensionSubscribe)
-        case .role:
+        case .voiceChangerEffect:
             let listSubscribe = TimbreRole.list.bind(to: collectionView.rx.items(cellIdentifier: "AEImageLabelCell",
                                                                                  cellType: AEImageLabelCell.self)) { [unowned self] (index, item, cell) in
                                                                                     cell.tagImageView.image = item.image
@@ -295,7 +306,7 @@ private extension AECollectionViewController {
             
             lastSubscribes.append(listSubscribe)
             lastSubscribes.append(selectSubscribe)
-        case .musciGenre:
+        case .styleTransformation:
             let listSubscribe = MusicGenre.list.bind(to: collectionView.rx.items(cellIdentifier: "AEImageLabelCell",
                                                                                  cellType: AEImageLabelCell.self)) { [unowned self] (index, item, cell) in
                                                                                     cell.tagImageView.image = item.image
@@ -315,7 +326,7 @@ private extension AECollectionViewController {
             
             lastSubscribes.append(listSubscribe)
             lastSubscribes.append(selectSubscribe)
-        case .electronicMusic:
+        case .pitchCorrection, .magicTone:
             break
         }
     }

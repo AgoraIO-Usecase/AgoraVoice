@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 import RxRelay
-import AlamoClient
+import Armin
 
 class RoomBackgroundVM: CustomObserver {
     var room: Room
@@ -35,19 +35,19 @@ class RoomBackgroundVM: CustomObserver {
         let parameters: StringAnyDic = ["backgroundImage": "\(index)"]
 
         let url = URLGroup.roomBackground(roomId: room.roomId)
-        let event = RequestEvent(name: "update-room-background")
-        let task = RequestTask(event: event,
+        let event = ArRequestEvent(name: "update-room-background")
+        let task = ArRequestTask(event: event,
                                type: .http(.put, url: url),
                                timeout: .low,
                                header: ["token": Keys.UserToken],
                                parameters: parameters)
         
-        client.request(task: task, success: ACResponse.json({ [weak self] (_) in
+        client.request(task: task, success: ArResponse.json({ [weak self] (_) in
             guard let strongSelf = self else {
                 return
             }
             strongSelf.selectedIndex.accept(index)
-        })) { [weak self] (_) -> RetryOptions in
+        })) { [weak self] (_) -> ArRetryOptions in
             guard let strongSelf = self else {
                 return .resign
             }

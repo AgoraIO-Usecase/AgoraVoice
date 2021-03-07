@@ -9,21 +9,21 @@
 import UIKit
 import RxSwift
 import RxRelay
-import AlamoClient
+import Armin
 
 enum Gift: Int {
     case smallBell = 0, iceCream, wine, cake, ring, watch, crystal, rocket
     
     var description: String {
         switch self {
-        case .smallBell: return NSLocalizedString("Small_Bell")
-        case .iceCream:  return NSLocalizedString("Ice_Cream")
-        case .wine:      return NSLocalizedString("Wine")
-        case .cake:      return NSLocalizedString("Cake")
-        case .ring:      return NSLocalizedString("Ring")
-        case .watch:     return NSLocalizedString("Watch")
-        case .crystal:   return NSLocalizedString("Crystal")
-        case .rocket:    return NSLocalizedString("Rocket")
+        case .smallBell: return DeviceAssistant.Language.isChinese ? "铃铛" : "Bell"
+        case .iceCream:  return DeviceAssistant.Language.isChinese ? "冰淇淋" : "Ice cream"
+        case .wine:      return DeviceAssistant.Language.isChinese ? "红酒" : "Wine"
+        case .cake:      return DeviceAssistant.Language.isChinese ? "蛋糕" : "Cake"
+        case .ring:      return DeviceAssistant.Language.isChinese ? "戒指" : "Ring"
+        case .watch:     return DeviceAssistant.Language.isChinese ? "手表" : "Watch"
+        case .crystal:   return DeviceAssistant.Language.isChinese ? "钻石" : "Diamond"
+        case .rocket:    return DeviceAssistant.Language.isChinese ? "火箭" : "Rocket"
         }
     }
     
@@ -94,24 +94,18 @@ class GiftVM: CustomObserver {
         observe()
     }
     
-    deinit {
-        #if !RELEASE
-        print("deinit GiftVM")
-        #endif
-    }
-    
     func present(gift: Gift, fail: Completion) {
         let client = Center.shared().centerProvideRequestHelper()
-        let event = RequestEvent(name: "present-gift")
+        let event = ArRequestEvent(name: "present-gift")
         let url = URLGroup.presentGift(roomId: room.roomId)
-        let task = RequestTask(event: event,
+        let task = ArRequestTask(event: event,
                                type: .http(.post, url: url),
                                timeout: .medium,
                                header: ["token": Keys.UserToken],
                                parameters: ["giftId": gift.rawValue, "count": 1])
         
-        client.request(task: task) { [unowned self] (_) -> RetryOptions in
-            self.fail.accept("give a gift fail")
+        client.request(task: task) { [unowned self] (_) -> ArRetryOptions in
+            self.fail.accept(LiveVCLocalizable.giveGiftFail())
             return .resign
         }
     }

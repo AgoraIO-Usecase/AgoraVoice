@@ -9,38 +9,29 @@
 import UIKit
 import RxSwift
 import RxRelay
+import AgoraRte
 
 class MediaDeviceVM: RxObject {
-    private var operatorObj: MediaDevice
-    
-    let mic = BehaviorRelay<AGESwitch>(value: .off)
+    let micStatus = BehaviorRelay<AGESwitch>(value: .off)
+    let micAction = PublishRelay<AGESwitch>()
     let localAudioLoop = BehaviorRelay<AGESwitch>(value: .off)
-    let audioOutput: BehaviorRelay<AudioOutputRouting> = BehaviorRelay(value: AudioOutputRouting.default)
+    let audioOutput = BehaviorRelay(value: AgoraRteAudioOutputRouting.default)
     
     override init() {
-        let operatorObj = Center.shared().centerProvideMediaDevice()
-        self.operatorObj = operatorObj
         super.init()
-        operatorObj.delegate = self
         observe()
     }
-}
-
-private extension MediaDeviceVM {
-    func observe() {
-        localAudioLoop.subscribe(onNext: { [unowned self] (isOn) in
-            self.operatorObj.recordAudioLoop(isOn.boolValue)
+    
+    private func observe() {
+        audioOutput.subscribe(onNext: { [unowned self] (routing) in
+            if !routing.isSupportLoop {
+                self.localAudioLoop.accept(.off)
+            }
         }).disposed(by: bag)
     }
 }
 
-extension MediaDeviceVM: MediaDeviceDelegate {
-    func mediaDevice(_ mediaDevice: MediaDevice, didChangeAudoOutputRouting routing: AudioOutputRouting) {
-        audioOutput.accept(routing)
-    }
-}
-
-extension AudioOutputRouting {
+extension AgoraRteAudioOutputRouting {
     var isSupportLoop: Bool {
         switch self {
         case .default, .headsetNoMic, .loudspeaker, .speakerphone: return false

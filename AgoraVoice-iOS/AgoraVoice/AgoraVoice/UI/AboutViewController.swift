@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import AgoraRte
 
 class DisclaimerViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = NSLocalizedString("Test_Product_Disclaimer")
+        self.title = MineLocalizable.disclaimer()
         
         let para = NSMutableParagraphStyle()
         para.alignment = .natural
@@ -24,7 +25,8 @@ class DisclaimerViewController: UIViewController {
         
         let string = NSAttributedString(string: NSLocalizedString("Disclaimer_Detail"),
                                         attributes: [NSAttributedString.Key.paragraphStyle : para,
-                                                     NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17)])
+                                                     NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15),
+                                                     NSAttributedString.Key.foregroundColor : UIColor.white])
         self.textView.attributedText = string
     }
 }
@@ -47,31 +49,28 @@ class AboutViewController: MaskTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let navigation = self.navigationController as? CSNavigationController else {
-            assert(false)
-            return
+        if let navigation = self.navigationController as? CSNavigationController {
+            navigation.navigationBar.isHidden = false
         }
-        
-        navigation.navigationBar.isHidden = false
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = NSLocalizedString("About")
-        privacyLabel.text = NSLocalizedString("Privacy_Item")
-        disclaimerLabel.text = NSLocalizedString("Disclaimer")
-        registerLabel.text = NSLocalizedString("Register_Agora_Account")
-        versionLabel.text = NSLocalizedString("Version_Release_Date")
-        sdkLabel.text = NSLocalizedString("RTC_SDK_Version")
-        alLabel.text = NSLocalizedString("AV_Version")
+        self.title = MineLocalizable.about()
+        privacyLabel.text = MineLocalizable.privacy()
+        disclaimerLabel.text = MineLocalizable.disclaimer()
+        registerLabel.text = MineLocalizable.registerAgoraAccount()
+        versionLabel.text = MineLocalizable.releaseDate()
+        sdkLabel.text = MineLocalizable.sdkVersion()
+        alLabel.text = MineLocalizable.appVersion()
         
         alValueLabel.text = "Ver \(AppAssistant.version)"
-        sdkValueLabel.text = "Ver \(RTCManager.sdkVersion())"
+        sdkValueLabel.text = "Ver \(AgoraRteEngine.getVersion())"
         
-        releaseDateValueLabel.text = "2020.6.18"
+        releaseDateValueLabel.text = "2021.3.4"
         
-        uploadLogLabel.text = NSLocalizedString("Upload_Log")
+        uploadLogLabel.text = MineLocalizable.uploadLog()
         
         agoraLabel.text = "www.agora.io"
         agoraLabel.font = UIFont.systemFont(ofSize: 16)
@@ -99,8 +98,12 @@ class AboutViewController: MaskTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        let privacyItem = 0
+        let agoraAccountItem = 2
+        let uploadLogItem = 6
+        
         switch indexPath.row {
-        case 0:
+        case privacyItem:
             var privacyURL: URL?
             if DeviceAssistant.Language.isChinese {
                 privacyURL = URL(string: "https://www.agora.io/cn/privacy-policy/")
@@ -113,22 +116,20 @@ class AboutViewController: MaskTableViewController {
             }
             
             UIApplication.shared.privateOpenURL(url)
-        case 1:
-            break
-        case 2:
-            var privacyURL: URL?
+        case agoraAccountItem:
+            var accountURL: URL?
             if DeviceAssistant.Language.isChinese {
-                privacyURL = URL(string: "https://sso.agora.io/cn/signup/")
+                accountURL = URL(string: "https://sso.agora.io/cn/signup/")
             } else {
-                privacyURL = URL(string: "https://sso.agora.io/en/signup/")
+                accountURL = URL(string: "https://sso.agora.io/en/signup/")
             }
             
-            guard let url = privacyURL else {
+            guard let url = accountURL else {
                 return
             }
             
             UIApplication.shared.privateOpenURL(url)
-        case 6:
+        case uploadLogItem:
             self.showHUD()
             let log = Center.shared().centerProvideFilesGroup().logs
             log.upload(success: { [weak self] (logId) in
@@ -137,14 +138,15 @@ class AboutViewController: MaskTableViewController {
                 let pasteboard = UIPasteboard.general
                 pasteboard.string = logId
 
-                let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
-                view.text = NSLocalizedString("LogId_Copy")
-                self?.showToastView(view, duration: 2)
-            }) { [weak self] (_) in
+                self?.showTextToast(text:  MineLocalizable.logIdCopy())
+            }) { [weak self] (error) in
                 self?.hiddenHUD()
-                let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
-                view.text = "Log upload fail"
-                self?.showToastView(view, duration: 2)
+                
+                if error.code == -1 {
+                    self?.showTextToast(text: NetworkLocalizable.lostConnectionRetry())
+                } else {
+                    self?.showTextToast(text:  MineLocalizable.uploadLogFail())
+                }
             }
         default:
             break
@@ -154,6 +156,8 @@ class AboutViewController: MaskTableViewController {
 
 extension UIApplication {
     func privateOpenURL(_ url: URL) {
-        open(url, options: [UIApplication.OpenExternalURLOptionsKey(rawValue: ""): ""], completionHandler: nil)
+        open(url,
+             options: [UIApplication.OpenExternalURLOptionsKey(rawValue: ""): ""],
+             completionHandler: nil)
     }
 }

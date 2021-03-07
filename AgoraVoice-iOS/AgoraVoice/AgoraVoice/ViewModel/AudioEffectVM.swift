@@ -10,19 +10,10 @@ import UIKit
 import RxSwift
 import RxRelay
 
-struct ElectronicMusic {
-    var isAvailable: Bool = false
-    var type: Int = 1
-    var value: Int = 1
-}
-
 class AudioEffectVM: RxObject {
-    private lazy var operateObj: AudioEffect = {
-        return Center.shared().centerProvideMediaDevice().recordAudioEffect
-    }()
-    
     private var lastAduioEffectType = AudioEffectType.belCanto
     
+    // Input Rx
     let selectedChatOfBelcanto = BehaviorRelay<ChatOfBelCanto>(value: .disable)
     let selectedSingOfBelcanto = BehaviorRelay<SingOfBelCanto>(value: .disable)
     let selectedTimbre = BehaviorRelay<Timbre>(value: .disable)
@@ -32,8 +23,19 @@ class AudioEffectVM: RxObject {
     let selectedMusicGenre = BehaviorRelay<MusicGenre>(value: .disable)
     
     let selectedElectronicMusic = BehaviorRelay<ElectronicMusic>(value: ElectronicMusic())
+    let selectedThreeDimensionalVoice = BehaviorRelay<Int>(value: 10)
     
-    let threeDimensionalVoice = BehaviorRelay<Int>(value: 0)
+    // Output Rx
+    let outputChatOfBelcanto = PublishRelay<ChatOfBelCanto>()
+    let outputSingOfBelcanto = PublishRelay<SingOfBelCanto>()
+    let outputTimbre = PublishRelay<Timbre>()
+    
+    let outputAudioSpace = PublishRelay<AudioSpace>()
+    let outputTimbreRole = PublishRelay<TimbreRole>()
+    let outputMusicGenre = PublishRelay<MusicGenre>()
+    
+    let outputElectronicMusic = PublishRelay<ElectronicMusic>()
+    let outputThreeDimensionalVoice = PublishRelay<Int>()
     
     override init() {
         super.init()
@@ -52,7 +54,7 @@ private extension AudioEffectVM {
                 self.selectedTimbre.accept(.disable)
             }
             
-            self.operateObj.setBelCantoWithChat(item)
+            self.outputChatOfBelcanto.accept(item)
         }).disposed(by: bag)
         
         selectedSingOfBelcanto.subscribe(onNext: { [unowned self] (item) in
@@ -63,7 +65,7 @@ private extension AudioEffectVM {
                 self.selectedTimbre.accept(.disable)
             }
             
-            self.operateObj.setBelCantoWithSing(item)
+            self.outputSingOfBelcanto.accept(item)
         }).disposed(by: bag)
         
         selectedTimbre.subscribe(onNext: { [unowned self] (item) in
@@ -74,7 +76,7 @@ private extension AudioEffectVM {
                 self.selectedSingOfBelcanto.accept(.disable)
             }
             
-            self.operateObj.setBelCantoWith(item)
+            self.outputTimbre.accept(item)
         }).disposed(by: bag)
         
         // soundEffectType
@@ -86,7 +88,7 @@ private extension AudioEffectVM {
                 self.selectedMusicGenre.accept(.disable)
             }
             
-            self.operateObj.setSoundWith(item)
+            self.outputAudioSpace.accept(item)
         }).disposed(by: bag)
         
         selectedTimbreRole.subscribe(onNext: { [unowned self] (item) in
@@ -97,7 +99,7 @@ private extension AudioEffectVM {
                 self.selectedMusicGenre.accept(.disable)
             }
             
-            self.operateObj.setSoundWith(item)
+            self.outputTimbreRole.accept(item)
         }).disposed(by: bag)
         
         selectedMusicGenre.subscribe(onNext: { [unowned self] (item) in
@@ -108,15 +110,16 @@ private extension AudioEffectVM {
                 self.selectedTimbreRole.accept(.disable)
             }
             
-            self.operateObj.setSoundWith(item)
+            self.outputMusicGenre.accept(item)
         }).disposed(by: bag)
         
-        // threeDimensionalVoice
-        threeDimensionalVoice.subscribe(onNext: { [unowned self] (value) in
+        // selectedThreeDimensionalVoice
+        selectedThreeDimensionalVoice.subscribe(onNext: { [unowned self] (value) in
             guard self.selectedAudioSpace.value == .threeDimensionalVoice else {
                 return
             }
-            self.operateObj.setThreedimVoiceOfSound(value)
+            
+            self.outputThreeDimensionalVoice.accept(value)
         }).disposed(by: bag)
         
         // Electronic Music
@@ -124,10 +127,9 @@ private extension AudioEffectVM {
             if music.isAvailable {
                 self.disableBelCanto()
                 self.disableSoundEffect()
-                self.operateObj.setElectronicMusicWithType(music.type, value: music.value)
-            } else {
-                self.operateObj.cancelElectronicMusic()
             }
+            
+            self.outputElectronicMusic.accept(music)
         }).disposed(by: bag)
     }
 }
@@ -146,6 +148,8 @@ private extension AudioEffectVM {
     }
     
     func disableElectronicMusic() {
-        self.selectedElectronicMusic.accept(ElectronicMusic(isAvailable: false, type: 1, value: 1))
+        var model = self.selectedElectronicMusic.value
+        model.isAvailable = false
+        self.selectedElectronicMusic.accept(model)
     }
 }

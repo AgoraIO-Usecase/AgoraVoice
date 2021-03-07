@@ -39,7 +39,7 @@ class BottomToolsViewController: RxViewController {
         
         textInput.textColor = .white
         textInput.returnKeyType = .done
-        textInput.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Live_Text_Input_Placeholder"),
+        textInput.attributedPlaceholder = NSAttributedString(string: LiveVCLocalizable.chatInputPlaceholder(),
                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor(hexString: "#CCCCCC"),
                                                                           NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)])
         view.addSubview(textInput)

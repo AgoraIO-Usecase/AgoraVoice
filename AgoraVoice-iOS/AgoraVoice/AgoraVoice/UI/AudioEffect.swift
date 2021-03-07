@@ -18,8 +18,8 @@ enum AudioEffectType {
     
     var description: String {
         switch self {
-        case .belCanto:    return NSLocalizedString("Voice_Beautifier")
-        case .soundEffect: return NSLocalizedString("Audio_Effects")
+        case .belCanto:    return DeviceAssistant.Language.isChinese ? "美声" : "Voice beautifier"
+        case .soundEffect: return DeviceAssistant.Language.isChinese ? "音效" : "Audio effects"
         }
     }
 }
@@ -33,29 +33,61 @@ enum BelCantoType {
     
     var description: String {
         switch self {
-        case .chat:   return NSLocalizedString("Chat_Beautifier")
-        case .sing:   return NSLocalizedString("Singing_Beautifier")
-        case .timbre: return NSLocalizedString("Timbre_Transformation")
+        case .chat:   return DeviceAssistant.Language.isChinese ? "语聊美声" : "Chat beautifier"
+        case .sing:   return DeviceAssistant.Language.isChinese ? "歌唱美声" : "Singing beautifier"
+        case .timbre: return DeviceAssistant.Language.isChinese ? "音色变换" : "Timbre transformation"
         }
     }
 }
 
 enum SoundEffectType {
-    case space, role, musciGenre, electronicMusic
+    case space, voiceChangerEffect, styleTransformation, pitchCorrection, magicTone
     
     static var list = BehaviorRelay<[SoundEffectType]>(value: [.space,
-                                                               .role,
-                                                               .musciGenre,
-                                                               .electronicMusic])
+                                                               .voiceChangerEffect,
+                                                               .styleTransformation,
+                                                               .pitchCorrection,
+                                                               .magicTone])
     
     var description: String {
         switch self {
-        case .space:           return NSLocalizedString("Room_Acoustics")
-        case .role:            return NSLocalizedString("Voice_Changer_Effect")
-        case .musciGenre:      return NSLocalizedString("Style_Transformation")
-        case .electronicMusic: return NSLocalizedString("Pitch_Correction")
+        case .space:               return DeviceAssistant.Language.isChinese ? "空间塑造" : "Room acoustics"
+        case .voiceChangerEffect:  return DeviceAssistant.Language.isChinese ? "变声音效" : "Voice changer effect"
+        case .styleTransformation: return DeviceAssistant.Language.isChinese ? "曲风音效" : "Style transformation"
+        case .pitchCorrection:     return DeviceAssistant.Language.isChinese ? "电音音效" : "Pitch correction"
+        case .magicTone:           return DeviceAssistant.Language.isChinese ? "魔力音阶" : "Magic tone"
         }
     }
+}
+
+enum ChatOfBelCanto {
+    case disable, maleMagnetic, femaleFresh, femaleVitality
+}
+
+enum SingOfBelCanto {
+    case disable, male, female
+}
+
+enum Timbre {
+    case disable, vigorous, deep, mellow, falsetto, full, clear, resounding, ringing
+}
+
+enum AudioSpace {
+    case disable, ktv, vocalConcer, studio, phonograph, virtualStereo, spacial, ethereal, threeDimensionalVoice
+}
+
+enum TimbreRole {
+    case disable, uncle, oldMan, babyBoy, babyGirl, sister, zhuBaJie, hulk
+}
+
+enum MusicGenre {
+    case disable, rnb, popular, rock, hiphop
+}
+
+struct ElectronicMusic {
+    var isAvailable: Bool = false
+    var type: Int = 1
+    var value: Int = 4
 }
 
 extension ChatOfBelCanto {
@@ -69,20 +101,34 @@ extension ChatOfBelCanto {
         case .femaleFresh:    return UIImage(named: "icon-清新女")!
         case .femaleVitality: return UIImage(named: "icon-活力女")!
         case .disable:        fatalError()
-        @unknown default:
-            fatalError()
         }
     }
     
     var description: String {
         switch self {
-        case .maleMagnetic:   return NSLocalizedString("Male_Magnetic")
-        case .femaleFresh:    return NSLocalizedString("Female_Fresh")
-        case .femaleVitality: return NSLocalizedString("Female_Vitality")
+        case .maleMagnetic:   return DeviceAssistant.Language.isChinese ? "磁性(男)" : "Magnetic(Male)"
+        case .femaleFresh:    return DeviceAssistant.Language.isChinese ? "清新(女)" : "Fresh(Female)"
+        case .femaleVitality: return DeviceAssistant.Language.isChinese ? "活力(女)" : "Vitality(Female)"
         case .disable:        fatalError()
-        @unknown default:
-            fatalError()
         }
+    }
+    
+    var parameters: String {
+        var value: Int
+        
+        switch self {
+        case .maleMagnetic:
+            value = 1
+        case .femaleFresh:
+            value = 2
+        case .femaleVitality:
+            value = 3
+        case .disable:
+            return "{\"che.audio.morph.reverb_preset\":0}"
+        }
+        
+        let parameters = "{\"che.audio.morph.beauty_voice\":\(value)}"
+        return parameters
     }
 }
 
@@ -95,9 +141,26 @@ extension SingOfBelCanto {
         case .male:    return NSLocalizedString("Male")
         case .female:  return NSLocalizedString("Female")
         case .disable: fatalError()
-        @unknown default:
-            fatalError()
         }
+    }
+    
+    var parameters: String {
+        var key: Int
+        var value: Int
+        
+        switch self {
+        case .male:
+            key = 1
+            value = 1
+        case .female:
+            key = 2
+            value = 1
+        case .disable:
+            return "{\"che.audio.morph.reverb_preset\":0}"
+        }
+        
+        let parameters = "{\"che.audio.morph.beauty_sing\":{\"key\":\(key),\"value\":\(value)}}"
+        return parameters
     }
 }
 
@@ -113,23 +176,49 @@ extension Timbre {
     
     var description: String {
         switch self {
-        case .vigorous:    return NSLocalizedString("Vigorous")
-        case .deep:        return NSLocalizedString("Deep")
-        case .mellow:      return NSLocalizedString("Mellow")
-        case .falsetto:    return NSLocalizedString("Falsetto")
-        case .full:        return NSLocalizedString("Full")
-        case .clear:       return NSLocalizedString("Clear")
-        case .resounding:  return NSLocalizedString("Resounding")
-        case .ringing:     return NSLocalizedString("Ringing")
+        case .vigorous:    return DeviceAssistant.Language.isChinese ? "浑厚" : "Vigorous"
+        case .deep:        return DeviceAssistant.Language.isChinese ? "低沉" : "Deep"
+        case .mellow:      return DeviceAssistant.Language.isChinese ? "圆润" : "Mellow"
+        case .falsetto:    return DeviceAssistant.Language.isChinese ? "假音" : "Falsetto"
+        case .full:        return DeviceAssistant.Language.isChinese ? "饱满" : "Full"
+        case .clear:       return DeviceAssistant.Language.isChinese ? "清澈" : "Clear"
+        case .resounding:  return DeviceAssistant.Language.isChinese ? "高亢" : "Resounding"
+        case .ringing:     return DeviceAssistant.Language.isChinese ? "嘹亮" : "Ringing"
         case .disable:     fatalError()
-        @unknown default:
-            fatalError()
         }
+    }
+    
+    var parameters: String {
+        var value: Int
+        
+        switch self {
+        case .vigorous:
+            value = 7
+        case .deep:
+            value = 8
+        case .mellow:
+            value = 9
+        case .falsetto:
+            value = 10
+        case .full:
+            value = 11
+        case .clear:
+            value = 12
+        case .resounding:
+            value = 13
+        case .ringing:
+            value = 14
+        case .disable:
+            return "{\"che.audio.morph.reverb_preset\":0}"
+        }
+        
+        let parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        return parameters
     }
 }
 
 extension AudioSpace {
-    static var list = BehaviorRelay<[AudioSpace]>(value: [.KTV,
+    static var list = BehaviorRelay<[AudioSpace]>(value: [.ktv,
                                                           .vocalConcer,
                                                           .studio,
                                                           .phonograph,
@@ -140,7 +229,7 @@ extension AudioSpace {
     
     var image: UIImage {
         switch self {
-        case .KTV:                    return UIImage(named: "icon-KTV")!
+        case .ktv:                    return UIImage(named: "icon-KTV")!
         case .vocalConcer:            return UIImage(named: "icon-演唱会")!
         case .studio:                 return UIImage(named: "icon-录音棚")!
         case .phonograph:             return UIImage(named: "icon-留声机")!
@@ -149,25 +238,55 @@ extension AudioSpace {
         case .ethereal:               return UIImage(named: "icon-空灵")!
         case .threeDimensionalVoice:  return UIImage(named: "icon-3D人声")!
         case .disable:                fatalError()
-        @unknown default:
-            fatalError()
         }
     }
     
     var description: String {
         switch self {
-        case .KTV:                    return NSLocalizedString("KTV")
-        case .vocalConcer:            return NSLocalizedString("Vocal_Concert")
-        case .studio:                 return NSLocalizedString("Studio")
-        case .phonograph:             return NSLocalizedString("Phonograph")
-        case .virtualStereo:          return NSLocalizedString("Virtual_Stereo")
-        case .spacial:                return NSLocalizedString("Spacial")
-        case .ethereal:               return NSLocalizedString("Ethereal")
-        case .threeDimensionalVoice:  return NSLocalizedString("Three_Dimensional_Voice")
+        case .ktv:                    return "KTV"
+        case .vocalConcer:            return DeviceAssistant.Language.isChinese ? "演唱会" : "Vocal concert"
+        case .studio:                 return DeviceAssistant.Language.isChinese ? "录音棚" : "Studio"
+        case .phonograph:             return DeviceAssistant.Language.isChinese ? "留声机" : "Phonograph"
+        case .virtualStereo:          return DeviceAssistant.Language.isChinese ? "虚拟立体声" : "Virtual stereo"
+        case .spacial:                return DeviceAssistant.Language.isChinese ? "空旷" : "Spacial"
+        case .ethereal:               return DeviceAssistant.Language.isChinese ? "空灵" : "Ethereal"
+        case .threeDimensionalVoice:  return DeviceAssistant.Language.isChinese ? "3D人声" : "3D Voice"
         case .disable:                fatalError()
-        @unknown default:
-            fatalError()
         }
+    }
+    
+    var parameters: String {
+        var value: Int
+        var parameters: String
+        
+        switch self {
+        case .ktv:
+            value = 1
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .vocalConcer:
+            value = 2
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .studio:
+            value = 5
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .phonograph:
+            value = 8
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .spacial:
+            value = 15
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .ethereal:
+            value = 5
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .virtualStereo:
+            parameters = "{\"che.audio.morph.virtual_stereo\":1}"
+        case .threeDimensionalVoice:
+            parameters = "{\"che.audio.morph.threedim_voice\":\(10)}"
+        case .disable:
+            parameters = "{\"che.audio.morph.reverb_preset\":0}"
+        }
+        
+        return parameters
     }
 }
 
@@ -175,8 +294,8 @@ extension TimbreRole {
     static var list = BehaviorRelay<[TimbreRole]>(value: [.uncle,
                                                           .oldMan,
                                                           .babyBoy,
-                                                          .babyGirl,
                                                           .sister,
+                                                          .babyGirl,
                                                           .zhuBaJie,
                                                           .hulk])
     
@@ -190,54 +309,117 @@ extension TimbreRole {
         case .zhuBaJie:  return UIImage(named: "icon-猪八戒")!
         case .hulk:      return UIImage(named: "icon-绿巨人")!
         case .disable:   fatalError()
-        @unknown default:
-            fatalError()
         }
     }
     
     var description: String {
         switch self {
-        case .uncle:     return NSLocalizedString("Uncle")
-        case .oldMan:    return NSLocalizedString("Old_Man")
-        case .babyBoy:   return NSLocalizedString("Boy")
-        case .sister:    return NSLocalizedString("Sister")
-        case .babyGirl:  return NSLocalizedString("Girl")
-        case .zhuBaJie:  return NSLocalizedString("Pig_King")
-        case .hulk:      return NSLocalizedString("Hulk")
+        case .uncle:     return DeviceAssistant.Language.isChinese ? "大叔" : "Uncle"
+        case .oldMan:    return DeviceAssistant.Language.isChinese ? "老男人" : "Old man"
+        case .babyBoy:   return DeviceAssistant.Language.isChinese ? "小男孩" : "Boy"
+        case .sister:    return DeviceAssistant.Language.isChinese ? "小姐姐" : "Sister"
+        case .babyGirl:  return DeviceAssistant.Language.isChinese ? "小女孩" : "Girl"
+        case .zhuBaJie:  return DeviceAssistant.Language.isChinese ? "猪八戒" : "Pig king"
+        case .hulk:      return DeviceAssistant.Language.isChinese ? "绿巨人" : "Hulk"
         case .disable:   fatalError()
-        @unknown default:
-            fatalError()
         }
+    }
+    
+    var parameters: String {
+        var value: Int
+        var parameters: String
+        
+        switch self {
+        case .uncle:
+            value = 3
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .oldMan:
+            value = 1
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .babyBoy:
+            value = 2
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .sister:
+            value = 4
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .babyGirl:
+            value = 3
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .zhuBaJie:
+            value = 4
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .hulk:
+            value = 6
+            parameters = "{\"che.audio.morph.voice_changer\":\(value)}"
+        case .disable:
+            parameters = "{\"che.audio.morph.reverb_preset\":0}"
+        }
+        
+        return parameters
     }
 }
 
 extension MusicGenre {
-    static var list = BehaviorRelay<[MusicGenre]>(value: [.RNB,
+    static var list = BehaviorRelay<[MusicGenre]>(value: [.rnb,
                                                           .popular,
                                                           .rock,
-                                                          .hipHop])
+                                                          .hiphop])
     
     var image: UIImage {
         switch self {
-        case .RNB:     return UIImage(named: "icon-R&B")!
+        case .rnb:     return UIImage(named: "icon-R&B")!
         case .popular: return UIImage(named: "icon-流行")!
         case .rock:    return UIImage(named: "icon-摇滚")!
-        case .hipHop:  return UIImage(named: "icon-嘻哈")!
+        case .hiphop:  return UIImage(named: "icon-嘻哈")!
         case .disable: fatalError()
-        @unknown default:
-            fatalError()
         }
     }
     
     var description: String {
         switch self {
-        case .RNB:     return NSLocalizedString("RNB")
-        case .popular: return NSLocalizedString("Popular")
-        case .rock:    return NSLocalizedString("Rock")
-        case .hipHop:  return NSLocalizedString("HipHop")
+        case .rnb:     return "R&B"
+        case .popular: return DeviceAssistant.Language.isChinese ? "流行" : "Popular"
+        case .rock:    return DeviceAssistant.Language.isChinese ? "摇滚" : "Rock"
+        case .hiphop:  return DeviceAssistant.Language.isChinese ? "嘻哈" : "HipHop"
         case .disable: fatalError()
-        @unknown default:
-            fatalError()
         }
+    }
+    
+    var parameters: String {
+        var value: Int
+        var parameters: String
+        
+        switch self {
+        case .rnb:
+            value = 7
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .popular:
+            value = 6
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .rock:
+            value = 11
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .hiphop:
+            value = 12
+            parameters = "{\"che.audio.morph.reverb_preset\":\(value)}"
+        case .disable:
+            parameters = "{\"che.audio.morph.reverb_preset\":0}"
+        }
+        
+        return parameters
+    }
+}
+
+extension ElectronicMusic {
+    var parameters: String {
+        var parameters: String
+        
+        if isAvailable {
+            parameters = "{\"che.audio.morph.electronic_voice\":{\"key\":\(self.type),\"value\":\(self.value)}}"
+        } else {
+            parameters = "{\"che.audio.morph.reverb_preset\":0}"
+        }
+        
+        return parameters
     }
 }

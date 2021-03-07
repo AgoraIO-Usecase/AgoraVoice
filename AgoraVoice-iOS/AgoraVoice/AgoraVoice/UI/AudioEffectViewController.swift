@@ -10,12 +10,22 @@ import UIKit
 import RxSwift
 import RxRelay
 
+class AudioEffectPreView: UIView {
+    @IBOutlet weak var titleLabel: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        titleLabel.text = AudioEffectsLocalizable.comingSoon()
+    }
+}
+
 class AudioEffectViewController: RxViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tabView: TabSelectView!
     
     @IBOutlet weak var aecollectionView: UIView!
     @IBOutlet weak var electronicMusicView: UIView!
+    @IBOutlet weak var preView: AudioEffectPreView!
     
     weak var collectionVC: AECollectionViewController?
     
@@ -60,17 +70,23 @@ private extension AudioEffectViewController {
             for item in BelCantoType.list.value {
                 titles.append(item.description)
             }
-            tabView.titleSpace = 53
+            tabView.titleSpace = DeviceAssistant.Language.isChinese ? 53 : 24
+            tabView.alignment = DeviceAssistant.Language.isChinese ? .center : .left
         case .soundEffect:
             for item in SoundEffectType.list.value {
                 titles.append(item.description)
             }
             
             tabView.titleSpace = 24
+            tabView.alignment = .left
         }
         
-        tabView.titleTopSpace = 14
-        tabView.alignment = DeviceAssistant.Language.isChinese ? .center : .left
+        if tabView.alignment == .left {
+            tabView.insets = UIEdgeInsets(top: 0,
+                                          left: 15,
+                                          bottom: 0,
+                                          right: 15)
+        }
         
         tabView.selectedTitle = TabSelectView.TitleProperty(color: UIColor(hexString: "#EEEEEE"),
                                                             font: UIFont.systemFont(ofSize: 14, weight: .medium))
@@ -119,12 +135,19 @@ private extension AudioEffectViewController {
         
         // special for eletronic music
         vc.selectedSoundEffectType.subscribe(onNext: { [unowned self] (type) in
-            if type == .electronicMusic {
+            switch type {
+            case .pitchCorrection:
                 self.aecollectionView.isHidden = true
                 self.electronicMusicView.isHidden = false
-            } else {
+                self.preView.isHidden = true
+            case .magicTone:
+                self.aecollectionView.isHidden = true
+                self.electronicMusicView.isHidden = true
+                self.preView.isHidden = false
+            default:
                 self.aecollectionView.isHidden = false
                 self.electronicMusicView.isHidden = true
+                self.preView.isHidden = true
             }
         }).disposed(by: vc.bag)
     }

@@ -11,38 +11,46 @@ import UIKit
 import Foundation
 import RxSwift
 import RxRelay
-import AlamoClient
+import Armin
 
 enum AppUpdate: Int {
     case noNeed, advise, need
 }
 
-class AppAssistant: NSObject {
-    let update = PublishRelay<AppUpdate>()
+class AppAssistant: RxObject {
+    let updateNotification = PublishRelay<AppUpdate>()
+    let update = BehaviorRelay<AppUpdate>(value: .noNeed)
+    
+    override init() {
+        super.init()
+        updateNotification.subscribe(onNext: { [unowned self] (update) in
+            self.update.accept(update)
+        }).disposed(by: bag)
+    }
     
     func checkMinVersion() {
         let client = Center.shared().centerProvideRequestHelper()
         let url = URLGroup.appVersion
-        let event = RequestEvent(name: "app-version")
+        let event = ArRequestEvent(name: "app-version")
         let parameters: StringAnyDic = ["appCode": "ent-voice",
                                         "osType": 1,
                                         "terminalType": 1,
-                                        "version": AppAssistant.version]
+                                        "appVersion": AppAssistant.version]
         
-        let task = RequestTask(event: event,
+        let task = ArRequestTask(event: event,
                                type: .http(.get, url: url),
                                timeout: .low,
                                parameters: parameters)
         
-        let successCallback: ACDicEXCompletion = { [unowned self] (json: ([String: Any])) throws in
+        let successCallback: ArDicEXCompletion = { [unowned self] (json: ([String: Any])) throws in
             let data = try json.getDataObject()
             let update = try data.getEnum(of: "forcedUpgrade", type: AppUpdate.self)
-            self.update.accept(update)
+            self.updateNotification.accept(update)
         }
         
-        let response = ACResponse.json(successCallback)
+        let response = ArResponse.json(successCallback)
         
-        let retry: ACErrorRetryCompletion = { (error: Error) -> RetryOptions in
+        let retry: ArErrorRetryCompletion = { (error: Error) -> ArRetryOptions in
             return .retry(after: 0.5)
         }
         

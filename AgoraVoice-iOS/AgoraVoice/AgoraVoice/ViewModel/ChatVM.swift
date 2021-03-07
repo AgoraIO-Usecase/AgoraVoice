@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 import RxRelay
-import AlamoClient
+import Armin
 
 struct Chat {
     var textSize: CGSize
@@ -45,12 +45,6 @@ struct Chat {
 class ChatVM: CustomObserver {
     var chatWidthLimit: CGFloat = UIScreen.main.bounds.width - 60
     var list = BehaviorRelay(value: [Chat]())
-    
-    deinit {
-        #if !RELEASE
-        print("deinit ChatVM")
-        #endif
-    }
     
     func newMessages(_ chats: [Chat]) {
         var new = self.list.value

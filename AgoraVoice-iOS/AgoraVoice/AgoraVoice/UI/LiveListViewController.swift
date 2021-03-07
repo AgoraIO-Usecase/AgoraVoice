@@ -13,32 +13,35 @@ import MJRefresh
 
 class LiveListPlaceholderView: RxView {
     enum PlaceholderType {
-        case noInternet, noData, noRoom
+        case noInternet, noRoom
         
         var image: UIImage {
             switch self {
-            case .noInternet: return UIImage(named: "pic-empty")!
-            case .noData:     return UIImage(named: "pic-No signal")!
-            case .noRoom:     return UIImage(named: "pic-No data")!
+            case .noInternet: return UIImage(named: "pic-No signal")!
+            case .noRoom:     return UIImage(named: "pic-empty")!
             }
         }
         
         var description: String {
             switch self {
-            case .noInternet: return NSLocalizedString("Lost_Connection")
-            case .noData:     return NSLocalizedString("No_Data_Please_Try_Again_Later")
-            case .noRoom:     return NSLocalizedString("Create_A_Room")
+            case .noInternet: return NetworkLocalizable.lostConnection()
+            case .noRoom:     return LiveListLocalizable.createChannelToStart()
             }
         }
     }
     
     @IBOutlet weak var tagImageView: UIImageView!
     @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var subLabel: UILabel!
     
-    var type: PlaceholderType = .noData {
+    var type: PlaceholderType = .noRoom {
         didSet {
             tagImageView.image = type.image
             label.text = type.description
+            label.textColor = (type != .noInternet) ? UIColor(hexString: "#4D5D73") : UIColor.white
+            
+            subLabel.text = NetworkLocalizable.lostConnectionDescription()
+            subLabel.isHidden = (type != .noInternet)
         }
     }
     
@@ -46,7 +49,7 @@ class LiveListPlaceholderView: RxView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        type = .noData
+        type = .noRoom
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -85,19 +88,16 @@ class LiveListViewController: MaskViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let navigation = self.navigationController as? CSNavigationController else {
-            assert(false)
-            return
+        if let navigation = self.navigationController as? CSNavigationController {
+            navigation.navigationBar.isHidden = false
         }
-        
-        navigation.navigationBar.isHidden = false
         
         perMinuterRefresh()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = NSLocalizedString("Chat_Room")
+        title = type.name
         updateViews()
         subscribeList()
         netMonitor()
@@ -133,7 +133,7 @@ class LiveListViewController: MaskViewController {
             vc.backgroundVM = RoomBackgroundVM(room: session.room.value)
             vc.giftVM = GiftVM(room: session.room.value)
             
-            vc.multiHostsVM = MultiHostsVM(room: session.room.value)
+            vc.coHostingVM = CoHostingVM(room: session.room.value)
             vc.seatsVM = LiveSeatsVM(room: session.room.value)
         default:
             break
@@ -221,19 +221,22 @@ private extension LiveListViewController {
                 localType = .audience
             }
             
-            let session = LiveSession(room: room, role: localType)
+            let session = LiveSession(room: room,
+                                      role: localType)
             self.tempLiveSession = session
             
             session.join(success: { [unowned self] (session) in
                 self.hiddenHUD()
-                self.performSegue(withIdentifier: "ChatRoomViewController", sender: session)
+                self.performSegue(withIdentifier: "ChatRoomViewController",
+                                  sender: session)
             }) { [unowned self] (error) in
                 self.hiddenHUD()
                 
-                if (error as NSError).code == 7 {
-                    self.showTextToast(text: NSLocalizedString("Join_Fail"))
+                if let code = error.code,
+                   code == 20403001 {
+                    self.showTextToast(text: LiveListLocalizable.joinChannelFailWithLimit())
                 } else {
-                    self.showTextToast(text: "join live fail: " + error.localizedDescription)
+                    self.showTextToast(text: LiveListLocalizable.joinChannelFail())
                 }
                 
                 self.roomListRefresh()

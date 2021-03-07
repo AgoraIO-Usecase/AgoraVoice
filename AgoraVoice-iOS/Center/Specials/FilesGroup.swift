@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import AliyunOSSiOS
 
 // MARK: - FilesGroup
 class FilesGroup: NSObject {
@@ -18,8 +17,6 @@ class FilesGroup: NSObject {
         #endif
         return path
     }()
-    
-    private var ossClient: OSSClient!
     
     var images = ImageFiles()
     var logs = LogFiles()
