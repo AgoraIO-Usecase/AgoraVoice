@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 import RxRelay
-import AlamoClient
+import Armin
 
 // state: 0空位 1正常 2封麦
 enum SeatState {
@@ -40,7 +40,8 @@ struct LiveSeat {
     var index: Int // 1 ... 6
     var state: SeatState
     
-    init(index: Int, state: SeatState) {
+    init(index: Int,
+         state: SeatState) {
         self.index = index
         self.state = state
     }
@@ -66,26 +67,20 @@ class LiveSeatsVM: CustomObserver {
     
     func update(state: SeatState, index: Int) {
         let client = Center.shared().centerProvideRequestHelper()
-        let task = RequestTask(event: RequestEvent(name: "multi-seat-state \(state)"),
+        let task = ArRequestTask(event: ArRequestEvent(name: "multi-seat-state \(state)"),
                                type: .http(.post, url: URLGroup.liveSeatStatus(roomId: room.roomId)),
                                timeout: .medium,
                                header: ["token": Keys.UserToken],
                                parameters: ["no": index, "state": state.rawValue])
-        client.request(task: task) { [weak self] (error) -> RetryOptions in
+        client.request(task: task) { [weak self] (error) -> ArRetryOptions in
             guard let strongSelf = self else {
                 return .resign
             }
             
-            if let cError = error as? ACError, cError.code == nil {
-                strongSelf.fail.accept(NSLocalizedString("Lost_Connection_Retry"))
+            if error.code == nil {
+                strongSelf.fail.accept(NetworkLocalizable.lostConnectionRetry())
             } else {
-                switch state {
-                case .empty: strongSelf.fail.accept("un-lock seat fail")
-                case .close: strongSelf.fail.accept("lock seat fail")
-                default:
-                    assert(false)
-                    break
-                }
+                strongSelf.fail.accept(ChatRoomLocalizable.coHostingActionFail())
             }
             
             return .resign
@@ -106,7 +101,8 @@ private extension LiveSeatsVM {
             
             do {
                 guard seatsJson.count == self.seatCount else {
-                    throw AGEError.fail("seat count invalid", extra:"count: \(seatsJson.count)")
+                    throw AGEError.fail("seat count invalid",
+                                        extra:"count: \(seatsJson.count)")
                 }
                 
                 var list = [LiveSeat]()
@@ -122,8 +118,11 @@ private extension LiveSeatsVM {
                     case 1:
                         let userId = try item.getStringValue(of: "userId")
                         let userName = try item.getStringValue(of: "userName")
-                        let info = BasicUserInfo(userId: userId, name: userName)
-                        let user = LiveRoleItem(type: .broadcaster, info: info, agUId: "0")
+                        let info = BasicUserInfo(userId: userId,
+                                                 name: userName)
+                        let user = LiveRoleItem(type: .broadcaster,
+                                                info: info,
+                                                agUId: "0")
                         let stream = self.seatMatchStreamWith(role: user)
                         state = .normal(stream)
                     case 2:
@@ -132,7 +131,8 @@ private extension LiveSeatsVM {
                         throw AGEError.fail("seat state invalid")
                     }
                     
-                    let seat = LiveSeat(index: index, state: state)
+                    let seat = LiveSeat(index: index,
+                                        state: state)
                     list.append(seat)
                 }
                 
@@ -145,14 +145,16 @@ private extension LiveSeatsVM {
     
     func seatMatchStreamWith(role: LiveRole) -> LiveStream {
         var stream: LiveStream?
-        for item in streamList.value where item.owner.info.userId == role.info.userId {
+        for item in streamList.value where item.owner.info == role.info {
             stream = item
         }
         
         if let tStream = stream {
             return tStream
         } else {
-            return LiveStream(streamId: role.agUId, hasAudio: true, owner: role)
+            return LiveStream(streamId: role.agUId,
+                              hasAudio: true,
+                              owner: role)
         }
     }
     

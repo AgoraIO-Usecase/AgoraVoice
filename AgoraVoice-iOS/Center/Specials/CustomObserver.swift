@@ -17,6 +17,10 @@ class CustomObserver: RxObject, AGELogBase {
     
     let message = PublishRelay<[String : Any]>()
     let fail = PublishRelay<String>()
+    
+    deinit {
+        log(info: "deinit")
+    }
 }
 
 extension CustomObserver {

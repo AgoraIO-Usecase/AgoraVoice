@@ -9,9 +9,8 @@
 import UIKit
 import RxSwift
 import RxRelay
-import AlamoClient
-
-typealias ActionMessage = EduActionMessage
+import Armin
+import AgoraRte
 
 class Center: RxObject {
     static let instance = Center()
@@ -21,7 +20,6 @@ class Center: RxObject {
     
     let isWorkNormally = PublishRelay<Bool>()
     let customMessage = PublishRelay<[String: Any]>()
-    let actionMessage = PublishRelay<ActionMessage>()
     
     // Specials
     private var files = FilesGroup()
@@ -31,24 +29,18 @@ class Center: RxObject {
     private lazy var appAssistant = AppAssistant()
     
     // Commons
-    private lazy var alamo = AlamoClient(delegate: nil,
-                                         logTube: self)
+    private lazy var http = Armin(delegate: nil,
+                                  logTube: self)
     
-    private lazy var oss = AGOSSClient()
-        
     private lazy var userDataHelper = UserDataHelper()
+    private lazy var rteLoginRetry = AfterWorker()
     
-    private var liveManager: EduManager!
-    
-    private lazy var liveManagerLoginRetry = AfterWorker()
-    private lazy var rtc = RTCManager.share()
-    private lazy var mediaDevice = MediaDevice(rtcEngine: rtc)
+    private var rteKit: AgoraRteEngine!
     
     private let log = LogTube()
     
     override init() {
         super.init()
-        _ = liveManager
         appInfo()
     }
 }
@@ -56,21 +48,19 @@ class Center: RxObject {
 extension Center {
     func registerAndLogin() {
         appAssistant.checkMinVersion()
-        appAssistant.update.subscribe(onNext: { [unowned self] (update) in
+        appAssistant.updateNotification.subscribe(onNext: { [unowned self] (update) in
             func privateRegisterAndLogin() {
                 if let current = CurrentUser.local() {
                     self.current = current
-                    self.login(userId: current.info.value.userId) { [unowned self] in
+                    self.login(user: current.info.value) { [unowned self] in
                         self.isWorkNormally.accept(true)
                     }
                     return
                 }
                 
                 self.register { [unowned self] (info: BasicUserInfo) in
-                    self.login(userId: info.userId) { [unowned self] in
-                        self.current = CurrentUser(info: info)
-                        self.isWorkNormally.accept(true)
-                    }
+                    self.current = CurrentUser(info: info)
+                    self.login(user: info)
                 }
             }
             
@@ -102,14 +92,14 @@ private extension Center {
     
     func register(success: ((BasicUserInfo) -> Void)?) {
         let url = URLGroup.userRegister
-        let event = RequestEvent(name: "user-register")
+        let event = ArRequestEvent(name: "user-register")
         let random = (Int(arc4random()) % Array.names.count)
         let name = Array.names[random]
         let parameters = ["userName": name]
-        let task = RequestTask(event: event,
-                               type: .http(.post, url: url),
-                               timeout: .low,
-                               parameters: parameters)
+        let task = ArRequestTask(event: event,
+                                 type: .http(.post, url: url),
+                                 timeout: .low,
+                                 parameters: parameters)
         
         let successCallback: DicEXCompletion = { (json: ([String: Any])) throws in
             let object = try json.getDataObject()
@@ -122,94 +112,109 @@ private extension Center {
                 success(info)
             }
         }
-        let response = ACResponse.json(successCallback)
+        let response = ArResponse.json(successCallback)
         
-        let retry: ACErrorRetryCompletion = { (error: Error) -> RetryOptions in
+        let retry: ArErrorRetryCompletion = { (error: Error) -> ArRetryOptions in
             return .retry(after: 1)
         }
         
-        alamo.request(task: task, success: response, failRetry: retry)
+        http.request(task: task, success: response, failRetry: retry)
     }
     
-    func login(userId: String, success: Completion) {
+    func login(user: BasicUserInfo, success: Completion = nil) {
         let url = URLGroup.userLogin
-        let event = RequestEvent(name: "user-login")
-        let task = RequestTask(event: event,
+        let event = ArRequestEvent(name: "user-login")
+        let task = ArRequestTask(event: event,
                                type: .http(.post, url: url),
                                timeout: .low,
-                               parameters: ["userId": userId])
+                               parameters: ["userId": user.userId])
         
         let successCallback: DicEXCompletion = { [unowned self] (json: ([String: Any])) throws in
             let object = try json.getDataObject()
             let userToken = try object.getStringValue(of: "userToken")
-            let rtmToken = try object.getStringValue(of: "rtmToken")
             Keys.UserToken = userToken
-            Keys.AgoraRtmToken = rtmToken
             
-            // RTM Login
-            self.liveManagerLogin(userId: userId, success: success)
-        }
-        let response = ACResponse.json(successCallback)
-        
-        let retry: ACErrorRetryCompletion = { (error: Error) -> RetryOptions in
-            return .retry(after: 1)
+            // RTE Login
+            self.rteLogin(userId: user.userId, success: success)
         }
         
-        alamo.request(task: task, success: response, failRetry: retry)
+        let response = ArResponse.json(successCallback)
+        
+        let retry: ArErrorRetryCompletion = { [unowned self] (error: ArError) -> ArRetryOptions in
+            guard let code = error.code else {
+                return .retry(after: 1)
+            }
+            
+            if code == 404 || code == 403 {
+                self.loginFailHandle()
+                return .resign
+            } else {
+                return .retry(after: 1)
+            }
+        }
+        
+        http.request(task: task, success: response, failRetry: retry)
     }
     
-    func liveManagerLogin(userId: String, success: Completion) {
-        let configuration = EduConfiguration(appId: Keys.AgoraAppId,
-                                             customerId: Keys.customerId,
-                                             customerCertificate: Keys.customerCertificate,
-                                             userUuid: userId,
-                                             userName: "")
-        let manager = EduManager(config: configuration, success: {
+    func loginFailHandle() {
+        // userId invalid, register again
+        self.register { [unowned self] (info: BasicUserInfo) in
+            self.login(user: info) { [unowned self] in
+                self.current = CurrentUser(info: info)
+            }
+        }
+    }
+    
+    func rteLogin(userId: String, success: Completion) {
+        let configuration = AgoraRteEngineConfig(appId: Keys.AgoraAppId,
+                                                customerId: Keys.customerId,
+                                                customerCertificate: Keys.customerCertificate,
+                                                userId: userId)
+        configuration.logConsolePrintType = .all
+        configuration.logFilePath = FilesGroup.cacheDirectory + log.folderName
+        
+        AgoraRteEngine.create(with: configuration, success: { [unowned self] (engine) in
+            self.rteKit = engine
+            self.rteKit.delegate = self
+            
+            self.isWorkNormally.accept(true)
+            
             if let success = success {
                 success()
             }
-        }) { [unowned self]  (error) in
-            self.liveManagerLoginRetry.perform(after: 0.5, on: .main) { [unowned self] in
-                self.liveManagerLogin(userId: userId, success: success)
+        }) { (error) in
+            self.rteLoginRetry.perform(after: 0.5, on: .main) { [unowned self] in
+                self.rteLogin(userId: userId, success: success)
             }
         }
-        manager.delegate = self
-        self.liveManager = manager
     }
 }
 
-extension Center: EduManagerDelegate {
-    func userMessageReceived(_ textMessage: EduTextMessage) {
-        guard let json = try? textMessage.message.json() else {
+extension Center: AgoraRteEngineDelegate {
+    func rteEngine(_ engine: AgoraRteEngine, didReceivedMessage message: AgoraRteMessage, fromUserId userId: String) {
+        guard let json = try? message.message.json() else {
             return
         }
+        
         customMessage.accept(json)
-    }
-    
-    func userActionMessageReceived(_ actionMessage: EduActionMessage) {
-        self.actionMessage.accept(actionMessage)
     }
 }
 
 extension Center: CenterHelper {
-    func centerProvideLiveManager() -> EduManager {
-        return liveManager
+    func centerProviderteEngine() -> AgoraRteEngine {
+        return rteKit
     }
     
     func centerProvideLocalUser() -> CurrentUser {
         return current
     }
     
-    func centerProvideRequestHelper() -> AlamoClient {
-        return alamo
+    func centerProvideRequestHelper() -> Armin {
+        return http
     }
     
     func centerProvideImagesHelper() -> ImageFiles {
         return files.images
-    }
-    
-    func centerProvideMediaDevice() -> MediaDevice {
-        return mediaDevice
     }
     
     func centerProvideFilesGroup() -> FilesGroup {
@@ -227,43 +232,31 @@ extension Center: CenterHelper {
     func centerProvideUserDataHelper() -> UserDataHelper {
         return userDataHelper
     }
-    
-    func centerProvideOSSClient() -> AGOSSClient {
-        return oss
-    }
 }
 
-extension Center: ACLogTube {
-    func log(from: AnyClass, info: String, extral: String?, funcName: String) {
+extension Center: ArLogTube {
+    func log(info: String, extra: String?) {
         let fromatter = AGELogFormatter(type: .info(info),
-                                        className: NSStringFromClass(from),
-                                        funcName: funcName,
-                                        extra: extral)
+                                        className: NSStringFromClass(Armin.self),
+                                        funcName: "",
+                                        extra: extra)
         log.logFromClass(formatter: fromatter)
     }
     
-    func log(from: AnyClass, warning: String, extral: String?, funcName: String) {
+    func log(warning: String, extra: String?) {
         let fromatter = AGELogFormatter(type: .warning(warning),
-                                        className: NSStringFromClass(from),
-                                        funcName: funcName,
-                                        extra: extral)
+                                        className: NSStringFromClass(Armin.self),
+                                        funcName: "",
+                                        extra: extra)
         log.logFromClass(formatter: fromatter)
     }
     
-    func log(from: AnyClass, error: Error, extral: String?, funcName: String) {
-        var description: String
-        if let cError = error as? ACError {
-            description = cError.localizedDescription
-        } else if let aError = error as? AGEError {
-            description = aError.localizedDescription
-        } else {
-            description = error.localizedDescription
-        }
-        
-        let fromatter = AGELogFormatter(type: .error(description),
-                                        className: NSStringFromClass(from),
-                                        funcName: funcName,
-                                        extra: extral)
+    func log(error: ArError, extra: String?) {
+        let localizedDescription = error.localizedDescription
+        let fromatter = AGELogFormatter(type: .error(localizedDescription),
+                                        className: NSStringFromClass(Armin.self),
+                                        funcName: "",
+                                        extra: extra)
         log.logFromClass(formatter: fromatter)
     }
 }

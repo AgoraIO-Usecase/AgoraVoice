@@ -185,8 +185,8 @@ private extension ImageFiles {
 private extension ImageFiles {
 //    func download(url: String, success: ((AGEImage) -> Void)? = nil, error: ErrorCompletion = nil) {
 //        let client = Center.shared().centerProvideRequestHelper()
-//        let event = RequestEvent(name: "download-head")
-//        let task = RequestTask(event: event, type: .http(.get, url: url))
+//        let event = ArRequestEvent(name: "download-head")
+//        let task = ArRequestTask(event: event, type: .http(.get, url: url))
 //        
 //        let successCallback: DataExCompletion = { (data: Data) throws in
 //            let image = try UIImage.initWith(data: data)
@@ -195,14 +195,14 @@ private extension ImageFiles {
 //            }
 //        }
 //        
-//        let retry: ACErrorRetryCompletion = { (mError: AGEError) in
+//        let retry: ArErrorRetryCompletion = { (mError: AGEError) in
 //            if let error = error {
 //                error(mError)
 //            }
 //            return .resign
 //        }
 //        
-//        let response = ACResponse.data(successCallback)
+//        let response = ArResponse.data(successCallback)
 //        
 //        client.request(task: task, success: response, failRetry: retry)
 //    }

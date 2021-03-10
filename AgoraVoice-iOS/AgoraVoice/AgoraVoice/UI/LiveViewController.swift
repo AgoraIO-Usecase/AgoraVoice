@@ -42,27 +42,6 @@ protocol LiveViewController where Self: MaskViewController {
 // MARK: VM
 extension LiveViewController {
     func syncLiveSessionInfo() {
-        liveSession.chatMessage.subscribe(onNext: { [unowned self] (userMessage) in
-            let chat = Chat(name: userMessage.user.info.name + ": ",
-                            text: userMessage.message,
-                            widthLimit: self.chatWidthLimit)
-            self.chatVM.newMessages([chat])
-        }).disposed(by: bag)
-
-        // user list
-        liveSession.userList.bind(to: userListVM.list).disposed(by: bag)
-        liveSession.userLeft.bind(to: userListVM.left).disposed(by: bag)
-        liveSession.userJoined.bind(to: userListVM.joined).disposed(by: bag)
-        liveSession.audienceList.bind(to: userListVM.audienceList).disposed(by: bag)
-        
-        liveSession.customMessage.bind(to: userListVM.message).disposed(by: bag)
-        
-        // gift
-        liveSession.customMessage.bind(to: giftVM.message).disposed(by: bag)
-        
-        // background
-        liveSession.customMessage.bind(to: backgroundVM.message).disposed(by: bag)
-        
         // local role & stream
         liveSession.localRole.filter { (local) -> Bool in
             return local.type == .owner
@@ -72,38 +51,33 @@ extension LiveViewController {
         
         liveSession.localStream.subscribe(onNext: { [unowned self] (stream) in
             if let stream = stream {
-                guard stream.hasAudio != self.deviceVM.mic.value.boolValue else {
-                    return
-                }
-                self.deviceVM.mic.accept(stream.hasAudio ? .on : .off)
+                self.deviceVM.micStatus.accept(stream.hasAudio ? .on : .off)
             } else {
-                guard self.deviceVM.mic.value != .off else {
-                    return
-                }
-                self.deviceVM.mic.accept(.off)
+                self.deviceVM.micStatus.accept(.off)
             }
         }).disposed(by: bag)
         
-        if let vc = bottomToolsVC {
-            liveSession.localRole.map({ (role) -> LiveRoleType in
-                return role.type
-            }).bind(to: vc.perspective).disposed(by: bag)
-        }
-        
         // end
-        liveSession.end.subscribe(onNext: { [unowned self] in
-            if let vc = self.presentedViewController {
-                vc.dismiss(animated: false, completion: nil)
-            }
-            
-            self.showAlert(NSLocalizedString("Live_End")) { [unowned self] (_) in
-                self.dimissSelf()
+        liveSession.state.subscribe(onNext: { [unowned self] (state) in
+            switch state {
+            case .end(let reason):
+                self.liveEndAlert(reason: reason)
+            case .active:
+                break
             }
         }).disposed(by: bag)
     }
     
-    // MARK: - users
+    // MARK: - Users
     func users() {
+        // user list
+        liveSession.userList.bind(to: userListVM.list).disposed(by: bag)
+        liveSession.userLeft.bind(to: userListVM.left).disposed(by: bag)
+        liveSession.userJoined.bind(to: userListVM.joined).disposed(by: bag)
+        liveSession.audienceList.bind(to: userListVM.audienceList).disposed(by: bag)
+        
+        liveSession.customMessage.bind(to: userListVM.message).disposed(by: bag)
+        
         personCountView.backgroundColor = tintColor
         personCountView.offsetLeftX = -4.0
         personCountView.offsetRightX = 4.0
@@ -122,28 +96,35 @@ extension LiveViewController {
         userListVM.joined.subscribe(onNext: { [unowned self] (list) in
             let chats = list.map { (user) -> Chat in
                 let chat = Chat(name: user.info.name,
-                                text: " \(NSLocalizedString("Join_Live_Room"))",
+                                text: " \(LiveVCLocalizable.someoneJoinedChannel())",
                           widthLimit: self.chatWidthLimit)
                 return chat
             }
-
+            
             self.chatVM.newMessages(chats)
         }).disposed(by: bag)
         
         userListVM.left.subscribe(onNext: { [unowned self] (list) in
             let chats = list.map { (user) -> Chat in
                 let chat = Chat(name: user.info.name,
-                                text: " \(NSLocalizedString("Leave_Live_Room"))",
+                                text: " \(LiveVCLocalizable.someoneLeftChannel())",
                           widthLimit: self.chatWidthLimit)
                 return chat
             }
-
+            
             self.chatVM.newMessages(chats)
         }).disposed(by: bag)
     }
     
     // MARK: - Chat List
     func chatList() {
+        liveSession.chatMessage.subscribe(onNext: { [unowned self] (userMessage) in
+            let chat = Chat(name: userMessage.user.info.name + ": ",
+                            text: userMessage.message,
+                            widthLimit: self.chatWidthLimit)
+            self.chatVM.newMessages([chat])
+        }).disposed(by: bag)
+        
         if let chatVC = self.chatVC {
             chatVM.list.bind(to: chatVC.list).disposed(by: bag)
         }
@@ -151,6 +132,8 @@ extension LiveViewController {
     
     // MARK: - Background
     func background() {
+        liveSession.customMessage.bind(to: backgroundVM.message).disposed(by: bag)
+        
         backgroundVM.selectedImage.bind(to: backgroundImageView.rx.image).disposed(by: bag)
         backgroundVM.fail.subscribe(onNext: { [unowned self] (text) in
             self.showTextToast(text: text)
@@ -159,10 +142,16 @@ extension LiveViewController {
     
     // MARK: - Gift
     func gift() {
+        // gift
+        liveSession.customMessage.bind(to: giftVM.message).disposed(by: bag)
+        
         giftVM?.received.subscribe(onNext: { [unowned self] (userGift) in
+            let owner = self.liveSession.room.value.owner
+            
             let chat = Chat(name: userGift.userName,
-                            text: " " + NSLocalizedString("Give_Owner_A_Gift"),
-                            image: userGift.gift.image, widthLimit: self.chatWidthLimit)
+                            text: " " + LiveVCLocalizable.sendGift(receiver: owner.info.name),
+                            image: userGift.gift.image,
+                            widthLimit: self.chatWidthLimit)
             self.chatVM.newMessages([chat])
             
             guard userGift.gift.hasGIF else {
@@ -173,9 +162,31 @@ extension LiveViewController {
         }).disposed(by: bag)
     }
     
-    // MARK: - Music List
-    func musicList() {
+    // MARK: - Music
+    func music() {
         musicVM.refetch()
+        
+        musicVM.playAction.bind(to: liveSession.playMusic).disposed(by: bag)
+        musicVM.pauseAction.bind(to: liveSession.pauseMusic).disposed(by: bag)
+        musicVM.resumeAction.bind(to: liveSession.resumeMusic).disposed(by: bag)
+        musicVM.stopAction.bind(to: liveSession.stopMusic).disposed(by: bag)
+        musicVM.volume.bind(to: liveSession.musicVolume).disposed(by: bag)
+        
+        liveSession.musicState.bind(to: musicVM.playerStatus).disposed(by: bag)
+    }
+    
+    // MARK: - AudioEffect
+    func audioEffect() {
+        audioEffectVM.outputChatOfBelcanto.bind(to: liveSession.chatOfBelcanto).disposed(by: bag)
+        audioEffectVM.outputSingOfBelcanto.bind(to: liveSession.singOfBelcanto).disposed(by: bag)
+        audioEffectVM.outputTimbre.bind(to: liveSession.timbre).disposed(by: bag)
+        
+        audioEffectVM.outputAudioSpace.bind(to: liveSession.audioSpace).disposed(by: bag)
+        audioEffectVM.outputTimbreRole.bind(to: liveSession.timbreRole).disposed(by: bag)
+        audioEffectVM.outputMusicGenre.bind(to: liveSession.musicGenre).disposed(by: bag)
+        
+        audioEffectVM.outputElectronicMusic.bind(to: liveSession.electronicMusic).disposed(by: bag)
+        audioEffectVM.outputThreeDimensionalVoice.bind(to: liveSession.threeDimensionalVoice).disposed(by: bag)
     }
     
     // MARK: - Net Monitor
@@ -184,16 +195,12 @@ extension LiveViewController {
         monitor.connect.subscribe(onNext: { [unowned self] (status) in
             switch status {
             case .notReachable:
-                let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
-                view.text = NSLocalizedString("Lost_Connection_Retry")
-                self.showToastView(view, duration: 3.0)
+                self.showTextToast(text: NetworkLocalizable.lostConnectionRetry())
             case .reachable(let type):
                 guard type == .wwan else {
                     return
                 }
-                let view = TextToast(frame: CGRect(x: 0, y: 200, width: 0, height: 44), filletRadius: 8)
-                view.text = NSLocalizedString("Use_Cellular_Data")
-                self.showToastView(view, duration: 3.0)
+                self.showTextToast(text: NetworkLocalizable.useCellularData())
             default:
                 break
             }
@@ -201,9 +208,15 @@ extension LiveViewController {
     }
     
     func mediaDevice() {
-        deviceVM.mic.subscribe(onNext: { [unowned self] (isOn) in
+        deviceVM.micAction.subscribe(onNext: { [unowned self] (isOn) in
             self.liveSession.updateLocalAudioStream(isOn: isOn.boolValue)
         }).disposed(by: bag)
+        
+        deviceVM.localAudioLoop.subscribe(onNext: { [unowned self] (isOn) in
+            self.liveSession.enableLocalAudioStreamLoop(enable: isOn.boolValue)
+        }).disposed(by: bag)
+        
+        liveSession.audioOuputRouting.bind(to: deviceVM.audioOutput).disposed(by: bag)
     }
 }
 
@@ -215,6 +228,10 @@ extension LiveViewController {
             assert(false)
             return
         }
+        
+        liveSession.localRole.map({ (role) -> LiveRoleType in
+            return role.type
+        }).bind(to: bottomToolsVC.perspective).disposed(by: bag)
         
         bottomToolsVC.liveType = liveSession.type
         bottomToolsVC.liveType = .chatRoom
@@ -233,10 +250,10 @@ extension LiveViewController {
                 return
             }
             
-            self.deviceVM.mic.accept(!isSelected ? .off : .on)
+            self.deviceVM.micAction.accept(!isSelected ? .off : .on)
         }).disposed(by: bag)
         
-        deviceVM.mic.map { (isOn) -> Bool in
+        deviceVM.micStatus.map { (isOn) -> Bool in
             return !isOn.boolValue
         }.bind(to: bottomToolsVC.micButton.rx.isSelected).disposed(by: bottomToolsVC.bag)
         
@@ -272,7 +289,7 @@ extension LiveViewController {
                                     widthLimit: self.chatWidthLimit)
                     self.chatVM.newMessages([chat])
                 }) { [unowned self] (_) in
-                    self.showAlert(message: NSLocalizedString("Send_Chat_Message_Fail"))
+                    self.showErrorToast(LiveVCLocalizable.sendChatFail())
                 }
         }).disposed(by: bag)
         
@@ -395,7 +412,7 @@ extension LiveViewController {
         
         extensionVC.audioLoopButton.rx.tap.subscribe(onNext: { [unowned extensionVC, unowned self] in
             guard self.deviceVM.audioOutput.value.isSupportLoop else {
-                self.showTextToast(text: NSLocalizedString("Please_Input_Headset"))
+                self.showTextToast(text: LiveVCLocalizable.audioLoopButtonAlert())
                 return
             }
             extensionVC.audioLoopButton.isSelected.toggle()
@@ -432,7 +449,7 @@ extension LiveViewController {
         dataVC.view.cornerRadius(10)
         
         liveSession.sessionReport.subscribe(onNext: { [unowned dataVC] (statistics) in
-            dataVC.infoLabel.text = statistics.description(onlyAudio: true)
+            dataVC.infoLabel.text = statistics.description
         }).disposed(by: dataVC.bag)
         
         let leftSpace: CGFloat = 15.0
@@ -473,7 +490,7 @@ extension LiveViewController {
         giftVC.selectGift.subscribe(onNext: { [unowned self] (gift) in
             self.hiddenMaskView()
             self.giftVM?.present(gift: gift) { [unowned self] in
-                self.showAlert(message: NSLocalizedString("Present_Gift_Fail"))
+                self.showAlert(message: LiveVCLocalizable.giveGiftFail())
             }
         }).disposed(by: giftVC.bag)
     }
@@ -500,7 +517,8 @@ extension LiveViewController {
         let gif = Bundle.main.url(forResource: gift.gifFileName, withExtension: "gif")
         let data = try! Data(contentsOf: gif!)
         
-        gifVC.startAnimating(of: data, repeatCount: 1) { [unowned self] in
+        gifVC.startAnimating(of: data, repeatCount: 1) { [unowned self, unowned gifVC] in
+            gifVC.view.removeFromSuperview()
             self.hiddenMaskView()
         }
     }
@@ -566,7 +584,27 @@ extension LiveViewController {
     }
 }
 
-extension LiveViewController {    
+extension LiveViewController {
+    func liveEndAlert(reason: LiveSession.State.Reason) {
+        if let vc = self.presentedViewController {
+            vc.dismiss(animated: false, completion: nil)
+        }
+        
+        var text: String
+        
+        switch reason {
+        case .ownerClose:
+            text = LiveVCLocalizable.liveStreamingEnds()
+        case .timeout:
+            text = LiveVCLocalizable.liveStreamingTimeout()
+        }
+        
+        self.showAlert(text,
+                       action: LiveVCLocalizable.leave()) { [unowned self] (_) in
+            self.dimissSelf()
+        }
+    }
+    
     func dimissSelf() {
         if let _ = self.navigationController?.viewControllers.first as? LiveTypeViewController {
             self.navigationController?.popViewController(animated: true)

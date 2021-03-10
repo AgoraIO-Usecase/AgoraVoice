@@ -8,15 +8,12 @@
 import UIKit
 
 struct URLGroup {
-    #if PREPRODUCT
-    private static let host = "http://api-solutions-pre.sh.agoralab.co/"
-    #elseif PRODUCT
     private static let host = "http://api.agora.io/"
-    #else
-    private static let host = "http://api-solutions-dev.sh.agoralab.co/"
-    #endif
     private static let version = "v1/"
-    private static let mainPath = "ent/voice/"
+    private static let rootPath = "ent/voice/"
+    private static var mainPath: String {
+        return rootPath + "apps/\(Keys.AgoraAppId)/"
+    }
     
     static var userRegister: String {
         return URLGroup.host + URLGroup.mainPath + version + "users"
@@ -40,6 +37,10 @@ struct URLGroup {
     
     static var liveCreate: String {
         return URLGroup.host + URLGroup.mainPath + version + "rooms"
+    }
+    
+    static func liveJoin(roomId: String, userId: String) -> String {
+        return URLGroup.host + URLGroup.mainPath + version + "rooms/\(roomId)/users/\(userId)/join"
     }
     
     static func userUpdateInfo(userId: String) -> String {
@@ -68,5 +69,9 @@ struct URLGroup {
     
     static func roomBackground(roomId: String) -> String {
         return URLGroup.host + URLGroup.mainPath + version + "rooms/\(roomId)"
+    }
+    
+    static func appStore(_ appId: Int) -> String {
+        return "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=\(appId)"
     }
 }

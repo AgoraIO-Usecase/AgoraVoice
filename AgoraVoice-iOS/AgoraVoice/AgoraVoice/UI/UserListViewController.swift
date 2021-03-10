@@ -49,7 +49,7 @@ class UserInvitationListCell: UITableViewCell {
             case .availableInvite:
                 inviteButton.isHidden = false
                 inviteButton.isEnabled = true
-                inviteButton.setTitle(NSLocalizedString("Invitation"), for: .normal)
+                inviteButton.setTitle(NSLocalizedString("Invite"), for: .normal)
                 inviteButton.setTitleColor(UIColor(hexString: "#0088EB"), for: .normal)
                 inviteButton.backgroundColor = UIColor(hexString: "#161D27")
                 inviteButton.cornerRadius(16)
@@ -131,20 +131,19 @@ class UserListViewController: RxViewController {
     private var invitingUserListSubscribeOnMultiHosts: Disposable?
     
     let inviteUser = PublishRelay<LiveRole>()
-    let rejectApplicationOfUser = PublishRelay<MultiHostsVM.Application>()
-    let acceptApplicationOfUser = PublishRelay<MultiHostsVM.Application>()
+    let rejectApplicationOfUser = PublishRelay<CoHostingVM.Application>()
+    let acceptApplicationOfUser = PublishRelay<CoHostingVM.Application>()
     
     var showType: ShowType = .onlyUser
     
     var userListVM: LiveUserListVM!
-    var multiHostsVM: MultiHostsVM!
+    var coHostingVM: CoHostingVM!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = 54
         tableViewBottom.constant = UIScreen.main.heightOfSafeAreaBottom
         
-        tabView.titleTopSpace = 14
         tabView.underlineWidth = 68
         tabView.alignment = .center
         tabView.titleSpace = 80
@@ -160,17 +159,16 @@ class UserListViewController: RxViewController {
         tableView.delegate = nil
         tableView.dataSource = nil
         
+        titleLabel.text = LiveVCLocalizable.onlineUser()
+        
         switch showType {
         case .onlyInvitationOfMultiHosts:
-            titleLabel.text = NSLocalizedString("Online_User")
             tabView.isHidden = true
             tableViewTop.constant = 0
         case .multiHosts:
-            titleLabel.text = NSLocalizedString("Online_User")
-            let titles = [NSLocalizedString("All"), NSLocalizedString("Application_List")]
+            let titles = [NSLocalizedString("All"), ChatRoomLocalizable.applicationList()]
             tabView.update(titles)
         case .onlyUser:
-            titleLabel.text = NSLocalizedString("Online_User")
             tabView.isHidden = true
             tableViewTop.constant = 0
         }
@@ -185,10 +183,7 @@ class UserListViewController: RxViewController {
             }.disposed(by: bag)
         case .onlyInvitationOfMultiHosts:
             tableViewBindWithUser(userListVM.audienceList).disposed(by: bag)
-            multiHostsVM.invitationByRejected.map { [unowned self] (_) -> [LiveRole] in
-                return self.userListVM.audienceList.value
-            }.bind(to: userListVM.audienceList).disposed(by: bag)
-            multiHostsVM.invitationTimeout.map { [unowned self] (_) -> [LiveRole] in
+            coHostingVM.invitationQueue.queueChanged.map { [unowned self] (_) -> [LiveRole] in
                 return self.userListVM.audienceList.value
             }.bind(to: userListVM.audienceList).disposed(by: bag)
         case .multiHosts:
@@ -200,7 +195,7 @@ class UserListViewController: RxViewController {
                     }
                     
                     self.userListSubscribeOnMultiHosts = self.tableViewBindWithUser(self.userListVM.list)
-                    self.invitingUserListSubscribeOnMultiHosts = self.invitingUserList(self.multiHostsVM.invitingUserList)
+                    self.invitingUserListSubscribeOnMultiHosts = self.invitingUserList(self.coHostingVM.invitingUserList)
                     
                     self.userListSubscribeOnMultiHosts?.disposed(by: self.bag)
                     self.invitingUserListSubscribeOnMultiHosts?.disposed(by: self.bag)
@@ -225,6 +220,9 @@ class UserListViewController: RxViewController {
 
 private extension UserListViewController {
     func tableViewBindWithUser(_ list: BehaviorRelay<[LiveRole]>) -> Disposable {
+        tableView.delegate = nil
+        tableView.dataSource = nil
+        
         let subscribe = list.bind(to: tableView
             .rx.items(cellIdentifier: "UserInvitationListCell",
                       cellType: UserInvitationListCell.self)) { [unowned self] (index, user, cell) in
@@ -233,7 +231,7 @@ private extension UserListViewController {
                         if self.showType == .multiHosts {
                             buttonState = .none
                         } else {
-                            for item in self.multiHostsVM.invitingUserList.value where user.info.userId == item.info.userId {
+                            for item in self.coHostingVM.invitingUserList.value where user.info.userId == item.info.userId {
                                 buttonState = .inviting
                                 break
                             }
@@ -262,7 +260,10 @@ private extension UserListViewController {
     }
     
     func tableViewBindWithApplicationsFromUser() -> Disposable {
-        let subscribe = multiHostsVM.applyingUserList.bind(to: tableView
+        tableView.delegate = nil
+        tableView.dataSource = nil
+        
+        let subscribe = coHostingVM.applyingUserList.bind(to: tableView
             .rx.items(cellIdentifier: "UserApplicationListCell",
                       cellType: UserApplicationListCell.self)) { [unowned self] (index, user, cell) in
                         cell.nameLabel.text = user.info.name
@@ -294,8 +295,8 @@ extension UserListViewController: UserApplicationListCellDelegate {
     func cell(_ cell: UserApplicationListCell, didTapAcceptButton: UIButton, on index: Int) {
         switch showType {
         case .multiHosts:
-            let user = multiHostsVM.applyingUserList.value[index]
-            guard let applicationList = multiHostsVM.applicationQueue.list as? [MultiHostsVM.Application] else {
+            let user = coHostingVM.applyingUserList.value[index]
+            guard let applicationList = coHostingVM.applicationQueue.list as? [CoHostingVM.Application] else {
                 return
             }
             
@@ -316,8 +317,8 @@ extension UserListViewController: UserApplicationListCellDelegate {
     func cell(_ cell: UserApplicationListCell, didTapRejectButton: UIButton, on index: Int) {
         switch showType {
         case .multiHosts:
-            let user = multiHostsVM.applyingUserList.value[index]
-            guard let applicationList = multiHostsVM.applicationQueue.list as? [MultiHostsVM.Application] else {
+            let user = coHostingVM.applyingUserList.value[index]
+            guard let applicationList = coHostingVM.applicationQueue.list as? [CoHostingVM.Application] else {
                 return
             }
             

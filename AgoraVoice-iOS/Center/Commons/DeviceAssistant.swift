@@ -39,6 +39,14 @@ struct DeviceAssistant {
             return osVersion
             #endif
         }
+        
+        static var isPad: Bool {
+            #if os(iOS)
+            return UIDevice.current.userInterfaceIdiom == .pad
+            #else
+            return false
+            #endif
+        }
     }
     
     struct Language {

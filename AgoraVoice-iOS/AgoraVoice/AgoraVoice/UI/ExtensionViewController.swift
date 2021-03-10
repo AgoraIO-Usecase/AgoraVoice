@@ -14,21 +14,29 @@ class ExtensionButton: UIButton {
         let h: CGFloat = 17.0
         let x: CGFloat = 0
         let y: CGFloat = self.bounds.height - h
-        return CGRect(x: x, y: y, width: w, height: h)
+        return CGRect(x: x,
+                      y: y,
+                      width: w,
+                      height: h)
     }
     
     override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
         let wh: CGFloat = 42.0
         let x: CGFloat = (self.bounds.width - wh) * 0.5
         let y: CGFloat = 0
-        return CGRect(x: x, y: y, width: wh, height: wh)
+        return CGRect(x: x,
+                      y: y,
+                      width: wh,
+                      height: wh)
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         titleLabel?.textAlignment = .center
         titleLabel?.font = UIFont.systemFont(ofSize: 12)
-        setTitleColor(UIColor(hexString: "#9BA2AB"), for: .normal)
+        titleLabel?.adjustsFontSizeToFitWidth = true
+        setTitleColor(UIColor(hexString: "#9BA2AB"),
+                      for: .normal)
     }
     
     required init?(coder: NSCoder) {
@@ -51,35 +59,49 @@ class ExtensionViewController: RxViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hexString: "#161D27")
         
-        titleLabel.text = NSLocalizedString("Tool")
+        titleLabel.text = NSLocalizedString("Tools")
         titleLabel.textColor = UIColor(hexString: "#EEEEEE")
         titleLabel.font = UIFont.systemFont(ofSize: 14)
         
-        dataButton.setImage(UIImage(named: "icon-data"), for: .normal)
-        dataButton.setTitle(NSLocalizedString("Real_Data"), for: .normal)
+        dataButton.setImage(UIImage(named: "icon-data"),
+                            for: .normal)
+        dataButton.setTitle(LiveVCLocalizable.statisticsButton(),
+                            for: .normal)
         view.addSubview(dataButton)
         
         switch perspective {
         case .owner:
-            musicButton.setImage(UIImage(named: "icon-music"), for: .normal)
-            musicButton.setTitle(NSLocalizedString("Music"), for: .normal)
+            musicButton.setImage(UIImage(named: "icon-music"),
+                                 for: .normal)
+            musicButton.setTitle(NSLocalizedString("Music"),
+                                 for: .normal)
             view.addSubview(musicButton)
             
-            backgroudButton.setImage(UIImage(named: "icon-背景"), for: .normal)
-            backgroudButton.setTitle(NSLocalizedString("Background"), for: .normal)
+            backgroudButton.setImage(UIImage(named: "icon-背景"),
+                                     for: .normal)
+            backgroudButton.setTitle(NSLocalizedString("Background"),
+                                     for: .normal)
             view.addSubview(backgroudButton)
             
-            audioLoopButton.setImage(UIImage(named: "icon-耳返-off"), for: .normal)
-            audioLoopButton.setImage(UIImage(named: "icon-耳返-on"), for: .selected)
-            audioLoopButton.setTitle(NSLocalizedString("Audio_Loop"), for: .normal)
-            audioLoopButton.setTitle(NSLocalizedString("Audio_Loop"), for: .selected)
+            audioLoopButton.setImage(UIImage(named: "icon-耳返-off"),
+                                     for: .normal)
+            audioLoopButton.setImage(UIImage(named: "icon-耳返-on"),
+                                     for: .selected)
+            audioLoopButton.setTitle(LiveVCLocalizable.audioLoopButton(),
+                                     for: .normal)
+            audioLoopButton.setTitle(LiveVCLocalizable.audioLoopButton(),
+                                     for: .selected)
             view.addSubview(audioLoopButton)
         case .broadcaster:
             audioLoopButton.isHidden = false
-            audioLoopButton.setImage(UIImage(named: "icon-耳返-off"), for: .normal)
-            audioLoopButton.setImage(UIImage(named: "icon-耳返-on"), for: .selected)
-            audioLoopButton.setTitle(NSLocalizedString("Audio_Loop"), for: .normal)
-            audioLoopButton.setTitle(NSLocalizedString("Audio_Loop"), for: .selected)
+            audioLoopButton.setImage(UIImage(named: "icon-耳返-off"),
+                                     for: .normal)
+            audioLoopButton.setImage(UIImage(named: "icon-耳返-on"),
+                                     for: .selected)
+            audioLoopButton.setTitle(LiveVCLocalizable.audioLoopButton(),
+                                     for: .normal)
+            audioLoopButton.setTitle(LiveVCLocalizable.audioLoopButton(),
+                                     for: .selected)
             view.addSubview(audioLoopButton)
         case .audience:
             audioLoopButton.isHidden = true

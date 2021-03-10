@@ -1,5 +1,5 @@
 //
-//  MultiHostsVM.swift
+//  coHostingVM.swift
 //  AgoraLive
 //
 //  Created by CavanSu on 2020/7/22.
@@ -9,9 +9,9 @@
 import UIKit
 import RxSwift
 import RxRelay
-import AlamoClient
+import Armin
 
-class MultiHostsVM: CustomObserver {
+class CoHostingVM: CustomObserver {
     struct Invitation: TimestampModel {
         var id: String
         var seatIndex: Int
@@ -19,7 +19,10 @@ class MultiHostsVM: CustomObserver {
         var receiver: LiveRole
         var timestamp: TimeInterval
         
-        init(id: String, seatIndex: Int, initiator: LiveRole, receiver: LiveRole) {
+        init(id: String,
+             seatIndex: Int,
+             initiator: LiveRole,
+             receiver: LiveRole) {
             self.id = id
             self.seatIndex = seatIndex
             self.initiator = initiator
@@ -35,7 +38,10 @@ class MultiHostsVM: CustomObserver {
         var receiver: LiveRole
         var timestamp: TimeInterval
         
-        init(id: String, seatIndex: Int, initiator: LiveRole, receiver: LiveRole) {
+        init(id: String,
+             seatIndex: Int,
+             initiator: LiveRole,
+             receiver: LiveRole) {
             self.id = id
             self.seatIndex = seatIndex
             self.initiator = initiator
@@ -60,7 +66,7 @@ class MultiHostsVM: CustomObserver {
     let invitationTimeout = PublishRelay<[Invitation]>()
     
     // Broadcaster
-    var receivedEndBroadcasting = PublishRelay<()>()
+    var receivedEndBroadcasting = PublishRelay<(LiveRole)>()
     
     // Audience
     var receivedInvitation = PublishRelay<Invitation>()
@@ -71,7 +77,6 @@ class MultiHostsVM: CustomObserver {
     var audienceBecameBroadcaster = PublishRelay<LiveRole>()
     var broadcasterBecameAudience = PublishRelay<LiveRole>()
     
-    let actionMessage = PublishRelay<ActionMessage>()
     let localRole = BehaviorRelay<LiveRole?>(value: nil)
     
     init(room: Room) {
@@ -82,35 +87,46 @@ class MultiHostsVM: CustomObserver {
     
     deinit {
         #if !RELEASE
-        print("deinit MultiHostsVM")
+        print("deinit CoHostingVM")
         #endif
     }
 }
 
 // MARK: Owner
-extension MultiHostsVM {
-    func sendInvitation(to user: LiveRole, on seatIndex: Int, fail: ErrorCompletion = nil) {
+extension CoHostingVM {
+    func sendInvitation(to user: LiveRole, on seatIndex: Int) {
         request(seatIndex: seatIndex,
                 type: 1,
                 userId: "\(user.info.userId)",
                 roomId: room.roomId,
                 success: { [unowned self] (json) in
-                    let id = try json.getStringValue(of: "data")
+                    let invitationTag = "2"
+                    let id = "\(localRole.value!.info.userId)_\(user.info.userId)_\(invitationTag)"
                     let invitation = Invitation(id: id,
                                                 seatIndex: seatIndex,
                                                 initiator: self.room.owner,
                                                 receiver: user)
                     self.invitationQueue.append(invitation)
-                }, fail: fail)
+                }, fail: nil)
     }
     
-    func accept(application: Application, success: Completion = nil, fail: ErrorCompletion = nil) {
+    func accept(application: Application, success: Completion = nil) {
         request(seatIndex: application.seatIndex,
                 type: 5,
                 userId: "\(application.initiator.info.userId)",
                 roomId: room.roomId,
                 success: { [unowned self] (json) in
                     self.applicationQueue.remove(application)
+                    
+                    for item in self.applicationQueue.list {
+                        guard let temp = item as? Application,
+                              temp.seatIndex == application.seatIndex else {
+                            return
+                        }
+                        
+                        self.applicationQueue.remove(temp)
+                    }
+                    
                     if let success = success {
                         success()
                     }
@@ -119,54 +135,44 @@ extension MultiHostsVM {
                         cError.code == 1301006 {
                         self.applicationQueue.remove(application)
                     }
-                    
-                    if let fail = fail {
-                        fail(error)
-                    }
                 }
     }
     
-    func reject(application: Application, fail: ErrorCompletion = nil) {
+    func reject(application: Application) {
         request(seatIndex: application.seatIndex,
                 type: 3,
                 userId: "\(application.initiator.info.userId)",
                 roomId: room.roomId,
                 success: { [unowned self] (json) in
                     self.applicationQueue.remove(application)
-                }, fail: fail)
+                }, fail: nil)
     }
     
-    func forceEndWith(user: LiveRole, on seatIndex: Int, success: Completion = nil, fail: ErrorCompletion = nil) {
+    func forceEndWith(user: LiveRole, on seatIndex: Int) {
         request(seatIndex: seatIndex,
                 type: 7,
                 userId: "\(user.info.userId)",
                 roomId: room.roomId,
-                success: { (_) in
-                    if let success = success {
-                        success()
-                    }
-                }, fail: fail)
+                success: nil,
+                fail: nil)
     }
 }
 
 // MARK: Broadcaster
-extension MultiHostsVM {
-    func endBroadcasting(seatIndex: Int, user: LiveRole, success: Completion = nil, fail: ErrorCompletion = nil) {
+extension CoHostingVM {
+    func endBroadcasting(seatIndex: Int, user: LiveRole) {
         request(seatIndex: seatIndex,
                 type: 8,
                 userId: "\(user.info.userId)",
                 roomId: room.roomId,
-                success: { (_) in
-                    if let success = success {
-                        success()
-                    }
-                }, fail: fail)
+                success: nil,
+                fail: nil)
     }
 }
 
 // MARK: Audience
-extension MultiHostsVM {
-    func sendApplication(by local: LiveRole, for seatIndex: Int, success: Completion = nil, fail: ErrorCompletion = nil) {
+extension CoHostingVM {
+    func sendApplication(by local: LiveRole, for seatIndex: Int, success: Completion = nil) {
         request(seatIndex: seatIndex,
                 type: 2,
                 userId: "\(room.owner.info.userId)",
@@ -175,18 +181,16 @@ extension MultiHostsVM {
                     if let success = success {
                         success()
                     }
-                }, fail: fail)
+                }, fail: nil)
     }
     
-    func accept(invitation: Invitation, success: Completion = nil, fail: ErrorCompletion = nil) {
+    func accept(invitation: Invitation) {
         let tInvi = invitationQueue.list.first { (item) -> Bool in
             return item.id == invitation.id
         }
         
         guard let _ = tInvi else {
-            if let fail = fail {
-                fail(AGEError.fail("invitation timeout"))
-            }
+            fail.accept(ChatRoomLocalizable.invitationTimeout())
             return
         }
         
@@ -194,22 +198,17 @@ extension MultiHostsVM {
                 type: 6,
                 userId: "\(invitation.initiator.info.userId)",
                 roomId: room.roomId,
-                success: { (_) in
-                    if let success = success {
-                        success()
-                    }
-                }, fail: fail)
+                success: nil,
+                fail: nil)
     }
     
-    func reject(invitation: Invitation, fail: ErrorCompletion = nil) {
+    func reject(invitation: Invitation) {
         let tInvi = invitationQueue.list.first { (item) -> Bool in
             return item.id == invitation.id
         }
         
         guard let _ = tInvi else {
-            if let fail = fail {
-                fail(AGEError.fail("invitation timeout"))
-            }
+            fail.accept(ChatRoomLocalizable.invitationTimeout())
             return
         }
         
@@ -217,20 +216,21 @@ extension MultiHostsVM {
                 type: 4,
                 userId: "\(invitation.initiator.info.userId)",
                 roomId: room.roomId,
-                fail: fail)
+                fail: nil)
     }
 }
 
-private extension MultiHostsVM {
+private extension CoHostingVM {
     // type: 1.房主邀请 2.观众申请 3.房主拒绝 4.观众拒绝 5.房主同意观众申请 6.观众接受房主邀请 7.房主让主播下麦 8.主播下麦
     func request(seatIndex: Int, type: Int, userId: String, roomId: String, success: DicEXCompletion = nil, fail: ErrorCompletion) {
         let client = Center.shared().centerProvideRequestHelper()
-        let task = RequestTask(event: RequestEvent(name: "multi-action: \(type)"),
-                               type: .http(.post, url: URLGroup.multiHosts(userId: userId, roomId: roomId)),
-                               timeout: .medium,
-                               header: ["token": Keys.UserToken],
-                               parameters: ["no": seatIndex, "type": type])
-        client.request(task: task, success: ACResponse.json({ [weak self] (json) in
+        let url = URLGroup.multiHosts(userId: userId, roomId: roomId)
+        let task = ArRequestTask(event: ArRequestEvent(name: "co-hosting-action: \(type)"),
+                                 type: .http(.post, url: url),
+                                 timeout: .medium,
+                                 header: ["token": Keys.UserToken],
+                                 parameters: ["no": seatIndex, "type": type])
+        client.request(task: task, success: ArResponse.json({ [weak self] (json) in
             guard let strongSelf = self else {
                 return
             }
@@ -238,13 +238,7 @@ private extension MultiHostsVM {
             let code = try json.getIntValue(of: "code")
             
             if code == 1301006 {
-                var message: String
-                
-                if DeviceAssistant.Language.isChinese {
-                    message = "麦位上已有观众"
-                } else {
-                    message = "The seat has been taken up"
-                }
+                let message = ChatRoomLocalizable.thisSeatHasBeenTakenUp()
                 
                 strongSelf.fail.accept(message)
                 
@@ -258,27 +252,15 @@ private extension MultiHostsVM {
             if let success = success {
                 try success(json)
             }
-        })) { [weak self] (error) -> RetryOptions in
+        })) { [weak self] (error) -> ArRetryOptions in
             guard let strongSelf = self else {
                 return .resign
             }
             
-            if let cError = error as? ACError, cError.code == nil {
-                strongSelf.fail.accept(NSLocalizedString("Lost_Connection_Retry"))
+            if error.code == nil {
+                strongSelf.fail.accept(NetworkLocalizable.lostConnectionRetry())
             } else {
-                switch type {
-                case 1: strongSelf.fail.accept("send invitation fail")
-                case 2: strongSelf.fail.accept("send application fail")
-                case 3: strongSelf.fail.accept("owner rejects application fail")
-                case 4: strongSelf.fail.accept("audience rejects invitation fail")
-                case 5: strongSelf.fail.accept("owner accepts application fail")
-                case 6: strongSelf.fail.accept("audience accepts invitation fail")
-                case 7: strongSelf.fail.accept("owner force broadcaster to end fail")
-                case 8: strongSelf.fail.accept("broadcaster end fail")
-                default:
-                    assert(false)
-                    break
-                }
+                strongSelf.fail.accept(ChatRoomLocalizable.coHostingActionFail())
             }
             
             if let fail = fail {
@@ -289,61 +271,130 @@ private extension MultiHostsVM {
     }
     
     func observe() {
-        actionMessage.subscribe(onNext: { [unowned self] (message) in
-            guard let payload = message.payload as? [String: Any] else {
-                return
-            }
-            
+        message.subscribe(onNext: { [unowned self] (json) in
             do {
-                let fromUserName = message.fromUser.userName
-                let fromUserId = message.fromUser.userUuid
-                let info = BasicUserInfo(userId: fromUserId, name: fromUserName)
-                let fromUser = LiveRoleItem(type:(message.fromUser.role == .teacher ? .owner : .audience),
-                                            info: info, agUId: "0")
+                guard let cause = try? json.getDictionaryValue(of: "cause"),
+                      let cmd = try? cause.getIntValue(of: "cmd"),
+                      cmd == 2,
+                      let data =  try? cause.getDictionaryValue(of: "data")  else {
+                    return
+                }
                 
-                let processId = message.processUuid
-                let event = try payload.getIntValue(of: "type")
+                let type = try data.getIntValue(of: "type")
+                let userDic = try data.getDictionaryValue(of: "user")
+                let user = try LiveRoleItem(dic: userDic)
+                
+                let ownerAcceptedAudienceRequest = 5
+                let audienceAcceptedOwnerInvitation = 6
+                let ownerForcedYouBecomeAudience = 7
+                let broadcastorStoppedCoHosting = 8
+                
+                switch type {
+                case ownerForcedYouBecomeAudience:
+                    self.receivedEndBroadcasting.accept((user))
+                    self.broadcasterBecameAudience.accept((user))
+                case ownerAcceptedAudienceRequest, audienceAcceptedOwnerInvitation:
+                    self.audienceBecameBroadcaster.accept((user))
+                case broadcastorStoppedCoHosting:
+                    self.broadcasterBecameAudience.accept((user))
+                default:
+                    break
+                }
+                
+            } catch {
+                self.log(error: error)
+            }
+        }).disposed(by: bag)
+        
+        message.subscribe(onNext: { [unowned self] (json) in
+            do {
+                guard let data = try? json.getDictionaryValue(of: "data"),
+                      let payload = try? data.getDictionaryValue(of: "payload"),
+                      let fromUserDic = try? data.getDictionaryValue(of: "fromUser") else {
+                    return
+                }
+                
+                let fromUserId = try fromUserDic.getStringValue(of: "userUuid")
+                let fromUserName = try fromUserDic.getStringValue(of: "userName")
+                let roleString = try fromUserDic.getStringValue(of: "role")
+                let role = try LiveRoleType.initWithDescription(roleString)
+                
                 let seatIndex = try payload.getIntValue(of: "no")
+                let event = try payload.getIntValue(of: "type")
+                
+                let info = BasicUserInfo(userId: fromUserId,
+                                         name: fromUserName)
+                
+                let fromUser = LiveRoleItem(type: role,
+                                            info: info,
+                                            agUId: "0")
                 
                 guard let local = self.localRole.value else {
                     throw AGEError.valueNil("local role")
                 }
+                
+                let applicationId = "1"
+                let invitationTag = "2"
                 
                 switch event {
                 // Owner
                 case 2: // received application:
                     let initiator = fromUser
                     let receiver = local
-                    let application = Application(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
+                    let applicationId = "\(initiator.info.userId)_\(receiver.info.userId)_\(applicationId)"
+                    let application = Application(id: applicationId,
+                                                  seatIndex: seatIndex,
+                                                  initiator: initiator,
+                                                  receiver: receiver)
                     self.applicationQueue.append(application)
                     self.receivedApplication.accept(application)
                 case  4: // audience rejected invitation
                     let initiator = local
                     let receiver = fromUser
-                    let invitation = Invitation(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
+                    let invitationId = "\(initiator.info.userId)_\(receiver.info.userId)_\(invitationTag)"
+                    let invitation = Invitation(id: invitationId,
+                                                seatIndex: seatIndex,
+                                                initiator: initiator,
+                                                receiver: receiver)
                     self.invitationByRejected.accept(invitation)
                 case  6: // audience accepted invitation:
                     let initiator = local
                     let receiver = fromUser
-                    let invitation = Invitation(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
+                    let invitationId = "\(initiator.info.userId)_\(receiver.info.userId)_\(invitationTag)"
+                    let invitation = Invitation(id: invitationId,
+                                                seatIndex: seatIndex,
+                                                initiator: initiator,
+                                                receiver: receiver)
                     self.invitationByAccepted.accept(invitation)
-                    
+                
                 // Audience
                 case  1: // receivedInvitation
                     let initiator = fromUser
                     let receiver = local
-                    let invitation = Invitation(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
+                    let invitationId = "\(initiator.info.userId)_\(receiver.info.userId)_\(invitationTag)"
+                    let invitation = Invitation(id: invitationId,
+                                                seatIndex: seatIndex,
+                                                initiator: initiator,
+                                                receiver: receiver)
                     self.invitationQueue.append(invitation)
                     self.receivedInvitation.accept(invitation)
                 case  3: // application by rejected
                     let initiator = local
                     let receiver = fromUser
-                    let application = Application(id: processId, seatIndex: seatIndex, initiator: initiator, receiver: receiver)
+                    let applicationId = "\(initiator.info.userId)_\(receiver.info.userId)_\(applicationId)"
+                    let application = Application(id: applicationId,
+                                                  seatIndex: seatIndex,
+                                                  initiator: initiator,
+                                                  receiver: receiver)
                     self.applicationByRejected.accept(application)
                 case  5: // application by accepted:
                     let initiator = local
                     let receiver = fromUser
-                    let application = Application(id: processId, seatIndex: 0, initiator: initiator, receiver: receiver)
+                    let applicationId = "\(initiator.info.userId)_\(receiver.info.userId)_\(applicationId)"
+                    let application = Application(id: applicationId,
+                                                  seatIndex: 0,
+                                                  initiator: initiator,
+                                                  receiver: receiver)
                     self.applicationByAccepted.accept(application)
                 default:
                     break
@@ -360,8 +411,18 @@ private extension MultiHostsVM {
         
         invitationByAccepted.subscribe(onNext: { [unowned self] (invitaion) in
             self.invitationQueue.remove(invitaion)
+            
+            for item in self.invitationQueue.list {
+                guard let temp = item as? Invitation,
+                      temp.seatIndex == invitaion.seatIndex else {
+                    return
+                }
+                
+                self.invitationQueue.remove(temp)
+            }
         }).disposed(by: bag)
         
+        // Audience
         applicationByRejected.subscribe(onNext: { [unowned self] (application) in
             self.applicationQueue.remove(application)
         }).disposed(by: bag)
@@ -370,7 +431,6 @@ private extension MultiHostsVM {
             self.applicationQueue.remove(application)
         }).disposed(by: bag)
         
-        //
         invitationQueue.queueChanged.subscribe(onNext: { [unowned self] (list) in
             guard let tList = list as? [Invitation] else {
                 return

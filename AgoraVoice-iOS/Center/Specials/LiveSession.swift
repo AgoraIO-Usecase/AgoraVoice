@@ -7,30 +7,42 @@
 //
 
 import UIKit
-import AlamoClient
+import Armin
 import RxSwift
 import RxRelay
+import AgoraRte
 
 class LiveSession: RxObject {
-    private var userService: EduUserService?
+    enum State {
+        enum Reason: Int {
+            case timeout = 1, ownerClose = 2
+        }
+        
+        case active, end(Reason)
+    }
     
+    private var logTube: LogTube {
+        return Center.shared().centerProvideLogTubeHelper()
+    }
+    
+    private var sceneService: AgoraRteScene
+    private var userService: AgoraRteLocalUser?
+    
+    // Session
     var type: LiveType
-    var roomManager: EduClassroomManager
     var room: BehaviorRelay<Room>
     
+    let state = BehaviorRelay<LiveSession.State>(value: .active)
     let fail = PublishRelay<String>()
-    
-    //
-    let end = PublishRelay<()>()
     
     // Local role
     let localRole: BehaviorRelay<LiveRole>
+    
     // Local stream
     let localStream = BehaviorRelay<LiveStream?>(value: nil)
-    let localStreamByRemoved = PublishRelay<()>()
     
     // Statistic
-    let sessionReport = BehaviorRelay(value: RTCStatistics(type: .local(RTCStatistics.Local(stats: AgoraChannelStats()))))
+    let sessionReport = BehaviorRelay(value: RTEStatistics())
     
     // User
     let userList = BehaviorRelay(value: [LiveRole]())
@@ -43,46 +55,86 @@ class LiveSession: RxObject {
     let streamJoined = PublishRelay<LiveStream>()
     let streamLeft = PublishRelay<LiveStream>()
     
+    // Music
+    let playMusic = PublishRelay<Music>()
+    let pauseMusic = PublishRelay<Music>()
+    let resumeMusic = PublishRelay<Music>()
+    let stopMusic = PublishRelay<Music>()
+    let musicVolume = PublishRelay<UInt>()
+    let musicState = BehaviorRelay(value: AgoraRteMediaPlayerState.stopped)
+    let musicError = PublishRelay<AGEError>()
+    
+    // AudioEffect
+    let chatOfBelcanto = PublishRelay<ChatOfBelCanto>()
+    let singOfBelcanto = PublishRelay<SingOfBelCanto>()
+    let timbre = PublishRelay<Timbre>()
+    
+    let audioSpace = PublishRelay<AudioSpace>()
+    let timbreRole = PublishRelay<TimbreRole>()
+    let musicGenre = PublishRelay<MusicGenre>()
+    
+    let electronicMusic = PublishRelay<ElectronicMusic>()
+    let threeDimensionalVoice = PublishRelay<Int>()
+    
+    // Audio loop
+    let enableAudioLoop = BehaviorRelay(value: false)
+    
+    // Audio output routing
+    let audioOuputRouting = BehaviorRelay(value: AgoraRteAudioOutputRouting.default)
+    
     // Message
     let chatMessage = PublishRelay<(user: LiveRole, message: String)>()
     let customMessage = BehaviorRelay(value: [String: Any]())
-    let actionMessage = PublishRelay<ActionMessage>()
     
     init(room: Room, role: LiveRoleType) {
-        let configuration = EduClassroomConfig()
-        configuration.roomUuid = room.roomId
-        configuration.sceneType = .typeBig
-        
-        let manager = Center.shared().centerProvideLiveManager().createClassroom(with: configuration)
-        self.type = .chatRoom
-        self.roomManager = manager
-        self.room = BehaviorRelay(value: room)
         let userInfo = Center.shared().centerProvideLocalUser().info.value
         let localRole = LiveRoleItem(type: role, info: userInfo, agUId: "0")
         self.localRole = BehaviorRelay(value: localRole)
+        
+        self.room = BehaviorRelay(value: room)
+        self.type = .chatRoom
+        
+        let config = AgoraRteSceneConfig(sceneId: room.roomId)
+        let rteKit = Center.shared().centerProviderteEngine()
+        let scene = rteKit.createAgoraRteScene(config)
+        self.sceneService = scene
+        
         super.init()
         
-        manager.delegate = self
-        let channelDelegateConfiguration = RTCChannelDelegateConfig()
-        channelDelegateConfiguration.statisticsReportDelegate = self
-        RTCManager.share().setChannelDelegateWith(channelDelegateConfiguration,
-                                                  channelId: room.roomId)
+        scene.sceneDelegate = self
+        scene.statsDelegate = self
         
-        observer()
+        let mediaControl = rteKit.getAgoraMediaControl()
+        mediaControl.delegate = self
     }
     
-    static func create(roomName: String, backgroundIndex:Int, success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
+    deinit {
+        #if !RELEASE
+        print("deinit Livesession")
+        #endif
+    }
+}
+
+// MARK: - Public
+// MARK: - Session create & join & leave
+extension LiveSession {
+    static func create(roomName: String,
+                       backgroundIndex:Int,
+                       success: ((LiveSession) -> Void)? = nil,
+                       fail: AGEErrorCompletion = nil) {
         let client = Center.shared().centerProvideRequestHelper()
-        let event = RequestEvent(name: "live-create")
+        let event = ArRequestEvent(name: "live-session-create")
         let url = URLGroup.liveCreate
-        let task = RequestTask(event: event,
+        let task = ArRequestTask(event: event,
                                type: .http(.post, url: url),
                                timeout: .medium,
                                header: ["token": Keys.UserToken],
                                parameters: ["roomName": roomName,
-                                            "backgroundImage": "\(backgroundIndex)"])
+                                            "backgroundImage": "\(backgroundIndex)",
+                                            "duration": 10,
+                                            "audienceLimit": 9])
         
-        client.request(task: task, success: ACResponse.json({ (json) in
+        client.request(task: task, success: ArResponse.json({ (json) in
             let roomId = try json.getStringValue(of: "data")
             let local = Center.shared().centerProvideLocalUser().info.value
             let owner = LiveRoleItem(type: .owner, info: local, agUId: "0")
@@ -92,98 +144,79 @@ class LiveSession: RxObject {
             if let success = success {
                 success(session)
             }
-        })) { (error) -> RetryOptions in
+        })) { (error) -> ArRetryOptions in
             if let fail = fail {
-                fail(error)
+                fail(AGEError(arError: error))
             }
             return .resign
         }
     }
     
-    func join(success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
-        let userName = Center.shared().centerProvideLocalUser().info.value.name
-        var eduRole: EduRoleType
-        switch localRole.value.type {
-        case .owner:
-            eduRole = .teacher
-        case .broadcaster, .audience:
-            eduRole = .student
-        }
+    func join(success: ((LiveSession) -> Void)? = nil,
+              fail: AGEErrorCompletion = nil) {
+        var role = localRole.value
         
-        // sepcail parameters for audio loop
-        RTCManager.share().setParameters("{\"che.audio.morph.earsback\":true}")
-        
-        let options = EduClassroomJoinOptions(userName: userName, role: eduRole)
-        options.mediaOption.publishType = .default
-        
-        roomManager.joinClassroom(options, success: { [unowned self] (userService) in
-            if let service = userService as? EduTeacherService {
-                service.delegate = self
-            } else if let service = userService as? EduStudentService {
-                service.delegate = self
-            }
+        let failHandle: ErrorCompletion = { [unowned self] (error) in
+            self.sceneService.leave()
+            self.log(error: error,
+                     extra: "live session join fail")
             
-            self.userService = userService
+            var ageError: AGEError
             
-            // room info
-            self.initRoomInfoDurationJoin(fail: fail)
-            
-            // all users
-            self.roomManager.getFullUserList(success: { [unowned self] (list) in
-                self.userList.accept([LiveRole](list: list))
-            }, failure: nil)
-            
-            // local user
-            let role = self.localRole.value
-            if role.type == .owner {
-                self.chatRoomOwnerJoin(success: success, fail: fail)
+            if let aError = error as? AGEError {
+                ageError = aError
+            } else if let arError = error as? ArError {
+                ageError = AGEError(arError: arError)
             } else {
-                // broadcaster and audience join process
-                self.chatRoomJoin(success: success, fail: fail)
+                ageError = AGEError.fail(error.localizedDescription)
             }
-        }) { (error) in
+            
             if let fail = fail {
-                fail(error)
+                fail(ageError)
             }
         }
+        
+        httpJoinProcess(liveRole: role, success: { [unowned self] (json) in
+            let roleDescription = try json.getStringValue(of: "role")
+            let streamId = try json.getStringValue(of: "streamId")
+            let newRole = try LiveRoleType.initWithDescription(roleDescription)
+            
+            role.type = newRole
+            role.agUId = streamId
+            
+            self.localRole.accept(role)
+            
+            self.rteJoinProcess(liveRole: role,
+                                success: { (session) in
+                if let success = success {
+                    success(session)
+                }
+            }, fail: failHandle)
+        }, fail: failHandle)
     }
     
     func leave() {
-        if localRole.value.type == .owner {
-            let client = Center.shared().centerProvideRequestHelper()
-            let event = RequestEvent(name: "live-session-close")
-            let url = URLGroup.liveClose(roomId: room.value.roomId)
-            let task = RequestTask(event: event,
-                                   type: .http(.post, url: url),
-                                   header: ["token": Keys.UserToken])
-            client.request(task: task)
-        } else {
-            if localRole.value.type == .broadcaster {
-                self.unpublishLocalStream()
-            }
-            
-            let client = Center.shared().centerProvideRequestHelper()
-            let event = RequestEvent(name: "live-session-leave")
-            let url = URLGroup.liveLeave(userId: localRole.value.info.userId,
-                                         roomId: room.value.roomId)
-            let task = RequestTask(event: event,
-                                   type: .http(.post, url: url),
-                                   header: ["token": Keys.UserToken])
-            client.request(task: task)
+        if localRole.value.type != .audience {
+            unpublishLocalStream()
         }
         
-        roomManager.leaveClassroom(success: nil, failure: nil)
-    }
-    
-    deinit {
-        print("Livesession deinit")
+        let client = Center.shared().centerProvideRequestHelper()
+        let event = ArRequestEvent(name: "live-session-leave")
+        let url = URLGroup.liveLeave(userId: localRole.value.info.userId,
+                                     roomId: room.value.roomId)
+        let task = ArRequestTask(event: event,
+                               type: .http(.post, url: url),
+                               header: ["token": Keys.UserToken])
+        client.request(task: task)
+        
+        sceneService.leave()
     }
 }
 
-// MARK: - Stream
+// MARK: - Local Stream
 extension LiveSession {
     func updateLocalAudioStream(isOn: Bool, success: Completion = nil, fail: ErrorCompletion = nil) {
-        guard let _ = userService else {
+        guard let service = userService else {
             if let fail = fail {
                 fail(AGEError.valueNil("userService"))
             }
@@ -197,562 +230,560 @@ extension LiveSession {
             return
         }
         
-        let configuration = EduStreamConfig(streamUuid: stream.streamId)
-        configuration.enableMicrophone = isOn
-        configuration.enableCamera = false
+        let failCallback = { (error: AgoraRteError) in
+            if let fail = fail {
+                fail(AGEError(rteError: error))
+            }
+        }
         
-        self.userService?.startOrUpdateLocalStream(configuration,
-                                                   success: { [unowned self] (stream) in
-                                                    self.userService?.publishStream(stream, success: {
-                                                        if let success = success {
-                                                            success()
-                                                        }
-                                                    }, failure: { (error) in
-                                                        if let fail = fail {
-                                                            fail(error)
-                                                        }
-                                                    })
-        }, failure: { (error) in
-                if let fail = fail {
-                    fail(error)
-                }
-        })
+        if isOn {
+            service.unmuteLocalMediaStream(stream.streamId,
+                                           type: .audio,
+                                           success: success,
+                                           fail: failCallback)
+        } else {
+            service.muteLocalMediaStream(stream.streamId,
+                                         type: .audio,
+                                         success: success,
+                                         fail: failCallback)
+        }
     }
     
+    func unpublishLocalStream(success: Completion = nil, fail: ErrorCompletion = nil) {
+        let rteKit = Center.shared().centerProviderteEngine()
+        let mediaControl = rteKit.getAgoraMediaControl()
+        let mic = mediaControl.createMicphoneAudioTrack()
+        let streamId = localRole.value.agUId
+        
+        userService?.unpublishLocalMediaTrack(mic,
+                                              withStreamId: streamId,
+                                              success: success,
+                                              fail: { (error) in
+                                                if let fail = fail {
+                                                    fail(AGEError(rteError: error))
+                                                }
+                                              })
+    }
+    
+    func enableLocalAudioStreamLoop(enable: Bool) {
+        let rteKit = Center.shared().centerProviderteEngine()
+        let mediaControl = rteKit.getAgoraMediaControl()
+        let mic = mediaControl.createMicphoneAudioTrack()
+        if enable {
+            mic.enableLocalPlayback()
+        } else {
+            mic.disableLocalPlayback()
+        }
+    }
+}
+
+// MARK: - Remote Stream
+extension LiveSession {
     func muteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
-        userService?.muteOther(stream: stream, fail: fail)
+        let info = AgoraRteRemoteStreamInfo(streamId: stream.streamId,
+                                            userId: stream.owner.info.userId,
+                                            mediaStreamType: .none,
+                                            videoSourceType: .none,
+                                            audioSourceType: .mic)
+        
+        userService?.createOrUpdateRemoteStream(info,
+                                                success: nil,
+                                                fail: { (error) in
+                                                    if let fail = fail {
+                                                        fail(AGEError(rteError: error))
+                                                    }
+                                                })
     }
     
     func unmuteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
-        userService?.ummuteOther(stream: stream, fail: fail)
-    }
-    
-    func publishNewStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
-        let eduStream = EduStream(liveStream: stream)
-        userService?.publishNewStream(eduStream, success: success, fail: fail)
-    }
-    
-    func publishNewStream(for user: LiveRole, success: Completion = nil, fail: ErrorCompletion = nil) {
-        let streamUser = audienceList.value.first { (item) -> Bool in
-            return item.info == user.info
-        }
+        let info = AgoraRteRemoteStreamInfo(streamId: stream.streamId,
+                                            userId: stream.owner.info.userId,
+                                            mediaStreamType: .audio,
+                                            videoSourceType: .none,
+                                            audioSourceType: .mic)
         
-        guard let tUser = streamUser else {
-            if let fail = fail {
-                fail(AGEError.fail("this user is not on audience list"))
-            }
-            return
-        }
-        
-        let liveStream = LiveStream(streamId: tUser.agUId, hasAudio: true, owner: tUser)
-        let eduStream = EduStream(liveStream: liveStream)
-        
-        userService?.publishNewStream(eduStream, success: success, fail: fail)
-    }
-    
-    func unpublishStream(_ stream: LiveStream, success: Completion = nil, fail: ErrorCompletion = nil) {
-        let eduStream = EduStream(liveStream: stream)
-        userService?.unpublishStream(eduStream, success: success, fail: fail)
+        userService?.createOrUpdateRemoteStream(info,
+                                                success: nil,
+                                                fail: { (error) in
+                                                    if let fail = fail {
+                                                        fail(AGEError(rteError: error))
+                                                    }
+                                                })
     }
 }
 
 // MARK: - Chat Message
 extension LiveSession {
     func sendChat(_ text: String, success: Completion = nil, fail: ErrorCompletion = nil) {
-        userService?.sendRoomChatMessage(withText: text, success: {
-            if let success = success {
-                success()
-            }
-        }, failure: { (error) in
-            if let fail = fail {
-                fail(error)
-            }
-        })
+        let message = AgoraRteMessage(message: text)
+        userService?.sendSceneMessage(toAllRemoteUsers: message,
+                                      success: success,
+                                      fail: { (error) in
+                                        if let fail = fail {
+                                            fail(AGEError(rteError: error))
+                                        }
+                                      })
     }
 }
 
+// MARK: - Private
 // MARK: - Join process
 fileprivate extension LiveSession {
-    func initRoomInfoDurationJoin(fail: ErrorCompletion = nil) {
-        self.roomManager.getUserList(with: .teacher, from: 0, to: 1, success: { [unowned self] (list) in
-            guard let owner = [LiveRole](list: list).first else {
-                if let fail = fail {
-                    let error = AGEError.fail("owner nil")
-                    fail(error)
-                }
-                return
+    func httpJoinProcess(liveRole: LiveRole,
+                         success: DicEXCompletion = nil,
+                         fail: ErrorCompletion = nil) {
+        let client = Center.shared().centerProvideRequestHelper()
+        let url = URLGroup.liveJoin(roomId: room.value.roomId,
+                                    userId: liveRole.info.userId)
+        
+        client.request(method: .post,
+                       url: url,
+                       event: "live-session-join",
+                       success: { (json) in
+            if let success = success {
+                try success(json)
             }
-            
-            self.roomManager.getClassroomInfo(success: { [unowned self] (eduRoom) in
-                let room = Room(name: eduRoom.roomInfo.roomName,
-                                roomId: eduRoom.roomInfo.roomUuid,
-                                personCount: Int(eduRoom.roomState.onlineUserCount),
-                                owner: owner)
-                self.room.accept(room)
-                if let json = eduRoom.roomProperties as? [String: Any] {
-                    self.customMessage.accept(json)
-                }
-            }, failure: nil)
-        }, failure: nil)
+        }, fail: fail)
     }
     
-    func chatRoomOwnerJoin(success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
-        let role = self.localRole.value
-        self.roomManager.getLocalUser(success: { [unowned self] (local) in
-            if let _ = local.streams.first {
+    func rteJoinProcess(liveRole: LiveRole,
+                        success: ((LiveSession) -> Void)? = nil,
+                        fail: ErrorCompletion = nil) {
+        let options = AgoraRteSceneJoinOptions(userName: liveRole.info.name,
+                                               userRole: liveRole.type.description)
+        let streamId = liveRole.agUId
+        options.streamId = streamId
+        
+        // audio encoder configuration
+        let rteKit = Center.shared().centerProviderteEngine()
+        let mediaControl = rteKit.getAgoraMediaControl()
+        let mic = mediaControl.createMicphoneAudioTrack()
+        let config = AgoraRteAudioEncoderConfig(profile: .musicHighQualityStereo,
+                                                scenario: .gameStreaming)
+        mic.setAudioEncoderConfig(config)
+        
+        // sepcail parameters for audio loop
+        sceneService.setParameters("{\"che.audio.morph.earsback\":true}")
+        
+        sceneService.join(with: options,
+                          success: { [unowned self] (localUser) in
+            localUser.localUserDelegate = self
+            self.userService = localUser
+            
+            do {
+                // room info
+                try self.initRoomInfoDurationJoin()
+                
+                // all users
+                let users = self.sceneService.users
+                let list = try [LiveRole](list: users)
+                self.userList.accept(list)
+                
+                // local user
+                let localUserInfo = try LiveRoleItem(rteUser: localUser.info)
+                self.localRole.accept(localUserInfo)
+                
+                // media stream
+                switch self.localRole.value.type {
+                case .owner: fallthrough
+                case .broadcaster:
+                    localUser.publishLocalMediaTrack(mic,
+                                                     withStreamId: streamId,
+                                                     success: nil,
+                                                     fail: nil)
+                default:
+                    break
+                }
+                
+                // subscribe remote streams
+                var streamList = [LiveStream]()
+                
+                for item in self.sceneService.streams {
+                    localUser.subscribeRemoteStream(item.streamId, type: .audio)
+                    try streamList.append(LiveStream(rteStream: item))
+                }
+                
+                self.streamList.accept(streamList)
+                
+                // event observe
+                self.streamObserve()
+                self.musicObserve()
+                self.audioEffectObserve()
+                self.messageObserver()
+                
                 if let success = success {
                     success(self)
                 }
-            } else {
-                // if local is owner, auto publish a stream when first time join room
-                let stream = LiveStream(streamId: role.agUId,
-                                        hasAudio: true,
-                                        owner: role)
-                
-                self.publishNewStream(stream, success: { [unowned self] in
-                    if let success = success {
-                        success(self)
-                    }
-                }, fail: fail)
-            }
-        }) { [unowned self] (error) in
-            self.leave()
-            
-            if let fail = fail {
-                fail(error)
-            }
-        }
-    }
-    
-    func chatRoomJoin(success: ((LiveSession) -> Void)? = nil, fail: ErrorCompletion = nil) {
-        self.roomManager.getClassroomInfo(success: { [unowned self] (eduRoom) in
-            guard let json = eduRoom.roomProperties as? [String: Any],
-                let seatsJson = try? json.getListValue(of: "seats") else {
-                    
-                    if let fail = fail {
-                        fail(AGEError.fail("room properties error",
-                                           extra: "\(eduRoom.roomProperties)"))
-                    }
-                    return
-            }
-            
-            var currentUserOnSeat: Bool = false
-            
-            do {
-                for item in seatsJson {
-                    let intState = try item.getIntValue(of: "state")
-                    
-                    // user taken up this seat
-                    guard intState == 1 else {
-                        continue
-                    }
-                    
-                    let userId = try item.getStringValue(of: "userId")
-                    let userName = try item.getStringValue(of: "userName")
-                    let info = BasicUserInfo(userId: userId, name: userName)
-                    
-                    if info == self.localRole.value.info {
-                        currentUserOnSeat = true
-                        break
-                    }
-                }
-                
-                self.roomManager.getLocalUser(success: { [unowned self] (local) in
-                    if let stream = local.streams.first, !currentUserOnSeat {
-                        guard let service = self.userService else {
-                            fatalError("userService nil")
-                        }
-                        
-                        service.unpublishStream(stream, success: { [unowned self] in
-                            if let success = success {
-                                success(self)
-                            }
-                        }) { (error) in
-                            if let fail = fail {
-                                fail(error)
-                            }
-                        }
-                    // broadcaster rejoin room after unconventionallly exit
-                    } else if let _ = local.streams.first, currentUserOnSeat {
-                        if let success = success {
-                            success(self)
-                        }
-                    // audience join
-                    } else if local.streams.count == 0, !currentUserOnSeat {
-                        if let success = success {
-                            success(self)
-                        }
-                    } else {
-                        if let fail = fail {
-                            fail(AGEError.fail("join fail"))
-                        }
-                    }
-                }) { [unowned self] (error) in
-                    self.leave()
-                    
-                    if let fail = fail {
-                        fail(error)
-                    }
-                }
-            } catch {
+            } catch  {
                 if let fail = fail {
-                    fail(AGEError.fail("room properties error",
-                                       extra: "\(eduRoom.roomProperties)"))
+                    fail(error)
                 }
             }
-            
         }) { (error) in
             if let fail = fail {
-                fail(error)
+                fail(AGEError(rteError: error))
             }
         }
     }
 }
 
 fileprivate extension LiveSession {
-    func addNewStream(eduStream: EduStream) {
-        let stream = LiveStream(eduStream: eduStream)
+    func initRoomInfoDurationJoin() throws {
+        var owner: LiveRoleItem?
+        
+        for user in sceneService.users where user.userRole == LiveRoleType.owner.description {
+            owner = try LiveRoleItem(rteUser: user)
+        }
+        
+        guard let tOwner = owner else {
+            throw AGEError.fail("owner nil")
+        }
+        
+        var room = self.room.value
+        room.owner = tOwner
+        room.personCount = sceneService.users.count
+        self.room.accept(room)
+        
+        if let properties = self.sceneService.properties {
+            customMessage.accept(properties)
+        }
+    }
+}
+
+// MARK: - Stream list
+fileprivate extension LiveSession {
+    func addNewStream(rteStream: AgoraRteMediaStreamInfo) {
+        guard let stream = try? LiveStream(rteStream: rteStream) else {
+            return
+        }
         var new = streamList.value
         new.append(stream)
         streamList.accept(new)
         streamJoined.accept(stream)
     }
-    
-    func removeStream(eduStream: EduStream) {
+
+    func removeStream(rteStream: AgoraRteMediaStreamInfo) {
         let index = streamList.value.firstIndex { (stream) -> Bool in
-            return eduStream.streamUuid == stream.streamId
+            return rteStream.streamId == stream.streamId
         }
-        
+
         guard let tIndex = index else {
             return
         }
-        
+
         var new = streamList.value
         let left = new[tIndex]
         new.remove(at: tIndex)
         streamList.accept(new)
-        
+
         streamLeft.accept(left)
     }
-    
-    func updateStream(eduStream: EduStream) {
+
+    func updateStream(rteStream: AgoraRteMediaStreamInfo) {
         let index = streamList.value.firstIndex { (stream) -> Bool in
-            return eduStream.streamUuid == stream.streamId
+            return rteStream.streamId == stream.streamId
         }
-        
+
         guard let tIndex = index else {
             return
         }
-        
+
+        guard let stream = try? LiveStream(rteStream: rteStream) else {
+            return
+        }
+
         var new = streamList.value
-        let stream = LiveStream(eduStream: eduStream)
         new[tIndex] = stream
         streamList.accept(new)
     }
     
-    func unpublishLocalStream(noStream: Completion = nil, success: Completion = nil, fail: ErrorCompletion = nil) {
-        roomManager.getLocalUser(success: { (local) in
-            if let stream = local.streams.first {
-                guard let service = self.userService else {
-                    fatalError("userService nil")
-                }
-                
-                service.unpublishStream(stream, success: {
-                    if let success = success {
-                        success()
-                    }
-                }) { (error) in
-                    if let fail = fail {
-                        fail(error)
-                    }
-                }
-            } else {
-                if let noStream = noStream {
-                    noStream()
-                }
-            }
-        })
-    }
-    
-    func endLocalStreamCapture() {
-        let configuration = EduStreamConfig(streamUuid: "0")
-        configuration.enableMicrophone = false
-        configuration.enableCamera = false
-        
-        self.userService?.startOrUpdateLocalStream(configuration, success: { (_) in
-            
-        }, failure: nil)
-    }
-    
-    func observer() {
-        // Determine whether local user is a broadcaster or an audience
-        // If local user is owner, no need this judgment
-        localStream.subscribe(onNext: { [unowned self] (stream) in
-            var role = self.localRole.value
-            
-            guard role.type != .owner else {
-                return
-            }
-            
-            // update role
-            if let stream = stream, role.type == .audience {
-                role.type = .broadcaster
-                self.localRole.accept(role)
-                self.updateLocalAudioStream(isOn: stream.hasAudio)
-            } else if stream == nil, role.type == .broadcaster {
-                role.type = .audience
-                self.localRole.accept(role)
-                self.endLocalStreamCapture()
-            }
-        }).disposed(by: bag)
-        
-        // Check the audience list after the stream list is updated
-        streamList.subscribe(onNext: { [unowned self] (_) in
-            self.userList.accept(self.userList.value)
-        }).disposed(by: bag)
-        
+    func streamObserve() {
         userList.subscribe(onNext: { [unowned self] (all) in
             var temp = [LiveRole]()
-            
-            for item in all {
-                var isAudience = true
-                for stream in self.streamList.value where stream.owner.info == item.info {
-                    isAudience = false
-                    break
-                }
-                
-                if isAudience {
-                    temp.append(item)
-                }
+
+            for item in all where item.type == .audience {
+                temp.append(item)
             }
-            
+
             self.audienceList.accept(temp)
         }).disposed(by: bag)
-        
-        Center.shared().customMessage.bind(to: customMessage).disposed(by: bag)
-        Center.shared().actionMessage.bind(to: actionMessage).disposed(by: bag)
     }
 }
 
-// MARK: - EduClassroomDelegate
-extension LiveSession: EduClassroomDelegate {
-    // User
-    func classroom(_ classroom: EduClassroom, remoteUsersInit users: [EduUser]) {
-        roomManager.getFullUserList(success: { [unowned self] (list) in
-            self.userList.accept([LiveRole](list: list))
-        }, failure: nil)
+// MARK: - Custome Message
+fileprivate extension LiveSession {
+    func messageObserver() {
+        Center.shared().customMessage.bind(to: customMessage).disposed(by: bag)
     }
-    
-    func classroom(_ classroom: EduClassroom, remoteUsersJoined users: [EduUser]) {
-        roomManager.getFullUserList(success: { [unowned self] (list) in
-            self.userList.accept([LiveRole](list: list))
-        }, failure: nil)
+}
+
+// MARK: - Music
+fileprivate extension LiveSession {
+    func musicObserve() {
+        let mediaControl = Center.shared().centerProviderteEngine().getAgoraMediaControl()
+        let player = mediaControl.createMediaPlayerTrack()
         
-        userJoined.accept([LiveRole](list: users))
+        playMusic.subscribe(onNext: { [unowned player] (music) in
+            player.open(withURL: music.url)
+            player.play()
+        }).disposed(by: bag)
+
+        pauseMusic.subscribe(onNext: { [unowned player] (music) in
+            player.pause()
+        }).disposed(by: bag)
+        
+        resumeMusic.subscribe(onNext: { [unowned player] (music) in
+            player.resume()
+        }).disposed(by: bag)
+        
+        stopMusic.subscribe(onNext: { [unowned player] (music) in
+            player.stop()
+        }).disposed(by: bag)
+        
+        musicVolume.subscribe(onNext: { [unowned player] (volume) in
+            player.adjustPlayoutVolume(volume)
+            player.adjustPublishVolume(volume)
+        }).disposed(by: bag)
     }
-    
-    func classroom(_ classroom: EduClassroom, remoteUserStateUpdated event: EduUserEvent, changeType: EduUserStateChangeType) {
+}
+
+// MARK: - AudioEffect
+fileprivate extension LiveSession {
+    func audioEffectObserve() {
+        chatOfBelcanto.subscribe(onNext: { [unowned self] (chat) in
+            self.sceneService.setParameters(chat.parameters)
+        }).disposed(by: bag)
         
+        singOfBelcanto.subscribe(onNext: { [unowned self] (sing) in
+            self.sceneService.setParameters(sing.parameters)
+        }).disposed(by: bag)
+        
+        timbre.subscribe(onNext: { [unowned self] (timbre) in
+            self.sceneService.setParameters(timbre.parameters)
+        }).disposed(by: bag)
+        
+        audioSpace.subscribe(onNext: { [unowned self] (space) in
+            self.sceneService.setParameters(space.parameters)
+        }).disposed(by: bag)
+        
+        timbreRole.subscribe(onNext: { [unowned self] (role) in
+            self.sceneService.setParameters(role.parameters)
+        }).disposed(by: bag)
+        
+        musicGenre.subscribe(onNext: { [unowned self] (music) in
+            self.sceneService.setParameters(music.parameters)
+        }).disposed(by: bag)
+        
+        electronicMusic.subscribe(onNext: { [unowned self] (music) in
+            self.sceneService.setParameters(music.parameters)
+        }).disposed(by: bag)
+        
+        threeDimensionalVoice.subscribe(onNext: { [unowned self] (value) in
+            let parameters = "{\"che.audio.morph.threedim_voice\":\(value)}"
+            self.sceneService.setParameters(parameters)
+        }).disposed(by: bag)
     }
-    
-    func classroom(_ classroom: EduClassroom, remoteUsersLeft events: [EduUserEvent]) {
-        roomManager.getFullUserList(success: { [unowned self] (list) in
-            self.userList.accept([LiveRole](list: list))
-        }, failure: nil)
-        
-        var list = [LiveRole]()
-        
-        for event in events {
-            let role = LiveRoleItem(eduUser: event.modifiedUser)
-            list.append(role)
-        }
-        
-        userLeft.accept(list)
-    }
-    
-    // Message
-    func classroom(_ classroom: EduClassroom, roomChatMessageReceived textMessage: EduTextMessage) {
-        let user = LiveRoleItem(eduUser: textMessage.fromUser)
-        let message = textMessage.message
-        chatMessage.accept((user, message))
-    }
-    
-    func classroom(_ classroom: EduClassroom, roomMessageReceived textMessage: EduTextMessage) {
-        guard let json = try? textMessage.message.json() else {
+}
+
+private extension LiveSession {
+    func getProperties(cause: String? = nil) {
+        guard let roomProperties = sceneService.properties else {
             return
         }
-        customMessage.accept(json)
-    }
-    
-    // Stream
-    func classroom(_ classroom: EduClassroom, remoteStreamsInit streams: [EduStream]) {
-        for item in streams {
-            addNewStream(eduStream: item)
+        
+        var properties = roomProperties as [String: Any]
+        
+        if let changedCause = try? cause?.json() {
+            properties["cause"] = changedCause
         }
-    }
-    
-    func classroom(_ classroom: EduClassroom, remoteStreamsAdded events: [EduStreamEvent]) {
-        for item in events {
-            addNewStream(eduStream: item.modifiedStream)
-        }
-    }
-    
-    func classroom(_ classroom: EduClassroom, remoteStreamUpdated event: EduStreamEvent, changeType: EduStreamStateChangeType) {
-        updateStream(eduStream: event.modifiedStream)
-    }
-    
-    func classroom(_ classroom: EduClassroom, remoteStreamsRemoved events: [EduStreamEvent]) {
-        for item in events {
-            removeStream(eduStream: item.modifiedStream)
-        }
-    }
-    
-    // Room
-    func classroom(_ classroom: EduClassroom, stateUpdated changeType: EduClassroomChangeType, operatorUser user: EduBaseUser) {
-        if classroom.roomState.courseState == .stop {
-            leave()
-            end.accept(())
-        }
-    }
-
-    func classroomPropertyUpdated(_ classroom: EduClassroom, cause: [AnyHashable : Any]?) {
-        // Mutit hosts && Live Seats
-        if var json = classroom.roomProperties as? [String: Any] {
+        
+        if let basic = try? properties.getDictionaryValue(of: "basic"),
+           let roomState = try? basic.getIntValue(of: "state"),
+           roomState == 0 {
             
-            if let cause = cause as? [String: Any] {
-                json["cause"] = cause
+            if let cause = try? properties.getDictionaryValue(of: "cause"),
+               let data = try? cause.getIntValue(of: "data"),
+               let reason = LiveSession.State.Reason(rawValue: data) {
+                leave()
+                state.accept(.end(reason))
+            } else {
+                leave()
+                state.accept(.end(.timeout))
             }
-            
-            customMessage.accept(json)
+        } else {
+            customMessage.accept(properties)
         }
     }
 }
 
-// MARK: - EduTeacherDelegate, EduStudentDelegate
-extension LiveSession: EduTeacherDelegate, EduStudentDelegate {
-    func localStreamAdded(_ event: EduStreamEvent) {
-        var new = localRole.value
-        new.agUId = event.modifiedStream.streamUuid
-        localRole.accept(new)
-        
-        let stream = LiveStream(streamId: event.modifiedStream.streamUuid,
-                                hasAudio: event.modifiedStream.hasAudio,
-                                owner: new)
-        localStream.accept(stream)
-        addNewStream(eduStream: event.modifiedStream)
-    }
-    
-    func localStreamRemoved(_ event: EduStreamEvent) {
-        localStream.accept(nil)
-        removeStream(eduStream: event.modifiedStream)
-        
-        if let _ = event.operatorUser {
-            localStreamByRemoved.accept(())
+// MARK: - AgoraRteSceneDelegate
+extension LiveSession: AgoraRteSceneDelegate {
+    // scene
+    func scene(_ scene: AgoraRteScene, didChange state: AgoraRteSceneConnectionState, withError error: AgoraRteError?) {
+        if state == .connected {
+            getProperties(cause: nil)
         }
     }
     
-    func localStreamUpdated(_ event: EduStreamEvent, changeType: EduStreamStateChangeType) {
-        let role = localRole.value
-        let stream = LiveStream(streamId: event.modifiedStream.streamUuid,
-                                hasAudio: event.modifiedStream.hasAudio,
-                                owner: role)
-        localStream.accept(stream)
-        updateStream(eduStream: event.modifiedStream)
+    func scene(_ scene: AgoraRteScene, didUpdateSceneProperties changedProperties: [String], remove: Bool, cause: String?) {
+        getProperties(cause: cause)
+    }
+    
+    func scene(_ scene: AgoraRteScene, didReceiveSceneMessage message: AgoraRteMessage, fromUser user: AgoraRteUserInfo) {
+        guard let liveUser = try? LiveRoleItem(rteUser: user) else {
+            return
+        }
+        chatMessage.accept((user: liveUser, message: message.message))
+    }
+    
+    // user
+    func scene(_ scene: AgoraRteScene, didRemoteUsersJoin userEvents: [AgoraRteUserEvent]) {
+        let users = userEvents.map { (event) -> AgoraRteUserInfo in
+            return event.modifiedUser
+        }
+        
+        guard let join = try? [LiveRole](list: users) else {
+            return
+        }
+        
+        userJoined.accept(join)
+        
+        let rteList = sceneService.users
+        
+        guard let list = try? [LiveRole](list: rteList) else {
+            return
+        }
+        
+        userList.accept(list)
+    }
+    
+    func scene(_ scene: AgoraRteScene, didRemoteUsersLeave userEvents: [AgoraRteUserEvent]) {
+        let users = userEvents.map { (event) -> AgoraRteUserInfo in
+            return event.modifiedUser
+        }
+        
+        guard let leave = try? [LiveRole](list: users) else {
+            return
+        }
+        
+        userLeft.accept(leave)
+        
+        let rteList = sceneService.users
+        
+        guard let list = try? [LiveRole](list: rteList) else {
+            return
+        }
+        
+        userList.accept(list)
+    }
+    
+    func scene(_ scene: AgoraRteScene, didUpdateRemoteUserInfo userEvent: AgoraRteUserEvent) {
+        let rteList = sceneService.users
+        
+        guard let list = try? [LiveRole](list: rteList) else {
+            return
+        }
+        
+        userList.accept(list)
+    }
+    
+    // stream
+    func scene(_ scene: AgoraRteScene, didAddRemoteStreams streamEvents: [AgoraRteMediaStreamEvent]) {
+        for item in streamEvents {
+            userService?.subscribeRemoteStream(item.modifiedStream.streamId,
+                                               type: .audio)
+            addNewStream(rteStream: item.modifiedStream)
+        }
+    }
+    
+    func scene(_ scene: AgoraRteScene, didRemoveRemoteStreams streamEvents: [AgoraRteMediaStreamEvent]) {
+        for item in streamEvents {
+            userService?.unsubscribeRemoteStream(item.modifiedStream.streamId,
+                                                 type: .audio)
+            removeStream(rteStream: item.modifiedStream)
+        }
+    }
+    
+    func scene(_ scene: AgoraRteScene, didUpdateRemoteStreams streamEvents: [AgoraRteMediaStreamEvent]) {
+        for item in streamEvents {
+            updateStream(rteStream: item.modifiedStream)
+        }
     }
 }
 
-// MARK: - RTCStatisticsReportDelegate
-extension LiveSession: RTCStatisticsReportDelegate {
-    func rtcReportRtcStats(_ stats: AgoraChannelStats) {
-        var new = self.sessionReport.value
-        new.updateChannelStats(stats)
-        sessionReport.accept(new)
-    }
-}
-
-extension EduUserService {
-    func muteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
-        var new = stream
-        new.hasAudio = false
-        let eduStream = EduStream(liveStream: new)
+// MARK: - AgoraRteLocalUserDelegate
+extension LiveSession: AgoraRteLocalUserDelegate {
+    func localUser(_ user: AgoraRteLocalUser, didUpdateLocalUserInfo info: AgoraRteUserInfo, cause: String?) {
+        var local = localRole.value
         
-        publishStream(eduStream, success: {
-            
-        }) { (error) in
-            if let fail = fail {
-                fail(error)
-            }
+        if let newRole = try? LiveRoleType.initWithDescription(info.userRole) {
+            local.type = newRole
+            localRole.accept(local)
         }
     }
     
-    func ummuteOther(stream: LiveStream, fail: ErrorCompletion = nil) {
-        var new = stream
-        new.hasAudio = true
-        let eduStream = EduStream(liveStream: new)
-        
-        publishStream(eduStream, success: {
-            
-        }) { (error) in
-            if let fail = fail {
-                fail(error)
-            }
+    func localUser(_ user: AgoraRteLocalUser, didChangeOfLocalStream event: AgoraRteMediaStreamEvent, with action: AgoraRteMediaStreamAction) {
+        guard let stream = try? LiveStream(rteStream: event.modifiedStream) else {
+            return
         }
-    }
-    
-    func publishNewStream(_ stream: EduStream, success: Completion = nil, fail: ErrorCompletion = nil) {
-        publishStream(stream, success: {
-            if let success = success {
-                success()
-            }
-        }) { (error) in
-            if let fail = fail {
-                fail(error)
-            }
-        }
-    }
-    
-    func unpublishStream(_ stream: EduStream, success: Completion = nil, fail: ErrorCompletion = nil) {
-        unpublishStream(stream, success: {
-            if let success = success {
-                success()
-            }
-        }) { (error) in
-            if let fail = fail {
-                fail(error)
-            }
-        }
-    }
-}
-
-fileprivate extension LiveRoleItem {
-    init(eduUser: EduUser) {
-        let info = BasicUserInfo(userId: eduUser.userUuid,
-                                 name: eduUser.userName)
         
-        self.info = info
-        self.agUId = eduUser.streamUuid
-        
-        switch eduUser.role {
-        case .teacher:
-            self.type = .owner
-        case .student:
-            self.type = .audience
-        default:
-            self.type = .audience
+        switch action {
+        case .added:
+            localStream.accept(stream)
+            addNewStream(rteStream: event.modifiedStream)
+        case .updated:
+            localStream.accept(stream)
+            updateStream(rteStream: event.modifiedStream)
+        case .removed:
+            localStream.accept(nil)
+            removeStream(rteStream: event.modifiedStream)
+        @unknown default:
             assert(false)
             break
         }
+    }
+    
+    func localUser(_ user: AgoraRteLocalUser, didUpdateLocalUserInfo userEvent: AgoraRteUserEvent) {
+        var old = localRole.value
+        let newRoleString = userEvent.modifiedUser.userRole
+        guard let newRole = try? LiveRoleType.initWithDescription(newRoleString) else {
+            return
+        }
         
-        self.giftRank = 0
+        old.type = newRole
+        localRole.accept(old)
+    }
+}
+
+// MARK: - AgoraRteStatsDelegate
+extension LiveSession: AgoraRteStatsDelegate {
+    func scene(_ scene: AgoraRteScene, didUpdateLocalAudioStream streamId: String, with stats: AgoraRteLocalAudioStats) {
+        var sessionStats = sessionReport.value
+        sessionStats.localAudioStats = stats
+        sessionReport.accept(sessionStats)
+    }
+    
+    func scene(_ scene: AgoraRteScene, report stats: AgoraRteSceneStats) {
+        var sessionStats = sessionReport.value
+        sessionStats.sceneStats = stats
+        sessionReport.accept(sessionStats)
+    }
+}
+
+// MARK: - AgoraRteMediaControlDelegate
+extension LiveSession: AgoraRteMediaControlDelegate {
+    func mediaControl(_ control: AgoraRteMediaControl, didChnageAudioRouting
+                        routing: AgoraRteAudioOutputRouting) {
+        audioOuputRouting.accept(routing)
     }
 }
 
 fileprivate extension Array where Element == LiveRole {
-    init(list: [EduUser]) {
+    init(list: [AgoraRteUserInfo]) throws {
         var array = [LiveRole]()
         
         for user in list {
-            let role = LiveRoleItem(eduUser: user)
+            let role = try LiveRoleItem(rteUser: user)
             array.append(role)
         }
         
@@ -761,47 +792,46 @@ fileprivate extension Array where Element == LiveRole {
 }
 
 fileprivate extension LiveStream {
-    init(eduStream: EduStream) {
-        var type: LiveRoleType
-        switch eduStream.userInfo.role {
-        case .teacher:
-            type = .owner
-        case .student:
-            type = .broadcaster
-        default:
-            fatalError()
-        }
+    init(rteStream: AgoraRteMediaStreamInfo) throws {
+        let user = try LiveRoleItem(rteUser: rteStream.owner)
+        let hasAudio = (rteStream.streamType.rawValue & AgoraRteMediaStreamType.audio.rawValue)
         
-        let info = BasicUserInfo(userId: eduStream.userInfo.userUuid,
-                                 name: eduStream.userInfo.userName)
-        
-        let user = LiveRoleItem(type: type,
-                                info: info,
-                                agUId: eduStream.streamUuid)
-        
-        self.init(streamId: eduStream.streamUuid,
-                  hasAudio: eduStream.hasAudio,
+        self.init(streamId: rteStream.streamId,
+                  hasAudio: hasAudio == 1 ? true : false,
                   owner: user)
     }
 }
 
-fileprivate extension EduStream {
-    convenience init(liveStream: LiveStream) {
-        let eduUser = EduBaseUser(userUuid: liveStream.owner.info.userId)
-        eduUser.userName = liveStream.owner.info.name
+private extension LiveSession {
+    func log(info: String, extra: String?) {
+        let fromatter = AGELogFormatter(type: .info(info),
+                                        className: NSStringFromClass(LiveSession.self),
+                                        funcName: "",
+                                        extra: extra)
+        logTube.logFromClass(formatter: fromatter)
+    }
+    
+    func log(warning: String, extra: String?) {
+        let fromatter = AGELogFormatter(type: .warning(warning),
+                                        className: NSStringFromClass(LiveSession.self),
+                                        funcName: "",
+                                        extra: extra)
+        logTube.logFromClass(formatter: fromatter)
+    }
+    
+    func log(error: Error, extra: String?) {
+        var localizedDescription: String
         
-        switch liveStream.owner.type {
-        case .owner:
-            eduUser.role = .teacher
-        case .broadcaster, .audience:
-            eduUser.role = .student
+        if let tError = error as? AGEError {
+            localizedDescription = tError.localizedDescription
+        } else {
+            localizedDescription = error.localizedDescription
         }
         
-        self.init(streamUuid: liveStream.streamId,
-                  streamName: "",
-                  sourceType: .none,
-                  hasVideo: false,
-                  hasAudio: liveStream.hasAudio,
-                  user: eduUser)
+        let fromatter = AGELogFormatter(type: .error(localizedDescription),
+                                        className: NSStringFromClass(LiveSession.self),
+                                        funcName: "",
+                                        extra: extra)
+        logTube.logFromClass(formatter: fromatter)
     }
 }

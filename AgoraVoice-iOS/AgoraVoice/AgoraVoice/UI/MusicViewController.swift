@@ -22,10 +22,6 @@ class MusicCell: UITableViewCell {
             self.singerLabel.textColor = isPlaying ? UIColor(hexString: "#FFFFFF") : UIColor(hexString: "#9BA2AB")
         }
     }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
 }
 
 class MusicViewController: RxTableViewController {
@@ -95,8 +91,8 @@ class MusicViewController: RxTableViewController {
             return Float(volume)
         }.bind(to: volumeSlider.rx.value).disposed(by: bag)
         
-        volumeSlider.rx.value.map { (volume) -> Int in
-            return Int(volume)
+        volumeSlider.rx.value.map { (volume) -> UInt in
+            return UInt(volume)
         }.bind(to: musicVM.volume).disposed(by: bag)
     }
 }

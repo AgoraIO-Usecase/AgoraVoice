@@ -10,27 +10,25 @@ import UIKit
 import RxSwift
 import RxRelay
 
-class UserNameViewController: UIViewController {
+class UserNameViewController: MaskViewController {
     @IBOutlet weak var nameTextField: UITextField!
+    
+    private let nameLimit: UInt = 16
     
     var newName: BehaviorRelay<String>!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let navigation = self.navigationController as? CSNavigationController else {
-            assert(false)
-            return
+        if let navigation = self.navigationController as? CSNavigationController {
+            navigation.navigationBar.isHidden = false
         }
-        navigation.navigationBar.isHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let navigation = self.navigationController as? CSNavigationController else {
-            assert(false)
-            return
+        if let navigation = self.navigationController as? CSNavigationController {
+            navigation.rightButton = nil
         }
-        navigation.rightButton = nil
     }
     
     override func viewDidLoad() {
@@ -41,11 +39,19 @@ class UserNameViewController: UIViewController {
             nameTextField.text = nil
         }
         
+        nameTextField.delegate = self
+        
         setupRightButton()
     }
     
     @objc func didDonePressed() {
-        if let name = nameTextField.text, name != newName.value {
+        guard let name = nameTextField.text,
+              name.count > 0 else {
+            self.showTextToast(text: MineLocalizable.nicknameMinLengthLimit())
+            return
+        }
+        
+        if name != newName.value {
             newName.accept(name)
         }
         
@@ -62,10 +68,17 @@ private extension UserNameViewController {
         
         navigation.navigationBar.isHidden = false
         
-        self.navigationItem.title = NSLocalizedString("Input_Name")
+        self.navigationItem.title = MineLocalizable.inputName()
         
-        let doneButton = UIButton(frame: CGRect(x: 0, y: 0, width: 69, height: 30))
-        doneButton.addTarget(self, action: #selector(didDonePressed), for: .touchUpInside)
+        let buttonFrame = CGRect(x: 0,
+                                 y: 0,
+                                 width: 69,
+                                 height: 30)
+         
+        let doneButton = UIButton(frame: buttonFrame)
+        doneButton.addTarget(self,
+                             action: #selector(didDonePressed),
+                             for: .touchUpInside)
         doneButton.setTitle(NSLocalizedString("Done"), for: .normal)
         doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         doneButton.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -73,5 +86,20 @@ private extension UserNameViewController {
         doneButton.backgroundColor = UIColor(hexString: "#008AF3")
         doneButton.cornerRadius(4)
         navigation.rightButton = doneButton
+    }
+}
+
+extension UserNameViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
+        if range.length == 1 && string.count == 0 {
+            return true
+        } else if let text = textField.text, text.count >= nameLimit {
+            self.showTextToast(text: MineLocalizable.nicknameMaxLengthLimit(nameLimit))
+            return false
+        } else {
+            return true
+        }
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 import RxRelay
-import AlamoClient
+import Armin
 
 struct Room {
     var name: String
@@ -51,7 +51,7 @@ struct Room {
         let ownerJson = try dic.getDictionaryValue(of: "ownerUserInfo")
         self.owner = try LiveRoleItem(dic: ownerJson)
         
-        let index = Int(try dic.getStringValue(of: "backgroundImage"))!
+        let index = Int(try dic.getStringValue(of: "backgroundImage")) ?? 1
         let images = Center.shared().centerProvideImagesHelper()
         self.image = images.getRoomPreview(index: index)
     }
@@ -104,8 +104,8 @@ extension LiveListVM {
                                         "count": count]
 
         let url = URLGroup.roomPage
-        let event = RequestEvent(name: "room-page")
-        let task = RequestTask(event: event,
+        let event = ArRequestEvent(name: "room-page")
+        let task = ArRequestTask(event: event,
                                type: .http(.get, url: url),
                                timeout: .low,
                                header: ["token": Keys.UserToken],
@@ -129,9 +129,9 @@ extension LiveListVM {
                 success()
             }
         }
-        let response = ACResponse.json(successCallback)
+        let response = ArResponse.json(successCallback)
 
-        let retry: ACErrorRetryCompletion = { (error: Error) -> RetryOptions in
+        let retry: ArErrorRetryCompletion = { (error: Error) -> ArRetryOptions in
             if let fail = fail {
                 fail()
             }
@@ -148,8 +148,8 @@ extension LiveListVM {
         let parameters: StringAnyDic = ["count": currentCount]
 
         let url = URLGroup.roomPage
-        let event = RequestEvent(name: "room-page-refetch")
-        let task = RequestTask(event: event,
+        let event = ArRequestEvent(name: "room-page-refetch")
+        let task = ArRequestTask(event: event,
                                type: .http(.get, url: url),
                                timeout: .low,
                                header: ["token": Keys.UserToken],
@@ -174,9 +174,9 @@ extension LiveListVM {
                 success()
             }
         }
-        let response = ACResponse.json(successCallback)
+        let response = ArResponse.json(successCallback)
 
-        let retry: ACErrorRetryCompletion = { (error: Error) -> RetryOptions in
+        let retry: ArErrorRetryCompletion = { (error: Error) -> ArRetryOptions in
             if let fail = fail {
                 fail()
             }

@@ -84,8 +84,8 @@ class ImageSelectViewController: RxViewController {
             self.collectionView.reloadData()
         }).disposed(by: bag)
         
-        selectIndex.map { [unowned self] (index) -> UIImage in
-            return self.images.value[index]
+        selectIndex.map { [unowned imageFile]  (index) -> UIImage in
+            return imageFile.roomBackgrounds[index]
         }.bind(to: selectImage).disposed(by: bag)
     }
 }

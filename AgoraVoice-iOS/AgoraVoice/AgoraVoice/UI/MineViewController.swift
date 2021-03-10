@@ -58,7 +58,7 @@ class TopView: UIImageView {
     }
 }
 
-class MineViewController: UITableViewController {
+class MineViewController: MaskTableViewController {
     @IBOutlet weak var placeholderView: UIView!
     
     @IBOutlet weak var headLabel: UILabel!
@@ -68,7 +68,6 @@ class MineViewController: UITableViewController {
     
     private var topView: TopView?
     private var mineVM = MineVM()
-    private let bag = DisposeBag()
     
     /*
     private lazy var imagePicker: UIImagePickerController = {
@@ -121,16 +120,18 @@ class MineViewController: UITableViewController {
         return 2
     }
     
-    /*
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        /*
         switch indexPath {
         case IndexPath(row: 0, section: 0): // pick head image
             self.present(imagePicker, animated: true, completion: nil)
         default:
             break
         }
+         */
     }
-    */
 }
 
 /*
@@ -162,9 +163,9 @@ private extension MineViewController {
         self.view.addSubview(view)
         
         // table cell
-        self.headLabel.text = NSLocalizedString("Mine_Head")
-        self.aboutLabel.text = NSLocalizedString("About")
-        self.nameLabel.text = NSLocalizedString("Mine_Name")
+        self.headLabel.text = MineLocalizable.headSetting()
+        self.aboutLabel.text = MineLocalizable.about()
+        self.nameLabel.text = MineLocalizable.nicknameSetting()
     }
     
     func setupBackButton() {
@@ -229,8 +230,12 @@ private extension MineViewController {
             guard newName != self.mineVM.userName.value else {
                 return
             }
-            self.mineVM.updateNewName(newName) {
-
+            self.mineVM.updateNewName(newName) { [unowned self] (error) in
+                if error.code == nil {
+                    self.showTextToast(text: NetworkLocalizable.lostConnectionRetry())
+                } else {
+                    self.showTextToast(text: MineLocalizable.updateNicknameFail())
+                }
             }
         }).disposed(by: bag)
     }
