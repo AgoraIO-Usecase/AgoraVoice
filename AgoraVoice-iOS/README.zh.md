@@ -15,6 +15,13 @@
 ### 下载 AgoraRte Framework
 下载 [AgoraRte](https://github.com/AgoraIO-Usecase/AgoraVoice/releases/download/ios_1.1.0/AgoraRte.framework.zip) 并解压，然后将 "AgoraRte.framework" 文件移动到 "AgoraVoice-iOS/AgoraRte" 文件夹下。
 
+### 获取 Keys
+
+1. 在[agora.io](https://dashboard.agora.io/signin/)创建一个开发者账号。
+2. 创建一个项目,  然后获取一组 **AppId**, **CustomerId**, **customerCertificate**。 
+3. 用 **AppId**, **CustomerId**, **customerCertificate** 去更新 "Keys" 文件。
+
+
 ### Run
 1. 在 "AgoraVoice-iOS/AgoraVoice" 路径下，使用 "pod install" 命令去链接所有需要依赖的库。
 2. 最后使用 Xcode 打开 AgoraVoice.xcworkspace，连接 iPhone／iPad 测试设备，设置有效的开发者签名后即可运行。

@@ -13,7 +13,14 @@
 This section shows you how to prepare, build, and run the application.
 
 ### Download AgoraRte Framework
+
 Download [AgoraRte](https://github.com/AgoraIO-Usecase/AgoraVoice/releases/download/ios_1.1.0/AgoraRte.framework.zip), unzip and move "AgoraRte.framework" to "AgoraVoice-iOS/AgoraRte".
+
+### Obtain keys
+
+1. Create a developer account at [agora.io](https://dashboard.agora.io/signin/). Once you finish the signup process, you will be redirected to the Dashboard.
+2. Create a project, and get An **AppId**, a **CustomerId**, a **customerCertificate**. 
+3. Use **AppId**, **CustomerId**, **customerCertificate** to update "Keys" file.
 
 ### Run
 
