@@ -29,7 +29,7 @@
             android:layout_height="@dimen/chat_room_host_panel_seat_mute_icon_size"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/icon_mic_off"/>
+            android:src="@drawable/icon_seat_item_mute"/>
     </io.agora.agoravoice.ui.views.SquareRelativeLayout>
 
 </RelativeLayout>

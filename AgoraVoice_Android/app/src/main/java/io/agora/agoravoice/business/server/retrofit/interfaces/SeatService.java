@@ -11,11 +11,14 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface SeatService {
-    @POST("ent/voice/v1/rooms/{roomId}/users/{userId}/seats")
-    Call<StringResp> requestSeatBehavior(@Header("token") String token, @Path("roomId") String roomId,
-                                         @Path("userId") String userId, @Body SeatBehaviorBody body);
+    @POST("{root}/apps/{appId}/v1/rooms/{roomId}/users/{userId}/seats")
+    Call<StringResp> requestSeatBehavior(@Path(value = "root", encoded = true) String rootPath,
+                                         @Path("appId") String appId, @Header("token") String token,
+                                         @Path("roomId") String roomId, @Path("userId") String userId,
+                                         @Body SeatBehaviorBody body);
 
-    @POST("ent/voice/v1/rooms/{roomId}/seats")
-    Call<BooleanResp> modifySeatState(@Header("token") String token, @Path("roomId") String roomId,
-                                      @Body SeatStateBody body);
+    @POST("{root}/apps/{appId}/v1/rooms/{roomId}/seats")
+    Call<BooleanResp> modifySeatState(@Path(value = "root", encoded = true) String rootPath,
+                                      @Path("appId") String appId, @Header("token") String token,
+                                      @Path("roomId") String roomId, @Body SeatStateBody body);
 }

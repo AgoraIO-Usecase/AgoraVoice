@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.graphics.Outline;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -22,8 +20,6 @@ import io.agora.agoravoice.utils.Const;
 import io.agora.agoravoice.utils.WindowUtil;
 
 public class MainFragmentHome extends AbsMainFragment implements View.OnClickListener {
-    private static final int MARGIN_RATIO = 12;
-
     private int mCardMargin;
 
     @Override

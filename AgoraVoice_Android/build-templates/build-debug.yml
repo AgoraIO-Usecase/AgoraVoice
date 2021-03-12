@@ -18,6 +18,7 @@ jobs:
           appId: $(appId.debug)
           customerId: $(customer.id)
           customerCert: $(customer.cer)
+          buglyId: $(bugly_appId_android)
 
       - task: CopyFiles@2
         inputs:

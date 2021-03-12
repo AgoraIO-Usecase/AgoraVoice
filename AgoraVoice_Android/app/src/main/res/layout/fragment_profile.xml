@@ -44,30 +44,6 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/user_profile_avatar_setting_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/main_profile_setting_item_height"
-        android:paddingStart="@dimen/common_margin_horizontal"
-        android:paddingEnd="@dimen/common_margin_horizontal"
-        android:background="@color/theme_background_1">
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:textAlignment="gravity"
-            android:gravity="center_vertical"
-            android:textColor="@color/theme_gray_4"
-            android:text="@string/profile_setting_title_avatar"
-            android:textSize="@dimen/text_size_2"/>
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/icon_go"/>
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/user_profile_nickname_setting_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/main_profile_setting_item_height"

@@ -12,8 +12,10 @@ import androidx.appcompat.widget.AppCompatTextView;
 import io.agora.agoravoice.R;
 
 public class RtcStatsView extends RelativeLayout {
-    private AppCompatTextView mTextView;
+    private AppCompatTextView mPropTextView;
+    private AppCompatTextView mStatsTextView;
     private AppCompatImageView mCloseBtn;
+    private String mPropFormat;
     private String mStatsFormat;
 
     public RtcStatsView(Context context) {
@@ -27,16 +29,24 @@ public class RtcStatsView extends RelativeLayout {
     }
 
     private void init() {
+        mPropFormat = getResources().getString(R.string.rtc_starts_property_format);
         mStatsFormat = getResources().getString(R.string.rtc_stats_format);
         LayoutInflater.from(getContext()).inflate(R.layout.rtc_stats_layout, this);
-        mTextView = findViewById(R.id.stats_text);
+        mPropTextView = findViewById(R.id.prop_text);
+        mStatsTextView = findViewById(R.id.stats_text);
         mCloseBtn = findViewById(R.id.stats_close_btn);
+        setProperty(0, 0);
         setLocalStats(0.0f, 0.0f, 0.0f, 0.0f, 0);
+    }
+
+    public void setProperty(int channel, int sampleRate) {
+        String prop = String.format(mPropFormat, channel, sampleRate);
+        mPropTextView.setText(prop);
     }
 
     public void setLocalStats(float rxRate, float rxLoss, float txRate, float txLoss, int latency) {
         String stats = String.format(mStatsFormat, rxRate, rxLoss, txRate, txLoss, latency);
-        mTextView.setText(stats);
+        mStatsTextView.setText(stats);
     }
 
     public void setCloseListener(OnClickListener listener) {
@@ -48,7 +58,7 @@ public class RtcStatsView extends RelativeLayout {
     }
 
     public void dismiss() {
-        mTextView.setText("");
+        mStatsTextView.setText("");
         setVisibility(GONE);
     }
 }

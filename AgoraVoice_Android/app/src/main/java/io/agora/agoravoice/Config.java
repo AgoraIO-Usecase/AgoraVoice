@@ -10,6 +10,10 @@ import io.agora.agoravoice.business.definition.struct.MusicInfo;
 import io.agora.agoravoice.manager.AudioManager;
 
 public class Config {
+    private static final int DEFAULT_3D_VOICE_SPEED = 10;
+    private static final int DEFAULT_ELECTRONIC_KEY = 1;
+    private static final int DEFAULT_ELECTRONIC_VALUE = 4;
+
     private volatile String mAppId;
     private volatile String mUserToken;
     private volatile String mRtmToken;
@@ -29,13 +33,22 @@ public class Config {
 
     private int mAudioEffectType = -1;
 
-    private int m3DVoiceSpeed;
+    private int m3DVoiceSpeed = DEFAULT_3D_VOICE_SPEED;
 
-    private int mElectronicKey;
+    private int mElectronicKey = DEFAULT_ELECTRONIC_KEY;
 
-    private int mElectronicValue;
+    private int mElectronicValue = DEFAULT_ELECTRONIC_VALUE;
 
     private int mBgImageSelected = -1;
+
+    public void reset3DVoiceEffect() {
+        m3DVoiceSpeed = DEFAULT_3D_VOICE_SPEED;
+    }
+
+    public void resetElectronicEffect() {
+        mElectronicKey = DEFAULT_ELECTRONIC_KEY;
+        mElectronicValue = DEFAULT_ELECTRONIC_VALUE;
+    }
 
     public String getAppId() {
         return mAppId;
@@ -86,7 +99,7 @@ public class Config {
     }
 
     public boolean userHasLogin() {
-        return !TextUtils.isEmpty(mRtmToken);
+        return !TextUtils.isEmpty(mUserToken);
     }
 
     public void updateMusicInfo(List<MusicInfo> list) {

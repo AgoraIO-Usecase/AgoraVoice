@@ -25,26 +25,6 @@ public class VoiceUtil {
             R.drawable.icon_voice_beauty_sing_female_small_room
     };
 
-    public static final int[] VOICE_BEAUTY_SING_PARAMS = {
-            Constants.GENERAL_BEAUTY_SING_MALE,
-            Constants.GENERAL_BEAUTY_SING_MALE,
-            Constants.GENERAL_BEAUTY_SING_MALE,
-            Constants.GENERAL_BEAUTY_SING_FEMALE,
-            Constants.GENERAL_BEAUTY_SING_FEMALE,
-            Constants.GENERAL_BEAUTY_SING_FEMALE
-    };
-
-    public static final int[] VOICE_BEAUTY_TIMBRE_PARAMS = {
-            Constants.VOICE_BEAUTY_VIGOROUS,
-            Constants.VOICE_BEAUTY_DEEP,
-            Constants.VOICE_BEAUTY_MELLOW,
-            Constants.VOICE_BEAUTY_FALSETTO,
-            Constants.VOICE_BEAUTY_FULL,
-            Constants.VOICE_BEAUTY_CLEAR,
-            Constants.VOICE_BEAUTY_RESOUNDING,
-            Constants.VOICE_BEAUTY_RINGING
-    };
-
     public static final int[] SPACE_EFFECT_IMAGE_RES = {
             R.drawable.icon_sound_effect_space_ktv,
             R.drawable.icon_sound_effect_space_concert,
@@ -69,7 +49,7 @@ public class VoiceUtil {
     public static final int[] FLAVOUR_EFFECT_IMAGE_RES = {
             R.drawable.icon_sound_effect_flavour_r_n_b,
             R.drawable.icon_sound_effect_flavour_pop,
+            R.drawable.icon_sound_effect_flavour_rock,
             R.drawable.icon_sound_effect_flavour_hipop,
-            R.drawable.icon_sound_effect_flavour_rock_n_roll,
     };
 }

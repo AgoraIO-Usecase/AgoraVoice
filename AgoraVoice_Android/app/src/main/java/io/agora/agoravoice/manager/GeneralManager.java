@@ -3,6 +3,7 @@ package io.agora.agoravoice.manager;
 import androidx.annotation.NonNull;
 
 import io.agora.agoravoice.business.BusinessProxy;
+import io.agora.agoravoice.business.server.retrofit.listener.LogServiceListener;
 
 public class GeneralManager {
     private BusinessProxy mProxy;
@@ -17,5 +18,9 @@ public class GeneralManager {
 
     public void getMusicList() {
         mProxy.requestMusicList();;
+    }
+
+    public void uploadLogs(LogServiceListener listener) {
+        mProxy.uploadLogs(listener);
     }
 }

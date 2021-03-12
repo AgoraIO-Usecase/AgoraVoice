@@ -15,7 +15,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import io.agora.agoravoice.R;
 import io.agora.agoravoice.manager.ProxyManager;
 import io.agora.agoravoice.ui.activities.main.about.AboutActivity;
-import io.agora.agoravoice.ui.activities.main.profile.AvatarSelectActivity;
 import io.agora.agoravoice.ui.activities.main.profile.NicknameActivity;
 import io.agora.agoravoice.utils.UserUtil;
 import io.agora.agoravoice.utils.WindowUtil;
@@ -39,7 +38,7 @@ public class MainFragmentProfile extends AbsMainFragment implements View.OnClick
 
         @Override
         public void onLoginSuccess(String userId, String userToken, String rtmToken) {
-            initUserInfo();
+            getActivity().runOnUiThread(() -> initUserInfo());
             application().proxy().removeUserServiceListener(mUserServiceListener);
         }
 
@@ -108,15 +107,12 @@ public class MainFragmentProfile extends AbsMainFragment implements View.OnClick
 
     private void tryLogin() {
         application().proxy().addUserServiceListener(mUserServiceListener);
-        application().proxy().login(application().config().getNickname());
+        application().proxy().login(application().config().getUserId());
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.user_profile_avatar_setting_layout:
-                toActivity(AvatarSelectActivity.class);
-                break;
             case R.id.user_profile_nickname_setting_layout:
                 toActivity(NicknameActivity.class);
                 break;

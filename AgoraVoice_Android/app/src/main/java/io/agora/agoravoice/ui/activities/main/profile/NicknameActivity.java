@@ -6,9 +6,11 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatEditText;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.agora.agoravoice.R;
 import io.agora.agoravoice.manager.ProxyManager;
@@ -17,11 +19,17 @@ import io.agora.agoravoice.utils.Const;
 import io.agora.agoravoice.utils.ToastUtil;
 import io.agora.agoravoice.utils.WindowUtil;
 
-public class NicknameActivity extends BaseActivity implements View.OnClickListener {
-    private AppCompatEditText mNameEdit;
+public class NicknameActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
+    private static final int TOAST_DURATION = 3000;
+    private static final int NAME_MAX_LENGTH = 16;
+    private static final String NAME_FORMAT = "[a-zA-Z_0-9\u4e00-\u9fa5\\s]*";
 
-    private ProxyManager.UserServiceListener mUserListener = new
-            ProxyManager.UserServiceListener() {
+    private AppCompatEditText mNameEdit;
+    private Pattern mPattern;
+    private long mLastToastTime;
+
+    private final ProxyManager.UserServiceListener mUserListener =
+            new ProxyManager.UserServiceListener() {
                 @Override
                 public void onUserCreated(String userId, String userName) {
 
@@ -65,22 +73,9 @@ public class NicknameActivity extends BaseActivity implements View.OnClickListen
 
         mNameEdit = findViewById(R.id.profile_nickname_edit_text);
         mNameEdit.setText(config().getNickname());
-        mNameEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        mNameEdit.addTextChangedListener(this);
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        mPattern = Pattern.compile(NAME_FORMAT);
     }
 
     @Override
@@ -106,9 +101,65 @@ public class NicknameActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        Matcher matcher = mPattern.matcher(s.toString());
+        if (matcher.matches()) return;
+
+        StringBuilder builder = new StringBuilder();
+        while (matcher.find()) {
+            String str = matcher.group();
+            builder.append(str);
+        }
+
+        int selection;
+        if (count < before) {
+            // characters are deleted or replaced
+            selection = start;
+        } else {
+            selection = start + count;
+        }
+
+        if (builder.length() != s.length()) {
+            // If there is any invalid character removed,
+            // set the selection to the end of string
+            selection = builder.length();
+        }
+
+        setNameText(builder.toString(), selection);
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (s.length() > NAME_MAX_LENGTH) {
+            long now = System.currentTimeMillis();
+            if (now - mLastToastTime >= TOAST_DURATION) {
+                // Avoid showing too much toast dialog at once
+                String format = getString(R.string.profile_name_too_long_toast_message);
+                String message = String.format(format, NAME_MAX_LENGTH);
+                ToastUtil.showShortToast(NicknameActivity.this, message);
+                mLastToastTime = now;
+            }
+
+            setNameText(s.subSequence(0, NAME_MAX_LENGTH).toString(), NAME_MAX_LENGTH);
+        }
+    }
+
+    private void setNameText(String content, int selection) {
+        mNameEdit.removeTextChangedListener(this);
+        mNameEdit.setText(content);
+        if (selection > 0) mNameEdit.setSelection(selection);
+        mNameEdit.addTextChangedListener(this);
+    }
+
     private void editName() {
         String name = mNameEdit == null ? null
-                : mNameEdit.getEditableText().toString();
+                : mNameEdit.getEditableText().toString().trim();
         if (!TextUtils.isEmpty(name)) {
             proxy().editUser(config().getUserToken(),
                     config().getUserId(), name);

@@ -1,26 +1,33 @@
 package io.agora.agoravoice.business;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.List;
 
+import io.agora.agoravoice.BuildConfig;
 import io.agora.agoravoice.business.definition.interfaces.CoreService;
 import io.agora.agoravoice.business.definition.interfaces.RoomEventListener;
-import io.agora.agoravoice.business.definition.interfaces.VoidCallback;
+import io.agora.agoravoice.business.definition.interfaces.VoiceCallback;
 import io.agora.agoravoice.business.definition.struct.AppVersionInfo;
+import io.agora.agoravoice.business.definition.struct.BusinessType;
 import io.agora.agoravoice.business.definition.struct.GiftInfo;
 import io.agora.agoravoice.business.definition.struct.MusicInfo;
-import io.agora.agoravoice.business.definition.struct.RoomStreamInfo;
+import io.agora.agoravoice.business.log.LogUploader;
+import io.agora.agoravoice.business.log.Logging;
 import io.agora.agoravoice.business.server.ServerClient;
 import io.agora.agoravoice.business.server.retrofit.listener.GeneralServiceListener;
+import io.agora.agoravoice.business.server.retrofit.listener.LogServiceListener;
 import io.agora.agoravoice.business.server.retrofit.listener.RoomServiceListener;
 import io.agora.agoravoice.business.server.retrofit.listener.SeatServiceListener;
 import io.agora.agoravoice.business.server.retrofit.listener.UserServiceListener;
+import io.agora.agoravoice.business.server.retrofit.model.body.OssBody;
 import io.agora.agoravoice.business.server.retrofit.model.requests.Request;
-import io.agora.agoravoice.business.server.retrofit.model.requests.SeatBehavior;
 import io.agora.agoravoice.business.server.retrofit.model.responses.RoomListResp;
 import io.agora.agoravoice.utils.Const;
+import io.agora.agoravoice.utils.UserUtil;
 
 /**
  * Proxy class that the app layer calls for services
@@ -35,21 +42,28 @@ public abstract class BusinessProxy implements
     // 1 means android phone app (rather than a pad app)
     private static final int TERMINAL_TYPE = 1;
 
-    private CoreService mCoreService;
+    private final CoreService mCoreService;
 
     // Custom services
-    private ServerClient mServerClient;
+    private final ServerClient mServerClient;
 
-    private BusinessProxyListener mProxyListener;
+    private final BusinessProxyListener mProxyListener;
+
+    private final BusinessProxyContext mContext;
 
     public BusinessProxy(@NonNull BusinessProxyContext context,
                          @NonNull BusinessProxyListener listener) {
         mProxyListener = listener;
         mCoreService = getCoreService(context);
-        mServerClient = new ServerClient();
+        mServerClient = new ServerClient(context.getAppId());
+        mContext = context;
     }
 
     protected abstract CoreService getCoreService(BusinessProxyContext context);
+
+    public String getServiceVersion() {
+        return mCoreService.getCoreServiceVersion();
+    }
 
     public void checkAppVersion(String version) {
         mServerClient.checkVersion(APP_CODE, OS_TYPE, TERMINAL_TYPE, version, this);
@@ -58,6 +72,14 @@ public abstract class BusinessProxy implements
     @Override
     public void onAppVersionCheckSuccess(AppVersionInfo info) {
         mProxyListener.onCheckVersionSuccess(info);
+    }
+
+    public void uploadLogs(final LogServiceListener listener) {
+        String sourcePath = UserUtil.appLogFolderPath(mContext.getContext());
+        OssBody body = new OssBody(BuildConfig.VERSION_NAME, Build.DEVICE,
+                Build.VERSION.SDK, "ZIP", "Android", "AgoraVoice");
+        LogUploader.upload(mServerClient, mContext.getContext(), mContext.getAppId(),
+                mServerClient.getBaseUrl(), sourcePath, body, listener);
     }
 
     public void requestMusicList() {
@@ -88,9 +110,9 @@ public abstract class BusinessProxy implements
 
         // We have checked that the current user has been logged in
         // to our server, it's time to log to the core service client
-        mCoreService.login(userId, new VoidCallback() {
+        mCoreService.login(userId, new VoiceCallback<Void>() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(Void param) {
                 mProxyListener.onLoginSuccess(userId, userToken, rtmToken);
             }
 
@@ -129,8 +151,8 @@ public abstract class BusinessProxy implements
         handleServiceFail(type, code, msg);
     }
 
-    public void createRoom(String token, String roomName, String image) {
-        mServerClient.createRoom(token, roomName, image, this);
+    public void createRoom(String token, String roomName, String image, int duration, int maxNum) {
+        mServerClient.createRoom(token, roomName, duration, maxNum, image,this);
     }
 
     @Override
@@ -138,26 +160,64 @@ public abstract class BusinessProxy implements
         mProxyListener.onRoomCreated(roomId, roomName);
     }
 
-    public void enterRoom(String roomId, String roomName, String userId,
-                          String userName, Const.Role role, RoomEventListener listener) {
-        if (mCoreService != null) {
-            mCoreService.enterRoom(roomId, roomName, userId, userName, role, listener);
-        }
+    public void enterRoom(String token, String roomId, String roomName,
+                          String userId, String userName, RoomEventListener listener) {
+        mServerClient.join(token, roomId, userId, new UserServiceListener() {
+            @Override
+            public void onUserCreateSuccess(String userId, String userName) {
+
+            }
+
+            @Override
+            public void onUserEditSuccess(String userId, String userName) {
+
+            }
+
+            @Override
+            public void onLoginSuccess(String userId, String userToken, String rtmToken) {
+
+            }
+
+            @Override
+            public void onJoinSuccess(String userId, String streamId, String role) {
+                if (mCoreService != null) {
+                    Logging.d("agora voice join success stream id "
+                            + streamId + " role " + role);
+                    mCoreService.enterRoom(roomId, roomName, userId, userName,
+                            streamId, Const.Role.fromString(role), listener);
+                }
+            }
+
+            @Override
+            public void onUserServiceFailed(int type, int code, String msg) {
+                Logging.d("agora voice join fail stream id " + code + " " + msg);
+                if (type == BusinessType.JOIN) {
+                    listener.onJoinFail(code, msg);
+                }
+            }
+        });
     }
 
-    public void leaveRoom(String roomId) {
-        if (mCoreService != null) {
-            mCoreService.leaveRoom(roomId);
-        }
+    @Override
+    public void onJoinSuccess(String userId, String streamId, String role) {
+        // Not used
+    }
+
+    public void leaveRoom(String token, String roomId, String userId) {
+        mServerClient.leaveRoom(token, roomId, userId, this);
     }
 
     @Override
     public void onLeaveRoom(String roomId) {
+        if (mCoreService != null) {
+            mCoreService.leaveRoom(roomId);
+        }
+
         mProxyListener.onLeaveRoom();
     }
 
     public void destroyRoom(String token, String roomId) {
-        mServerClient.destroyRoom(token, roomId, this);
+        mServerClient.closeRoom(token, roomId, this);
     }
 
     public void getRoomList(@NonNull String token, @Nullable String nextId,
@@ -270,27 +330,41 @@ public abstract class BusinessProxy implements
         mCoreService.setElectronicParams(key, value);
     }
 
-    public void enableLocalAudio(String roomId, boolean publish) {
-        mCoreService.enableLocalAudio(roomId, publish);
+    public void enableLocalAudio() {
+        mCoreService.enableLocalAudio();
     }
 
-    public void disableLocalAudio(String roomId) {
-        mCoreService.disableLocalAudio(roomId);
+    public void disableLocalAudio() {
+        mCoreService.disableLocalAudio();
     }
 
-    public void enableRemoteAudio(String roomId, String userId, boolean enabled) {
+    public void enableRemoteAudio(String userId, boolean enabled) {
         if (enabled) {
-            mCoreService.enableRemoteAudio(roomId, userId);
+            mCoreService.enableRemoteAudio(userId);
         } else {
-            mCoreService.disableRemoteAudio(roomId, userId);
+            mCoreService.disableRemoteAudio(userId);
         }
     }
 
-    public void muteLocalAudio(String roomId, boolean muted) {
-        mCoreService.muteLocalAudio(roomId, muted);
+    public void muteLocalAudio(boolean muted) {
+        mCoreService.muteLocalAudio(muted);
     }
 
-    public void muteRemoteAudio(String roomId, RoomStreamInfo info, boolean muted) {
-        mCoreService.muteRemoteAudio(roomId, info, muted);
+    public void muteRemoteAudio(String userId, boolean muted) {
+        mCoreService.muteRemoteAudio(userId, muted);
+    }
+
+    public void logout() {
+        mCoreService.logout(new VoiceCallback<Void>() {
+            @Override
+            public void onSuccess(Void param) {
+
+            }
+
+            @Override
+            public void onFailure(int code, String reason) {
+
+            }
+        });
     }
 }

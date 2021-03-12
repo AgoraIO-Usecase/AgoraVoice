@@ -1,7 +1,2 @@
-include ':edusdk-impl'
-include ':log'
-include ':rte'
-include ':edusdk-api'
-include ':base'
 include ':app'
 rootProject.name = "AgoraVoice_Android"

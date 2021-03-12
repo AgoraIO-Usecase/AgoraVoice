@@ -13,7 +13,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
@@ -59,6 +58,7 @@ public abstract class AbsLiveActivity extends BaseActivity {
                 boolean plugged = intent.getIntExtra("state", -1) == 1;
                 boolean hasMic = intent.getIntExtra("microphone", -1) == 1;
                 mHeadsetWithMicPlugged = plugged && hasMic;
+                onHeadsetWithMicPlugged(mHeadsetWithMicPlugged);
             }
         }
     };
@@ -66,6 +66,8 @@ public abstract class AbsLiveActivity extends BaseActivity {
     protected boolean headSetWithMicPlugged() {
         return mHeadsetWithMicPlugged;
     }
+
+    protected abstract void onHeadsetWithMicPlugged(boolean plugged);
 
     private NetworkReceiver mNetworkReceiver;
 
@@ -82,7 +84,7 @@ public abstract class AbsLiveActivity extends BaseActivity {
             } else {
                 int type = info.getType();
                 if (ConnectivityManager.TYPE_WIFI == type) {
-                    ToastUtil.showShortToast(context, R.string.network_switch_to_wifi);
+                    // ToastUtil.showShortToast(context, R.string.network_switch_to_wifi);
                 } else if (ConnectivityManager.TYPE_MOBILE == type) {
                     ToastUtil.showShortToast(context, R.string.network_switch_to_mobile);
                 }
@@ -219,11 +221,6 @@ public abstract class AbsLiveActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
     }
 
     @Override
