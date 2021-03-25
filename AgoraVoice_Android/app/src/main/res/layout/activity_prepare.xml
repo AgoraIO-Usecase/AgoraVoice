@@ -69,7 +69,8 @@
             android:textSize="@dimen/text_size_2"
             android:textColor="@android:color/white"
             android:background="@null"
-            android:lines="1"/>
+            android:lines="1"
+            android:singleLine="true"/>
     </RelativeLayout>
 
     <RelativeLayout

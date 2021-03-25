@@ -41,7 +41,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
     private String[] mSoundEffectTypeNames;
     private String[] mSpaceEffectNames;
     private String[] mChangeEffectNames;
-    private String[] mFlavourEffectNames;
+    private String[] mStyleEffectNames;
     private String[] mElectronicKeyNames;
     private String[] mElectronicToneNames;
 
@@ -83,7 +83,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         mSoundEffectTypeNames = getResources().getStringArray(R.array.action_sheet_sound_effect_types);
         mSpaceEffectNames = getResources().getStringArray(R.array.action_sheet_sound_effect_space_names);
         mChangeEffectNames = getResources().getStringArray(R.array.action_sheet_sound_effect_change_names);
-        mFlavourEffectNames = getResources().getStringArray(R.array.action_sheet_sound_effect_flavour_names);
+        mStyleEffectNames = getResources().getStringArray(R.array.action_sheet_sound_effect_style_names);
         mElectronicKeyNames = getResources().getStringArray(R.array.action_sheet_sound_effect_electronic_keys);
         mElectronicToneNames = getResources().getStringArray(R.array.action_sheet_sound_effect_electronic_tones);
 
@@ -94,12 +94,14 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         mListener = listener;
     }
 
-    public void setConfig(Config config) {
+    public void setConfig(@NonNull Config config) {
         mConfig = config;
+        mSelectedKey = mConfig.getElectronicVoiceKey();
+        mSelectedValue = mConfig.getElectronicVoiceValue();
+        changeType(mSelectedType);
     }
 
     private void changeType(int type) {
-        if (mSelectedType == type) return;
         mSelectedType = type;
         mTypeAdapter.notifyDataSetChanged();
         mContentLayout.removeAllViews();
@@ -151,7 +153,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
                 }
             case TYPE_FLAVOUR:
                 if (AudioManager.EFFECT_FLAVOR_RNB <= type &&
-                        type <= AudioManager.EFFECT_FLAVOR_ROCK_N_ROLL) {
+                        type <= AudioManager.EFFECT_FLAVOR_HIP_HOP) {
                     return type - AudioManager.EFFECT_FLAVOR_RNB;
                 } else {
                     return -1;
@@ -189,7 +191,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
     private void initFlavourSoundEffect() {
         RecyclerView recyclerView = new RecyclerView(getContext());
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), GRID_COUNT));
-        recyclerView.setAdapter(new FlavourEffectAdapter());
+        recyclerView.setAdapter(new StyleEffectAdapter());
         mContentLayout.addView(recyclerView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     }
 
@@ -216,20 +218,30 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         mElectronicSwitch = layout.findViewById(R.id.action_sheet_electronic_switch);
         boolean enabled = electronicEnabled();
         mElectronicSwitch.setActivated(enabled);
+        mKeyAdapter.setEnabled(enabled);
+        mValueAdapter.setEnabled(enabled);
+
         mElectronicSwitch.setOnClickListener(view -> {
             if (view.isActivated()) {
                 view.setActivated(false);
-                mSelectedKey = 0;
-                mSelectedValue = 0;
+                mKeyAdapter.setEnabled(false);
+                mValueAdapter.setEnabled(false);
                 if (mListener != null) {
                     mListener.onVoiceBeautyUnselected();
                 }
             } else {
                 view.setActivated(true);
-                // Choose the first electronic parameters
-                // when switch on
-                mSelectedKey = 1;
-                mSelectedValue = 1;
+                mKeyAdapter.setEnabled(true);
+                mValueAdapter.setEnabled(true);
+
+                if (mConfig != null) {
+                    mSelectedKey = mConfig.getElectronicVoiceKey();
+                    mSelectedValue = mConfig.getElectronicVoiceValue();
+                } else {
+                    mSelectedKey = 1;
+                    mSelectedValue = 1;
+                }
+
                 if (mListener != null) {
                     mListener.onVoiceBeautySelected(AudioManager.EFFECT_ELECTRONIC);
                     mListener.onElectronicVoiceParamChanged(mSelectedKey, mSelectedValue);
@@ -398,7 +410,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
         }
     }
 
-    private class FlavourEffectAdapter extends RecyclerView.Adapter<EffectImageViewHolder> {
+    private class StyleEffectAdapter extends RecyclerView.Adapter<EffectImageViewHolder> {
         @NonNull
         @Override
         public EffectImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -411,7 +423,7 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             int pos = holder.getAdapterPosition();
             boolean selected = pos == mSelected3;
             holder.image.setImageResource(VoiceUtil.FLAVOUR_EFFECT_IMAGE_RES[pos]);
-            holder.name.setText(mFlavourEffectNames[pos]);
+            holder.name.setText(mStyleEffectNames[pos]);
             holder.name.setTextColor(selected ? Color.WHITE : TITLE_TEXT_DEFAULT);
             holder.itemView.setActivated(selected);
             holder.itemView.setOnClickListener(view -> {
@@ -432,11 +444,17 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
 
         @Override
         public int getItemCount() {
-            return mFlavourEffectNames.length;
+            return mStyleEffectNames.length;
         }
     }
 
     private class ElectronicKeyAdapter extends RecyclerView.Adapter<ElectronicKeyViewHolder> {
+        private boolean mEnabled;
+
+        void setEnabled(boolean enabled) {
+            mEnabled = enabled;
+        }
+
         @NonNull
         @Override
         public ElectronicKeyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -451,10 +469,10 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             holder.name.setText(mElectronicKeyNames[pos]);
             holder.name.setTextColor(selected ? Color.WHITE : TITLE_TEXT_DEFAULT);
             holder.layout.setActivated(selected);
+            holder.layout.setEnabled(mEnabled);
+            if (!mEnabled) return;
             holder.itemView.setOnClickListener(view -> {
-                if (pos == mSelectedKey - 1) {
-                    mSelectedKey = 0;
-                } else {
+                if (pos != mSelectedKey - 1) {
                     mSelectedKey = pos + 1;
                     if (mListener != null) {
                         mListener.onElectronicVoiceParamChanged(mSelectedKey, mSelectedValue);
@@ -482,6 +500,13 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
     }
 
     private class ElectronicToneAdapter extends RecyclerView.Adapter<ElectronicToneViewHolder> {
+        private boolean mEnabled;
+
+        void setEnabled(boolean enabled) {
+            mEnabled = enabled;
+            notifyDataSetChanged();
+        }
+
         @NonNull
         @Override
         public ElectronicToneViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -496,10 +521,10 @@ public class SoundEffectActionSheet extends AbstractActionSheet {
             holder.name.setText(mElectronicToneNames[pos]);
             holder.name.setTextColor(selected ? Color.WHITE : TITLE_TEXT_DEFAULT);
             holder.layout.setActivated(selected);
+            holder.layout.setEnabled(mEnabled);
+            if (!mEnabled) return;
             holder.itemView.setOnClickListener(view -> {
-                if (pos == mSelectedValue - 1) {
-                    mSelectedValue = 0;
-                } else {
+                if (pos != mSelectedValue - 1) {
                     mSelectedValue = pos + 1;
                     if (mListener != null && electronicEnabled()) {
                         mListener.onElectronicVoiceParamChanged(mSelectedKey, mSelectedValue);

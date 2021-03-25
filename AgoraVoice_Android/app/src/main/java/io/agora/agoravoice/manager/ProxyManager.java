@@ -24,11 +24,10 @@ import io.agora.agoravoice.business.definition.struct.AppVersionInfo;
 import io.agora.agoravoice.business.definition.struct.BusinessType;
 import io.agora.agoravoice.business.definition.struct.GiftInfo;
 import io.agora.agoravoice.business.definition.struct.MusicInfo;
-import io.agora.agoravoice.business.definition.struct.RoomInfo;
+import io.agora.agoravoice.business.log.Logging;
+import io.agora.agoravoice.business.server.retrofit.listener.LogServiceListener;
 import io.agora.agoravoice.business.server.retrofit.model.responses.RoomListResp;
 import io.agora.agoravoice.utils.Const;
-import io.agora.agoravoice.utils.UserUtil;
-import io.agora.education.api.logger.LogLevel;
 
 public class ProxyManager implements BusinessProxyListener {
     private Context mContext;
@@ -48,6 +47,8 @@ public class ProxyManager implements BusinessProxyListener {
     private NetworkStateReceiver mNetworkStateReceiver;
     private boolean mNetworkConnected;
     private int mNetworkType;
+
+    private boolean mInitialized;
 
     public interface GeneralServiceListener {
         void onCheckVersionSuccess(AppVersionInfo info);
@@ -108,31 +109,28 @@ public class ProxyManager implements BusinessProxyListener {
         }
     }
 
-    public ProxyManager(@NonNull Context context) {
-        BusinessProxyContext bContext = new BusinessProxyContext(
-            context,
-            context.getString(R.string.app_id),
-            context.getString(R.string.customer_id),
-            context.getString(R.string.customer_certificate),
-            UserUtil.appLogFolderPath(context),
-            LogLevel.INFO.getValue()
-        );
-
-        mContext = context;
-        mBusinessProxy = BusinessProxyBuilder.create(bContext, this);
-        mGeneralManager = new GeneralManager(mBusinessProxy);
-        mUserManager = new UserManager(mBusinessProxy);
-        mRoomManager = new RoomManager(mBusinessProxy);
-        mAudioManager = new AudioManager(mBusinessProxy);
+    public ProxyManager(@NonNull BusinessProxyContext context) {
+        mContext = context.getContext();
         mGeneralServiceListeners = new ArrayList<>();
         mUserServiceListeners = new ArrayList<>();
         mRoomServiceListeners = new ArrayList<>();
         mNetworkStateListeners = new ArrayList<>();
         mSeatListeners = new ArrayList<>();
         mSeatManagerMap = new HashMap<>();
-
-        checkNetworkState(context);
+        checkNetworkState(mContext);
         registerNetworkStateReceiver();
+        mBusinessProxy = BusinessProxyBuilder.create(context, this);
+        mGeneralManager = new GeneralManager(mBusinessProxy);
+        mUserManager = new UserManager(mBusinessProxy);
+        mRoomManager = new RoomManager(mBusinessProxy);
+        mAudioManager = new AudioManager(mBusinessProxy);
+    }
+
+    public ProxyManager(@NonNull Context context) {
+        this(new BusinessProxyContext(context,
+                context.getString(R.string.app_id),
+                context.getString(R.string.customer_id),
+                context.getString(R.string.customer_certificate)));
     }
 
     private void checkNetworkState(Context context) {
@@ -223,100 +221,41 @@ public class ProxyManager implements BusinessProxyListener {
         mGeneralManager.checkVersion(version);
     }
 
-    @Override
-    public void onCheckVersionSuccess(AppVersionInfo info) {
-        for (GeneralServiceListener listener : mGeneralServiceListeners) {
-            listener.onCheckVersionSuccess(info);
-        }
+    public void uploadLogs(LogServiceListener listener) {
+        mGeneralManager.uploadLogs(listener);
     }
 
     public void getMusicList() {
         mGeneralManager.getMusicList();
     }
 
-    @Override
-    public void onGetMustList(List<MusicInfo> info) {
-        for (GeneralServiceListener listener : mGeneralServiceListeners) {
-            listener.onMusicList(info);
-        }
-    }
-
-    @Override
-    public void onGetGiftList(List<GiftInfo> info) {
-        for (GeneralServiceListener listener : mGeneralServiceListeners) {
-            listener.onGiftList(info);
-        }
-    }
-
     public void createUser(String userName) {
         mUserManager.createUser(userName);
-    }
-
-    @Override
-    public void onCreateUser(String userId, String userName) {
-        for (UserServiceListener listener : mUserServiceListeners) {
-            listener.onUserCreated(userId, userName);
-        }
     }
 
     public void editUser(String token, String userId, String userName) {
         mUserManager.editUser(token, userId, userName);
     }
 
-    @Override
-    public void onEditUserSuccess(String userId, String userName) {
-        for (UserServiceListener listener : mUserServiceListeners) {
-            listener.onEditUser(userId, userName);
-        }
-    }
-
     public void login(String userId) {
         mUserManager.login(userId);
     }
 
-    @Override
-    public void onLoginSuccess(String userId, String userToken, String rtmToken) {
-        for (UserServiceListener listener : mUserServiceListeners) {
-            listener.onLoginSuccess(userId, userToken, rtmToken);
-        }
-    }
-
-    public void createRoom(String token, String roomName, String image) {
-        mRoomManager.createRoom(token, roomName, image);
-    }
-
-    @Override
-    public void onRoomCreated(String roomId, String roomName) {
-        for (RoomServiceListener listener : mRoomServiceListeners) {
-            listener.onRoomCreated(roomId, roomName);
-        }
+    public void createRoom(String token, String roomName, String image, int duration, int maxNum) {
+        mRoomManager.createRoom(token, roomName, image, duration, maxNum);
     }
 
     public void getRoomList(String token, String nextId, int count, int type) {
         mRoomManager.getRoomList(token, nextId, count, type);
     }
 
-    @Override
-    public void onGetRoomList(String nextId, int total, List<RoomListResp.RoomListItem> list) {
-        for (RoomServiceListener listener : mRoomServiceListeners) {
-            listener.onGetRoomList(nextId, total, list);
-        }
+    public void enterRoom(String token, String roomId, String roomName, String userId,
+                          String userName, RoomEventListener listener) {
+        mRoomManager.enterRoom(token, roomId, roomName, userId, userName, listener);
     }
 
-    public void enterRoom(String roomId, String roomName, String userId,
-                          String userName, Const.Role role, RoomEventListener listener) {
-        mRoomManager.enterRoom(roomId, roomName, userId, userName, role, listener);
-    }
-
-    public void leaveRoom(String token, String roomId) {
-        mRoomManager.leaveRoom(token, roomId);
-    }
-
-    @Override
-    public void onLeaveRoom() {
-        for (RoomServiceListener listener : mRoomServiceListeners) {
-            listener.onLeaveRoom();
-        }
+    public void leaveRoom(String token, String roomId, String userId) {
+        mRoomManager.leaveRoom(token, roomId, userId);
     }
 
     public void destroyRoom(String token, String roomId) {
@@ -338,16 +277,19 @@ public class ProxyManager implements BusinessProxyListener {
     }
 
     public void createSeatManager(String roomId) {
-        if (!mSeatManagerMap.containsKey(roomId)) {
-            mSeatManagerMap.remove(roomId);
-        }
-
+        mSeatManagerMap.remove(roomId);
         InvitationManager manager = new InvitationManager(roomId, mBusinessProxy);
         mSeatManagerMap.put(roomId, manager);
     }
 
     public void removeSeatManager(String roomId) {
-        mSeatManagerMap.remove(roomId);
+        synchronized (this) {
+            // To avoid frequently call this remove method
+            // in a short time, when conflicts may occur for
+            // the outside world.
+            Logging.d("remove invitation manager, room id " + roomId);
+            mSeatManagerMap.remove(roomId);
+        }
     }
 
     public int requestSeatBehavior(String token, String roomId, String userId, String userName, int no, int type) {
@@ -363,6 +305,74 @@ public class ProxyManager implements BusinessProxyListener {
         return mSeatManagerMap.get(roomId);
     }
 
+    public void changeSeatState(String token, String roomId, int no, int state) {
+        InvitationManager manager = mSeatManagerMap.get(roomId);
+        if (manager != null) manager.requestSeatStateChange(token, roomId, no, state);
+    }
+
+    @Override
+    public void onCheckVersionSuccess(AppVersionInfo info) {
+        for (GeneralServiceListener listener : mGeneralServiceListeners) {
+            listener.onCheckVersionSuccess(info);
+        }
+    }
+
+    @Override
+    public void onGetMustList(List<MusicInfo> info) {
+        for (GeneralServiceListener listener : mGeneralServiceListeners) {
+            listener.onMusicList(info);
+        }
+    }
+
+    @Override
+    public void onGetGiftList(List<GiftInfo> info) {
+        for (GeneralServiceListener listener : mGeneralServiceListeners) {
+            listener.onGiftList(info);
+        }
+    }
+
+    @Override
+    public void onCreateUser(String userId, String userName) {
+        for (UserServiceListener listener : mUserServiceListeners) {
+            listener.onUserCreated(userId, userName);
+        }
+    }
+
+    @Override
+    public void onEditUserSuccess(String userId, String userName) {
+        for (UserServiceListener listener : mUserServiceListeners) {
+            listener.onEditUser(userId, userName);
+        }
+    }
+
+    @Override
+    public void onLoginSuccess(String userId, String userToken, String rtmToken) {
+        for (UserServiceListener listener : mUserServiceListeners) {
+            listener.onLoginSuccess(userId, userToken, rtmToken);
+        }
+    }
+
+    @Override
+    public void onRoomCreated(String roomId, String roomName) {
+        for (RoomServiceListener listener : mRoomServiceListeners) {
+            listener.onRoomCreated(roomId, roomName);
+        }
+    }
+
+    @Override
+    public void onLeaveRoom() {
+        for (RoomServiceListener listener : mRoomServiceListeners) {
+            listener.onLeaveRoom();
+        }
+    }
+
+    @Override
+    public void onGetRoomList(String nextId, int total, List<RoomListResp.RoomListItem> list) {
+        for (RoomServiceListener listener : mRoomServiceListeners) {
+            listener.onGetRoomList(nextId, total, list);
+        }
+    }
+
     @Override
     public void onSeatBehaviorSuccess(int type, String userId, String userName, int no) {
         for (SeatListener listener : mSeatListeners) {
@@ -375,11 +385,6 @@ public class ProxyManager implements BusinessProxyListener {
         for (SeatListener listener : mSeatListeners) {
             listener.onSeatBehaviorFail(type, userId, userName, no, code, msg);
         }
-    }
-
-    public void changeSeatState(String token, String roomId, int no, int state) {
-        InvitationManager manager = mSeatManagerMap.get(roomId);
-        if (manager != null) manager.requestSeatStateChange(token, roomId, no, state);
     }
 
     @Override
@@ -407,6 +412,8 @@ public class ProxyManager implements BusinessProxyListener {
                 }
                 break;
             case BusinessType.LOGIN:
+            case BusinessType.CREATE_USER:
+            case BusinessType.JOIN:
                 for (UserServiceListener listener : mUserServiceListeners) {
                     listener.onUserServiceFailed(type, code, message);
                 }
@@ -424,9 +431,16 @@ public class ProxyManager implements BusinessProxyListener {
         return mAudioManager;
     }
 
+    public String getServiceVersion() {
+        return mBusinessProxy.getServiceVersion();
+    }
+
+    public void logout() {
+        mBusinessProxy.logout();
+    }
+
     public void release() {
         unregisterNetworkStateReceiver();
-
         mGeneralServiceListeners.clear();
         mUserServiceListeners.clear();
         mRoomServiceListeners.clear();

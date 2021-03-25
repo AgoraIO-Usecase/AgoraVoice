@@ -1,18 +1,23 @@
 package io.agora.agoravoice.business.server;
 
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 
-import com.elvishew.xlog.XLog;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import io.agora.agoravoice.BuildConfig;
+import io.agora.agoravoice.business.log.Logging;
 import io.agora.agoravoice.business.server.retrofit.interfaces.GeneralService;
+import io.agora.agoravoice.business.server.retrofit.interfaces.LogService;
 import io.agora.agoravoice.business.server.retrofit.interfaces.SeatService;
 import io.agora.agoravoice.business.server.retrofit.interfaces.RoomService;
 import io.agora.agoravoice.business.server.retrofit.interfaces.UserService;
 import io.agora.agoravoice.business.server.retrofit.listener.GeneralServiceListener;
+import io.agora.agoravoice.business.log.LogUploaderListener;
 import io.agora.agoravoice.business.server.retrofit.listener.RoomServiceListener;
 import io.agora.agoravoice.business.server.retrofit.listener.SeatServiceListener;
 import io.agora.agoravoice.business.server.retrofit.listener.UserServiceListener;
@@ -21,6 +26,7 @@ import io.agora.agoravoice.business.server.retrofit.model.body.CreateRoomBody;
 import io.agora.agoravoice.business.server.retrofit.model.body.CreateUserBody;
 import io.agora.agoravoice.business.server.retrofit.model.body.EditUserBody;
 import io.agora.agoravoice.business.server.retrofit.model.body.ModifyRoomBody;
+import io.agora.agoravoice.business.server.retrofit.model.body.OssBody;
 import io.agora.agoravoice.business.server.retrofit.model.body.SeatBehaviorBody;
 import io.agora.agoravoice.business.server.retrofit.model.body.LoginBody;
 import io.agora.agoravoice.business.server.retrofit.model.body.SeatStateBody;
@@ -29,8 +35,10 @@ import io.agora.agoravoice.business.server.retrofit.model.requests.Request;
 import io.agora.agoravoice.business.server.retrofit.model.responses.BooleanResp;
 import io.agora.agoravoice.business.server.retrofit.model.responses.CreateUserResp;
 import io.agora.agoravoice.business.server.retrofit.model.responses.GiftListResp;
+import io.agora.agoravoice.business.server.retrofit.model.responses.JoinResp;
 import io.agora.agoravoice.business.server.retrofit.model.responses.LoginResp;
 import io.agora.agoravoice.business.server.retrofit.model.responses.MusicResp;
+import io.agora.agoravoice.business.server.retrofit.model.responses.OssResp;
 import io.agora.agoravoice.business.server.retrofit.model.responses.Resp;
 import io.agora.agoravoice.business.server.retrofit.model.responses.RoomListResp;
 import io.agora.agoravoice.business.server.retrofit.model.responses.StringResp;
@@ -42,55 +50,91 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Url;
 import retrofit2.internal.EverythingIsNonNull;
 
 public class ServerClient {
-    private static final String SERVER_HOST_DEV = "https://api-solutions-dev.sh.agoralab.co";
-    private static final String SERVER_HOST_PRODUCT = "https://api-solutions.sh2.agoralab.co";
+    private static final String SERVER_HOST_PRODUCT = "https://api.agora.io/";
+    private static final String OSS_HOST_PRODUCT = "https://api-solutions.agoralab.co/";
     private static final String ERROR_UNKNOWN_MSG = "";
+    private static final String API_ROOT_PATH = "ent/voice";
 
     private static final int MAX_RESPONSE_THREAD = 10;
     private static final int DEFAULT_TIMEOUT_IN_SECONDS = 30;
 
     private static final int ERROR_OK = 0;
-    private static final int ERROR_UNKNOWN = -1;
-    private static final int ERROR_CONNECTION = -2;
+    public static final int ERROR_UNKNOWN = -1;
+    public static final int ERROR_CONNECTION = -2;
 
-    private GeneralService mGeneralService;
-    private UserService mUserService;
-    private RoomService mRoomService;
-    private SeatService mSeatService;
+    private final GeneralService mGeneralService;
+    private final UserService mUserService;
+    private final RoomService mRoomService;
+    private final SeatService mSeatService;
+    private final LogService mLogService;
 
-    public ServerClient() {
+    private String mAppId;
+
+    public ServerClient(String appId) {
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .connectTimeout(DEFAULT_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
                 .readTimeout(DEFAULT_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
                 .writeTimeout(DEFAULT_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
                 .build();
 
-        String baseUrl = BuildConfig.DEBUG ? SERVER_HOST_DEV : SERVER_HOST_PRODUCT;
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(SERVER_HOST_PRODUCT)
                 .client(okHttpClient)
                 .callbackExecutor(Executors.newFixedThreadPool(MAX_RESPONSE_THREAD))
                 .addConverterFactory(GsonConverterFactory.create());
 
-        if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(XLog::d);
-            interceptor.level(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-            builder.client(client);
-        }
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(Logging::d);
+        interceptor.level(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+        builder.client(client);
 
         Retrofit retrofit = builder.build();
         mGeneralService = retrofit.create(GeneralService.class);
         mUserService = retrofit.create(UserService.class);
         mRoomService = retrofit.create(RoomService.class);
         mSeatService = retrofit.create(SeatService.class);
+
+        builder = new Retrofit.Builder()
+                .baseUrl(OSS_HOST_PRODUCT)
+                .client(okHttpClient)
+                .callbackExecutor(Executors.newFixedThreadPool(MAX_RESPONSE_THREAD))
+                .addConverterFactory(GsonConverterFactory.create());
+        builder.client(client);
+        retrofit = builder.build();
+
+        mLogService = retrofit.create(LogService.class);
+
+        mAppId = appId;
     }
 
-    public void checkVersion(@NonNull String appCode, int osType, int terminalType,
-                             @NonNull String version, @NonNull GeneralServiceListener listener) {
+    public ServerClient() {
+        this(null);
+    }
+
+    public void setAppId(String appId) {
+        mAppId = appId;
+    }
+
+    /**
+     * @return the service bridge path, used to navigate the
+     * different services of scenarios of servers. This path
+     * is relatively fixed but configurable when needed
+     */
+    private String getRootPath() {
+        return API_ROOT_PATH;
+    }
+
+    public String getBaseUrl() {
+        return SERVER_HOST_PRODUCT;
+    }
+
+    @EverythingIsNonNull
+    public void checkVersion(String appCode, int osType, int terminalType,
+                             String version, GeneralServiceListener listener) {
         mGeneralService.checkVersion(appCode, osType, terminalType, version).enqueue(new Callback<VersionResp>() {
             @Override
             @EverythingIsNonNull
@@ -137,7 +181,7 @@ public class ServerClient {
     }
 
     public void giftList(GeneralServiceListener listener) {
-        mGeneralService.getGiftList().enqueue(new Callback<GiftListResp>() {
+        mGeneralService.getGiftList(getRootPath()).enqueue(new Callback<GiftListResp>() {
             @Override
             @EverythingIsNonNull
             public void onResponse(Call<GiftListResp> call, Response<GiftListResp> response) {
@@ -159,8 +203,47 @@ public class ServerClient {
         });
     }
 
-    public void createUser(@NonNull String userName, @NonNull UserServiceListener listener) {
-        mUserService.createUser(new CreateUserBody(userName)).enqueue(new Callback<CreateUserResp>() {
+    @EverythingIsNonNull
+    public void getOssParams(String appId, OssBody body, LogUploaderListener listener) {
+        mLogService.getOssParams(appId, body).enqueue(new Callback<OssResp>() {
+            @Override
+            public void onResponse(Call<OssResp> call, Response<OssResp> response) {
+                OssResp resp = response.body();
+                if (resp == null || resp.data == null) {
+                    listener.onOssParamsFail(Request.UPLOAD_LOGS_OSS, ERROR_UNKNOWN, ERROR_UNKNOWN_MSG);
+                } else if (resp.code != ERROR_OK) {
+                    listener.onOssParamsFail(Request.UPLOAD_LOGS_OSS, resp.code, resp.msg);
+                } else {
+                    listener.onOssParamsResponse(resp);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OssResp> call, Throwable t) {
+                listener.onOssParamsFail(Request.UPLOAD_LOGS_OSS, ERROR_CONNECTION, t.getMessage());
+            }
+        });
+    }
+
+    public Call<StringResp> logStsCallback(@Url String url) {
+        return mLogService.logStsCallback(url);
+    }
+
+    private boolean appIdValid() {
+        if (TextUtils.isEmpty(mAppId)) {
+            Logging.e("createUser app id is empty");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @EverythingIsNonNull
+    public void createUser(String userName, UserServiceListener listener) {
+        if (!appIdValid()) return;
+
+        mUserService.createUser(getRootPath(), mAppId,
+                new CreateUserBody(userName)).enqueue(new Callback<CreateUserResp>() {
             @Override
             @EverythingIsNonNull
             public void onResponse(Call<CreateUserResp> call, Response<CreateUserResp> response) {
@@ -182,9 +265,13 @@ public class ServerClient {
         });
     }
 
-    public void editUserSuccess(@NonNull String token, @NonNull final String userId,
-                                @NonNull final String userName, @NonNull UserServiceListener listener) {
-        mUserService.editUser(token, userId, new EditUserBody(userName)).enqueue(new Callback<BooleanResp>() {
+    @EverythingIsNonNull
+    public void editUserSuccess(String token, final String userId,
+                                final String userName, UserServiceListener listener) {
+        if (!appIdValid()) return;
+
+        mUserService.editUser(getRootPath(), mAppId, token, userId,
+                new EditUserBody(userName)).enqueue(new Callback<BooleanResp>() {
             @Override
             @EverythingIsNonNull
             public void onResponse(Call<BooleanResp> call, Response<BooleanResp> response) {
@@ -207,7 +294,9 @@ public class ServerClient {
     }
 
     public void login(@NonNull String userId, @NonNull UserServiceListener listener) {
-        mUserService.login(new LoginBody(userId)).enqueue(new Callback<LoginResp>() {
+        if (!appIdValid()) return;
+
+        mUserService.login(getRootPath(), mAppId, new LoginBody(userId)).enqueue(new Callback<LoginResp>() {
             @Override
             @EverythingIsNonNull
             public void onResponse(Call<LoginResp> call, Response<LoginResp> response) {
@@ -229,9 +318,45 @@ public class ServerClient {
         });
     }
 
-    public void createRoom(@NonNull String token, @NonNull String roomName,
-                           @NonNull String image, @NonNull RoomServiceListener listener) {
-        mRoomService.createRoom(token, new CreateRoomBody(roomName, image)).enqueue(new Callback<StringResp>() {
+    public void join(@NonNull String token, @NonNull String roomId,
+                     @NonNull String userId, @NonNull UserServiceListener listener) {
+        mUserService.join(token, getRootPath(), mAppId, roomId, userId).enqueue(new Callback<JoinResp>() {
+            @Override
+            @EverythingIsNonNull
+            public void onResponse(Call<JoinResp> call, Response<JoinResp> response) {
+                JoinResp resp = response.body();
+                if (resp != null && resp.data != null) {
+                    if (resp.code == ERROR_OK) {
+                        listener.onJoinSuccess(userId, resp.data.streamId, resp.data.role);
+                    } else {
+                        listener.onUserServiceFailed(Request.JOIN, resp.code, resp.msg);
+                    }
+                } else {
+                    try {
+                        String message = response.errorBody().string();
+                        Resp r = new Gson().fromJson(message, Resp.class);
+                        listener.onUserServiceFailed(Request.JOIN, r.code, r.msg);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            @EverythingIsNonNull
+            public void onFailure(Call<JoinResp> call, Throwable t) {
+                listener.onUserServiceFailed(Request.JOIN, ERROR_CONNECTION, t.getMessage());
+            }
+        });
+    }
+
+    @EverythingIsNonNull
+    public void createRoom(String token, String roomName, int duration, int maxNum,
+                           String image, @NonNull RoomServiceListener listener) {
+        if (!appIdValid()) return;
+
+        mRoomService.createRoom(getRootPath(), mAppId, token,
+                new CreateRoomBody(roomName, image, duration, maxNum)).enqueue(new Callback<StringResp>() {
             @Override
             @EverythingIsNonNull
             public void onResponse(Call<StringResp> call, Response<StringResp> response) {
@@ -253,8 +378,11 @@ public class ServerClient {
         });
     }
 
-    public void destroyRoom(@NonNull String token, @NonNull String roomId, @NonNull RoomServiceListener listener) {
-        mRoomService.destroyRoom(token, roomId).enqueue(new Callback<BooleanResp>() {
+    @EverythingIsNonNull
+    public void closeRoom(String token, String roomId, RoomServiceListener listener) {
+        if (!appIdValid()) return;
+
+        mRoomService.closeRoom(getRootPath(), mAppId, token, roomId).enqueue(new Callback<BooleanResp>() {
             @Override
             @EverythingIsNonNull
             public void onResponse(Call<BooleanResp> call, Response<BooleanResp> response) {
@@ -276,9 +404,37 @@ public class ServerClient {
         });
     }
 
-    public void getRoomList(@NonNull String token, final String nextId,
-                            int count, int type, @NonNull RoomServiceListener listener) {
-        mRoomService.getRoomList(token, nextId, count, type).enqueue(new Callback<RoomListResp>() {
+    @EverythingIsNonNull
+    public void leaveRoom(String token, String roomId, String userId, RoomServiceListener listener) {
+        if (!appIdValid()) return;
+
+        mRoomService.leaveRoom(getRootPath(), token, mAppId, roomId, userId).enqueue(new Callback<BooleanResp>() {
+            @Override
+            public void onResponse(Call<BooleanResp> call, Response<BooleanResp> response) {
+                BooleanResp resp = response.body();
+                if (resp == null) {
+                    listener.onRoomServiceFailed(Request.LEAVE_ROOM, ERROR_UNKNOWN, ERROR_UNKNOWN_MSG);
+                } else if (resp.code != ERROR_OK) {
+                    listener.onRoomServiceFailed(Request.LEAVE_ROOM, resp.code, resp.msg);
+                } else {
+                    listener.onLeaveRoom(roomId);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BooleanResp> call, Throwable t) {
+                listener.onRoomServiceFailed(Request.LEAVE_ROOM, ERROR_CONNECTION, t.getMessage());
+            }
+        });
+    }
+
+    @EverythingIsNonNull
+    public void getRoomList(String token, final String nextId,
+                            int count, int type, RoomServiceListener listener) {
+        if (!appIdValid()) return;
+
+        mRoomService.getRoomList(getRootPath(), mAppId, token, nextId,
+                count, type).enqueue(new Callback<RoomListResp>() {
             @Override
             @EverythingIsNonNull
             public void onResponse(Call<RoomListResp> call, Response<RoomListResp> response) {
@@ -300,9 +456,12 @@ public class ServerClient {
         });
     }
 
-    public void sendGift(@NonNull String token, @NonNull String roomId,
-                         @NonNull String giftId, int count, @NonNull RoomServiceListener listener) {
-        mRoomService.sendGift(token, roomId, new SendGiftBody(giftId, count))
+    @EverythingIsNonNull
+    public void sendGift(String token, String roomId,
+                         String giftId, int count, RoomServiceListener listener) {
+        if (!appIdValid()) return;
+
+        mRoomService.sendGift(getRootPath(), mAppId, token, roomId, new SendGiftBody(giftId, count))
             .enqueue(new Callback<BooleanResp>() {
                 @Override
                 @EverythingIsNonNull
@@ -323,9 +482,12 @@ public class ServerClient {
             });
     }
 
-    public void modifyRoom(@NonNull String token, @NonNull String roomId,
-                           String backgroundId, @NonNull RoomServiceListener listener) {
-        mRoomService.modifyRoom(token, roomId, new ModifyRoomBody(backgroundId))
+    @EverythingIsNonNull
+    public void modifyRoom(String token, String roomId,
+                           String backgroundId, RoomServiceListener listener) {
+        if (!appIdValid()) return;
+
+        mRoomService.modifyRoom(getRootPath(), mAppId, token, roomId, new ModifyRoomBody(backgroundId))
                 .enqueue(new Callback<BooleanResp>() {
             @Override
             @EverythingIsNonNull
@@ -371,10 +533,12 @@ public class ServerClient {
         );
     }
 
-    public void requestSeatBehavior(@NonNull String token, @NonNull String roomId,
-                                    @NonNull String userId, String userName,
+    @EverythingIsNonNull
+    public void requestSeatBehavior(String token, String roomId, String userId, String userName,
                                     int no, int type, SeatServiceListener listener) {
-        mSeatService.requestSeatBehavior(token, roomId, userId,
+        if (!appIdValid()) return;
+
+        mSeatService.requestSeatBehavior(getRootPath(), mAppId, token, roomId, userId,
                 new SeatBehaviorBody(no, type)).enqueue(new Callback<StringResp>() {
             @Override
             @EverythingIsNonNull
@@ -397,9 +561,13 @@ public class ServerClient {
         });
     }
 
-    public void requestSeatStateChange(@NonNull String token, @NonNull String roomId,
+    @EverythingIsNonNull
+    public void requestSeatStateChange(String token, String roomId,
                                        int no, int state, SeatServiceListener listener) {
-        mSeatService.modifySeatState(token, roomId, new SeatStateBody(no, state)).enqueue(new Callback<BooleanResp>() {
+        if (!appIdValid()) return;
+
+        mSeatService.modifySeatState(getRootPath(), mAppId, token, roomId,
+                new SeatStateBody(no, state)).enqueue(new Callback<BooleanResp>() {
             @Override
             @EverythingIsNonNull
             public void onResponse(Call<BooleanResp> call, Response<BooleanResp> response) {

@@ -1,33 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/dialog_width"
-    android:layout_height="@dimen/dialog_height"
+    android:layout_height="@dimen/dialog_height_low"
     android:background="@drawable/dialog_background">
     <LinearLayout
         android:id="@+id/dialog_text_area"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dialog_content_height"
+        android:layout_height="@dimen/dialog_content_height_low"
         android:orientation="vertical">
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/dialog_title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:textSize="@dimen/text_size_2"
-            android:textAlignment="gravity"
-            android:gravity="center"
-            android:textColor="@android:color/black"/>
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/dialog_message"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:paddingStart="@dimen/margin_3"
-            android:paddingEnd="@dimen/margin_3"
             android:textSize="@dimen/text_size_1_1"
             android:textAlignment="gravity"
-            android:gravity="center_horizontal|top"
-            android:textColor="@color/gray_1"/>
+            android:gravity="center"
+            android:layout_margin="@dimen/margin_1"
+            android:textColor="@android:color/black"/>
     </LinearLayout>
     <View
         android:id="@+id/dialog_divider"

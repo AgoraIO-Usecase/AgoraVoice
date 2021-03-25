@@ -54,9 +54,9 @@ public class HostPanelOperateActionSheet extends AbstractActionSheet {
     private int[] mOpenSeatOwnerOps = { SeatOps.INVITE, SeatOps.BLOCK };
     private int[] mBlockSeatOps = { SeatOps.UNBLOCK };
     private int[] mTakenSeatOwnerOps = { SeatOps.MUTE, SeatOps.FORCE_LEAVE, SeatOps.BLOCK };
-    private int[] mTakenSeatHostOps = { SeatOps.MUTE, SeatOps.LEAVE };
+    private int[] mTakenSeatHostOps = { SeatOps.LEAVE };
     private int[] mMutedSeatOwnerOps = { SeatOps.UN_MUTE, SeatOps.FORCE_LEAVE, SeatOps.BLOCK };
-    private int[] mMutedSeatHostOps = { SeatOps.UN_MUTE, SeatOps.LEAVE };
+    private int[] mMutedSeatHostOps = { SeatOps.LEAVE };
     private int[] mAudienceOps = { SeatOps.APPLY };
 
     private OperateAdapter mAdapter;
@@ -126,7 +126,6 @@ public class HostPanelOperateActionSheet extends AbstractActionSheet {
             } else if (mState == ChatRoomHostPanel.Seat.STATE_BLOCK) {
                 opArray = mBlockSeatOps;
             } else if (mState == ChatRoomHostPanel.Seat.STATE_TAKEN && mSeat != null) {
-
                 boolean hasAudio = mSeat.getStreamInfo() != null && mSeat.getStreamInfo().enableAudio;
                 if (mIsOwner) {
                     if (!hasAudio) {

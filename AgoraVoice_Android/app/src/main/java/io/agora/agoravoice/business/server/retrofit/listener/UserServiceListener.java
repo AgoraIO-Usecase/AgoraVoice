@@ -7,5 +7,7 @@ public interface UserServiceListener {
 
     void onLoginSuccess(String userId, String userToken, String rtmToken);
 
+    void onJoinSuccess(String userId, String streamId, String role);
+
     void onUserServiceFailed(int type, int code, String msg);
 }

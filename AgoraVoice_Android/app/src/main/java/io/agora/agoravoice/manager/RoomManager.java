@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 
 import io.agora.agoravoice.business.BusinessProxy;
 import io.agora.agoravoice.business.definition.interfaces.RoomEventListener;
-import io.agora.agoravoice.business.server.retrofit.listener.RoomServiceListener;
-import io.agora.agoravoice.utils.Const;
 
 public class RoomManager {
     private BusinessProxy mProxy;
@@ -14,21 +12,21 @@ public class RoomManager {
         mProxy = proxy;
     }
 
-    public void createRoom(String token, String roomName, String image) {
-        mProxy.createRoom(token, roomName, image);
+    public void createRoom(String token, String roomName, String image, int duration, int maxNum) {
+        mProxy.createRoom(token, roomName, image, duration, maxNum);
     }
 
     public void getRoomList(String token, String nextId, int count, int type) {
         mProxy.getRoomList(token, nextId, count, type);
     }
 
-    public void enterRoom(String roomId, String roomName, String userId,
-                          String userName, Const.Role role, RoomEventListener listener) {
-        mProxy.enterRoom(roomId, roomName, userId, userName, role, listener);
+    public void enterRoom(String token, String roomId, String roomName, String userId,
+                          String userName, RoomEventListener listener) {
+        mProxy.enterRoom(token, roomId, roomName, userId, userName, listener);
     }
 
-    public void leaveRoom(String token, String roomId) {
-        mProxy.leaveRoom(roomId);
+    public void leaveRoom(String token, String roomId, String userId) {
+        mProxy.leaveRoom(token, roomId, userId);
     }
 
     public void sendGift(String token, String roomId, String giftId, int count) {

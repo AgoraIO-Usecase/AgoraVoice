@@ -6,10 +6,12 @@ import io.agora.agoravoice.business.definition.struct.RoomStreamInfo;
 import io.agora.agoravoice.utils.Const;
 
 public interface CoreService {
-    void login(String uid, VoidCallback callback);
+    void login(String uid, VoiceCallback<Void> callback);
 
-    void enterRoom(String roomId, String roomName, String userId,
-                   String userName, Const.Role role, RoomEventListener listener);
+    void logout(VoiceCallback<Void> callback);
+
+    void enterRoom(String roomId, String roomName, String userId, String userName,
+                   String streamId, Const.Role role, RoomEventListener listener);
 
     void leaveRoom(@NonNull String roomId);
 
@@ -31,15 +33,17 @@ public interface CoreService {
 
     void setElectronicParams(int key, int value);
 
-    void enableLocalAudio(String roomId, boolean publish);
+    void enableLocalAudio();
 
-    void disableLocalAudio(String roomId);
+    void disableLocalAudio();
 
-    void enableRemoteAudio(String roomId, String userId);
+    void enableRemoteAudio(String userId);
 
-    void disableRemoteAudio(String roomId, String userId);
+    void disableRemoteAudio(String userId);
 
-    void muteLocalAudio(String roomId, boolean muted);
+    void muteLocalAudio(boolean muted);
 
-    void muteRemoteAudio(String roomId, RoomStreamInfo info, boolean muted);
+    void muteRemoteAudio(String userId, boolean muted);
+
+    String getCoreServiceVersion();
 }

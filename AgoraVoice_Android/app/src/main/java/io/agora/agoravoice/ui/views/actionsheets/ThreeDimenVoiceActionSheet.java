@@ -14,6 +14,7 @@ import io.agora.agoravoice.manager.AudioManager;
 public class ThreeDimenVoiceActionSheet extends AbstractActionSheet
         implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     private static final int MAX_VOICE_SPEED = 60;
+    private static final int MIN_VOICE_SPEED = 1;
 
     public interface ThreeDimenVoiceActionListener {
         void onThreeDimenVoiceEnabled(boolean enabled);
@@ -44,14 +45,11 @@ public class ThreeDimenVoiceActionSheet extends AbstractActionSheet
         mSwitch.setOnClickListener(view -> {
             if (view.isActivated()) {
                 view.setActivated(false);
-                if (mConfig != null) mConfig.set3DVoiceSpeed(0);
-                mValueBar.setProgress(0);
                 mValueBar.setEnabled(false);
                 if (mListener != null) mListener.onThreeDimenVoiceEnabled(false);
             } else {
                 view.setActivated(true);
                 mValueBar.setEnabled(true);
-                mValueBar.setProgress(getVoiceSpeed());
                 if (mListener != null) mListener.onThreeDimenVoiceEnabled(true);
             }
         });
@@ -75,13 +73,12 @@ public class ThreeDimenVoiceActionSheet extends AbstractActionSheet
     }
 
     public void setup() {
+        mValueBar.setProgress(getVoiceSpeed());
         if (threeDimenVoiceEnabled()) {
             mSwitch.setActivated(true);
-            mValueBar.setProgress(getVoiceSpeed());
             mValueBar.setEnabled(true);
         } else {
             mSwitch.setActivated(false);
-            mValueBar.setProgress(0);
             mValueBar.setEnabled(false);
         }
     }
@@ -107,6 +104,11 @@ public class ThreeDimenVoiceActionSheet extends AbstractActionSheet
     public void onStopTrackingTouch(SeekBar seekBar) {
         if (threeDimenVoiceEnabled() && mListener != null) {
             int progress = seekBar.getProgress();
+            if (progress < MIN_VOICE_SPEED) {
+                seekBar.setProgress(MIN_VOICE_SPEED);
+                progress = MIN_VOICE_SPEED;
+            }
+
             mListener.onThreeDimenVoiceSpeedChanged(
                     progress < 0 ? 0 : Math.min(progress, MAX_VOICE_SPEED));
         }

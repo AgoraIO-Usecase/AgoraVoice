@@ -49,10 +49,10 @@ public class AudioManager {
 
     public static final int EFFECT_FLAVOR_RNB = 32;
     public static final int EFFECT_FLAVOR_POP = 33;
-    public static final int EFFECT_FLAVOR_HIP_HOP = 34;
-    public static final int EFFECT_FLAVOR_ROCK_N_ROLL = 35;
+    public static final int EFFECT_FLAVOR_ROCK = 34;
+    public static final int EFFECT_FLAVOR_HIP_HOP = 35;
 
-    public static final int EFFECT_ELECTRONIC = 35;
+    public static final int EFFECT_ELECTRONIC = 36;
 
     private BusinessProxy mProxy;
 
@@ -108,23 +108,23 @@ public class AudioManager {
         mProxy.setElectronicParams(key, value);
     }
 
-    public void enableLocalAudio(String roomId, boolean publish) {
-        mProxy.enableLocalAudio(roomId, publish);
+    public void enableLocalAudio() {
+        mProxy.enableLocalAudio();
     }
 
-    public void disableLocalAudio(String roomId) {
-        mProxy.disableLocalAudio(roomId);
+    public void disableLocalAudio() {
+        mProxy.disableLocalAudio();
     }
 
-    public void enableRemoteAudio(String roomId, String userId, boolean enabled) {
-        mProxy.enableRemoteAudio(roomId, userId, enabled);
+    public void enableRemoteAudio(String userId, boolean enabled) {
+        mProxy.enableRemoteAudio(userId, enabled);
     }
 
-    public void muteLocalAudio(String roomId, boolean muted) {
-        mProxy.muteLocalAudio(roomId, muted);
+    public void muteLocalAudio(boolean muted) {
+        mProxy.muteLocalAudio(muted);
     }
 
-    public void muteRemoteAudio(String roomId, RoomStreamInfo info, boolean muted) {
-        mProxy.muteRemoteAudio(roomId, info, muted);
+    public void muteRemoteAudio(String userId, boolean muted) {
+        mProxy.muteRemoteAudio(userId, muted);
     }
 }

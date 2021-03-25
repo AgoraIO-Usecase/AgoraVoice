@@ -10,6 +10,7 @@ def main():
     appId = ""
     customerId = ""
     customerCer = ""
+    buglyId = ""
 
     if "keystore" in os.environ:
         keystore = os.environ["keystore"]
@@ -29,6 +30,9 @@ def main():
     if "customerCert" in os.environ:
         customerCer = os.environ["customerCert"]
 
+    if "buglyId" in os.environ:
+        buglyId = os.environ["buglyId"]
+
     f1 = open("./app/build.gradle", 'r+')
     content = f1.read()
     contentNew = re.sub(r'azure_keystore_file', keystore, content)
@@ -44,6 +48,8 @@ def main():
     contentNew = re.sub(r'<##APP_ID##>', appId, content)
     contentNew = re.sub(r'<##CUSTOMER_ID##>', customerId, contentNew)
     contentNew = re.sub(r'<##CUSTOMER_CER##>', customerCer, contentNew)
+    contentNew = re.sub(r'<##BUGLYl_APP_ID##>', buglyId, contentNew)
+
     f2.seek(0)
     f2.write(contentNew)
     f2.truncate()

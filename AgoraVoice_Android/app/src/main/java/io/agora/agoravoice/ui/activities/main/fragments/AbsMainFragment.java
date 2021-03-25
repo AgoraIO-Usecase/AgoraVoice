@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import io.agora.agoravoice.AgoraVoiceApplication;
+import io.agora.agoravoice.AgoraApplication;
 import io.agora.agoravoice.utils.WindowUtil;
 
 public abstract class AbsMainFragment extends Fragment {
@@ -26,8 +26,8 @@ public abstract class AbsMainFragment extends Fragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    protected AgoraVoiceApplication application() {
-        return (AgoraVoiceApplication) getActivity().getApplication();
+    protected AgoraApplication application() {
+        return (AgoraApplication) getActivity().getApplication();
     }
 
     @Override

@@ -91,7 +91,7 @@ public class RoomUserActionView extends RelativeLayout {
         if (rankUsers == null) return;
 
         int id = 0;
-        for (int i = 0; i < rankUsers.size(); i++) {
+        for (int i = rankUsers.size() - 1; i >= 0; i--) {
             if (i >= MAX_ICON_COUNT) break;
             setIconResource(rankUsers.get(i), id++);
         }

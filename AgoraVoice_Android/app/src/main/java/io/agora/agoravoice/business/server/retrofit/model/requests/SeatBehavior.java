@@ -9,4 +9,5 @@ public class SeatBehavior {
     public static final int INVITE_ACCEPT = 6;
     public static final int FORCE_LEAVE = 7;
     public static final int LEAVE = 8;
+    public static final int INVITE_CANCEL = -1;
 }
