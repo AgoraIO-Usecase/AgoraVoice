@@ -28,7 +28,7 @@ BGM="Background music";
 Min="Min";
 Max="Max";
 
-Limit_Toast="This is for experiencing Agora quality. Please refrain from using it commercially. The max duration per session is 10 minutes, and the max number of participants per channel is 10. ";
+Limit_Toast="The max duration per session is 10 minutes, and the max number of participants per channel is 10.";
 
 Disclaimer_Detail="Agora Voice (\"this product\") is a product provided by Agora. Agora enjoys the copyright and ownership of this product. It is hereby granted free of charge to anyone who obtains a copy of this product and related documentation (hereinafter referred to as \"software\") to try the software without limitation, including but not limited to trial, copy, modify, merge, publish, distribute, but this product shall not be used For any commercial use, you may not sublicense and / or sell copies of the software.
 
