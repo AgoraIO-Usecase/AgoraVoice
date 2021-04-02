@@ -176,7 +176,7 @@ class ChatRoomViewController: MaskLogViewController, LiveViewController {
         case "ChatViewController":
             let vc = segue.destination as! ChatViewController
             vc.cellColor = tintColor
-            self.chatVC = vc
+            chatVC = vc
         default:
             break
         }
@@ -291,7 +291,8 @@ private extension ChatRoomViewController {
         vc.showType = type
         vc.view.cornerRadius(10)
         
-        if type == .multiHosts, personCountView.needRemind {
+        if type == .multiHosts,
+           personCountView.needRemind {
             vc.tabView.selectedIndex.accept(1)
             personCountView.needRemind = false
         }
@@ -558,8 +559,9 @@ private extension ChatRoomViewController {
         self.presentInvitationList { [unowned self] (user) in
             self.hiddenMaskView()
             
-            let action1Title = DeviceAssistant.Language.isChinese ? NSLocalizedString("No") : NSLocalizedString("Cancel")
-            let action2Title = DeviceAssistant.Language.isChinese ? NSLocalizedString("Yes") : NSLocalizedString("Confirm")
+            let isChinese = DeviceAssistant.Language.isChinese
+            let action1Title = isChinese ? NSLocalizedString("No") : NSLocalizedString("Cancel")
+            let action2Title = isChinese ? NSLocalizedString("Yes") : NSLocalizedString("Confirm")
             
             let message = ChatRoomLocalizable.sendInvitation(to: user.info.name)
             

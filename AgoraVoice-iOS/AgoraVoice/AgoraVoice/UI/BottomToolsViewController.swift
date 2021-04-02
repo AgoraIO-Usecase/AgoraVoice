@@ -44,7 +44,8 @@ class BottomToolsViewController: RxViewController {
                                                                           NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)])
         view.addSubview(textInput)
         
-        extensionButton.setImage(UIImage(named: "icon-more"), for: .normal)
+        extensionButton.setImage(UIImage(named: "icon-more"),
+                                 for: .normal)
         view.addSubview(extensionButton)
         
         perspective.subscribe(onNext: { [unowned self] (role) in
@@ -57,8 +58,8 @@ class BottomToolsViewController: RxViewController {
         super.viewDidLayoutSubviews()
         let buttonWH: CGFloat = 38.0
         let space: CGFloat = 15.0
-        let viewWidth = self.view.bounds.width
-        let viewHeight = self.view.bounds.height
+        let viewWidth = view.bounds.width
+        let viewHeight = view.bounds.height
                 
         extensionButton.frame = CGRect(x: viewWidth - buttonWH - space,
                                        y: 0,
@@ -68,7 +69,10 @@ class BottomToolsViewController: RxViewController {
         
         var lastButton: UIButton
         
-        func buttonsLayout(_ buttons: [UIButton], extensionButton: UIButton, buttonWH: CGFloat, space: CGFloat) {
+        func buttonsLayout(_ buttons: [UIButton],
+                           extensionButton: UIButton,
+                           buttonWH: CGFloat,
+                           space: CGFloat) {
             var lastButton: UIButton = extensionButton
             
             for button in buttons {
@@ -120,33 +124,42 @@ private extension BottomToolsViewController {
         switch (liveType, perspective.value) {
         case (.chatRoom, .owner):
             belcantoButton.isHidden = false
-            belcantoButton.setImage(UIImage(named: "icon-美声"), for: .normal)
+            belcantoButton.setImage(UIImage(named: "icon-美声"),
+                                    for: .normal)
             view.addSubview(belcantoButton)
             
             soundEffectButton.isHidden = false
-            soundEffectButton.setImage(UIImage(named: "icon-音效"), for: .normal)
+            soundEffectButton.setImage(UIImage(named: "icon-音效"),
+                                       for: .normal)
             view.addSubview(soundEffectButton)
             
             micButton.isHidden = false
-            micButton.setImage(UIImage(named: "icon-microphone-on"), for: .normal)
-            micButton.setImage(UIImage(named: "icon-microphone-off"), for: .selected)
+            micButton.setImage(UIImage(named: "icon-microphone-on"),
+                               for: .normal)
+            micButton.setImage(UIImage(named: "icon-microphone-off"),
+                               for: .selected)
             view.addSubview(micButton)
         case (.chatRoom, .broadcaster):
             micButton.isHidden = false
-            micButton.setImage(UIImage(named: "icon-microphone-on"), for: .normal)
-            micButton.setImage(UIImage(named: "icon-microphone-off"), for: .selected)
+            micButton.setImage(UIImage(named: "icon-microphone-on"),
+                               for: .normal)
+            micButton.setImage(UIImage(named: "icon-microphone-off"),
+                               for: .selected)
             view.addSubview(micButton)
             
             belcantoButton.isHidden = false
-            belcantoButton.setImage(UIImage(named: "icon-美声"), for: .normal)
+            belcantoButton.setImage(UIImage(named: "icon-美声"),
+                                    for: .normal)
             view.addSubview(belcantoButton)
             
             soundEffectButton.isHidden = false
-            soundEffectButton.setImage(UIImage(named: "icon-音效"), for: .normal)
+            soundEffectButton.setImage(UIImage(named: "icon-音效"),
+                                       for: .normal)
             view.addSubview(soundEffectButton)
         case (.chatRoom, .audience):
             giftButton.isHidden = false
-            giftButton.setImage(UIImage(named: "icon-gift"), for: .normal)
+            giftButton.setImage(UIImage(named: "icon-gift"),
+                                for: .normal)
             view.addSubview(giftButton)
         }
     }
