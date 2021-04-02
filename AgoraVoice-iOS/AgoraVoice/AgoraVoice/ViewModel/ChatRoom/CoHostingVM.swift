@@ -94,7 +94,8 @@ class CoHostingVM: CustomObserver {
 
 // MARK: Owner
 extension CoHostingVM {
-    func sendInvitation(to user: LiveRole, on seatIndex: Int) {
+    func sendInvitation(to user: LiveRole,
+                        on seatIndex: Int) {
         request(seatIndex: seatIndex,
                 type: 1,
                 userId: "\(user.info.userId)",
@@ -110,7 +111,8 @@ extension CoHostingVM {
                 }, fail: nil)
     }
     
-    func accept(application: Application, success: Completion = nil) {
+    func accept(application: Application,
+                success: Completion = nil) {
         request(seatIndex: application.seatIndex,
                 type: 5,
                 userId: "\(application.initiator.info.userId)",
@@ -148,7 +150,8 @@ extension CoHostingVM {
                 }, fail: nil)
     }
     
-    func forceEndWith(user: LiveRole, on seatIndex: Int) {
+    func forceEndWith(user: LiveRole,
+                      on seatIndex: Int) {
         request(seatIndex: seatIndex,
                 type: 7,
                 userId: "\(user.info.userId)",
@@ -160,7 +163,8 @@ extension CoHostingVM {
 
 // MARK: Broadcaster
 extension CoHostingVM {
-    func endBroadcasting(seatIndex: Int, user: LiveRole) {
+    func endBroadcasting(seatIndex: Int,
+                         user: LiveRole) {
         request(seatIndex: seatIndex,
                 type: 8,
                 userId: "\(user.info.userId)",
@@ -172,7 +176,9 @@ extension CoHostingVM {
 
 // MARK: Audience
 extension CoHostingVM {
-    func sendApplication(by local: LiveRole, for seatIndex: Int, success: Completion = nil) {
+    func sendApplication(by local: LiveRole,
+                         for seatIndex: Int,
+                         success: Completion = nil) {
         request(seatIndex: seatIndex,
                 type: 2,
                 userId: "\(room.owner.info.userId)",
@@ -222,14 +228,21 @@ extension CoHostingVM {
 
 private extension CoHostingVM {
     // type: 1.房主邀请 2.观众申请 3.房主拒绝 4.观众拒绝 5.房主同意观众申请 6.观众接受房主邀请 7.房主让主播下麦 8.主播下麦
-    func request(seatIndex: Int, type: Int, userId: String, roomId: String, success: DicEXCompletion = nil, fail: ErrorCompletion) {
+    func request(seatIndex: Int,
+                 type: Int,
+                 userId: String,
+                 roomId: String,
+                 success: DicEXCompletion = nil,
+                 fail: ErrorCompletion) {
         let client = Center.shared().centerProvideRequestHelper()
-        let url = URLGroup.multiHosts(userId: userId, roomId: roomId)
+        let url = URLGroup.multiHosts(userId: userId,
+                                      roomId: roomId)
         let task = ArRequestTask(event: ArRequestEvent(name: "co-hosting-action: \(type)"),
                                  type: .http(.post, url: url),
                                  timeout: .medium,
                                  header: ["token": Keys.UserToken],
                                  parameters: ["no": seatIndex, "type": type])
+        
         client.request(task: task, success: ArResponse.json({ [weak self] (json) in
             guard let strongSelf = self else {
                 return

@@ -27,7 +27,7 @@ class DisclaimerViewController: UIViewController {
                                         attributes: [NSAttributedString.Key.paragraphStyle : para,
                                                      NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15),
                                                      NSAttributedString.Key.foregroundColor : UIColor.white])
-        self.textView.attributedText = string
+        textView.attributedText = string
     }
 }
 
@@ -77,7 +77,7 @@ class AboutViewController: MaskTableViewController {
         agoraLabel.textColor = UIColor(hexString: "#686E78")
         agoraLabel.textAlignment = .center
         
-        guard let navigation = self.navigationController as? CSNavigationController else {
+        guard let navigation = navigationController as? CSNavigationController else {
             assert(false)
             return
         }
@@ -91,11 +91,15 @@ class AboutViewController: MaskTableViewController {
             navigation.navigationBar.bounds.height -
             15 - h
         
-        agoraLabel.frame = CGRect(x: x, y: y, width: w, height: h)
+        agoraLabel.frame = CGRect(x: x,
+                                  y: y,
+                                  width: w,
+                                  height: h)
         view.addSubview(agoraLabel)
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView,
+                            didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let privacyItem = 0
@@ -138,14 +142,14 @@ class AboutViewController: MaskTableViewController {
                 let pasteboard = UIPasteboard.general
                 pasteboard.string = logId
 
-                self?.showTextToast(text:  MineLocalizable.logIdCopy())
+                self?.showTextToast(text: MineLocalizable.logIdCopy())
             }) { [weak self] (error) in
                 self?.hiddenHUD()
                 
                 if error.code == -1 {
                     self?.showTextToast(text: NetworkLocalizable.lostConnectionRetry())
                 } else {
-                    self?.showTextToast(text:  MineLocalizable.uploadLogFail())
+                    self?.showTextToast(text: MineLocalizable.uploadLogFail())
                 }
             }
         default:

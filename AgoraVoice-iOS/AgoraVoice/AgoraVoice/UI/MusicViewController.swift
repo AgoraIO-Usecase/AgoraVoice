@@ -17,9 +17,9 @@ class MusicCell: UITableViewCell {
     
     var isPlaying: Bool = false {
         didSet {
-            self.contentView.backgroundColor = isPlaying ? UIColor(hexString: "#0088EB") : UIColor(hexString: "#161D27")
-            self.nameLabel.textColor = isPlaying ? UIColor(hexString: "#FFFFFF") : UIColor(hexString: "#EEEEEE")
-            self.singerLabel.textColor = isPlaying ? UIColor(hexString: "#FFFFFF") : UIColor(hexString: "#9BA2AB")
+            contentView.backgroundColor = isPlaying ? UIColor(hexString: "#0088EB") : UIColor(hexString: "#161D27")
+            nameLabel.textColor = isPlaying ? UIColor(hexString: "#FFFFFF") : UIColor(hexString: "#EEEEEE")
+            singerLabel.textColor = isPlaying ? UIColor(hexString: "#FFFFFF") : UIColor(hexString: "#9BA2AB")
         }
     }
 }
