@@ -19,7 +19,11 @@ struct Room {
     var image: UIImage
     var owner: LiveRole
     
-    init(name: String = "", roomId: String, imageURL: String = "", personCount: Int = 0, owner: LiveRole) {
+    init(name: String = "",
+         roomId: String,
+         imageURL: String = "",
+         personCount: Int = 0,
+         owner: LiveRole) {
         self.name = name
         self.roomId = roomId
         self.imageURL = imageURL
@@ -86,14 +90,18 @@ extension LiveListVM {
             let room = Room(name: "room\(index)",
                 roomId: "\(index)",
                 personCount: index,
-                owner: LiveRoleItem(type: .owner, info: BasicUserInfo(userId: "index", name: ""), agUId: "0"))
+                owner: LiveRoleItem(type: .owner,
+                                    info: BasicUserInfo(userId: "index", name: ""),
+                                    agUId: "0"))
             temp.append(room)
         }
         
         self.chatRoomList = temp
     }
     
-    func fetch(count: Int = 10, success: Completion = nil, fail: Completion = nil) {
+    func fetch(count: Int = 10,
+               success: Completion = nil,
+               fail: Completion = nil) {
         guard let lastRoom = self.presentingList.value.last else {
             return
         }
@@ -117,7 +125,8 @@ extension LiveListVM {
             }
 
             let object = try json.getDataObject()
-            let jsonList = try object.getValue(of: "list", type: [StringAnyDic].self)
+            let jsonList = try object.getValue(of: "list",
+                                               type: [StringAnyDic].self)
             let list = try [Room](dicList: jsonList)
 
             switch requestListType {
@@ -138,10 +147,13 @@ extension LiveListVM {
             return .resign
         }
 
-        client.request(task: task, success: response, failRetry: retry)
+        client.request(task: task,
+                       success: response,
+                       failRetry: retry)
     }
     
-    func refetch(success: Completion = nil, fail: Completion = nil) {
+    func refetch(success: Completion = nil,
+                 fail: Completion = nil) {
         let client = Center.shared().centerProvideRequestHelper()
         let requestListType = presentingType
         let currentCount = presentingList.value.count < 10 ? 10 : presentingList.value.count
@@ -162,7 +174,8 @@ extension LiveListVM {
 
             try json.getCodeCheck()
             let object = try json.getDataObject()
-            let jsonList = try object.getValue(of: "list", type: [StringAnyDic].self)
+            let jsonList = try object.getValue(of: "list",
+                                               type: [StringAnyDic].self)
             let list = try [Room](dicList: jsonList)
 
             switch requestListType {
@@ -183,7 +196,9 @@ extension LiveListVM {
             return .resign
         }
 
-        client.request(task: task, success: response, failRetry: retry)
+        client.request(task: task,
+                       success: response,
+                       failRetry: retry)
     }
 }
 

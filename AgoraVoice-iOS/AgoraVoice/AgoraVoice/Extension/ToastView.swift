@@ -27,8 +27,10 @@ class TextToast: ToastView {
                                          bottom: 15.0,
                                          right: 15.0)
     
-    override init(frame: CGRect, filletRadius: CGFloat = 0.0) {
-        super.init(frame: frame, filletRadius: filletRadius)
+    override init(frame: CGRect,
+                  filletRadius: CGFloat = 0.0) {
+        super.init(frame: frame,
+                   filletRadius: filletRadius)
         self.initViews()
     }
     
@@ -38,14 +40,17 @@ class TextToast: ToastView {
     }
     
     func initViews() {
-        self.insideBackgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
-        self.backgroundColor = .clear
+        insideBackgroundColor = UIColor(red: 0,
+                                        green: 0,
+                                        blue: 0,
+                                        alpha: 0.6)
+        backgroundColor = .clear
         label.numberOfLines = 0
         label.textAlignment = .left
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 14)
         
-        self.addSubview(label)
+        addSubview(label)
     }
     
     override func layoutSubviews() {
@@ -58,22 +63,25 @@ class TextToast: ToastView {
             let height: CGFloat = CGFloat(MAXFLOAT)
             
             let newSize = text.size(font: font,
-                                    drawRange: CGSize(width: width, height: height))
+                                    drawRange: CGSize(width: width,
+                                                      height: height))
             self.labelSize = newSize
         }
         
-        self.label.frame = CGRect(x: contentEdgeInsets.left,
-                                  y: contentEdgeInsets.top,
-                                  width: labelSize.width,
-                                  height: labelSize.height)
+        label.frame = CGRect(x: contentEdgeInsets.left,
+                             y: contentEdgeInsets.top,
+                             width: labelSize.width,
+                             height: labelSize.height)
         
-        if (self.label.frame.maxX + contentEdgeInsets.right) != self.bounds.width
-            || (self.label.frame.maxY + contentEdgeInsets.bottom) != self.bounds.height {
-            var newFrame = self.frame
-            var newSize = self.frame.size
+        let condition1 = (label.frame.maxX + contentEdgeInsets.right) != bounds.width
+        let condition2 = (label.frame.maxY + contentEdgeInsets.bottom) != bounds.height
+        
+        if (condition1 || condition2) {
+            var newFrame = frame
+            var newSize = frame.size
             
-            newSize.width = self.label.frame.maxX + contentEdgeInsets.right
-            newSize.height = self.label.frame.maxY + contentEdgeInsets.bottom
+            newSize.width = label.frame.maxX + contentEdgeInsets.right
+            newSize.height = label.frame.maxY + contentEdgeInsets.bottom
             
             newFrame.size = newSize
             
@@ -102,15 +110,18 @@ class TagImageTextToast: ToastView {
         }
     }
     
-    var labelSize = CGSize(width: 0, height: 20)
+    var labelSize = CGSize(width: 0,
+                           height: 20)
     
     var contentEdgeInsets = UIEdgeInsets(top: 15.0,
                                          left: 15.0,
                                          bottom: 15.0,
                                          right: 15.0)
     
-    override init(frame: CGRect, filletRadius: CGFloat = 0.0) {
-        super.init(frame: frame, filletRadius: filletRadius)
+    override init(frame: CGRect,
+                  filletRadius: CGFloat = 0.0) {
+        super.init(frame: frame,
+                   filletRadius: filletRadius)
         self.initViews()
     }
     
@@ -120,15 +131,18 @@ class TagImageTextToast: ToastView {
     }
     
     func initViews() {
-        self.insideBackgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
-        self.backgroundColor = .clear
+        insideBackgroundColor = UIColor(red: 0,
+                                        green: 0,
+                                        blue: 0,
+                                        alpha: 0.6)
+        backgroundColor = .clear
         label.numberOfLines = 0
         label.textAlignment = .left
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 14)
         
-        self.addSubview(tagImageView)
-        self.addSubview(label)
+        addSubview(tagImageView)
+        addSubview(label)
     }
     
     override func layoutSubviews() {
@@ -143,11 +157,12 @@ class TagImageTextToast: ToastView {
             let height: CGFloat = CGFloat(MAXFLOAT)
             
             let newSize = text.size(font: font,
-                                    drawRange: CGSize(width: width, height: height))
+                                    drawRange: CGSize(width: width,
+                                                      height: height))
             self.labelSize = newSize
         }
         
-        self.tagImageView.frame = CGRect(x: contentEdgeInsets.left,
+        tagImageView.frame = CGRect(x: contentEdgeInsets.left,
                                          y: contentEdgeInsets.top,
                                          width: 14,
                                          height: 14)
@@ -156,13 +171,15 @@ class TagImageTextToast: ToastView {
                                   width: labelSize.width,
                                   height: labelSize.height)
         
-        if (self.label.frame.maxX + contentEdgeInsets.right) != self.bounds.width
-            || (self.label.frame.maxY + contentEdgeInsets.bottom) != self.bounds.height {
-            var newFrame = self.frame
-            var newSize = self.frame.size
+        let condition1 = (label.frame.maxX + contentEdgeInsets.right) != bounds.width
+        let condition2 = (label.frame.maxY + contentEdgeInsets.bottom) != bounds.height
+        
+        if (condition1 || condition2) {
+            var newFrame = frame
+            var newSize = frame.size
             
-            newSize.width = self.label.frame.maxX + contentEdgeInsets.right
-            newSize.height = self.label.frame.maxY + contentEdgeInsets.bottom
+            newSize.width = label.frame.maxX + contentEdgeInsets.right
+            newSize.height = label.frame.maxY + contentEdgeInsets.bottom
             
             newFrame.size = newSize
             

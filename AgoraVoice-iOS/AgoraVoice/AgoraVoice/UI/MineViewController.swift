@@ -27,30 +27,33 @@ class TopView: UIImageView {
         self.label = label
         
         super.init(frame: frame)
-        self.addSubview(label)
-        self.addSubview(image)
+        addSubview(label)
+        addSubview(image)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
         let imageViewWH: CGFloat = 86.0
-        let imageViewY = (self.bounds.height - imageViewWH) * 0.5
-        let imageViewX = (self.bounds.width - imageViewWH) * 0.5
+        let imageViewY = (bounds.height - imageViewWH) * 0.5
+        let imageViewX = (bounds.width - imageViewWH) * 0.5
         
-        self.imageView.frame = CGRect(x: imageViewX,
-                                      y: imageViewY,
-                                      width: imageViewWH,
-                                      height: imageViewWH)
-        self.imageView.isCycle = true
-        self.imageView.layer.borderWidth = 1
-        self.imageView.layer.borderColor = UIColor.white.cgColor
+        imageView.frame = CGRect(x: imageViewX,
+                                 y: imageViewY,
+                                 width: imageViewWH,
+                                 height: imageViewWH)
+        imageView.isCycle = true
+        imageView.layer.borderWidth = 1
+        imageView.layer.borderColor = UIColor.white.cgColor
         
         let labelX: CGFloat = 10.0
         let lableY: CGFloat = imageViewY + imageViewWH + 19.0
-        let labelW: CGFloat = self.bounds.width - (labelX * 2)
+        let labelW: CGFloat = bounds.width - (labelX * 2)
         let labelH: CGFloat = 24.0
-        self.label.frame = CGRect(x: labelX, y: lableY, width: labelW, height: labelH)
+        label.frame = CGRect(x: labelX,
+                             y: lableY,
+                             width: labelW,
+                             height: labelH)
     }
     
     required init?(coder: NSCoder) {
@@ -116,11 +119,13 @@ class MineViewController: MaskTableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView,
+                            numberOfRowsInSection section: Int) -> Int {
         return 2
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView,
+                            didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
         /*
@@ -174,8 +179,13 @@ private extension MineViewController {
             return
         }
         
-        let backButton = UIButton(frame: CGRect(x: 0, y: 0, width: 69, height: 44))
-        backButton.setImage(UIImage(named: "icon-back"), for: .normal)
+        let frame = CGRect(x: 0,
+                           y: 0,
+                           width: 69,
+                           height: 44)
+        let backButton = UIButton(frame: frame)
+        backButton.setImage(UIImage(named: "icon-back"),
+                            for: .normal)
         navigation.setupBarOthersColor(color: UIColor.white)
         navigation.backButton = backButton
     }
@@ -186,16 +196,22 @@ private extension MineViewController {
             return
         }
         
-        let backButton = UIButton(frame: CGRect(x: 10, y: 0, width: 69, height: 44))
-        backButton.setTitle(NSLocalizedString("Cancel"), for: .normal)
+        let frame = CGRect(x: 10,
+                           y: 0,
+                           width: 69,
+                           height: 44)
+        let backButton = UIButton(frame: frame)
+        backButton.setTitle(NSLocalizedString("Cancel"),
+                            for: .normal)
         backButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         backButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        backButton.setTitleColor(UIColor(hexString: "#FFFFFF"), for: .normal)
+        backButton.setTitleColor(UIColor(hexString: "#FFFFFF"),
+                                 for: .normal)
         navigation.backButton = backButton
     }
     
     func setupNavigationBarColor() {
-        guard let navigation = self.navigationController as? CSNavigationController else {
+        guard let navigation = navigationController as? CSNavigationController else {
             assert(false)
             return
         }
@@ -204,7 +220,7 @@ private extension MineViewController {
     }
     
     func setupNavigationTitleFontColor() {
-        guard let navigation = self.navigationController as? CSNavigationController else {
+        guard let navigation = navigationController as? CSNavigationController else {
             assert(false)
             return
         }

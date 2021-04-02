@@ -10,11 +10,17 @@ import UIKit
 
 class TextInputView: UITextField {
     override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-        return CGRect(x: 15, y: 0, width: self.bounds.width - 30, height: self.bounds.height)
+        return CGRect(x: 15,
+                      y: 0,
+                      width: bounds.width - 30,
+                      height: bounds.height)
     }
     
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return CGRect(x: 15, y: 0, width: self.bounds.width - 30, height: self.bounds.height)
+        return CGRect(x: 15,
+                      y: 0,
+                      width: bounds.width - 30,
+                      height: bounds.height)
     }
 }
 
@@ -45,30 +51,37 @@ class ChatInputView: UIView {
         textView.cornerRadius(textView.frame.height * 0.5)
     }
     
-    func showAbove(frame: CGRect, duration: TimeInterval, completion: ((Bool) -> Void)? = nil) {
-        self.isHidden = false
+    func showAbove(frame: CGRect,
+                   duration: TimeInterval,
+                   completion: ((Bool) -> Void)? = nil) {
+        isHidden = false
         var newChatFrame = self.frame
         let y = UIScreen.main.bounds.height - frame.height - newChatFrame.height
         newChatFrame.origin.y = y
             
-        UIView.animate(withDuration: duration, animations: {
+        UIView.animate(withDuration: duration,
+                       animations: {
             self.frame = newChatFrame
         }, completion: completion)
     }
     
-    func hidden(duration: TimeInterval, completion: ((Bool) -> Void)? = nil) {
-        var newChatFrame = self.frame
+    func hidden(duration: TimeInterval,
+                completion: ((Bool) -> Void)? = nil) {
+        var newChatFrame = frame
         newChatFrame.origin.y = UIScreen.main.bounds.height
         
-        UIView.animate(withDuration: duration, animations: {
+        UIView.animate(withDuration: duration,
+                       animations: { [unowned self] in
             self.frame = newChatFrame
-        }) { (done) in
-            if done {
-                self.isHidden = true
-                
-                if let completion = completion {
-                    completion(done)
-                }
+        }) { [unowned self] (done) in
+            guard done else {
+                return
+            }
+            
+            self.isHidden = true
+            
+            if let completion = completion {
+                completion(done)
             }
         }
     }

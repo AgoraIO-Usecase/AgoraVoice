@@ -64,9 +64,9 @@ class TabSelectView: UIScrollView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.layer.masksToBounds = true
-        self.showsHorizontalScrollIndicator = false
-        self.showsVerticalScrollIndicator = false
+        layer.masksToBounds = true
+        showsHorizontalScrollIndicator = false
+        showsVerticalScrollIndicator = false
     }
     
     override func layoutSubviews() {
