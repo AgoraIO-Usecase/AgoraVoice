@@ -16,8 +16,8 @@ android {
         applicationId "io.agora.agoravoice"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 11013
-        versionName "1.1.0"
+        versionCode 11100
+        versionName "1.1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
