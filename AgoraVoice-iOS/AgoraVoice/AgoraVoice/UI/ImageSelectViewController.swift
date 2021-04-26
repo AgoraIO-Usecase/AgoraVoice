@@ -89,7 +89,3 @@ class ImageSelectViewController: RxViewController {
         }.bind(to: selectImage).disposed(by: bag)
     }
 }
-
-private extension ImageSelectViewController {
-    
-}

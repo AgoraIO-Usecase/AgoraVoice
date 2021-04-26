@@ -89,7 +89,8 @@ private extension AudioEffectViewController {
         }
         
         tabView.selectedTitle = TabSelectView.TitleProperty(color: UIColor(hexString: "#EEEEEE"),
-                                                            font: UIFont.systemFont(ofSize: 14, weight: .medium))
+                                                            font: UIFont.systemFont(ofSize: 14,
+                                                                                    weight: .medium))
         
         tabView.unselectedTitle = TabSelectView.TitleProperty(color: UIColor(hexString: "#9BA2AB"),
                                                               font: UIFont.systemFont(ofSize: 14))
@@ -130,7 +131,8 @@ private extension AudioEffectViewController {
                 
         // SoundEffectType - ThreeDimension
         vc.selectedThreeDimension.subscribe(onNext: { [unowned self] in
-            self.performSegue(withIdentifier: "ThreeDimensionalViewController", sender: nil)
+            self.performSegue(withIdentifier: "ThreeDimensionalViewController",
+                              sender: nil)
         }).disposed(by: bag)
         
         // special for eletronic music

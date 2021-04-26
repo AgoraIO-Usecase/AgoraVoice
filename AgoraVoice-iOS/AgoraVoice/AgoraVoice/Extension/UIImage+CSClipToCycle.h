@@ -8,6 +8,12 @@
 #import <UIKit/UIKit.h>
 
 @interface UIImage (CSClipToCycle)
-+ (UIImage * _Nonnull)imageWithClipImage:(UIImage * _Nonnull)image borderWidth:(CGFloat)borderWidth borderColor:(UIColor * _Nullable)color;
-+ (UIImage * _Nonnull)imageWithClipImage:(UIImage * _Nonnull)image cornerRadius:(CGFloat)radius borderWidth:(CGFloat)borderWidth borderColor:(UIColor * _Nullable)color;
++ (UIImage * _Nonnull)imageWithClipImage:(UIImage * _Nonnull)image
+                             borderWidth:(CGFloat)borderWidth
+                             borderColor:(UIColor * _Nullable)color;
+
++ (UIImage * _Nonnull)imageWithClipImage:(UIImage * _Nonnull)image
+                            cornerRadius:(CGFloat)radius
+                             borderWidth:(CGFloat)borderWidth
+                             borderColor:(UIColor * _Nullable)color;
 @end

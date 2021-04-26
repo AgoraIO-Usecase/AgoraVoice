@@ -15,8 +15,8 @@ class GiftAudienceCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.headImage.backgroundColor = UIColor.blue
-        self.headImage.cornerRadius(14)
+        headImage.backgroundColor = UIColor.blue
+        headImage.cornerRadius(14)
     }
 }
 
@@ -26,11 +26,13 @@ class GiftAudienceViewController: RxCollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 28.0, height: 28.0)
+        layout.itemSize = CGSize(width: 28.0,
+                                 height: 28.0)
         layout.minimumInteritemSpacing = 10
         layout.scrollDirection = .horizontal
         collectionView.semanticContentAttribute = UISemanticContentAttribute.forceRightToLeft
-        collectionView.setCollectionViewLayout(layout, animated: true)
+        collectionView.setCollectionViewLayout(layout,
+                                               animated: true)
         collectionView.backgroundColor = .clear
         
         collectionView.delegate = nil

@@ -16,25 +16,27 @@ class GIFViewController: RxViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor(red: 0.0,
-                                            green: 0.0,
-                                            blue: 0.0,
-                                            alpha: 0.7)
-        self.imageView.backgroundColor = UIColor.clear
+        view.backgroundColor = UIColor(red: 0.0,
+                                       green: 0.0,
+                                       blue: 0.0,
+                                       alpha: 0.7)
+        imageView.backgroundColor = UIColor.clear
     }
     
     func stopAnimationg() {
-        self.imageView.stopAnimating()
-        self.imageView.image = nil
-        self.currentRepeatCount = 0
+        imageView.stopAnimating()
+        imageView.image = nil
+        currentRepeatCount = 0
     }
     
-    func startAnimating(of data: Data, repeatCount: Int = 1, completion: Completion = nil) {
+    func startAnimating(of data: Data,
+                        repeatCount: Int = 1,
+                        completion: Completion = nil) {
         self.stopAnimationg()
         
         let image = FLAnimatedImage(animatedGIFData: data)
-        self.imageView.animatedImage = image
-        self.imageView.loopCompletionBlock = { [weak self] (loopCountRemaining) in
+        imageView.animatedImage = image
+        imageView.loopCompletionBlock = { [weak self] (loopCountRemaining) in
             self?.currentRepeatCount += 1
             
             guard self?.currentRepeatCount == repeatCount else {

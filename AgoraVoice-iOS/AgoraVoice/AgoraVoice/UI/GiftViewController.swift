@@ -59,7 +59,7 @@ class GiftViewController: RxViewController {
         collectionView.backgroundColor = UIColor(hexString: "#161D27")
         
         let itemWidth: CGFloat = 60.0
-        let itemHeight: CGFloat = 98.0
+        let itemHeight: CGFloat = 75.0
         
         let spacing = (UIScreen.main.bounds.width - (4 * itemWidth) - 30) / 3
         

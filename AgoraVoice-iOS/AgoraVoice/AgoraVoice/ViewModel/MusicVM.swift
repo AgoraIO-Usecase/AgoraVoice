@@ -31,7 +31,10 @@ struct Music {
     var isPlaying: Bool
     var url: String
     
-    init(name: String, singer: String, isPlaying: Bool = false, url: String) {
+    init(name: String,
+         singer: String,
+         isPlaying: Bool = false,
+         url: String) {
         self.name = name
         self.singer = singer
         self.isPlaying = isPlaying
@@ -92,10 +95,12 @@ class MusicVM: RxObject {
         playAction.accept(music)
         
         if let item = lastMusic {
-            updateMusicStatusOfList(music: item, isPlaying: false)
+            updateMusicStatusOfList(music: item,
+                                    isPlaying: false)
         }
         
-        updateMusicStatusOfList(music: music, isPlaying: true)
+        updateMusicStatusOfList(music: music,
+                                isPlaying: true)
         
         lastMusic = music
     }
@@ -103,19 +108,22 @@ class MusicVM: RxObject {
     func pause(music: Music) {
         pauseAction.accept(music)
         
-        updateMusicStatusOfList(music: music, isPlaying: false)
+        updateMusicStatusOfList(music: music,
+                                isPlaying: false)
     }
     
     func resume(music: Music) {
         resumeAction.accept(music)
         
-        updateMusicStatusOfList(music: music, isPlaying: true)
+        updateMusicStatusOfList(music: music,
+                                isPlaying: true)
     }
     
     func stop() {
         if let music = lastMusic {
             stopAction.accept(music)
-            updateMusicStatusOfList(music: music, isPlaying: false)
+            updateMusicStatusOfList(music: music,
+                                    isPlaying: false)
         }
         
         lastMusic = nil
@@ -123,7 +131,8 @@ class MusicVM: RxObject {
 }
 
 private extension MusicVM {
-    func updateMusicStatusOfList(music: Music, isPlaying: Bool) {
+    func updateMusicStatusOfList(music: Music,
+                                 isPlaying: Bool) {
         var musicList = list.value
         let index = musicList.firstIndex { (item) -> Bool in
             return item == music

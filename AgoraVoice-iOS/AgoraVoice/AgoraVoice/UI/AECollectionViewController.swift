@@ -129,7 +129,6 @@ private extension AECollectionViewController {
             
             let listSubscribe = ChatOfBelCanto.list.bind(to: collectionView.rx.items(cellIdentifier: "AEImageLabelCell",
                                                                                  cellType: AEImageLabelCell.self)) { [unowned self] (index, item, cell) in
-                                                                                    
                                                                                     cell.tagImageView.image = item.image
                                                                                     cell.nameLabel.text = "\(item.description)"
                                                                                     cell.isSelectedNow = (item == self.audioEffectVM.selectedChatOfBelcanto.value)

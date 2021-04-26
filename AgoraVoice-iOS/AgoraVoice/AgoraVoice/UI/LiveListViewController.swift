@@ -52,7 +52,8 @@ class LiveListPlaceholderView: RxView {
         type = .noRoom
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>,
+                               with event: UIEvent?) {
         tap.accept(())
     }
 }
@@ -154,10 +155,12 @@ private extension LiveListViewController {
                                                    bottom: 0,
                                                    right: 15)
         
-        collectionView.setCollectionViewLayout(layout, animated: true)
+        collectionView.setCollectionViewLayout(layout,
+                                               animated: true)
         
         createButton.layer.shadowOpacity = 0.3
-        createButton.layer.shadowOffset = CGSize(width: 0, height: 3)
+        createButton.layer.shadowOffset = CGSize(width: 0,
+                                                 height: 3)
         createButton.layer.shadowColor = UIColor(hexString: "#BD3070").cgColor
         
         createButton.rx.tap.subscribe(onNext: { [unowned self] in
@@ -266,7 +269,8 @@ private extension LiveListViewController {
                       selector: #selector(roomListRefresh),
                       userInfo: nil,
                       repeats: true)
-        RunLoop.main.add(timer!, forMode: .common)
+        RunLoop.main.add(timer!,
+                         forMode: .common)
         timer?.fire()
     }
     
@@ -290,7 +294,8 @@ private extension LiveListViewController {
             self.showHUD()
         }
         
-        listVM.refetch(success: end, fail: end)
+        listVM.refetch(success: end,
+                       fail: end)
     }
     
     func cancelScheduelRefresh() {

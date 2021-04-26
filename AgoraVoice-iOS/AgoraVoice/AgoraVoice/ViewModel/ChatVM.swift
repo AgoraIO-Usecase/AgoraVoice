@@ -16,7 +16,10 @@ struct Chat {
     var content: NSAttributedString
     var image: UIImage?
     
-    init(name: String, text: String, image: UIImage? = nil, widthLimit: CGFloat) {
+    init(name: String,
+         text: String,
+         image: UIImage? = nil,
+         widthLimit: CGFloat) {
         let tName = name
         let content = (tName + text) as NSString
         let textRect = content.boundingRect(with: CGSize(width: widthLimit, height: CGFloat(MAXFLOAT)),

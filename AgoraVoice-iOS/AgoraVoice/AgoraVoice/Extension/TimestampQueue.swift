@@ -71,13 +71,15 @@ extension TimestampQueue: SubThreadTimerDelegate {
             }
         }
         
-        if let needRemoveIndex = needRemoveIndex {
-            DispatchQueue.main.async { [unowned self] in
-                let timeouts = self.list.prefix(needRemoveIndex + 1)
-                self.timeout.accept(Array(timeouts))
-                if self.list.count > 0 {
-                    self.list.removeSubrange(0...needRemoveIndex)
-                }
+        guard let removeIndex = needRemoveIndex else {
+            return
+        }
+        
+        DispatchQueue.main.async { [unowned self] in
+            let timeouts = self.list.prefix(removeIndex + 1)
+            self.timeout.accept(Array(timeouts))
+            if self.list.count > 0 {
+                self.list.removeSubrange(0...removeIndex)
             }
         }
     }

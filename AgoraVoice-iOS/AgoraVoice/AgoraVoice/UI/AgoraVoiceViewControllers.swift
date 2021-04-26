@@ -70,10 +70,10 @@ class MaskViewController: RxViewController, ShowAlertProtocol, PresentChildProto
                                                green: 0.0,
                                                blue: 0.0,
                                                alpha: 0.7), tap: (() -> Void)? = nil) {
-        self.maskTapBlock = tap
+        maskTapBlock = tap
         maskView.isHidden = false
         maskView.backgroundColor = color
-        self.view.addSubview(maskView)
+        view.addSubview(maskView)
     }
     
     func hiddenMaskView() {
@@ -82,7 +82,7 @@ class MaskViewController: RxViewController, ShowAlertProtocol, PresentChildProto
             self.presentingChild = nil
         }
         
-        self.maskTapBlock = nil
+        maskTapBlock = nil
         maskView.isHidden = true
         maskView.removeFromSuperview()
     }
@@ -92,7 +92,7 @@ class MaskViewController: RxViewController, ShowAlertProtocol, PresentChildProto
             maskTapBlock()
         }
         
-        self.hiddenMaskView()
+        hiddenMaskView()
     }
 }
 

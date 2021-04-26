@@ -34,7 +34,9 @@ enum LiveType {
 }
 
 protocol LiveTypeCellDelegate: NSObjectProtocol {
-    func cell(_ cell: LiveTypeCell, didPressedStartButton: UIButton, on index: Int)
+    func cell(_ cell: LiveTypeCell,
+              didPressedStartButton: UIButton,
+              on index: Int)
 }
 
 class LiveTypeCell: RxCollectionViewCell {
@@ -67,7 +69,7 @@ class LiveTypeViewController: MaskViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidLoad() {
@@ -105,17 +107,23 @@ private extension LiveTypeViewController {
         let collectionTop: CGFloat = 57
         let collectionBottom: CGFloat = 35
         
-        let height = UIScreen.main.bounds.height - UITabBar.height
+        let height = UIScreen.main.bounds.height
+            - UITabBar.height
             - UIScreen.main.heightOfSafeAreaTop
             - collectionTop - collectionBottom
         
         let space: CGFloat = 33
         let width = UIScreen.main.bounds.width - (space * 2)
         
-        layout.itemSize = CGSize(width: width, height: height)
-        layout.sectionInset = UIEdgeInsets(top: 0, left: space, bottom: 0, right: space)
+        layout.itemSize = CGSize(width: width,
+                                 height: height)
+        layout.sectionInset = UIEdgeInsets(top: 0,
+                                           left: space,
+                                           bottom: 0,
+                                           right: space)
         layout.scrollDirection = .horizontal
-        collectionView.setCollectionViewLayout(layout, animated: false)
+        collectionView.setCollectionViewLayout(layout,
+                                               animated: false)
         
         list.bind(to: collectionView.rx.items(cellIdentifier: "LiveTypeCell",
                                                 cellType: LiveTypeCell.self)) { [unowned self] (index, type, cell) in
@@ -128,19 +136,24 @@ private extension LiveTypeViewController {
     }
     
     func setupBackButton() {
-        guard let navigation = self.navigationController as? CSNavigationController else {
+        guard let navigation = navigationController as? CSNavigationController else {
             assert(false)
             return
         }
         
-        let backButton = UIButton(frame: CGRect(x: 0, y: 0, width: 69, height: 44))
-        backButton.setImage(UIImage(named: "icon-back"), for: .normal)
+        let frame = CGRect(x: 0,
+                           y: 0,
+                           width: 69,
+                           height: 44)
+        let backButton = UIButton(frame: frame)
+        backButton.setImage(UIImage(named: "icon-back"),
+                            for: .normal)
         navigation.setupBarOthersColor(color: UIColor.white)
         navigation.backButton = backButton
     }
     
     func setupNavigationBarColor() {
-        guard let navigation = self.navigationController as? CSNavigationController else {
+        guard let navigation = navigationController as? CSNavigationController else {
             assert(false)
             return
         }
@@ -149,7 +162,7 @@ private extension LiveTypeViewController {
     }
     
     func setupNavigationTitleFontColor() {
-        guard let navigation = self.navigationController as? CSNavigationController else {
+        guard let navigation = navigationController as? CSNavigationController else {
             assert(false)
             return
         }
@@ -159,8 +172,11 @@ private extension LiveTypeViewController {
 }
 
 extension LiveTypeViewController: LiveTypeCellDelegate {
-    func cell(_ cell: LiveTypeCell, didPressedStartButton: UIButton, on index: Int) {
+    func cell(_ cell: LiveTypeCell,
+              didPressedStartButton: UIButton,
+              on index: Int) {
         let type = list.value[index]
-        performSegue(withIdentifier: "LiveListViewController", sender: type)
+        performSegue(withIdentifier: "LiveListViewController",
+                     sender: type)
     }
 }

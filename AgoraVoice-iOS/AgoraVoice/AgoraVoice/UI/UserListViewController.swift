@@ -12,12 +12,19 @@ import RxSwift
 import RxRelay
 
 protocol UserInvitationListCellDelegate: NSObjectProtocol {
-    func cell(_ cell: UserInvitationListCell, didTapInvitationButton: UIButton, on index: Int)
+    func cell(_ cell: UserInvitationListCell,
+              didTapInvitationButton: UIButton,
+              on index: Int)
 }
 
 protocol UserApplicationListCellDelegate: NSObjectProtocol {
-    func cell(_ cell: UserApplicationListCell, didTapAcceptButton: UIButton, on index: Int)
-    func cell(_ cell: UserApplicationListCell, didTapRejectButton: UIButton, on index: Int)
+    func cell(_ cell: UserApplicationListCell,
+              didTapAcceptButton: UIButton,
+              on index: Int)
+    
+    func cell(_ cell: UserApplicationListCell,
+              didTapRejectButton: UIButton,
+              on index: Int)
 }
 
 class UserInvitationListCell: UITableViewCell {
@@ -41,16 +48,20 @@ class UserInvitationListCell: UITableViewCell {
             case .inviting:
                 inviteButton.isHidden = false
                 inviteButton.isEnabled = false
-                inviteButton.setTitle(NSLocalizedString("Inviting"), for: .disabled)
-                inviteButton.setTitleColor(UIColor(hexString: "#161D27"), for: .normal)
+                inviteButton.setTitle(NSLocalizedString("Inviting"),
+                                      for: .disabled)
+                inviteButton.setTitleColor(UIColor(hexString: "#161D27"),
+                                           for: .normal)
                 inviteButton.backgroundColor = UIColor(hexString: "#556272")
                 inviteButton.cornerRadius(16)
                 inviteButton.layer.borderWidth = 0
             case .availableInvite:
                 inviteButton.isHidden = false
                 inviteButton.isEnabled = true
-                inviteButton.setTitle(NSLocalizedString("Invite"), for: .normal)
-                inviteButton.setTitleColor(UIColor(hexString: "#0088EB"), for: .normal)
+                inviteButton.setTitle(NSLocalizedString("Invite"),
+                                      for: .normal)
+                inviteButton.setTitleColor(UIColor(hexString: "#0088EB"),
+                                           for: .normal)
                 inviteButton.backgroundColor = UIColor(hexString: "#161D27")
                 inviteButton.cornerRadius(16)
                 inviteButton.layer.borderWidth = 2
@@ -64,12 +75,14 @@ class UserInvitationListCell: UITableViewCell {
         let color = UIColor(hexString: "#D8D8D8")
         let x: CGFloat = 15.0
         let width = UIScreen.main.bounds.width - (x * 2)
-        self.contentView.containUnderline(color,
-                                          x: x,
-                                          width: width)
+        contentView.containUnderline(color,
+                                     x: x,
+                                     width: width)
         
-        self.inviteButton.rx.tap.subscribe(onNext: { [unowned self] in
-            self.delegate?.cell(self, didTapInvitationButton: self.inviteButton, on: self.index)
+        inviteButton.rx.tap.subscribe(onNext: { [unowned self] in
+            self.delegate?.cell(self,
+                                didTapInvitationButton: self.inviteButton,
+                                on: self.index)
         }).disposed(by: bag)
     }
 }
@@ -90,26 +103,32 @@ class UserApplicationListCell: UITableViewCell {
         let color = UIColor(hexString: "#D8D8D8")
         let x: CGFloat = 15.0
         let width = UIScreen.main.bounds.width - (x * 2)
-        self.contentView.containUnderline(color,
-                                          x: x,
-                                          width: width)
+        contentView.containUnderline(color,
+                                     x: x,
+                                     width: width)
         
-        self.rejectButton.setTitle(NSLocalizedString("Reject"), for: .normal)
-        self.rejectButton.setTitleColor(UIColor(hexString: "#0088EB"), for: .normal)
-        self.rejectButton.layer.borderWidth = 1
-        self.rejectButton.layer.borderColor = UIColor(hexString: "#556272").cgColor
-        self.rejectButton.backgroundColor = UIColor(hexString: "#161D27")
-        self.rejectButton.cornerRadius(16)
-        self.rejectButton.rx.tap.subscribe(onNext: { [unowned self] in
-            self.delegate?.cell(self, didTapRejectButton: self.rejectButton, on: self.index)
+        rejectButton.setTitle(NSLocalizedString("Reject"),
+                              for: .normal)
+        rejectButton.setTitleColor(UIColor(hexString: "#0088EB"),
+                                   for: .normal)
+        rejectButton.layer.borderWidth = 1
+        rejectButton.layer.borderColor = UIColor(hexString: "#556272").cgColor
+        rejectButton.backgroundColor = UIColor(hexString: "#161D27")
+        rejectButton.cornerRadius(16)
+        rejectButton.rx.tap.subscribe(onNext: { [unowned self] in
+            self.delegate?.cell(self,
+                                didTapRejectButton: self.rejectButton,
+                                on: self.index)
         }).disposed(by: bag)
         
-        self.acceptButton.setTitle(NSLocalizedString("Accept"), for: .normal)
-        self.acceptButton.setTitleColor(.white, for: .normal)
-        self.acceptButton.backgroundColor = UIColor(hexString: "#0088EB")
-        self.acceptButton.cornerRadius(16)
-        self.acceptButton.rx.tap.subscribe(onNext: { [unowned self] in
-            self.delegate?.cell(self, didTapAcceptButton: self.acceptButton, on: self.index)
+        acceptButton.setTitle(NSLocalizedString("Accept"), for: .normal)
+        acceptButton.setTitleColor(.white, for: .normal)
+        acceptButton.backgroundColor = UIColor(hexString: "#0088EB")
+        acceptButton.cornerRadius(16)
+        acceptButton.rx.tap.subscribe(onNext: { [unowned self] in
+            self.delegate?.cell(self,
+                                didTapAcceptButton: self.acceptButton,
+                                on: self.index)
         }).disposed(by: bag)
     }
 }
@@ -231,7 +250,7 @@ private extension UserListViewController {
                         if self.showType == .multiHosts {
                             buttonState = .none
                         } else {
-                            for item in self.coHostingVM.invitingUserList.value where user.info.userId == item.info.userId {
+                            for item in self.coHostingVM.invitingUserList.value where user.info == item.info {
                                 buttonState = .inviting
                                 break
                             }
@@ -277,7 +296,9 @@ private extension UserListViewController {
 }
 
 extension UserListViewController: UserInvitationListCellDelegate {
-    func cell(_ cell: UserInvitationListCell, didTapInvitationButton: UIButton, on index: Int) {
+    func cell(_ cell: UserInvitationListCell,
+              didTapInvitationButton: UIButton,
+              on index: Int) {
         switch showType {
         case .multiHosts:
             let user = userListVM.list.value[index]
@@ -292,7 +313,9 @@ extension UserListViewController: UserInvitationListCellDelegate {
 }
 
 extension UserListViewController: UserApplicationListCellDelegate {
-    func cell(_ cell: UserApplicationListCell, didTapAcceptButton: UIButton, on index: Int) {
+    func cell(_ cell: UserApplicationListCell,
+              didTapAcceptButton: UIButton,
+              on index: Int) {
         switch showType {
         case .multiHosts:
             let user = coHostingVM.applyingUserList.value[index]
@@ -314,7 +337,9 @@ extension UserListViewController: UserApplicationListCellDelegate {
         }
     }
     
-    func cell(_ cell: UserApplicationListCell, didTapRejectButton: UIButton, on index: Int) {
+    func cell(_ cell: UserApplicationListCell,
+              didTapRejectButton: UIButton,
+              on index: Int) {
         switch showType {
         case .multiHosts:
             let user = coHostingVM.applyingUserList.value[index]

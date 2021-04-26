@@ -1,12 +1,8 @@
-WORKING_PATH="./"
-APP_Project="AgoraVoice"
-APP_TARGET=$1
+APP_Project=$1
+APP_TARGET=${APP_Project}
 MODE=$2
 
-echo "WORKING_PATH: ${WORKING_PATH}"
 echo "APP_TARGET: ${APP_TARGET}"
-
-cd ${WORKING_PATH}
 echo `pwd`
 
 rm -f *.ipa
@@ -38,18 +34,18 @@ fi
 
 Plist_Path=../Build/plist/${Export_Plist_File}
 
-cd ../../AgoraVoice/
+cd ../../${APP_Project}/
 
 TARGET_FILE=""
 if [ ! -f "Podfile" ];then
-TARGET_FILE="${APP_Project}.xcodeproj"
-xcodebuild clean -project ${TARGET_FILE} -scheme "${APP_TARGET}" -configuration ${MODE}
-xcodebuild -project ${TARGET_FILE} -scheme "${APP_TARGET}" -configuration ${MODE} -archivePath ${ArchivePath} archive
+    TARGET_FILE="${APP_Project}.xcodeproj"
+    xcodebuild clean -project ${TARGET_FILE} -scheme "${APP_TARGET}" -configuration ${MODE}
+    xcodebuild -project ${TARGET_FILE} -scheme "${APP_TARGET}" -configuration ${MODE} -archivePath ${ArchivePath} archive
 else
-pod install
-TARGET_FILE="${APP_Project}.xcworkspace"
-xcodebuild clean -workspace ${TARGET_FILE} -scheme "${APP_TARGET}" -configuration ${MODE}
-xcodebuild -workspace ${TARGET_FILE} -scheme "${APP_TARGET}" -configuration ${MODE} -archivePath ${ArchivePath} archive
+    pod install
+    TARGET_FILE="${APP_Project}.xcworkspace"
+    xcodebuild clean -workspace ${TARGET_FILE} -scheme "${APP_TARGET}" -configuration ${MODE}
+    xcodebuild -workspace ${TARGET_FILE} -scheme "${APP_TARGET}" -configuration ${MODE} -archivePath ${ArchivePath} archive
 fi
 
 xcodebuild -exportArchive -exportOptionsPlist ${Plist_Path} -archivePath ${ArchivePath} -exportPath .
