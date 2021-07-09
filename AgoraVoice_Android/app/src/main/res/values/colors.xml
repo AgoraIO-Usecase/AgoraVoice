@@ -50,4 +50,7 @@
     <color name="chat_room_card_background_color_start">#FF180C87</color>
     <color name="chat_room_card_background_color_middle">#FF2D02FF</color>
     <color name="chat_room_card_background_color_end">#FF850BC7</color>
+
+    <color name="color_error">#fd3e3f</color>
+    <color name="blue_600">#0087ff</color>
 </resources>
