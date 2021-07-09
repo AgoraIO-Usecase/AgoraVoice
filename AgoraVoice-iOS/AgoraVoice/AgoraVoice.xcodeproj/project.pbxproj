@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D35244B2698804C000AFE5F /* Agora_Privacy_Policy_en.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 1D3524492698804C000AFE5F /* Agora_Privacy_Policy_en.rtf */; };
+		1D35244C2698804C000AFE5F /* Agora_Privacy_Policy_cn.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 1D35244A2698804C000AFE5F /* Agora_Privacy_Policy_cn.rtf */; };
+		1DDE86B026987EC700094608 /* TermsAndPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDE86AE26987EC700094608 /* TermsAndPolicyView.swift */; };
+		1DDE86B126987EC700094608 /* TermsAndPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDE86AF26987EC700094608 /* TermsAndPolicyViewController.swift */; };
+		1DDE86B426987EFA00094608 /* Policy.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1DDE86B626987EFA00094608 /* Policy.storyboard */; };
 		25FE87BC8A59A85C79FC19B9 /* Pods_AgoraVoice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFA6A288AD8BCBB08EA5C83D /* Pods_AgoraVoice.framework */; };
 		8620F717259C4D8000F8359F /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8620F716259C4D8000F8359F /* Localizable.swift */; };
 		8620FC9E25AC363500F8359F /* AgoraVoiceViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8620FC9D25AC363500F8359F /* AgoraVoiceViewControllers.swift */; };
@@ -115,6 +120,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1D35244826987F6C000AFE5F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Policy.strings"; sourceTree = "<group>"; };
+		1D3524492698804C000AFE5F /* Agora_Privacy_Policy_en.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Agora_Privacy_Policy_en.rtf; sourceTree = "<group>"; };
+		1D35244A2698804C000AFE5F /* Agora_Privacy_Policy_cn.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Agora_Privacy_Policy_cn.rtf; sourceTree = "<group>"; };
+		1DDE86AE26987EC700094608 /* TermsAndPolicyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsAndPolicyView.swift; sourceTree = "<group>"; };
+		1DDE86AF26987EC700094608 /* TermsAndPolicyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsAndPolicyViewController.swift; sourceTree = "<group>"; };
+		1DDE86B526987EFA00094608 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Policy.storyboard; sourceTree = "<group>"; };
+		1DDE86B826987EFD00094608 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Policy.strings; sourceTree = "<group>"; };
 		80206A59AF0409FF6B450865 /* Pods-AgoraVoice.test2020-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraVoice.test2020-dev.xcconfig"; path = "Target Support Files/Pods-AgoraVoice/Pods-AgoraVoice.test2020-dev.xcconfig"; sourceTree = "<group>"; };
 		8620F716259C4D8000F8359F /* Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizable.swift; sourceTree = "<group>"; };
 		8620FC9D25AC363500F8359F /* AgoraVoiceViewControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraVoiceViewControllers.swift; sourceTree = "<group>"; };
@@ -412,6 +424,7 @@
 		A75C6FC324FCD729003E5AD9 /* storyboard */ = {
 			isa = PBXGroup;
 			children = (
+				1DDE86B626987EFA00094608 /* Policy.storyboard */,
 				A75C6FC624FCD75D003E5AD9 /* LaunchScreen.storyboard */,
 				A75C6FC424FCD75D003E5AD9 /* Main.storyboard */,
 				A75C70E124FDF121003E5AD9 /* Live.storyboard */,
@@ -423,6 +436,8 @@
 		A75C6FCA24FCD767003E5AD9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				1D35244A2698804C000AFE5F /* Agora_Privacy_Policy_cn.rtf */,
+				1D3524492698804C000AFE5F /* Agora_Privacy_Policy_en.rtf */,
 				A75C6F5424FCC387003E5AD9 /* Assets.xcassets */,
 				A75C70FE24FE2B70003E5AD9 /* Localizable.strings */,
 			);
@@ -507,6 +522,8 @@
 		A75C70E924FE2545003E5AD9 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				1DDE86AE26987EC700094608 /* TermsAndPolicyView.swift */,
+				1DDE86AF26987EC700094608 /* TermsAndPolicyViewController.swift */,
 				8620FC9D25AC363500F8359F /* AgoraVoiceViewControllers.swift */,
 				A75C70EA24FE2557003E5AD9 /* MainTabBarViewController.swift */,
 				A75C70EF24FE2765003E5AD9 /* LiveTypeViewController.swift */,
@@ -634,9 +651,12 @@
 				A75C70FC24FE2B70003E5AD9 /* Localizable.strings in Resources */,
 				A70638382519EC170078A5EE /* SuperCake.gif in Resources */,
 				A706383D2519EC170078A5EE /* SuperIcecream.gif in Resources */,
+				1D35244C2698804C000AFE5F /* Agora_Privacy_Policy_cn.rtf in Resources */,
+				1D35244B2698804C000AFE5F /* Agora_Privacy_Policy_en.rtf in Resources */,
 				A70638362519EC170078A5EE /* .gitkeep in Resources */,
 				A706383E2519EC170078A5EE /* SuperDiamond.gif in Resources */,
 				A706383C2519EC170078A5EE /* SuperRing.gif in Resources */,
+				1DDE86B426987EFA00094608 /* Policy.storyboard in Resources */,
 				A70638372519EC170078A5EE /* SuperBell.gif in Resources */,
 				A706383A2519EC170078A5EE /* SuperWine.gif in Resources */,
 			);
@@ -749,9 +769,11 @@
 				A75C70F624FE29AF003E5AD9 /* MineViewController.swift in Sources */,
 				A750EC4F2500B1E6006E50E3 /* MineVM.swift in Sources */,
 				A750EC6F2505E286006E50E3 /* AudioEffectViewController.swift in Sources */,
+				1DDE86B126987EC700094608 /* TermsAndPolicyViewController.swift in Sources */,
 				A75C700324FCE41F003E5AD9 /* JsonParse.swift in Sources */,
 				A75C700224FCE41F003E5AD9 /* Utils.swift in Sources */,
 				A75C6FFA24FCE41F003E5AD9 /* AGELock.swift in Sources */,
+				1DDE86B026987EC700094608 /* TermsAndPolicyView.swift in Sources */,
 				A75C700724FCE41F003E5AD9 /* FilesGroup.swift in Sources */,
 				A750EC442500A33F006E50E3 /* BottomToolsViewController.swift in Sources */,
 				A75C702D24FCEF1E003E5AD9 /* DeviceAssistant.swift in Sources */,
@@ -785,6 +807,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		1DDE86B626987EFA00094608 /* Policy.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1DDE86B526987EFA00094608 /* Base */,
+				1DDE86B826987EFD00094608 /* en */,
+				1D35244826987F6C000AFE5F /* zh-Hans */,
+			);
+			name = Policy.storyboard;
+			sourceTree = "<group>";
+		};
 		A75C6FC424FCD75D003E5AD9 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
