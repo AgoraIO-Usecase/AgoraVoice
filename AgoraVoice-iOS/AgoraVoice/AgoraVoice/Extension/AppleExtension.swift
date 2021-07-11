@@ -99,19 +99,33 @@ extension String {
 
 extension UIScreen {
     var isNotch: Bool {
-        if UIApplication.shared.statusBarFrame.height != 20 {
-            return true
+        if #available(iOS 11.0, *),
+           let safeAreaInsets = UIApplication.shared.keyWindow?.safeAreaInsets  {
+            return safeAreaInsets.left > 0.0 ||
+                safeAreaInsets.top > 0.0 ||
+                safeAreaInsets.right > 0.0 ||
+                safeAreaInsets.bottom > 0.0
         } else {
             return false
         }
     }
     
     var heightOfSafeAreaTop: CGFloat {
-        return UIApplication.shared.statusBarFrame.height
+        if #available(iOS 11.0, *),
+           let safeAreaInsets = UIApplication.shared.keyWindow?.safeAreaInsets  {
+            return safeAreaInsets.top
+        } else {
+            return 20
+        }
     }
     
     var heightOfSafeAreaBottom: CGFloat {
-        return (self.isNotch ? 34 : 0)
+        if #available(iOS 11.0, *),
+           let safeAreaInsets = UIApplication.shared.keyWindow?.safeAreaInsets  {
+            return safeAreaInsets.bottom
+        } else {
+            return 0
+        }
     }
 }
 
