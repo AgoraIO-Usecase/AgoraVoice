@@ -31,8 +31,8 @@
     <string name="about_title">关于</string>
     <string name="privacy_policy_title">隐私条例</string>
     <string name="privacy_website_link">https://www.agora.io/cn/privacy-policy/</string>
-
-
+    <string name="terms_title">用户协议</string>
+    <string name="terms_link">https://www.agora.io/cn/terms-of-service/</string>
     <string name="disclaimer_title">产品免责声明</string>
     <string name="disclaimer_content">&#160;&#160;&#160;&#160;Agora Voice（“本产品”）是由Agora提供的一款测试产品，Agora享有本产品的著作权和所有权。特此免费授予获得本产品和相关文档文件（以下简称“软件”）副本的任何人无限制地试用软件的权利，包括但不限于试用，复制，修改，合并，发布，分发，但本产品不得用于任何商业用途，不得再许可和/或出售该软件的副本。\n\n
 

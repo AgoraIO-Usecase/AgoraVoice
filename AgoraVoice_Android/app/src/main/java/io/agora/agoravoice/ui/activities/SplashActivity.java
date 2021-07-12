@@ -14,6 +14,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import java.util.List;
 
+import io.agora.agoravoice.Config;
 import io.agora.agoravoice.R;
 import io.agora.agoravoice.business.definition.struct.AppVersionInfo;
 import io.agora.agoravoice.business.definition.struct.BusinessType;
@@ -24,6 +25,7 @@ import io.agora.agoravoice.business.server.ServerClient;
 import io.agora.agoravoice.manager.ProxyManager;
 import io.agora.agoravoice.ui.activities.main.MainActivity;
 import io.agora.agoravoice.ui.views.CropBackgroundRelativeLayout;
+import io.agora.agoravoice.ui.views.PrivacyTermsDialog;
 import io.agora.agoravoice.utils.Const;
 import io.agora.agoravoice.utils.RandomUtil;
 import io.agora.agoravoice.utils.ToastUtil;
@@ -32,14 +34,37 @@ import io.agora.agoravoice.utils.WindowUtil;
 public class SplashActivity extends BaseActivity implements
         ProxyManager.GeneralServiceListener,
         ProxyManager.UserServiceListener {
+
     private Dialog mUpgradeDialog;
+    private PrivacyTermsDialog termsDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         WindowUtil.hideStatusBar(getWindow(), false);
-        initialize();
+        initPrivacy();
+    }
+
+    private void initPrivacy() {
+        if (!preferences().getBoolean(Config.KEY_SHOW_PRIVACY, false)) {
+            termsDialog = new PrivacyTermsDialog(this);
+            termsDialog.setPrivacyTermsDialogListener(new PrivacyTermsDialog.OnPrivacyTermsDialogListener() {
+                @Override
+                public void onPositiveClick() {
+                    preferences().edit().putBoolean(Config.KEY_SHOW_PRIVACY, true).apply();
+                    initialize();
+                }
+
+                @Override
+                public void onNegativeClick() {
+                    finish();
+                }
+            });
+            termsDialog.show();
+        } else {
+            initialize();
+        }
     }
 
     private void initialize() {
@@ -250,5 +275,9 @@ public class SplashActivity extends BaseActivity implements
         super.onDestroy();
         proxy().removeGeneralServiceListener(this);
         proxy().removeUserServiceListener(this);
+
+        if (termsDialog != null) {
+            termsDialog.dismiss();
+        }
     }
 }

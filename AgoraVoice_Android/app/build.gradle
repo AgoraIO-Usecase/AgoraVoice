@@ -16,7 +16,7 @@ android {
         applicationId "io.agora.agoravoice"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 11100
+        versionCode 11110
         versionName "1.1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -40,7 +40,7 @@ android {
 }
 
 dependencies {
-    def navigation_version = "2.3.2"
+    def navigation_version = "2.3.5"
     def retrofit_version = "2.9.0"
     def okhttp_logging_version = "4.7.2"
 
@@ -50,8 +50,6 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.2.1'
 
-    implementation "androidx.navigation:navigation-fragment:$navigation_version"
-    implementation "androidx.navigation:navigation-ui:$navigation_version"
     implementation "androidx.navigation:navigation-fragment:$navigation_version"
     implementation "androidx.navigation:navigation-ui:$navigation_version"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"

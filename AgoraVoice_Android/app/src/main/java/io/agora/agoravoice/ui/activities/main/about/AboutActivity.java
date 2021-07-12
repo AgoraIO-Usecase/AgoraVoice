@@ -22,6 +22,7 @@ public class AboutActivity extends BaseActivity implements
     private static final String TAG = AboutActivity.class.getSimpleName();
 
     private RelativeLayout mPrivacyLayout;
+    private RelativeLayout mTerms;
     private RelativeLayout mDisclaimerLayout;
     private RelativeLayout mSignUpLayout;
     private RelativeLayout mUploadLogLayout;
@@ -38,6 +39,8 @@ public class AboutActivity extends BaseActivity implements
     private void initView() {
         mPrivacyLayout = findViewById(R.id.about_privacy_layout);
         mPrivacyLayout.setOnClickListener(this);
+        mTerms = findViewById(R.id.about_terms_layout);
+        mTerms.setOnClickListener(this);
         mDisclaimerLayout = findViewById(R.id.about_disclaimer_layout);
         mDisclaimerLayout.setOnClickListener(this);
         mSignUpLayout = findViewById(R.id.about_sign_up_layout);
@@ -73,6 +76,11 @@ public class AboutActivity extends BaseActivity implements
         int id = v.getId();
         if (id == mPrivacyLayout.getId()) {
             String link = getString(R.string.privacy_website_link);
+            Uri uri = Uri.parse(link);
+            intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        } else if (id == mTerms.getId()) {
+            String link = getString(R.string.terms_link);
             Uri uri = Uri.parse(link);
             intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);

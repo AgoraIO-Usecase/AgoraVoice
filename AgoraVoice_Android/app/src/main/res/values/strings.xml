@@ -35,6 +35,8 @@
     <string name="about_title">About</string>
     <string name="privacy_policy_title">Privacy</string>
     <string name="privacy_website_link">https://www.agora.io/en/privacy-policy/</string>
+    <string name="terms_title">Terms of Services</string>
+    <string name="terms_link">https://www.agora.io/en/terms-of-service/</string>
 
     <string name="disclaimer_title">Disclaimer</string>
     <string name="disclaimer_content">&#160;&#160;&#160;&#160;Agora Voice ("this product") is a test product provided by Agora.
@@ -55,7 +57,7 @@
 
     <string name="version_title">Agora Voice Version</string>
     <string name="release_date_title">Release Date</string>
-    <string name="release_date" translatable="false">2021.03.04</string>
+    <string name="release_date" translatable="false">2021.07.12</string>
     <string name="rte_sdk_version_title">SDK Version</string>
     <string name="upload_log_title">Upload log</string>
     <string name="upload_log_success_message_format">Log id %s copied into the clipboard</string>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="29533d1c-21a8-4416-866f-788fa1e32b3e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/AgoraVoice_Android/app/libs/rte-1.1.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgoraVoice_Android/app/src/main/java/io/agora/agoravoice/AgoraApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/AgoraVoice_Android/app/src/main/java/io/agora/agoravoice/AgoraApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgoraVoice_Android/app/src/main/java/io/agora/agoravoice/business/server/ServerClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/AgoraVoice_Android/app/src/main/java/io/agora/agoravoice/business/server/ServerClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AgoraVoice_Android/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/AgoraVoice_Android/app/src/main/res/values/strings.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1rBopE9jwwaTXjnQGI17GVNNIsj" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="application.passwordSafe" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="29533d1c-21a8-4416-866f-788fa1e32b3e" name="Default Changelist" comment="" />
+      <created>1618459024943</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1618459024943</updated>
+    </task>
+    <servers />
+  </component>
+</project>
