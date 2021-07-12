@@ -201,4 +201,12 @@ public class Config {
     public int getBgImageSelected() {
         return mBgImageSelected;
     }
+
+    public static final String KEY_IMAGE_URL = "key-image-url";
+    public static final String KEY_TOKEN = "key-token";
+
+    public static final String KEY_SHOW_PRIVACY = "key_show_privacy";
+
+    public static final int EDIT_USER_NAME_RESULT_CANCEL = 1;
+    public static final int EDIT_USER_NAME_RESULT_DONE = 2;
 }

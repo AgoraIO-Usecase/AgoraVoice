@@ -13,6 +13,7 @@
 
     <color name="theme_blue_1">#FF0088EB</color>
     <color name="theme_blue_1_alpha">#660088EB</color>
+    <color name="blue_600">#0087ff</color>
 
     <color name="action_sheet_voice_enhance_item_selected_bg">#FF10284B</color>
     <color name="action_sheet_voice_enhance_item_enable_bg">#FF2F3947</color>
@@ -50,4 +51,6 @@
     <color name="chat_room_card_background_color_start">#FF180C87</color>
     <color name="chat_room_card_background_color_middle">#FF2D02FF</color>
     <color name="chat_room_card_background_color_end">#FF850BC7</color>
+
+    <color name="color_error">#fd3e3f</color>
 </resources>
