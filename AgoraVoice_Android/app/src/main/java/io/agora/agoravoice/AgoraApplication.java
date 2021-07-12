@@ -44,8 +44,8 @@ public class AgoraApplication extends Application {
     }
 
     private void initBugly() {
-        CrashReport.initCrashReport(getApplicationContext(),
-                getResources().getString(R.string.bugly_app_id), false);
+        // CrashReport.initCrashReport(getApplicationContext(),
+        //        getResources().getString(R.string.bugly_app_id), false);
     }
 
     @Override
