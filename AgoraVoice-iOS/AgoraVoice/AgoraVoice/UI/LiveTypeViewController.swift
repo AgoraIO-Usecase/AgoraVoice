@@ -74,6 +74,14 @@ class LiveTypeViewController: MaskViewController {
         super.viewDidLoad()
         titleLabel.text = AppAssistant.name
         updateCollectionViewLayout()
+
+        DispatchQueue.main.async {
+            if !TermsAndPolicyViewController.getPolicyPopped(), let termsVC = TermsAndPolicyViewController.loadFromStoryboard("Policy", "terms") {
+                termsVC.modalPresentationStyle = .fullScreen
+                termsVC.fromSetting = false
+                self.present(termsVC, animated: true, completion: nil)
+            }
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
