@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="agree_the_terms">I have read the terms</string>
+	<string name="user_terms_1">Welcome to use Agora Voice!\nWe attach great importance to the protection of your privacy and personal information, and we especially remind you to read and fully understand the \'Terms of Service\' and \'Privacy Policy\'.\nWe will store and use your personal information in strict accordance with the privacy law, and we will not provide it to any third party without your consent. We adopt industry-leading security measures to protect your personal information.\nYou can read the full text of the <a href="https://www.agora.io/en/terms-of-service"> \'Terms of Service\' </a> and <a href="https://www.agora.io/en/privacy-policy"> \'Privacy Policy\' </a> for details. If you agree to the above content, please click \"Agree\" to start using our products/services.\n</string>
+
+	<string name="setting_title_user_agreement">Terms of Service and Privacy Policy</string>
+	<string name="got_it">GOT IT</string>
+	<string name="decline">DECLINE</string>
+	<string name="accept">ACCEPT</string>
+
+</resources>

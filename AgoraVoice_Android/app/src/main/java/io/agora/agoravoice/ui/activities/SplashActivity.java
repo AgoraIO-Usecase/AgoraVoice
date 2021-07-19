@@ -23,6 +23,7 @@ import io.agora.agoravoice.business.log.Logging;
 import io.agora.agoravoice.business.server.ServerClient;
 import io.agora.agoravoice.manager.ProxyManager;
 import io.agora.agoravoice.ui.activities.main.MainActivity;
+import io.agora.agoravoice.ui.dialog.PrivacyTermsDialog;
 import io.agora.agoravoice.ui.views.CropBackgroundRelativeLayout;
 import io.agora.agoravoice.utils.Const;
 import io.agora.agoravoice.utils.RandomUtil;
@@ -33,13 +34,35 @@ public class SplashActivity extends BaseActivity implements
         ProxyManager.GeneralServiceListener,
         ProxyManager.UserServiceListener {
     private Dialog mUpgradeDialog;
+    private PrivacyTermsDialog termsDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         WindowUtil.hideStatusBar(getWindow(), false);
-        initialize();
+        initPrivacy();
+    }
+
+    private void initPrivacy() {
+        if (!preferences().getBoolean(Const.KEY_SHOW_PRIVACY, false)) {
+            termsDialog = new PrivacyTermsDialog(this);
+            termsDialog.setPrivacyTermsDialogListener(new PrivacyTermsDialog.OnPrivacyTermsDialogListener() {
+                @Override
+                public void onPositiveClick() {
+                    preferences().edit().putBoolean(Const.KEY_SHOW_PRIVACY, true).apply();
+                    initialize();
+                }
+
+                @Override
+                public void onNegativeClick() {
+                    finish();
+                }
+            });
+            termsDialog.show();
+        } else {
+            initialize();
+        }
     }
 
     private void initialize() {
@@ -185,7 +208,7 @@ public class SplashActivity extends BaseActivity implements
 
     @Override
     public void onMusicList(List<MusicInfo> info) {
-            config().updateMusicInfo(info);
+        config().updateMusicInfo(info);
     }
 
     @Override
@@ -205,11 +228,11 @@ public class SplashActivity extends BaseActivity implements
     @Override
     public void onUserCreated(String userId, String userName) {
         Logging.i("agora voice application onUserCreated " +
-                    userId + " " + config().getNickname());
-            config().setUserId(userId);
-            preferences().edit().putString(Const.KEY_USER_ID, userId).apply();
-            preferences().edit().putString(Const.KEY_USER_NAME, config().getNickname()).apply();
-            proxy().login(userId);
+                userId + " " + config().getNickname());
+        config().setUserId(userId);
+        preferences().edit().putString(Const.KEY_USER_ID, userId).apply();
+        preferences().edit().putString(Const.KEY_USER_NAME, config().getNickname()).apply();
+        proxy().login(userId);
     }
 
     @Override
@@ -248,6 +271,9 @@ public class SplashActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (termsDialog != null) {
+            termsDialog.dismiss();
+        }
         proxy().removeGeneralServiceListener(this);
         proxy().removeUserServiceListener(this);
     }

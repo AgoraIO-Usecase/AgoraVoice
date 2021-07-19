@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="agree_the_terms">我已阅读以上条款</string>
+    <string name="user_terms_1">欢迎您使用Agora Voice！\n我们非常重视您的隐私保护和个人信息保护，特别提示您阅读并充分理解“用户条款”和“隐私政策”各条款。\n我们会严格按照法律规定存储和使用您的个人信息，未经您同意，我们不会提供给任何第三方进行使用。我们采用业界领先的安全措施保护您的个人信息安全。\n您可以阅读<a href="https://www.agora.io/cn/terms-of-service">《用户条款》</a>及<a href="https://www.agora.io/cn/privacy-policy">《隐私政策》</a>全文了解详细信息。若同意以上内容，请点击“同意”，开始使用我们的产品/服务。\n    </string>
+
+    <!-- privacy -->
+    <string name="setting_title_user_agreement">用户隐私政策概要</string>
+    <string name="got_it">知道了</string>
+    <string name="decline">拒绝</string>
+    <string name="accept">同意</string>
+</resources>
