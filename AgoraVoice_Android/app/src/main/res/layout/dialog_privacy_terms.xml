@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -12,7 +11,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@android:color/transparent"
-        android:nextFocusDown="@id/termsCheck"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbars="vertical">
 
@@ -22,59 +20,16 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvTerms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autoLink="web"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:lineSpacingMultiplier="1.5"
                 android:text="@string/user_terms_1"
                 android:textAppearance="?attr/textAppearanceCaption"
                 android:textColorLink="?attr/colorPrimary"
-                android:textIsSelectable="true"
-                android:textSize="11sp"
-                tools:ignore="SmallSp" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:text="@string/user_terms_2"
-                android:textAppearance="?attr/textAppearanceCaption"
-                android:textColorLink="?attr/colorPrimary"
-                android:textIsSelectable="true"
-                android:textSize="11sp"
-                tools:ignore="SmallSp" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:text="@string/user_terms_3"
-                android:textAppearance="?attr/textAppearanceCaption"
-                android:textColorLink="?attr/colorPrimary"
-                android:textIsSelectable="true"
-                android:textSize="11sp"
-                tools:ignore="SmallSp" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:text="@string/user_terms_4"
-                android:textAppearance="?attr/textAppearanceCaption"
-                android:textColorLink="?attr/colorPrimary"
-                android:textIsSelectable="true"
-                android:textSize="11sp"
-                tools:ignore="SmallSp" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:text="@string/privacy_policy"
-                android:textAppearance="?attr/textAppearanceCaption"
-                android:textColorLink="?attr/colorPrimary"
-                android:textIsSelectable="true"
-                android:textSize="11sp"
-                tools:ignore="SmallSp" />
+                android:textSize="14sp" />
         </LinearLayout>
     </ScrollView>
 
@@ -83,11 +38,12 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_gravity="start"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="10dp"
         android:checked="false"
-        android:nextFocusUp="@id/content"
         android:text="@string/agree_the_terms"
         android:textAppearance="?attr/textAppearanceCaption"
         android:textColor="?android:attr/textColorSecondary"
+        android:textSize="14sp"
         app:useMaterialThemeColors="false" />
 </LinearLayout>
