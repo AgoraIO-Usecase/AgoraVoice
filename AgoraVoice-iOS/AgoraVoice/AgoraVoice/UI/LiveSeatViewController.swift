@@ -161,7 +161,8 @@ class LiveSeatViewController: MaskViewController {
                 return commands.isEmpty ? false : true
             }.subscribe(onNext: { [unowned self] (commands) in
                 let seat = self.seats.value[seatView.index]
-                let seatCommands = LiveSeatCommands(seat: seat, commands: commands)
+                let seatCommands = LiveSeatCommands(seat: seat,
+                                                    commands: commands)
                 self.seatCommands.accept(seatCommands)
             }).disposed(by: bag)
             
@@ -174,7 +175,8 @@ class LiveSeatViewController: MaskViewController {
     lazy var seats: BehaviorRelay<[LiveSeat]> = {
         var temp = [LiveSeat]()
         for i in 0 ..< self.seatCount {
-            let seat = LiveSeat(index: i, state: .empty)
+            let seat = LiveSeat(index: i,
+                                state: .empty)
             temp.append(seat)
         }
         
@@ -221,7 +223,7 @@ private extension LiveSeatViewController {
         
         for (index, item) in seats.enumerated() {
             let view = seatViews[index]
-            view.perspective = self.perspective.value
+            view.perspective = perspective.value
             view.commandButton.type = item.state
             
             if let stream = item.state.stream {
@@ -237,7 +239,7 @@ class CommandCell: UICollectionViewCell {
     private lazy var underLine: CALayer = {
         let layer = CALayer()
         layer.backgroundColor = UIColor(hexString: "#0C121B").cgColor
-        self.contentView.layer.addSublayer(layer)
+        contentView.layer.addSublayer(layer)
         return layer
     }()
     
@@ -245,12 +247,12 @@ class CommandCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor(hexString: "#161D27")
+        backgroundColor = UIColor(hexString: "#161D27")
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.backgroundColor = UIColor(hexString: "#161D27")
+        backgroundColor = UIColor(hexString: "#161D27")
     }
     
     lazy var titleLabel: UILabel = {
@@ -258,24 +260,24 @@ class CommandCell: UICollectionViewCell {
         label.textColor = UIColor(hexString: "#EEEEEE")
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 14)
-        self.contentView.addSubview(label)
+        contentView.addSubview(label)
         return label
     }()
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.titleLabel.frame = CGRect(x: 0,
-                                       y: 0,
-                                       width: self.bounds.width,
-                                       height: self.bounds.height)
+        titleLabel.frame = CGRect(x: 0,
+                                  y: 0,
+                                  width: bounds.width,
+                                  height: bounds.height)
         
         if needUnderLine {
-            self.underLine.frame = CGRect(x: 5,
-                                          y: self.bounds.height - 1,
-                                          width: self.bounds.width - 10,
-                                          height: 1)
+            underLine.frame = CGRect(x: 5,
+                                     y: bounds.height - 1,
+                                     width: bounds.width - 10,
+                                     height: 1)
         } else {
-            self.underLine.frame = CGRect.zero
+            underLine.frame = CGRect.zero
         }
     }
 }

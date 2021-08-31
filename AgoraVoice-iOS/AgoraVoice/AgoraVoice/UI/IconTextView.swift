@@ -19,17 +19,17 @@ class IconTextView: UIControl {
         super.awakeFromNib()
         label.textAlignment = .right
         
-        self.addSubview(imageView)
-        self.addSubview(label)
+        addSubview(imageView)
+        addSubview(label)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let height = self.frame.height
-        let width = self.frame.width
+        let height = frame.height
+        let width = frame.width
         let radius = height * 0.5
-        self.layer.cornerRadius = radius
+        layer.cornerRadius = radius
         
         let subsTopSpace: CGFloat = 2.0
         let imageViewHeight = height - (subsTopSpace * 2.0)

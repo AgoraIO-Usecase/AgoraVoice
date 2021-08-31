@@ -20,15 +20,16 @@ class GIFView: FLAnimatedImageView {
     private var state: State = .stop
     
     func stopAnimationg(releaseImage: Bool = true) {
-        self.state = .stop
+        state = .stop
         self.stopAnimating()
         if releaseImage {
             self.image = nil
         }
-        self.currentRepeatCount = 0
+        currentRepeatCount = 0
     }
     
-    init(frame: CGRect, gif: Data) {
+    init(frame: CGRect,
+         gif: Data) {
         super.init(frame: frame)
         self.gifImage = gif
     }
@@ -37,16 +38,18 @@ class GIFView: FLAnimatedImageView {
         super.init(coder: coder)
     }
     
-    func startAnimating(of data: Data, repeatCount: Int = 1, completion: Completion = nil) {
+    func startAnimating(of data: Data,
+                        repeatCount: Int = 1,
+                        completion: Completion = nil) {
         guard state == .stop else {
             return
         }
-        self.state = .animating
-        self.stopAnimationg()
-        self.gifImage = data
+        state = .animating
+        stopAnimationg()
+        gifImage = data
         let image = FLAnimatedImage(animatedGIFData: data)
-        self.animatedImage = image
-        self.loopCompletionBlock = { [weak self] (loopCountRemaining) in
+        animatedImage = image
+        loopCompletionBlock = { [weak self] (loopCountRemaining) in
             self?.currentRepeatCount += 1
             
             guard self?.currentRepeatCount == repeatCount else {
@@ -61,10 +64,14 @@ class GIFView: FLAnimatedImageView {
         }
     }
     
-    func startAnimating(repeatCount: Int = 1, completion: Completion = nil) {
-        guard let data = gifImage, state == .stop else {
+    func startAnimating(repeatCount: Int = 1,
+                        completion: Completion = nil) {
+        guard let data = gifImage,
+              state == .stop else {
             return
         }
-        startAnimating(of: data, repeatCount: repeatCount, completion: completion)
+        startAnimating(of: data,
+                       repeatCount: repeatCount,
+                       completion: completion)
     }
 }

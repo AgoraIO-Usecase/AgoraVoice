@@ -8,8 +8,9 @@
 #import "UIImage+CSClipToCycle.h"
 
 @implementation UIImage (CSClipToCycle)
-
-+ (UIImage * _Nonnull)imageWithClipImage:(UIImage * _Nonnull)image borderWidth:(CGFloat)borderWidth borderColor:(UIColor * _Nullable)color {
++ (UIImage * _Nonnull)imageWithClipImage:(UIImage * _Nonnull)image
+                             borderWidth:(CGFloat)borderWidth
+                             borderColor:(UIColor * _Nullable)color {
     // 图片的宽度和高度
     CGFloat imageWH = image.size.width >= image.size.height ? image.size.height : image.size.width;
     
@@ -49,7 +50,10 @@
     return clipImage;
 }
 
-+ (UIImage * _Nonnull)imageWithClipImage:(UIImage * _Nonnull)image cornerRadius:(CGFloat)radius borderWidth:(CGFloat)borderWidth borderColor:(UIColor * _Nullable)color {
++ (UIImage * _Nonnull)imageWithClipImage:(UIImage * _Nonnull)image
+                            cornerRadius:(CGFloat)radius
+                             borderWidth:(CGFloat)borderWidth
+                             borderColor:(UIColor * _Nullable)color {
     // 1.开启上下文
     CGFloat contextWidth = image.size.width;
     CGFloat contextHeight = image.size.height;
@@ -146,5 +150,4 @@
     
     return clipImage;
 }
-
 @end
