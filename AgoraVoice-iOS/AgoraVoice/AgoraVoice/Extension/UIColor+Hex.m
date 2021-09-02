@@ -9,7 +9,6 @@
 #import "UIColor+Hex.h"
 
 @implementation UIColor (Hex)
-
 + (UIColor *)colorWithHexString:(NSString *)color {
     CGFloat alpha = 1;
     
@@ -20,19 +19,26 @@
         alpha = [colorArray[1] floatValue];
     }
     
-    NSString *cString = [[colorString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] uppercaseString];
+    NSCharacterSet *characterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    NSString *cString = [[colorString stringByTrimmingCharactersInSet:characterSet] uppercaseString];
     
     // String should be 6 or 8 characters
     if ([cString length] < 6) {
         return [UIColor clearColor];
     }
     
-    if ([cString hasPrefix:@"0X"])
+    if ([cString hasPrefix:@"0X"]) {
         cString = [cString substringFromIndex:2];
-    if ([cString hasPrefix:@"#"])
+    }
+        
+    if ([cString hasPrefix:@"#"]) {
         cString = [cString substringFromIndex:1];
-    if ([cString length] != 6)
+    }
+        
+    if ([cString length] != 6) {
         return [UIColor clearColor];
+    }
+        
     
     NSRange range;
     range.location = 0;
@@ -49,7 +55,9 @@
     [[NSScanner scannerWithString:gString] scanHexInt:&g];
     [[NSScanner scannerWithString:bString] scanHexInt:&b];
     
-    return [UIColor colorWithRed:((float) r / 255.0f) green:((float) g / 255.0f) blue:((float) b / 255.0f) alpha:alpha];
+    return [UIColor colorWithRed:((float)r / 255.0f)
+                           green:((float)g / 255.0f)
+                            blue:((float)b / 255.0f)
+                           alpha:alpha];
 }
-
 @end

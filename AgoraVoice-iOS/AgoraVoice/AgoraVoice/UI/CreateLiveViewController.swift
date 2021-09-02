@@ -80,19 +80,21 @@ class CreateLiveViewController: MaskViewController {
         switch segueId {
         case "ChatRoomViewController":
             let vc = segue.destination as! ChatRoomViewController
+            let room = liveSession.room.value
             vc.liveSession = liveSession
-            vc.backgroundVM = RoomBackgroundVM(room: liveSession.room.value)
-            vc.giftVM = GiftVM(room: liveSession.room.value)
+            vc.backgroundVM = RoomBackgroundVM(room: room)
+            vc.giftVM = GiftVM(room: room)
             
-            vc.coHostingVM = CoHostingVM(room: liveSession.room.value)
-            vc.seatsVM = LiveSeatsVM(room: liveSession.room.value)
+            vc.coHostingVM = CoHostingVM(room: room)
+            vc.seatsVM = LiveSeatsVM(room: room)
         default:
             break
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.nameTextField.endEditing(true)
+    override func touchesBegan(_ touches: Set<UITouch>,
+                               with event: UIEvent?) {
+        nameTextField.endEditing(true)
     }
 }
 
@@ -133,8 +135,8 @@ private extension CreateLiveViewController {
     }
     
     func close() {
-        self.navigationController?.dismiss(animated: true,
-                                           completion: nil)
+        navigationController?.dismiss(animated: true,
+                                      completion: nil)
     }
     
     func randomName() {
@@ -153,10 +155,12 @@ private extension CreateLiveViewController {
                                                         height: 44.0),
                                           filletRadius: 8)
         
-        view.labelSize = CGSize(width: UIScreen.main.bounds.width - 30, height: 0)
+        view.labelSize = CGSize(width: UIScreen.main.bounds.width - 30,
+                                height: 0)
         view.text = NSLocalizedString("Limit_Toast")
         view.tagImage = UIImage(named: "icon-yellow-caution")
-        self.showToastView(view, duration: 5.0)
+        showToastView(view,
+                      duration: 5.0)
         
         view.closeButton.rx.tap.subscribe(onNext: { [unowned self] in
             self.toastView?.removeFromSuperview()
@@ -177,9 +181,9 @@ private extension CreateLiveViewController {
                                     width: UIScreen.main.bounds.width,
                                     height: presenetedHeight)
         
-        self.presentChild(vc,
-                          animated: true,
-                          presentedFrame: presentedFrame)
+        presentChild(vc,
+                     animated: true,
+                     presentedFrame: presentedFrame)
         
         vc.selectIndex.accept(selectedImageIndex)
         vc.selectImage.bind(to: backgroundImageView.rx.image).disposed(by: vc.bag)
@@ -191,7 +195,7 @@ private extension CreateLiveViewController {
 
 private extension CreateLiveViewController {
     func startLivingWithName(_ name: String) {
-        self.showHUD()
+        showHUD()
         
         LiveSession.create(roomName: name,
                            backgroundIndex: selectedImageIndex,
@@ -209,7 +213,7 @@ private extension CreateLiveViewController {
     }
     
     func joinLiving(session: LiveSession) {
-        self.showHUD()
+        showHUD()
         
         tempSession = session
         
@@ -234,10 +238,14 @@ private extension CreateLiveViewController {
 }
 
 extension CreateLiveViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if range.length == 1 && string.count == 0 {
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
+        if range.length == 1,
+           string.count == 0 {
             return true
-        } else if let text = textField.text, text.count >= nameLimit {
+        } else if let text = textField.text,
+                  text.count >= nameLimit {
             self.showTextToast(text: CreateLiveLocalizable.channelNameLengthLimit(nameLimit))
             return false
         } else {
